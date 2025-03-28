@@ -1,0 +1,31 @@
+{
+  "registration": {
+    "passwordReset": "Password Reset"
+  },
+  "email": {
+    "emailResetName": "Password Reminder",
+    "resetPasswordSubject": "Password Reset",
+    "resetPasswordBody": "<h4>Reset Your Crims City Password</h4> <p>Hello! Did you forget the key to your virtual office in Crims City? Don't worry, you can easily reset your password using this link:</p> <a href=\"{{resetLink}}\" class=\"reset-link\">Reset Password</a> <p>After clicking the link, you will be redirected to a page where you can set a new password.</p> <p>Remember to use a strong and unique password to protect your account.</p>",
+    "emailActivationSender": "Activation",
+    "activationEmailSubject": "Account Activation",
+    "activationEmailMessage": "<p>Unlock the gates of <strong style=\"font-style: italic;\">Crims City</strong> and dive into underground adventures, activate your account now!</p><p>Click <a href=\"{{activationLink}}\" style=\"color: #0000ff; text-decoration: underline; font-style: italic;\">here</a> to activate your account.</p>"
+  },
+  "LOGIN": {
+    "INCOMPLETE_DATA": "Complete the data.",
+    "WRONG_DATA": "Incorrect login data.",
+    "USER_BLOCKED": "User blocked.",
+    "ACCOUNT_ACTIVATE_FALSE": "Account not activated, check your email.",
+    "INVALID_TOKEN": "Invalid token",
+    "WEAK_PASSWORD": "Password does not meet the requirements: minimum 6 characters, 1 uppercase letter, 1 digit, 1 special character.",
+    "PASSWORD_UPDATE_ERROR": "Failed to update password.",
+    "INTERNAL_SERVER_ERROR": "An internal server error occurred. Contact the Administrator.",
+    "NO_TOKEN": "No token",
+    "PASSWORD_SUCCESS_UPDATE": "Password successfully updated.",
+    "USER_NOT_FOUND": "No user found with this email address.",
+    "EMAIL_WITH_RESET": "An email with a password reset link has been sent.",
+    "PASSWORD_TOO_SHORT": "Password must be at least 6 characters long, include 1 uppercase, 1 lowercase letter, 1 digit, and 1 special character.",
+    "EMAIL_EXIST": "Email address already exists.",
+    "CONTACT_SUCCESS": "Thank you for your message, we will reply as soon as possible.",
+    "CONTACT_NO_SUCCESS": "An unexpected error occurred, contact support@crims-city.ct8.pl."
+  }
+}

@@ -1,0 +1,34 @@
+{
+	"registration": {
+		"passwordReset": "Reset hasła"
+	},
+	"email": {
+		"emailResetName": "Przypomnienie hasła",
+		"resetPasswordSubject": "Resetowanie hasła",
+		"resetPasswordBody": "<h4>Zresetuj hasło do Crims City</h4> <p>Cześć! Zapomniałeś klucza do swojego wirtualnego biura w Crims City? Nie martw się, możesz łatwo zresetować hasło za pomocą tego linku:</p> <a href=\"{{resetLink}}\" class=\"reset-link\">Zresetuj hasło</a> <p>Po kliknięciu w link zostaniesz przeniesiony na stronę, gdzie będziesz mógł ustawić nowe hasło.</p> <p>Pamiętaj, aby używać silnego i unikalnego hasła, aby chronić swoje konto.</p>",
+		"emailActivationSender": "Aktywacja",
+		"activationEmailSubject": "Aktywacja konta",
+		"activationEmailMessage": "<p>Odblokuj bramy <strong style=\"font-style: italic;\">Crims City</strong> i zanurz się w podziemnych przygodach, aktywuj swoje konto teraz!</p><p>Kliknij <a href=\"{{activationLink}}\" style=\"color: #0000ff; text-decoration: underline; font-style: italic;\">tutaj</a>, aby aktywować swoje konto.</p>"
+	},
+	"LOGIN": {
+		"INCOMPLETE_DATA": "Uzupełnij Dane.",
+		"WRONG_DATA": "Niepoprawne dane logowania.",
+		"USER_BLOCKED": "Użytkownik zablokowany.",
+		"ACCOUNT_ACTIVATE_FALSE": "Konto nie zostało aktywowane, sprawdź adres E-mail.",
+		"INVALID_TOKEN": "Nieprawidłowy token",
+		"WEAK_PASSWORD": "Hasło nie spełania wymagań, minimum 6 znaków, 1 duża litera, 1 cyfra, 1 znak specialny.",
+		"PASSWORD_UPDATE_ERROR": "Nie udało się zaktualizować hasła.",
+		"INTERNAL_SERVER_ERROR": "Wystąpił wewnętrzym błąd serwera. Skontaktuj się Administratorem.",
+		"NO_TOKEN": "Brak tokenu",
+		"PASSWORD_SUCCESS_UPDATE": "Hasło zostało pomyślnie zaktualizowane.",
+		"USER_NOT_FOUND": "Nie ma użytkownika z tym adresem e-mail",
+		"EMAIL_WITH_RESET": "E-mail z linkiem do resetowania hasła został wysłany.",
+		"PASSWORD_TOO_SHORT": "Hasło musi mieć minimum 6 znaków, 1 duża, 1 mała (litera) 1 cyfrę i 1 znak specjalny.",
+		"EMAIL_EXIST": "Adres e-mail już istnieje.",
+		"CONTACT_SUCCESS": "Dziękujemy za wiadomość, odpowiemy najszybciej jak to możliwe.",
+		"CONTACT_NO_SUCCESS": "Wystapił nieoczekiwany błąd, skontaktuj się z support@crims-city.ct8.pl."
+	},
+	"INTERNAL_SERVER_ERROR": "INTERNAL_SERVER_ERROR",
+	"EMAIL_WITH_RESET": "EMAIL_WITH_RESET",
+	"USER_NOT_FOUND": "USER_NOT_FOUND"
+}
