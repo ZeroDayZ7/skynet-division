@@ -5,7 +5,7 @@ export default function Home() {
     <main className="flex flex-col min-h-screen">
       
       {/* Sekcja z treścią na środku */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center">
+      <div className="flex-1 flex flex-col items-center text-center">
           <LoginModal />
       </div>
     </main>
