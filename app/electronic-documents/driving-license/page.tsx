@@ -11,7 +11,7 @@ interface UserData {
   second_name: string;
   last_name: string;
   pesel: string;
-  document_number: string;
+  passport_number: string;
   issue_date: string;
   expiration_date: string;
   photo?: string; // Pole opcjonalne
@@ -22,13 +22,12 @@ interface UserData {
 export default function ProfilePage() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isAddressVisible, setIsAddressVisible] = useState(false);
   const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/api/user-eid`, {
+        const response = await fetch(`${apiUrl}/api/user-passport`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -96,9 +95,9 @@ export default function ProfilePage() {
       </div>
 
       <div className="my-4">
-        <h3 className="text-lg font-semibold">Dokument</h3>
+        <h3 className="text-lg font-semibold">Paszport</h3>
         <ul className="list-none p-0">
-          <li><strong>Numer dokumentu:</strong> {userData.document_number}</li>
+          <li><strong>Numer paszportu:</strong> {userData.passport_number}</li>
           <li><strong>Data wydania:</strong> {new Date(userData.issue_date).toLocaleDateString()}</li>
           <li><strong>Data ważności:</strong> {new Date(userData.expiration_date).toLocaleDateString()}</li>
         </ul>

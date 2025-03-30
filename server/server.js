@@ -15,6 +15,7 @@ const registrationEndpoint = require('./endpoints/registrationEndpoint');
 const loginEndpoint = require('./endpoints/loginEndpoint');
 const contactEndpoint = require('./endpoints/contactEndpoint');
 const userEndpoint = require('./endpoints/userEndpoint');
+const citizenprojects = require('./endpoints/citizenprojects');
 
 app.use(cookieParser());
 app.use(express.json());
@@ -44,6 +45,7 @@ app.use(registrationEndpoint);
 app.use(loginEndpoint);
 app.use(contactEndpoint);
 app.use(userEndpoint);
+app.use(citizenprojects);
 
 // // Obsługuje wszystkie inne żądania, które nie pasują do plików statycznych
 app.get('*', (req, res) => {

@@ -7,7 +7,7 @@ import Notifications from "@/components/notification/Notification";
 import {
   FaSignOutAlt, FaNewspaper, FaLanguage, FaIdCard,
   FaShoppingCart, FaGamepad, FaBook, FaCalendar, FaFileAlt, FaCloud, FaShieldAlt,
-  FaLightbulb, FaTools, FaSpinner
+  FaLightbulb, FaTools, FaSpinner, FaBriefcase 
 } from "react-icons/fa";
 
 
@@ -21,8 +21,8 @@ export default function Dashboard() {
     { icon: FaIdCard, link: "/electronic-documents", label: "eDokumenty", enabled: true },
     { icon: FaNewspaper, link: "/citizens-projects", label: "Projekty Obywatelskie", enabled: true }, // Disabled
     { icon: FaLanguage , link: "/language-trainer", label: "Trener Języka", enabled: true },
-    { icon: FaShoppingCart, link: "/shop", label: "Sklep", enabled: false }, // Disabled
-    { icon: FaGamepad, link: "/games", label: "Gry", enabled: false },
+    { icon: FaBriefcase , link: "/jobs-board", label: "Praca", enabled: true }, // Disabled
+    { icon: FaShoppingCart, link: "/FaShoppingCart", label: "Market", enabled: false },
     { icon: FaBook, link: "/library", label: "Biblioteka", enabled: false },
     { icon: FaCalendar, link: "/calendar", label: "Kalendarz", enabled: false },
     { icon: FaFileAlt, link: "/documents", label: "Dokumenty", enabled: false },
@@ -39,7 +39,7 @@ export default function Dashboard() {
 
   return (
 
-    <main className="flex flex-col min-h-screen p-4">
+    <div className="flex flex-col min-h-screen p-2">
       {/* Górny pasek z przyciskami */}
       <div className="flex justify-end gap-4 p-4">
         <button onClick={() => handleNavigation("/notifications")} className="text-gray-600 hover:text-blue-500 text-2xl">
@@ -76,6 +76,6 @@ export default function Dashboard() {
 
       {/* Modal wylogowania */}
       <LogoutModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-    </main>
+    </div>
   );
 }

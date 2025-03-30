@@ -11,7 +11,7 @@ export default function CitizenProjectsHome() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleNavigation = (link) => {
+  const handleNavigation = (link: string) => {
     setIsLoading(true);
     router.push(link);
   };

@@ -7,8 +7,8 @@ import BackButton from "@/components/ui/BackButton";
 
 const documents = [
   { id: 1, name: "E-Dowód", icon: FaIdCard, enabled: true, link: "/electronic-documents/eid" },
-  { id: 2, name: "Prawo jazdy", icon: FaCar, enabled: false, link: "/prawo-jazdy" },
-  { id: 3, name: "Paszport", icon: FaPassport, enabled: true, link: "/paszport" },
+  { id: 2, name: "Prawo jazdy", icon: FaCar, enabled: true, link: "/electronic-documents/driving-license" },
+  { id: 3, name: "Paszport", icon: FaPassport, enabled: true, link: "/electronic-documents/passport" },
   { id: 4, name: "Legitymacja studencka", icon: FaUser, enabled: false, link: "/legitymacja" },
   { id: 5, name: "E-Faktury", icon: FaFileInvoice, enabled: true, link: "/e-faktury" },
   { id: 6, name: "Rejestr karalności", icon: FaClipboardList, enabled: false, link: "/rejestr-karalnosci" },

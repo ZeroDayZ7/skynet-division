@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import BackButton from "@/components/ui/BackButton";
+import { toast } from "sonner";
+
 
 export default function NewProjectForm() {
   const [formData, setFormData] = useState({
@@ -49,8 +51,10 @@ export default function NewProjectForm() {
     // Symulacja wysyłania danych (zastąp to prawdziwym kodem wysyłania)
     setTimeout(() => {
       setIsSubmitting(false);
-      alert("Projekt został dodany!");
-      router.push("/citizens-projects/list");
+      // alert("Projekt został dodany!");
+      toast("Event has been created.")
+
+      // router.push("/citizens-projects/list");
     }, 2000);
   };
 
