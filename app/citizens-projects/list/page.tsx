@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaSearch, FaMapMarkerAlt, FaSpinner, FaThumbsUp } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
 
 interface Project {
   id: number;
@@ -59,7 +58,6 @@ export default function ViewProjects() {
 
   return (
     <div className="max-w-4xl mx-auto p-4 bg-white">
-      <BackButton />
       <h2 className="text-xl font-semibold mb-4">Lista Projektów Obywatelskich</h2>
 
       <div className="flex gap-4 mb-6">

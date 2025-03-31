@@ -10,9 +10,6 @@ export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    // const { publicRuntimeConfig } = getConfig();
-    // const apiUrl = publicRuntimeConfig.apiUrl; // Pobranie wartości apiUrl
-
     const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 
     setLoading(true);

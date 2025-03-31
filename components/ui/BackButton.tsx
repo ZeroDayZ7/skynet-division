@@ -14,7 +14,7 @@ export default function BackButton() {
   return (
     <button 
       onClick={goBack} 
-      className="text-blue-500 flex items-center gap-2 mb-4"
+      className="text-blue-500 flex items-center gap-2 cursor-pointer"
     >
       <FaArrowLeft />
       Cofnij

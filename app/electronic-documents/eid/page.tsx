@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import BackButton from "@/components/ui/BackButton";
 import { FaSpinner } from "react-icons/fa";
 
 // Interfejs określający typ danych użytkownika
@@ -22,7 +21,6 @@ interface UserData {
 export default function ProfilePage() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isAddressVisible, setIsAddressVisible] = useState(false);
   const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 
   useEffect(() => {
@@ -64,7 +62,6 @@ export default function ProfilePage() {
 
   return (
     <div className="profile-page p-4">
-      <BackButton />
       <h1 className="text-2xl font-bold mb-4">Profil Użytkownika</h1>
       
       <div className="flex items-center mb-4">

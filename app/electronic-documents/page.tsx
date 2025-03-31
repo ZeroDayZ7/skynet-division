@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaIdCard, FaCar, FaPassport, FaUser, FaFileInvoice, FaClipboardList, FaRegCreditCard, FaSpinner } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
 
 const documents = [
   { id: 1, name: "E-Dowód", icon: FaIdCard, enabled: true, link: "/electronic-documents/eid" },
@@ -23,12 +22,11 @@ export default function DocumentsPage() {
     setLoading(true);
     setTimeout(() => {
       router.push(link);
-    }, 500);
+    }, 100);
   };
 
   return (
     <div className="p-4 max-w-lg mx-auto">
-      <BackButton />
       {loading ? (
         <div className="flex items-center justify-center py-4">
           <FaSpinner className="text-4xl text-blue-500 animate-spin" />

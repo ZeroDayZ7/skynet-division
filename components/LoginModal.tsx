@@ -40,7 +40,7 @@ export default function LoginModal() {
       } finally {
         setIsLoading(false);
       }
-    }, 1000);
+    }, 100);
   };
 
   // Funkcja do generowania losowego URL obrazu z Unsplash
@@ -50,8 +50,8 @@ export default function LoginModal() {
   };
 
   return (
-    <div className="p-6 w-96">
-      <div className="flex flex-col items-center mb-6">
+    <div className="p-6 max-w-screen-sm">
+      <div className="mb-6">
         <img
           src={getRandomImageUrl()}
           alt="Logo aplikacji"

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { FaSearch, FaSpinner } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import BackButton from "@/components/ui/BackButton";
+import categoriesData from "@/resources/categories.json";
 
 const JobSearchPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,8 +36,6 @@ const JobSearchPage = () => {
 
   return (
     <div className="job-search-page min-h-screen p-4 max-w-md mx-auto">
-      <BackButton className="mb-4" />
-
       {isLoading ? (
         <div className="flex items-center justify-center py-20">
           <FaSpinner className="text-4xl text-blue-500 animate-spin" />
@@ -96,10 +94,15 @@ const JobSearchPage = () => {
                   className="w-full p-2 border border-gray-300 rounded-lg focus:border-blue-500"
                 >
                   <option value="">Wybierz kategorię</option>
-                  <option value="IT">IT</option>
-                  <option value="Marketing">Marketing</option>
-                  <option value="Sales">Sprzedaż</option>
-                  <option value="Finance">Finanse</option>
+                  {categoriesData.categories.map(
+                    (
+                      cat // Zmiana tutaj
+                    ) => (
+                      <option key={cat.value} value={cat.value}>
+                        {cat.label}
+                      </option>
+                    )
+                  )}
                 </select>
               </div>
 

@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaPlusCircle, FaSearch, FaFilter, FaSpinner, FaBriefcase } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
 
 const actions = [
   { id: 1, name: "Dodaj Ogłoszenie", icon: FaPlusCircle, enabled: true, link: "/jobs-board/new" },
@@ -26,7 +25,6 @@ export default function JobBoard() {
 
   return (
     <div className="job-board flex flex-col min-h-screen p-4">
-      <BackButton />
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <FaSpinner className="text-6xl text-gray-600 animate-spin" />

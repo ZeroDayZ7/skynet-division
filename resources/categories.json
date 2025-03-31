@@ -1,0 +1,8 @@
+{
+    "categories": [
+      { "value": "IT", "label": "IT" },
+      { "value": "Marketing", "label": "Marketing" },
+      { "value": "Sales", "label": "Sprzedaż" },
+      { "value": "Finance", "label": "Finanse" }
+    ]
+  }

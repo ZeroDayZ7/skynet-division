@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import LogoutModal from "../../components/LogoutModal";
 import { FaPlusCircle, FaProjectDiagram, FaSpinner } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
 
 export default function CitizenProjectsHome() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,8 +17,6 @@ export default function CitizenProjectsHome() {
 
   return (
     <div className="citizens-projects flex flex-col min-h-screen p-4">
-      {/* Górny pasek nawigacyjny */}
-        <BackButton />
       {/* Ekran ładowania */}
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
