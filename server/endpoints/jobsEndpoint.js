@@ -5,7 +5,6 @@ const db = require('../db');
 const bcrypt = require('bcrypt');
 const { i18n } = require('../language/i18nSetup');
 const { verifyJwtToken } = require('../tools/tokenTools');
-const serverLogs = require('../tools/server_logs');
 
 const router = express.Router();
 

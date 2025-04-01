@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { z } from "zod";
+import sanitizeHtml from "sanitize-html";
 
-// Interfejs określający typ danych użytkownika
 interface UserData {
   user_id: number;
   first_name: string;
@@ -13,40 +14,72 @@ interface UserData {
   document_number: string;
   issue_date: string;
   expiration_date: string;
-  photo?: string; // Pole opcjonalne
+  photo?: string;
   birth_date: string;
   birth_place: string;
 }
 
+const UserDataSchema = z.object({
+  user_id: z.number(),
+  first_name: z.string().min(1),
+  second_name: z.string().min(1),
+  last_name: z.string().min(1),
+  pesel: z.string().length(11),
+  document_number: z.string().min(1),
+  issue_date: z.string().datetime(),
+  expiration_date: z.string().datetime(),
+  photo: z.string().url().optional(),
+  birth_date: z.string().datetime(),
+  birth_place: z.string().min(1),
+});
+
+const sanitize = (input: string) =>
+  sanitizeHtml(input, { allowedTags: [], allowedAttributes: {} });
+
 export default function ProfilePage() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
       try {
+        const token = localStorage.getItem("jwt_token"); // lub z ciasteczka
         const response = await fetch(`${apiUrl}/api/user-eid`, {
           method: "POST",
           credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+            "X-CSRF-Token": await fetchCsrfToken(),
+          },
+          signal: controller.signal,
         });
 
-        if (!response.ok) {
-          throw new Error("Błąd pobierania danych");
-        }
-
-        const data: UserData = await response.json();
+        if (!response.ok) throw new Error("Błąd pobierania danych");
+        const rawData = await response.json();
+        const data = UserDataSchema.parse(rawData);
         setUserData(data);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        setError(error.name === "AbortError" ? "Przekroczono czas oczekiwania" : error.message);
       } finally {
+        clearTimeout(timeoutId);
         setLoading(false);
       }
     };
 
     fetchUserData();
   }, []);
+
+  // const fetchCsrfToken = async () => {
+  //   const res = await fetch(`${apiUrl}/api/csrf-token`, { credentials: "include" });
+  //   const { csrfToken } = await res.json();
+  //   return csrfToken;
+  // };
 
   if (loading) {
     return (
@@ -56,6 +89,10 @@ export default function ProfilePage() {
     );
   }
 
+  if (error) {
+    return <p className="text-center text-red-500">{error}</p>;
+  }
+
   if (!userData) {
     return <p className="text-center text-red-500">Nie udało się załadować danych użytkownika.</p>;
   }
@@ -63,10 +100,9 @@ export default function ProfilePage() {
   return (
     <div className="profile-page p-4">
       <h1 className="text-2xl font-bold mb-4">Profil Użytkownika</h1>
-      
       <div className="flex items-center mb-4">
         {userData.photo ? (
-          <img src={userData.photo} alt="User Photo" className="w-24 h-24 rounded-full border shadow-lg" />
+          <img src={sanitize(userData.photo)} alt="User Photo" className="w-24 h-24 rounded-full border shadow-lg" />
         ) : (
           <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
             Brak zdjęcia
@@ -74,32 +110,12 @@ export default function ProfilePage() {
         )}
         <div className="ml-4">
           <h2 className="text-xl font-semibold">
-            {userData.first_name} {userData.second_name} {userData.last_name}
+            {sanitize(userData.first_name)} {sanitize(userData.second_name)} {sanitize(userData.last_name)}
           </h2>
-          <p className="text-gray-500">PESEL: {userData.pesel}</p>
+          <p className="text-gray-500">PESEL: {sanitize(userData.pesel)}</p>
         </div>
       </div>
-
-      <div className="my-4">
-        <h3 className="text-lg font-semibold">Dane osobowe</h3>
-        <ul className="list-none p-0">
-          <li><strong>Imię:</strong> {userData.first_name}</li>
-          <li><strong>Drugie imię:</strong> {userData.second_name}</li>
-          <li><strong>Nazwisko:</strong> {userData.last_name}</li>
-          <li><strong>PESEL:</strong> {userData.pesel}</li>
-          <li><strong>Data urodzenia:</strong> {new Date(userData.birth_date).toLocaleDateString()}</li>
-          <li><strong>Miejsce urodzenia:</strong> {userData.birth_place}</li>
-        </ul>
-      </div>
-
-      <div className="my-4">
-        <h3 className="text-lg font-semibold">Dokument</h3>
-        <ul className="list-none p-0">
-          <li><strong>Numer dokumentu:</strong> {userData.document_number}</li>
-          <li><strong>Data wydania:</strong> {new Date(userData.issue_date).toLocaleDateString()}</li>
-          <li><strong>Data ważności:</strong> {new Date(userData.expiration_date).toLocaleDateString()}</li>
-        </ul>
-      </div>
+      {/* Reszta JSX z sanitizacją tam, gdzie wyświetlasz dane */}
     </div>
   );
 }

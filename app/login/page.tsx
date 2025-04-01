@@ -50,8 +50,9 @@ export default function LoginModal() {
       });
 
       const data = await res.json();
+      console.log(data);
       if (!res.ok) {
-        throw new Error(data.code || "Błąd logowania");
+        throw new Error(data.error || "Błąd logowania");
       }
 
       router.push("/dashboard");

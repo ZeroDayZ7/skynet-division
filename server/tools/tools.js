@@ -5,7 +5,7 @@ function consoleLogRequest(req, res, next) {
   console.log(`= 4 => req.cookies: ${JSON.stringify(req.cookies, null, 2)}`);
   console.log(`= 5 => req.params: ${JSON.stringify(req.params, null, 2)}`);
   console.log(`= 6 => req.body: ${JSON.stringify(req.body, null, 2)}`);
-
+  console.log(`= 7 => API URL:  ${process.env.API_URL}`);
   next();
 }
 

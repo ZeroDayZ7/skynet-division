@@ -4,8 +4,6 @@ const bcrypt = require('bcrypt');
 const { i18n } = require('../language/i18nSetup');
 const { sendEmail } = require('../tools/emailUtils');
 
-const server_logs = require('../tools/server_logs');
-
 const router = express.Router();
 
 // =================================================================

@@ -12,6 +12,12 @@ i18n.configure({
 });
 
 function setLocale(req, res, next) {
+
+  if (!langHeader) { // Jeśli brak nagłówka, ustaw domyślny język
+    i18n.setLocale('pl');
+    return next();
+  }
+  
   const preferredLanguage = req.headers['accept-language'].split(',')[0];
   if (preferredLanguage) {
     const supportedLanguages = ['pl', 'en'];
@@ -20,7 +26,7 @@ function setLocale(req, res, next) {
       i18n.setLocale(locale);
     }
   }
-  console.log(`= 7 => next(i18n)`);
+  console.log(`= 8 => next(i18n)`);
   next();
 }
 

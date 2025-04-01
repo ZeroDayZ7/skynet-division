@@ -1,26 +1,11 @@
 const express = require('express');
 const db = require('../db');
 const bcrypt = require('bcrypt');
-const rateLimit = require('express-rate-limit');
-const logger = require('../tools/logger');
-
-// Ustaw limit dla prób logowania
-const loginLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minut
-  max: 5, // Maksymalnie 5 prób logowania
-  handler: (req, res) => {
-    res.status(429).json({
-      code: 'Zbyt wiele nieudanych prób logowania. Spróbuj ponownie później.',
-      message: 'Zbyt wiele nieudanych prób logowania. Spróbuj ponownie później.',
-    });
-  },
-});
 
 const { i18n } = require('../language/i18nSetup');
 
 const { generateAccessToken, verifyJwtToken, ClearSessionFromDatabase } = require('../tools/tokenTools');
 
-const serverLogs = require('../tools/server_logs');
 const router = express.Router();
 // ==========================================================================
 // Logowanie
@@ -35,7 +20,7 @@ router.get('/api/check-user', verifyJwtToken, (req, res) => {
 // ==========================================================================
 // Logowanie
 // ==========================================================================
-router.post('/api/login', loginLimiter, async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -119,7 +104,7 @@ router.post('/api/login', loginLimiter, async (req, res) => {
 // ==============================================================================
 // Logout
 // ==============================================================================
-router.post('/api/logout', verifyJwtToken, async (req, res, next) => {
+router.post('/logout', verifyJwtToken, async (req, res, next) => {
   try {
     const userID = req.user.id;
     console.log(`LOGOUT userID${userID}`);
