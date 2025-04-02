@@ -32,7 +32,7 @@ export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
       } finally {
         setLoading(false);
       }
-    }, 1000); // Opóźnienie 1000 ms (1 sekunda)
+    }, 100); // Opóźnienie 1000 ms (1 sekunda)
   };
 
   if (!isOpen) return null;

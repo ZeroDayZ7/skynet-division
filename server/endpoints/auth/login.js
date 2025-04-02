@@ -1,70 +1,102 @@
-const express = require('express');
-const router = express.Router();
-const { i18n } = require('../../language/i18nSetup');
-const authService = require('../../services/authService');
-// const userService = require('../../services/userService');
-const { generateAccessToken } = require('../../tools/tokenTools');
+import express from 'express';
+import { i18n } from '../../language/i18nSetup.js';
+import authService from '../../services/auth.service.js';
+import { generateAuthToken } from '../../services/token.service.js';
+import SystemLog from '../../utils/SystemLog.js';
 
-router.post('/', async (req, res) => {
+const router = express.Router();
+
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const userIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  const userIp = req.headers['x-forwarded-for'] || req.ip; // Używamy req.ip zamiast req.connection.remoteAddress
 
   try {
+    // 1. Walidacja danych wejściowych
     if (!email || !password) {
+      SystemLog.warn('Login attempt with incomplete data', { email });
       return res.status(400).json({
-        messages: 'error',
-        isLoggedIn: false,
-        code: i18n.__('LOGIN.INCOMPLETE_DATA')
+        success: false,
+        message: i18n.__('LOGIN.INCOMPLETE_DATA'),
+        isLoggedIn: false
       });
     }
 
-    // Walidacja użytkownika
+    // 2. Weryfikacja użytkownika
     const validationResult = await authService.validateUser(email, password, userIp);
     if (validationResult.error) {
-      return res.status(400).json(validationResult);
-    }
-
-    // Generowanie tokenu
-    const token = await generateAccessToken(validationResult.user.ids, validationResult.user.role);
-    if (!token) {
-      return res.status(400).json({
-        messages: 'error',
-        isLoggedIn: false,
-        code: i18n.__('LOGIN.WRONG_DATA')
+      SystemLog.warn('Invalid login attempt', { 
+        email,
+        reason: validationResult.error 
+      });
+      return res.status(401).json({
+        success: false,
+        error: "Wpisz poprawnie dane",
+        isLoggedIn: false
       });
     }
 
-    // Zapis sesji
+    // 3. Generowanie tokena JWT
+    const token = generateAuthToken({
+      id: validationResult.user.ids,
+      // Jeśli potrzebujesz email i role w tokenie:
+      // email: validationResult.user.email,
+      // role: validationResult.user.role
+    });
+
+    // 4. Zapisywanie sesji
     req.session.userId = validationResult.user.ids;
     
-    req.session.save((err) => {
+    req.session.save(async (err) => {
       if (err) {
-        console.error('Błąd sesji:', err);
-        return res.status(500).json({ error: 'Błąd logowania' });
+        SystemLog.error('Session save error', {
+          userId: validationResult.user.ids,
+          error: err.message
+        });
+        return res.status(500).json({ 
+          success: false,
+          message: i18n.__('INTERNAL_SERVER_ERROR'),
+          isLoggedIn: false
+        });
       }
 
-      res.cookie(process.env.AT_NAME, token.accessToken, {
+      // 5. Ustawienie bezpiecznego ciasteczka
+      res.cookie(process.env.ACCESS_COOKIE_NAME, token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        maxAge: parseInt(process.env.C_MAX_AGE, 10),
-        sameSite: false,
+        maxAge: parseInt(process.env.JWT_EXPIRES_IN_MS || '3600000', 10), // 1h domyślnie
+        // sameSite: 'lax',
+        // domain: process.env.COOKIE_DOMAIN
+      });
+ 
+      // 6. Zwrócenie odpowiedzi
+      SystemLog.info('User logged in successfully', { 
+        userId: validationResult.user.ids,
+        ip: userIp 
       });
 
       return res.status(200).json({
-        message: 'Logowanie pomyślne',
+        success: true,
+        message: i18n.__('LOGIN.SUCCESS'),
         isLoggedIn: true,
-        role: validationResult.user.role,
+        user: {
+          id: validationResult.user.ids
+        }
       });
     });
 
   } catch (error) {
+    SystemLog.error('Login process failed', {
+      email,
+      error: error.message,
+      stack: error.stack
+    });
+    
     return res.status(500).json({
-      message: 'Błąd serwera',
-      code: i18n.__('INTERNAL_SERVER_ERROR'),
-      messages: 'error',
-      isLoggedIn: false,
+      success: false,
+      message: i18n.__('INTERNAL_SERVER_ERROR'),
+      isLoggedIn: false
     });
   }
 });
 
-module.exports = router;
+export default router;

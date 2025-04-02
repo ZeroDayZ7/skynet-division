@@ -1,54 +1,53 @@
-// sessionManager.js
-require('dotenv').config();
-const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);
-const db = require('../db');
+import session from 'express-session';
+import connectSessionSequelize from 'connect-session-sequelize';
+import sequelize from '../config/db.js';
 
-// Opcje sesji
-const sessionOptions = {
-  checkExpirationInterval: 10000, // Czas w milisekundach między sprawdzeniami wygasłych sesji
-  expiration: 3600000, // Czas wygaśnięcia sesji w milisekundach
-  schema: {
-    tableName: 'sessions_store', // Nazwa tabeli
-    columnNames: {
-      session_id: 'session_id', // Nazwa kolumny identyfikatora sesji
-      expires: 'expires', // Nazwa kolumny daty wygaśnięcia
-      data: 'data' // Nazwa kolumny danych sesji
+export default function sessionManager(app) {
+  const SequelizeStore = connectSessionSequelize(session.Store);
+
+  const sessionStore = new SequelizeStore({
+    db: sequelize,
+    tableName: 'sessions',
+    checkExpirationInterval: 15 * 60 * 1000, // co 15 minut sprawdzaj wygasłe sesje
+    expiration: 24 * 60 * 60 * 1000, // sesje wygasają po 24 godzinach
+    extendDefaultFields: (defaults, session) => {
+      return {
+        data: defaults.data,
+        expires: defaults.expires,
+        userId: session.userId // przykład dodatkowego pola
+      };
     }
-  }
-};
+  });
 
-// Tworzenie instancji MySQLStore z opcjami
-const sessionStore = new MySQLStore(sessionOptions, db, (error) =>{
-  if(error) {
-    console.log(`SESSION_ERROR: ${error}`);
-    return;
-  }
-});
+  // Konfiguracja sesji
+  const sessionConfig = {
+    name: process.env.SESSION_COOKIE_NAME || 'sessionId', // lepsze zarządzanie ciasteczkami
+    secret: process.env.SESSION_KEY || 'fallback_secret_key_123',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    proxy: process.env.NODE_ENV === 'production', // ważne jeśli za proxy
+    cookie: {
+      maxAge: parseInt(process.env.SESSION_MAX_AGE) || 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      domain: process.env.SESSION_DOMAIN || undefined // dla domen krzyżowych
+    }
+  };
 
-// Middleware session
-const sessionMiddleware = session({
-  store: sessionStore,
-  secret: process.env.SESSION_KEY || 'default_secret', // Dodanie domyślnej wartości dla bezpieczeństwa
-  resave: false, // Ustawienie na false, aby nie zapisywać sesji bez zmian
-  saveUninitialized: false, // Nie zapisuj sesji, jeśli nie została zainicjalizowana
-  rolling: false, // Automatyczne odświeżanie sesji
-  name: process.env.SESSION_NAME || 'default_session_name', // Dodanie domyślnej nazwy sesji
-  cookie: {
-    maxAge: Number(process.env.C_MAX_AGE) || 900000, // Domyślny czas trwania sesji 15 minut
-    secure: process.env.NODE_ENV === "production", // Ustaw na true, jeśli używasz HTTPS
-    httpOnly: true, // Ustawienie httpOnly na true dla bezpieczeństwa
-    sameSite: false,
-    // sameSite: 'strict', // Ograniczenie ciasteczek do tej samej witryny
-    // sameSite: 'lax', // Ograniczenie ciasteczek do tej samej witryny
-    // sameSite: 'None', // Najmniej restrykcyjne, przesyła ciasteczka we wszystkich żądaniach (wymaga HTTPS).
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
   }
-});
 
-function sessionManager(app) {
-  app.use(sessionMiddleware);
+  app.use(session(sessionConfig));
+
+  // Synchronizacja store z obsługą błędów
+  sessionStore.sync()
+    .then(() => console.log('Session store synced successfully'))
+    .catch(err => console.error('Error syncing session store:', err));
+
+  // Czyszczenie starych sesji przy starcie
+  sessionStore.startExpiringSessions();
 }
-
-
-
-module.exports = sessionManager;

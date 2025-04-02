@@ -26,7 +26,8 @@
 		"PASSWORD_TOO_SHORT": "Hasło musi mieć minimum 6 znaków, 1 duża, 1 mała (litera) 1 cyfrę i 1 znak specjalny.",
 		"EMAIL_EXIST": "Adres e-mail już istnieje.",
 		"CONTACT_SUCCESS": "Dziękujemy za wiadomość, odpowiemy najszybciej jak to możliwe.",
-		"CONTACT_NO_SUCCESS": "Wystapił nieoczekiwany błąd, skontaktuj się z support@crims-city.ct8.pl."
+		"CONTACT_NO_SUCCESS": "Wystapił nieoczekiwany błąd, skontaktuj się z support@crims-city.ct8.pl.",
+		"SUCCESS": "LOGIN.SUCCESS"
 	},
 	"INTERNAL_SERVER_ERROR": "INTERNAL_SERVER_ERROR",
 	"EMAIL_WITH_RESET": "EMAIL_WITH_RESET",

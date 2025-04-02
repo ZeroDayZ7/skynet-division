@@ -1,3 +1,4 @@
+// Funkcja logująca dane żądania
 function consoleLogRequest(req, res, next) {
   console.log(`= 1 => req.method: ${req.method}`);
   console.log(`= 2 => req.url: ${req.url}`);
@@ -9,21 +10,24 @@ function consoleLogRequest(req, res, next) {
   next();
 }
 
-module.exports = { consoleLogRequest };
+// Eksport funkcji
+export { consoleLogRequest };
 
+// Jeśli masz drugą funkcję, odkomentuj ją i zmień sposób eksportu
+/*
+function consoleLogHeaders(req, res, next) {
+  console.log(`= 1 => req.headers: ${JSON.stringify(req.headers, null, 2)}`);
 
-// function consoleLogHeaders(req, res, next) {
-//   console.log(`= 1 => req.headers: ${JSON.stringify(req.headers, null, 2)}`);
-
-//   if (req.cookies) {
-//     req.sessionToken = req.cookies['Oo!SK'];
-//     req.accessToken = req.cookies['access_token'];
-//   } else {
-//     console.log('=> Brak ciasteczek w nagłówkach.');
-//   }
+  if (req.cookies) {
+    req.sessionToken = req.cookies['Oo!SK'];
+    req.accessToken = req.cookies['access_token'];
+  } else {
+    console.log('=> Brak ciasteczek w nagłówkach.');
+  }
   
-//   console.log(`next(consoleLogHeaders)`);
-//   next();
-// }
+  console.log(`next(consoleLogHeaders)`);
+  next();
+}
 
-// module.exports = { consoleLogHeaders };
+export { consoleLogHeaders };
+*/
