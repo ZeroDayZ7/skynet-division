@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import SystemLog from '../utils/SystemLog.js';
-import jwtConfig from '../config/jwt.config.js';
+import SystemLog from '#utils/SystemLog.js';
+import jwtConfig from '#config/jwt.config.js';
 
 // Funkcja pomocnicza do szyfrowania ID
 const encryptId = (id) => {

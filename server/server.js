@@ -1,13 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import sessionManager from './tools/sessionManager.js';
+import sessionManager from '#tools/sessionManager.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import SystemLog from './utils/SystemLog.js';
+import SystemLog from '#utils/SystemLog.js';
 import helmet from 'helmet';
-import { setLocale } from './language/i18nSetup.js'; // Import setLocale
-import { consoleLogRequest } from './tools/tools.js';
-import apiRouter from './routes/apiRouter.js'; // Statyczny import
+import { setLocale } from '#language/i18nSetup.js'; // Import setLocale
+import { consoleLogRequest } from '#tools/tools.js';
+import apiRouter from '#routes/apiRouter.js'; // Statyczny import
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ console.log(`====================== START ===========================`);
 //     }
 //   }
 // }));
-
+ 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

@@ -1,10 +1,10 @@
 import express from 'express';
 
-import loginEndpoint from '../endpoints/auth/login.js';
-import logoutEndpoint from '../endpoints/auth/logout.js';
+import loginEndpoint from '#endpoints/v1/auth/login.js';
+import logoutEndpoint from '#endpoints/v1/auth/logout.js';
 
-import { authMiddleware } from '../middlewares/auth.js';
-import rateLimiterConfig from '../config/rateLimiterConfig.js'; // Import domyślny
+import { authMiddleware } from '#middlewares/auth.js';
+import rateLimiterConfig from '#config/rateLimiterConfig.js'; // Import domyślny
 
 const { authLimiter } = rateLimiterConfig;
 
@@ -15,7 +15,6 @@ router.post('/login', authLimiter, loginEndpoint);
 
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutEndpoint);
-// router.post('/logout', logoutEndpoint);
 
 // Rejestracja
 // router.post('/register', require('../endpoints/registrationEndpoint.js'));

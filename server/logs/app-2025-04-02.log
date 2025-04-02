@@ -1,0 +1,95 @@
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 05:24:49"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 05:25:07","tokenPreview":"t1NOUm9k","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 05:25:07","userId":77}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 05:44:35"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:13:50"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:14:16"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:14:48"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:15:16"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:20:08"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:21:00"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:21:07"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:21:43"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:22:01"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:22:15"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:22:31"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:22:42"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:22:56"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:23:07"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:23:25"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:24:18"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:24:29"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:24:36"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:25:21"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:25:53"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:26:02"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:26:07"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:27:04"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:28:20"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:29:10"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 06:30:33","tokenPreview":"Sr1zekk8","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 06:30:33","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 06:31:29","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 06:31:29","userId":77}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:33:58"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 06:34:37","tokenPreview":"q0WY6ANA","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 06:34:37","userId":77}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:53:55"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 06:56:09"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 06:57:03","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 06:57:03","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 06:57:52","tokenPreview":"e2hW6-E0","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 06:57:52","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 06:58:18","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 06:58:18","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 06:58:19","tokenPreview":"SLPwkqK8","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 06:58:19","userId":77}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 07:02:21"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:27:20","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:27:20","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:27:28","tokenPreview":"MaiUMxOU","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:27:28","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:27:50","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:27:50","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:27:52","tokenPreview":"Ok7sYjHE","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:27:52","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:41:57","tokenPreview":"62nbuy48","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:41:57","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:42:18","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:42:18","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:42:20","tokenPreview":"AL_09viw","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:42:20","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:42:30","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:42:30","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:42:32","tokenPreview":"SY_AqvGo","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:42:32","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:42:58","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:42:58","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:43:00","tokenPreview":"LsHucRh4","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:43:00","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:44:01","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:44:01","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:44:28","tokenPreview":"O07I2wVg","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:44:28","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:44:35","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:44:35","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:44:58","tokenPreview":"KeW2wkCg","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:44:58","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:45:04","tokenPreview":"UIa18C4c","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:45:04","userId":77}
+{"level":"warn","message":"Brute force attempt from IP: ::1","timestamp":"2025-04-02 07:45:14"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-02 07:45:31"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:45:33","tokenPreview":"xhRJcXyI","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:45:33","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:45:50","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:45:50","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:46:14","tokenPreview":"USadxAvU","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:46:14","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:46:20","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:46:20","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:46:40","tokenPreview":"Z3Wt31FM","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:46:40","userId":77}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-02 07:46:55","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-02 07:46:55","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-02 07:47:13","tokenPreview":"H7oIii7k","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-02 07:47:13","userId":77}

@@ -1,5 +1,5 @@
 import rateLimit from 'express-rate-limit';
-import SystemLog from '../utils/SystemLog.js'; // Import całej instancji loggera
+import SystemLog from '#utils/SystemLog.js'; // Import całej instancji loggera
 
 const isLocal = process.env.NODE_ENV === 'development';
 

@@ -37,8 +37,6 @@ export default function LoginModal() {
         router.push("/dashboard");
       } catch (err: any) {
         setError(err.message || "Wystąpił problem z logowaniem");
-      } finally {
-        setIsLoading(false);
       }
     }, 100);
   };

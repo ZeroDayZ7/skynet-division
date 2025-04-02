@@ -48,14 +48,11 @@ export default function ProfilePage() {
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       try {
-        const token = localStorage.getItem("jwt_token"); // lub z ciasteczka
         const response = await fetch(`${apiUrl}/api/user-eid`, {
           method: "POST",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-            "X-CSRF-Token": await fetchCsrfToken(),
           },
           signal: controller.signal,
         });

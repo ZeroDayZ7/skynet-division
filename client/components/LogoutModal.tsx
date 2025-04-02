@@ -29,8 +29,6 @@ export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
         }
       } catch (error) {
         console.error("Error logging out", error);
-      } finally {
-        setLoading(false);
       }
     }, 100); // Opóźnienie 1000 ms (1 sekunda)
   };

@@ -1,8 +1,8 @@
 import express from 'express';
-import { i18n } from '../../language/i18nSetup.js';
-import authService from '../../services/auth.service.js';
-import { generateAuthToken } from '../../services/token.service.js';
-import SystemLog from '../../utils/SystemLog.js';
+import { i18n } from '#language/i18nSetup.js';
+import authService from '#services/auth.service.js';
+import { generateAuthToken } from '#services/token.service.js';
+import SystemLog from '#utils/SystemLog.js';
 
 const router = express.Router();
 

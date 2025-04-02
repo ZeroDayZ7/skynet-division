@@ -1,6 +1,6 @@
 import session from 'express-session';
 import connectSessionSequelize from 'connect-session-sequelize';
-import sequelize from '../config/db.js';
+import sequelize from '#config/db.js';
 
 export default function sessionManager(app) {
   const SequelizeStore = connectSessionSequelize(session.Store);

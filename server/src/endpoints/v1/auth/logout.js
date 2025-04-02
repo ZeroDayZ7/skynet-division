@@ -1,6 +1,6 @@
 import express from "express";
-import SystemLog from "../../utils/SystemLog.js"; // Załóżmy, że masz logger
-import { i18n } from "../../language/i18nSetup.js"; // Załóżmy, że masz i18n
+import SystemLog from "#utils/SystemLog.js"; // Załóżmy, że masz logger
+import { i18n } from "#language/i18nSetup.js"; // Załóżmy, że masz i18n
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post("/logout", async (req, res) => {
         isLoggedIn: false,
       });
     }
-
+ 
     const userId = req.session.userId; // Pobierz ID użytkownika z sesji
 
     // 2. Usuń sesję po stronie serwera
