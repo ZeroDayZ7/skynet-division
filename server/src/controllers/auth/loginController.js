@@ -13,8 +13,7 @@ export const loginController = async (req, res) => {
     if (!email || !password) {
       SystemLog.warn('Login attempt with incomplete data', { email });
       return res.status(400).json({
-        success: false,
-        isLoggedIn: false
+        isAuthenticated: false
       });
     }
 
@@ -23,22 +22,22 @@ export const loginController = async (req, res) => {
     if (validationResult.error) {
       SystemLog.warn('Invalid login attempt', { 
         email,
-        reason: validationResult.code 
+        reason: validationResult.code
       });
       return res.status(401).json({
-        success: false,
-        isLoggedIn: false
+        isAuthenticated: false,
+        message: validationResult.code
       });
     }
 
     // 3. Generowanie tokena JWT
     const token = generateAuthToken({
-      id: validationResult.user.ids
+      id: validationResult.user.id
       // Jeśli chcesz dodać role, dodaj je do tokenu
     });
 
     // 4. Zapisywanie sesji
-    req.session.userId = validationResult.user.ids;
+    req.session.userId = validationResult.user.id;
 
     req.session.save(async (err) => {
       if (err) {
@@ -47,8 +46,7 @@ export const loginController = async (req, res) => {
           error: err.message
         });
         return res.status(500).json({ 
-          success: false,
-          isLoggedIn: false
+          isAuthenticated: false
         });
       }
 
@@ -66,12 +64,7 @@ export const loginController = async (req, res) => {
       });
 
       return res.status(200).json({
-        success: true,
-        isLoggedIn: true,
-        isAuthenticated: true,
-        user: {
-          id: validationResult.user.id
-        }
+        isAuthenticated: true
       });
     });
 
@@ -83,8 +76,7 @@ export const loginController = async (req, res) => {
     });
 
     return res.status(500).json({
-      success: false,
-      isLoggedIn: false
+      isAuthenticated: false
     });
   }
 };

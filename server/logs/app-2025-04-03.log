@@ -1235,3 +1235,402 @@
 {"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:43:00"}
 {"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:43:23"}
 {"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:43:26"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:44:43"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:44:49"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:44:50"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:44:54","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:44:54"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:44:54","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:44:54"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:44:54"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:44:54"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:44:54"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:45:11"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:45:18"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:46:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:46:29","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:46:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:46:29"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:46:29","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:46:29"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:46:29"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:46:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:46:33"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:47:57"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:48:00"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:48:02"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:48:05","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:48:05"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:48:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:48:05","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:48:05"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:48:05"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:48:05"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:48:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:48:28","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:48:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:48:28","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:48:28"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:48:28"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:48:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:49:37"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:50:00","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:50:00"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:50:00"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:50:00","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:50:00"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:50:00"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:50:00"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:50:35"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:51:51"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:51:53"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:52:01"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:52:02"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:24","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:24"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:24"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:24","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:24"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:24"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:24"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:26"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:28","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:28","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:28"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:28"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:36"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:39","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:39"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:39"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:39","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:39"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:39"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:39"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:56"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:58","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:58"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 15:53:58","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 15:53:58"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:53:58"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:58"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 15:53:58"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:54:32"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:54:34"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:54:34"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:54:34"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 15:58:24"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:58:27"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:58:27"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:58:27"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 15:58:52"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:58:52"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/user-eid","timestamp":"2025-04-03 15:58:52"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:03:22"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:03:28"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 16:03:29","tokenPreview":"gEeeooy0","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 16:03:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:03:30"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:03:33"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:03:36","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:03:36"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:03:36"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:03:36","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:03:36"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:03:36"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:03:36"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:04:04"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:04:23"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:05:31"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:05:33"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:06:26"}
+{"level":"info","message":"SESSION is ACTIVE: \"AaU2CEkpZlTk1aWSUf3KNXCDnHqKLINQ\"","timestamp":"2025-04-03 16:08:48"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 16:13:48","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 16:13:48","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 16:13:48"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 16:14:02","tokenPreview":"cag33oN0","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 16:14:02"}
+{"level":"info","message":"SESSION is ACTIVE: \"moKPs58LycvfyZHnKHYUY81dNRwwUrP_\"","timestamp":"2025-04-03 16:14:02"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 16:14:10","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 16:14:10","userId":77}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 16:14:15","tokenPreview":"2PdgPgsc","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 16:14:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"W6RjiOdy1InMRwaPp4USkY8AYbjWgP2y\"","timestamp":"2025-04-03 16:14:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"W6RjiOdy1InMRwaPp4USkY8AYbjWgP2y\"","timestamp":"2025-04-03 16:14:22"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:14:25","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:14:25"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:14:25","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:14:25"}
+{"level":"info","message":"SESSION is ACTIVE: \"W6RjiOdy1InMRwaPp4USkY8AYbjWgP2y\"","timestamp":"2025-04-03 16:14:25"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:14:25"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:14:25"}
+{"level":"info","message":"SESSION is ACTIVE: \"W6RjiOdy1InMRwaPp4USkY8AYbjWgP2y\"","timestamp":"2025-04-03 16:14:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"W6RjiOdy1InMRwaPp4USkY8AYbjWgP2y\"","timestamp":"2025-04-03 16:17:36"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 16:22:36","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 16:22:36","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 16:22:36"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 16:23:19","tokenPreview":"6gtKwWl0","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 16:23:19"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:23:20"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:23:22"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:25:03"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:25:04"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:25:15","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:25:15"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 16:25:15","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 16:25:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:25:15"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:25:15"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 16:25:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"xKk9hFqjyp96LxE6W--G8DGZnAfnHDfk\"","timestamp":"2025-04-03 16:25:17"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 16:30:17","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 16:30:17","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 16:30:17"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 16:33:24","tokenPreview":"QfyEIUCY","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 16:33:24"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:33:25"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:33:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:33:47"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:33:55"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:34:06"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:34:11"}
+{"level":"info","message":"SESSION is ACTIVE: \"FCPNvz9Qm39uHwFMzceYZsYBg3KkJLIE\"","timestamp":"2025-04-03 16:34:12"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 16:39:12","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 16:39:12","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 16:39:12"}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 17:21:28","tokenPreview":"PD1uFE44","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 17:21:28"}
+{"level":"info","message":"SESSION is ACTIVE: \"K_wN2fZJSXxS3ETKEL8ZEAM30P0Vq5bI\"","timestamp":"2025-04-03 17:21:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 17:23:46","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 17:23:46","userId":77}
+{"email":"yovasec567@fincainc.com1","level":"warn","message":"Invalid login attempt","reason":"LOGIN.WRONG_DATA","timestamp":"2025-04-03 17:23:49"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:25:18"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:26:25"}
+{"email":"yovasec567@fincainc.com1","level":"warn","message":"Invalid login attempt","reason":"LOGIN.WRONG_DATA","timestamp":"2025-04-03 17:26:28"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:27:23"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:28:07"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:28:50"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:29:11"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:29:13","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 17:29:13","tokenPreview":"n2uagJJs","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 17:29:13"}
+{"level":"info","message":"SESSION is ACTIVE: \"TXQ6BQfRLygrjEthOCB5GTO4y1tOK4Wg\"","timestamp":"2025-04-03 17:29:14"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 17:29:55","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 17:29:55","userId":77}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:30:07","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","reason":"LOGIN.USER_BLOCKED","timestamp":"2025-04-03 17:30:07"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:31:53"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:31:56","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","timestamp":"2025-04-03 17:31:56"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:32:13","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","timestamp":"2025-04-03 17:32:13"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 17:33:20"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:33:21","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","reason":"LOGIN.USER_BLOCKED","timestamp":"2025-04-03 17:33:21"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:34:23","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","reason":"LOGIN.USER_BLOCKED","timestamp":"2025-04-03 17:34:23"}
+{"activation_token":"787","lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:38:00","userBlock":1}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","reason":"LOGIN.USER_BLOCKED","timestamp":"2025-04-03 17:38:00"}
+{"activation_token":"787","lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:38:13","userBlock":0}
+{"email":"yovasec567@fincainc.com","level":"warn","message":"Invalid login attempt","reason":"LOGIN.ACCOUNT_ACTIVATE_FALSE","timestamp":"2025-04-03 17:38:13"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 17:38:29","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 17:38:29","tokenPreview":"BUY3kL24","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 17:38:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"a7RCpCP9_Rl6nyBbgTA3rXaP7sORmFKJ\"","timestamp":"2025-04-03 17:38:30"}
+{"level":"info","message":"SESSION is ACTIVE: \"a7RCpCP9_Rl6nyBbgTA3rXaP7sORmFKJ\"","timestamp":"2025-04-03 17:40:42"}
+{"level":"info","message":"SESSION is ACTIVE: \"a7RCpCP9_Rl6nyBbgTA3rXaP7sORmFKJ\"","timestamp":"2025-04-03 17:45:09"}
+{"level":"info","message":"SESSION is ACTIVE: \"a7RCpCP9_Rl6nyBbgTA3rXaP7sORmFKJ\"","timestamp":"2025-04-03 17:45:17"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 17:50:17","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 17:50:17","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 17:50:17"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 18:46:42"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 18:46:49"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 18:46:56"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 18:47:04"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:12:50"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:12:59"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:14:44"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:17:37"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:18:16"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:18:42"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:20:06"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:27:51"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 19:27:56","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 19:27:56","tokenPreview":"esYucX50","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 19:27:56","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"p3noNbFobJeOfw8VM5hDHfz4_I6mnJ6t\"","timestamp":"2025-04-03 19:27:56"}
+{"level":"info","message":"SESSION is ACTIVE: \"p3noNbFobJeOfw8VM5hDHfz4_I6mnJ6t\"","timestamp":"2025-04-03 19:27:59"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:31:12"}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 19:31:15"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 19:31:17","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 19:31:17","tokenPreview":"mWRUUGu8","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 19:31:17","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:31:18"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:31:20"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:32:13"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:34:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:35:52"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:35:53","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:35:53"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:35:53","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:35:53"}
+{"error":{"name":"SequelizeDatabaseError","original":{"code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;","sqlMessage":"Table 'crimscity.notification_templates' doesn't exist","sqlState":"42S02"},"parameters":{},"parent":{"code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;","sqlMessage":"Table 'crimscity.notification_templates' doesn't exist","sqlState":"42S02"},"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;"},"level":"error","message":"Błąd pobierania powiadomień","timestamp":"2025-04-03 19:35:53","userId":"77"}
+{"error":{"name":"SequelizeDatabaseError","original":{"code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;","sqlMessage":"Table 'crimscity.notification_templates' doesn't exist","sqlState":"42S02"},"parameters":{},"parent":{"code":"ER_NO_SUCH_TABLE","errno":1146,"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;","sqlMessage":"Table 'crimscity.notification_templates' doesn't exist","sqlState":"42S02"},"sql":"SELECT `UserNotification`.`id`, `UserNotification`.`user_id`, `UserNotification`.`notification_id`, `UserNotification`.`is_read`, `UserNotification`.`received_at`, `template`.`id` AS `template.id`, `template`.`type` AS `template.type`, `template`.`message` AS `template.message` FROM `user_notifications` AS `UserNotification` LEFT OUTER JOIN `notification_templates` AS `template` ON `UserNotification`.`notification_id` = `template`.`id` WHERE `UserNotification`.`user_id` = '77' AND `UserNotification`.`is_read` = 0 ORDER BY `UserNotification`.`received_at` DESC LIMIT 0, 10;"},"level":"error","message":"Błąd pobierania powiadomień","timestamp":"2025-04-03 19:35:53","userId":"77"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:38:04"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:38:05","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:38:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:38:05","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:38:05"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:41:56"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:41:56","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:41:56"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:41:56","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:41:56"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/logout","timestamp":"2025-04-03 19:46:57"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:46:57"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/notifications","timestamp":"2025-04-03 19:46:57"}
+{"action":"authentication","ip":"::1","level":"warn","message":"Missing authentication token","path":"/notifications","timestamp":"2025-04-03 19:46:57"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:46:57"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:46:59"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 19:47:46"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:47:54"}
+{"level":"info","message":"SESSION is ACTIVE: \"3BcURlKd8rnzTNg2I53fvXXwTvmwFz5t\"","timestamp":"2025-04-03 19:47:55"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 19:48:05","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 19:48:05","tokenPreview":"xAheEAvg","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 19:48:05","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"FOj_xpEUU5A2zrWetBu6b7dxRWrkQMXP\"","timestamp":"2025-04-03 19:48:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:48:08","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:48:08"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:48:08","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:48:08"}
+{"level":"info","message":"SESSION is ACTIVE: \"FOj_xpEUU5A2zrWetBu6b7dxRWrkQMXP\"","timestamp":"2025-04-03 19:48:08"}
+{"level":"info","message":"SESSION is ACTIVE: \"FOj_xpEUU5A2zrWetBu6b7dxRWrkQMXP\"","timestamp":"2025-04-03 19:48:17"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:48:18","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:48:18"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:48:18","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:48:18"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 19:53:18","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 19:53:18","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 19:53:18"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 19:54:00","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 19:54:00","tokenPreview":"eNFID9EY","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 19:54:00","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"yxtQ9qBUHkIQgRyGAjqHdeXyNxKQ_H_K\"","timestamp":"2025-04-03 19:54:01"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:54:03","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:54:03"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:54:03","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:54:03"}
+{"level":"info","message":"SESSION is ACTIVE: \"yxtQ9qBUHkIQgRyGAjqHdeXyNxKQ_H_K\"","timestamp":"2025-04-03 19:54:03"}
+{"level":"info","message":"SESSION is ACTIVE: \"yxtQ9qBUHkIQgRyGAjqHdeXyNxKQ_H_K\"","timestamp":"2025-04-03 19:58:09"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:58:09","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:58:09"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:58:09","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:58:09"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/undefined/read","timestamp":"2025-04-03 19:58:14","userId":"77"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:59:24","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:59:24"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 19:59:52","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 19:59:52"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:00:13","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:00:13"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:00:17","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:00:17"}
+{"level":"info","message":"SESSION is ACTIVE: \"yxtQ9qBUHkIQgRyGAjqHdeXyNxKQ_H_K\"","timestamp":"2025-04-03 20:01:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:01:28","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:01:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:01:28","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:01:28"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:05:22","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:05:22"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 20:06:29","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 20:06:29","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 20:06:29"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 20:06:37","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 20:06:37","tokenPreview":"VAV6LEe8","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 20:06:37","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"in0FTgmNzzYBe3vA8ZVRz5RfI2FC3Tsy\"","timestamp":"2025-04-03 20:06:38"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:06:40","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:06:40"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:06:40","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:06:40"}
+{"level":"info","message":"SESSION is ACTIVE: \"in0FTgmNzzYBe3vA8ZVRz5RfI2FC3Tsy\"","timestamp":"2025-04-03 20:06:40"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 20:11:41","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 20:11:41","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 20:11:41"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 20:15:14","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 20:15:14","tokenPreview":"M551o3Gw","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 20:15:14","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"yz_6SP7nU99-qkP0OHz0WTRZL4WlAoM8\"","timestamp":"2025-04-03 20:15:15"}
+{"level":"info","message":"SESSION is ACTIVE: \"yz_6SP7nU99-qkP0OHz0WTRZL4WlAoM8\"","timestamp":"2025-04-03 20:15:19"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 20:15:23","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 20:15:23"}
+{"level":"info","message":"SESSION is ACTIVE: \"yz_6SP7nU99-qkP0OHz0WTRZL4WlAoM8\"","timestamp":"2025-04-03 20:15:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/user-eid","timestamp":"2025-04-03 20:15:23","userId":"77"}
+{"level":"info","message":"Pobieranie danych e-dowodu dla użytkownika ID: 77","timestamp":"2025-04-03 20:15:23"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 20:15:23"}
+{"level":"info","message":"Dane zwrócone:","timestamp":"2025-04-03 20:15:23"}
+{"level":"info","message":"SESSION is ACTIVE: \"yz_6SP7nU99-qkP0OHz0WTRZL4WlAoM8\"","timestamp":"2025-04-03 20:16:04"}
+{"level":"info","message":"SESSION is ACTIVE: \"yz_6SP7nU99-qkP0OHz0WTRZL4WlAoM8\"","timestamp":"2025-04-03 20:16:06"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 20:21:06","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 20:21:06","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 20:21:06"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 20:21:37"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 20:21:56"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 20:22:53"}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 20:23:05","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 20:23:05","tokenPreview":"J970OUhY","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 20:23:05","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:23:06"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:23:06","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:23:06"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:23:06","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:23:06"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:23:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:23:23","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:23:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:23:23","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:23:23"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:25:27"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:25:29","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:25:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:25:29"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:25:29","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:25:29"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:25:37"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:25:40","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:25:40"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:25:40"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:25:40","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:25:40"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:26:11"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:26:11","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:26:11"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:26:11","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:26:11"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:27:03","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:27:03"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:27:04"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:27:04","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:27:04"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:30:23","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:30:23"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:30:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications","timestamp":"2025-04-03 20:30:23","userId":"77"}
+{"level":"info","message":"Pobieranie powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:30:23"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:30:47","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:30:47"}
+{"level":"info","message":"SESSION is ACTIVE: \"iIC792MQeW0hgBibx683Wfzk6fmH66mo\"","timestamp":"2025-04-03 20:30:47"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:30:47","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:30:47"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 20:33:01","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 20:33:01","userId":77}
+{"activation_token":null,"lastLoginIp":"::1","level":"info","message":"userDetails:","timestamp":"2025-04-03 20:33:04","userBlock":0}
+{"action":"token_generation","level":"info","message":"Authentication token generated","timestamp":"2025-04-03 20:33:04","tokenPreview":"YTbZcVk0","userId":77}
+{"ip":"::1","level":"info","message":"User logged in successfully","timestamp":"2025-04-03 20:33:04","userId":77}
+{"level":"info","message":"SESSION is ACTIVE: \"abm291s5kp20NFnaPbGMaXIBQ4WGql-t\"","timestamp":"2025-04-03 20:33:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:33:05","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:33:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:33:05","userId":"77"}
+{"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:33:05"}

@@ -12,7 +12,7 @@ export const checkUserDetails = async (email) => {
 export const getUserByEmail = async (email) => {
   const user = await User.findOne({
     where: { email },
-    attributes: ['pass', 'ids'],
+    attributes: ['pass', 'id'],
   });
   return user ? user.get({ plain: true }) : null;
 };

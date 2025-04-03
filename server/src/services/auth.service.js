@@ -1,18 +1,16 @@
-import sequelize from '../config/db.js';
 import bcrypt from 'bcrypt';
 import userService from './user.service.js';
+import SystemLog from '#utils/SystemLog.js';
 
 export const validateUser = async (email, password, ip) => {
   const userDetails = await userService.checkUserDetails(email);
 
   // Debugowanie – sprawdź, co dokładnie zwraca userDetails
-  console.log('userDetails:', userDetails);
+  SystemLog.info('userDetails:', userDetails);
 
   if (!userDetails || userDetails.userBlock === 1 || userDetails.activation_token !== null) {
     return {
       error: true,
-      messages: 'error',
-      isLoggedIn: false,
       code: userDetails
         ? userDetails.userBlock
           ? 'LOGIN.USER_BLOCKED'
@@ -26,10 +24,7 @@ export const validateUser = async (email, password, ip) => {
 
   if (!isPasswordValid) {
     return {
-      error: true,
-      messages: 'error',
-      isLoggedIn: false,
-      code: 'LOGIN.WRONG_DATA'
+      error: true
     };
   }
 

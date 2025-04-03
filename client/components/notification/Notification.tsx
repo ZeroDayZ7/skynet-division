@@ -3,22 +3,31 @@
 import { useState, useEffect } from "react";
 import { FaBell } from "react-icons/fa";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
+
 export default function Notifications() {
   const [count, setCount] = useState<number>(0);
 
   useEffect(() => {
-    // Symulacja danych powiadomień za pomocą tablicy
-    const notifications = [
-      { id: 1, message: "Nowa wiadomość!" },
-      { id: 2, message: "Aktualizacja profilu." },
-      { id: 3, message: "Przypomnienie o spotkaniu." },
-      { id: 4, message: "Nowy komentarz." },
-      { id: 5, message: "Zaproszenie do grupy." },
-    ];
+    const fetchNotificationsCount = async () => {
+      try {
+        const response = await fetch(`${apiUrl}/api/users/notifications/unread-count`, {
+          method: "GET",
+          credentials: "include", // Jeżeli potrzebujesz autoryzacji
+        });
 
-    // Losowa liczba powiadomień z tablicy
-    // const randomCount = Math.floor(Math.random() * (notifications.length + 1));
-    setCount(4);
+        if (!response.ok) {
+          throw new Error("Failed to fetch notifications count");
+        }
+
+        const data = await response.json();
+        setCount(data.unreadCount); // Zakładając, że API zwraca pole `unreadCount`
+      } catch (error) {
+        console.error("Error fetching notifications count:", error);
+      }
+    };
+
+    fetchNotificationsCount();
   }, []);
 
   const displayCount = count > 9 ? "9+" : count;

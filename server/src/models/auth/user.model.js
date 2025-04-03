@@ -5,7 +5,7 @@ import { Model, DataTypes } from 'sequelize';
 class User extends Model {}
 
 User.init({
-  ids: {
+  id: {
     type: DataTypes.INTEGER(11),
     primaryKey: true,
     autoIncrement: true,

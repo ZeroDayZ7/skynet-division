@@ -113,7 +113,7 @@ export default function ProfilePage() {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-50">
         <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-          <h2 className="text-xl font-bold text-red-600 mb-4">Błąd</h2>
+          <h2 className="text-xl font-bold text-red-600 mb-4 text-center">Błąd</h2>
           <p className="text-gray-700">{error}</p>
           <button
             className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"

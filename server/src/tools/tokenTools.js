@@ -80,10 +80,10 @@ export const verifyJwtToken = async (req, res, next) => {
 };
 
 // Tworzenie tokenu JWT
-export const generateAccessToken = async (ids) => {
+export const generateAccessToken = async (id) => {
   try {
     const payload = {
-      ids
+      id
     };
 
     const sessionJwtToken = jwt.sign(payload, process.env.JWT_KEY, { expiresIn: '1h' });
