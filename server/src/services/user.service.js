@@ -1,48 +1,5 @@
 import sequelize from '../config/db.js'; // Import instancji Sequelize
-import { Model, DataTypes } from 'sequelize';
-
-// Definiowanie modelu User
-const User = sequelize.define('users', {
-  ids: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  pass: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  role: {
-    type: DataTypes.STRING,
-    defaultValue: 'user',
-  },
-  lastLoginIp: {
-    type: DataTypes.STRING,
-  },
-  login_count: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  login_date: {
-    type: DataTypes.DATE,
-  },
-  userBlock: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-  },
-  activation_token: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-}, {
-  tableName: 'users', // Nazwa tabeli w bazie danych
-  timestamps: false, // Wyłącz automatyczne createdAt/updatedAt, jeśli nie używasz
-});
+import User from '#models/auth/user.model.js'
 
 export const checkUserDetails = async (email) => {
   const user = await User.findOne({

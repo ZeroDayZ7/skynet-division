@@ -1,4 +1,5 @@
 import BackButton from "@/components/ui/BackButton"
+import MainMenuButton from "@/components/ui/MainMenuButton"
 
 export default function DocumentsLayout({
     children,
@@ -7,7 +8,10 @@ export default function DocumentsLayout({
   }) {
     return (
       <>
-        <div className="pt-4 pl-4"><BackButton /></div>
+        <div className="pt-4 pl-4 flex items-center space-x-4">
+          <BackButton />
+          <MainMenuButton />
+          </div>
         {children}
       </>
     )

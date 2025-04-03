@@ -11,7 +11,7 @@ const router = express.Router();
 // ==============================================================================
 // Endpoint do pobrania danych e-dowodu użytkownika + zdjęcia
 // ==============================================================================
-router.post('/api/user-eid', verifyJwtToken, async (req, res) => {
+router.post('/user-eid', verifyJwtToken, async (req, res) => {
   const userId = req.user.id; // Pobranie ID użytkownika z tokena
 
   console.log(`Pobieranie danych e-dowodu dla użytkownika ID: ${userId}`);

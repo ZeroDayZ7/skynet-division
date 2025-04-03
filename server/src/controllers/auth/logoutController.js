@@ -1,21 +1,16 @@
-import express from "express";
 import SystemLog from "#utils/SystemLog.js"; // Załóżmy, że masz logger
-import { i18n } from "#language/i18nSetup.js"; // Załóżmy, że masz i18n
 
-const router = express.Router();
-
-router.post("/logout", async (req, res) => {
+export const logoutController = async (req, res) => {
   try {
     // 1. Sprawdź, czy użytkownik jest zalogowany
     if (!req.session.userId) {
       SystemLog.warn("Logout attempt without active session");
       return res.status(401).json({
         success: false,
-        message: i18n.__("LOGOUT.NO_ACTIVE_SESSION"),
         isLoggedIn: false,
       });
     }
- 
+
     const userId = req.session.userId; // Pobierz ID użytkownika z sesji
 
     // 2. Usuń sesję po stronie serwera
@@ -37,15 +32,11 @@ router.post("/logout", async (req, res) => {
       res.clearCookie(process.env.ACCESS_COOKIE_NAME, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        // sameSite: 'lax',
-        // domain: process.env.COOKIE_DOMAIN,
       });
 
       res.clearCookie(process.env.SESSION_COOKIE_NAME, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        // sameSite: 'lax',
-        // domain: process.env.COOKIE_DOMAIN,
       });
 
       // 4. Logowanie wylogowania
@@ -69,6 +60,4 @@ router.post("/logout", async (req, res) => {
       isLoggedIn: true,
     });
   }
-});
-
-export default router;
+};

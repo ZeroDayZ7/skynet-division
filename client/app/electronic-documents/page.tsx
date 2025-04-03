@@ -22,7 +22,7 @@ export default function DocumentsPage() {
     setLoading(true);
     setTimeout(() => {
       router.push(link);
-    }, 100);
+    }, 1000);
   };
 
   return (

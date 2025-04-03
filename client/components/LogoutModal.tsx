@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { logout } from "../lib/utils/logout"; // Zaimportuj funkcję wylogowania
 
-// Definicja typu dla props
 interface LogoutModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -10,27 +10,14 @@ export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
-
     setLoading(true);
-
-    console.log(`Attempting to log out from: ${apiUrl}/api/logout`);
-
-    setTimeout(async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/logout`, {
-          method: "POST",
-          credentials: "include",
-        });
-        if (response.ok) {
-          window.location.href = "/";
-        } else {
-          console.error("Logout failed");
-        }
-      } catch (error) {
-        console.error("Error logging out", error);
-      }
-    }, 100); // Opóźnienie 1000 ms (1 sekunda)
+    try {
+      await logout(); // Wywołaj funkcję wylogowania
+    } catch (error) {
+      console.error("Error during logout process:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!isOpen) return null;

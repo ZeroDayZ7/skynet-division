@@ -1,28 +1,15 @@
 import express from 'express';
-
-import loginEndpoint from '#endpoints/v1/auth/login.js';
-import logoutEndpoint from '#endpoints/v1/auth/logout.js';
+import authRouter from '#routes/authRouter.js';
+import usersRouter from '#routes/usersRouter.js'
 
 import { authMiddleware } from '#middlewares/auth.js';
-import rateLimiterConfig from '#config/rateLimiterConfig.js'; // Import domyślny
-
-const { authLimiter } = rateLimiterConfig;
 
 const router = express.Router();
 
-// Logowanie
-router.post('/login', authLimiter, loginEndpoint);
+// Podłączanie podrouterów
+router.use('/auth', authRouter);
+router.use('/users', authMiddleware, usersRouter);
 
-// Wylogowanie
-router.post('/logout', authMiddleware, logoutEndpoint);
-
-// Rejestracja
-// router.post('/register', require('../endpoints/registrationEndpoint.js'));
-
-// Odświeżanie tokena
-// router.post('/refresh-token', require('../endpoints/auth/refreshToken.js'));
-
-// Obsługuje inne niezdefiniowane trasy (404)
 router.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });
 });

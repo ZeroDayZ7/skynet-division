@@ -42,7 +42,7 @@ export default function LoginModal() {
     setIsLoading(true);
 
     try {
-      const res = await fetch(`${apiUrl}/api/login`, {
+      const res = await fetch(`${apiUrl}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
