@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image';
 import { useRouter } from "next/navigation";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
+import { useAuth } from "@/context/auth-context";
+import { loginUser } from "@/services/auth.service";
 
 export default function LoginModal() {
+  const { login } = useAuth(); // Używamy login z kontekstu
   const [email, setEmail] = useState("yovasec567@fincainc.com");
   const [password, setPassword] = useState("Zaq1@wsx");
   const [error, setError] = useState("");
@@ -13,8 +17,6 @@ export default function LoginModal() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const router = useRouter();
-
-  const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 
   const validateForm = () => {
     let valid = true;
@@ -34,44 +36,36 @@ export default function LoginModal() {
     return valid;
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isLoading || !validateForm()) return;
-
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const res = await fetch(`${apiUrl}/api/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      console.log(data);
-      if (!res.ok) {
-        throw new Error(data.message || "Błąd logowania");
+    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (isLoading || !validateForm()) return;
+  
+      setError("");
+      setIsLoading(true);
+  
+      try {
+        const user = await loginUser(email, password);
+        login(user);
+        router.replace("/dashboard");
+      } catch (err: any) {
+        setError(err.message || "Wystąpił problem z logowaniem");
+      } finally {
+        setIsLoading(false);
       }
-
-      router.push("/dashboard");
-    } catch (err: any) {
-      setError(err.message || "Wystąpił problem z logowaniem");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   return (
     <div className="flex flex-col items-center">
       <div className="p-6 w-full max-w-screen-sm">
         {/* LOGO */}
         <div className="flex flex-col items-center mb-6">
-          <img
+          <Image
             src="/logo.jpg"
             alt="Logo aplikacji"
-            className="w-max h-24 rounded-full mb-2"
+            className="rounded-full"
+            width={200}
+            height={112}
+            priority
           />
           <h1 className="text-2xl font-bold text-gray-800">
             Aplikacja Obywatelska
@@ -141,7 +135,9 @@ export default function LoginModal() {
           <div>
             <button
               type="submit"
-              className="w-full p-3 h-12 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition duration-300 flex items-center justify-center"
+              className={`w-full h-12 flex items-center justify-center rounded-md text-white transition duration-300 ${
+                isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"
+              }`}
               disabled={isLoading}
             >
               {isLoading ? <FaSpinner className="animate-spin" /> : "Zaloguj"}

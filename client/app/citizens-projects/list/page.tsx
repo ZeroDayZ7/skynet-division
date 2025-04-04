@@ -49,7 +49,7 @@ export default function ViewProjects() {
     };
 
     fetchProjects();
-  }, [page]);
+  }, [page, apiUrl]);
 
   const filteredProjects = projects.filter(project =>
     (searchTerm ? project.title.toLowerCase().includes(searchTerm.toLowerCase()) : true) &&

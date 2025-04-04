@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaPlusCircle, FaSearch, FaFilter, FaSpinner, FaBriefcase } from "react-icons/fa";
+import { FaPlusCircle, FaSearch, FaFilter, FaSpinner } from "react-icons/fa";
 
 const actions = [
   { id: 1, name: "Dodaj Ogłoszenie", icon: FaPlusCircle, enabled: true, link: "/jobs-board/new" },

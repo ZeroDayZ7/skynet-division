@@ -3,36 +3,33 @@ import userService from './user.service.js';
 import SystemLog from '#utils/SystemLog.js';
 
 export const validateUser = async (email, password, ip) => {
-  const userDetails = await userService.checkUserDetails(email);
+  const user = await userService.getUserDetailsForValidation(email);
 
-  // Debugowanie – sprawdź, co dokładnie zwraca userDetails
-  SystemLog.info('userDetails:', userDetails);
+  SystemLog.info('userDetails:', user);
 
-  if (!userDetails || userDetails.userBlock === 1 || userDetails.activation_token !== null) {
+  if (!user || user.userBlock === 1 || user.activation_token !== null) {
     return {
       error: true,
-      code: userDetails
-        ? userDetails.userBlock
+      code: user
+        ? user.userBlock
           ? 'LOGIN.USER_BLOCKED'
           : 'LOGIN.ACCOUNT_ACTIVATE_FALSE'
         : 'LOGIN.WRONG_DATA'
     };
   }
 
-  const user = await userService.getUserByEmail(email);
   const isPasswordValid = await bcrypt.compare(password, user.pass);
-
   if (!isPasswordValid) {
     return {
       error: true
     };
   }
 
-  if (userDetails.lastLoginIp !== ip) {
-    await userService.updateLastLoginIp(email, ip);
-  }
+  // Zoptymalizowana aktualizacja licznika logowań i adresu IP
+  await userService.updateLoginDetails(email, ip, user.lastLoginIp);
 
-  await userService.updateLoginCount(email);
+  // Nie trzeba tworzyć `userWithRole`, ponieważ `user` już zawiera `role`
+  SystemLog.warn('USR:', user);
 
   return {
     error: false,

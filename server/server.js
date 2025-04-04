@@ -27,11 +27,11 @@ console.log(`====================== START ===========================`);
 //     }
 //   }
 // }));
-
+ 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(consoleLogRequest);
+// app.use(consoleLogRequest);
 app.disable('x-powered-by');
 
 // Session and language

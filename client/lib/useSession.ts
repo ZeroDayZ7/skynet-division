@@ -2,12 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { logout } from '../lib/utils/logout'
+import { logoutUser } from '@/services/auth.service';
 
 const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 const cookieName = process.env.NEXT_PUBLIC_SESSION_KEY;
-
-console.log(cookieName);
 
 export function useSession() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -17,8 +15,6 @@ export function useSession() {
   const hasSessionCookie = useCallback(() => {
     return document.cookie.split(';').some((item) => item.trim().startsWith(`${cookieName}=`));
   }, []);
-
-
 
   const checkSession = useCallback(async () => {
     try {
@@ -101,7 +97,7 @@ export function useSession() {
     heartbeatInterval = setInterval(() => {
       const timeSinceLastActivity = Date.now() - lastActivity;
       if (timeSinceLastActivity > 10 * 1000 && pathname !== '/login') {
-        logout();
+        logoutUser();
         setIsAuthenticated(false);
         router.replace('/login');
         // sendHeartbeat();

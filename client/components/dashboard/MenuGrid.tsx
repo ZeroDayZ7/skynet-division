@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/auth-context";
 import {
   FaIdCard,
   FaNewspaper,
@@ -10,6 +11,7 @@ import {
   FaTools,
   FaBriefcase,
   FaSpinner,
+  FaUserShield,  // Ikona dla panelu admina
 } from "react-icons/fa";
 
 const menuItems = [
@@ -22,8 +24,25 @@ const menuItems = [
 ];
 
 export default function MenuGrid() {
+  const { user } = useAuth();  // Pobieramy użytkownika z kontekstu
   const router = useRouter();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null); // Śledzi, który przycisk się ładuje
+
+  // Dodajemy przycisk administracyjny tylko dla użytkowników z rolą admin, z użyciem useMemo
+  const menuWithAdmin = useMemo(() => {
+    if (user?.role === "admin") {
+      return [
+        ...menuItems,
+        {
+          icon: FaUserShield,
+          link: "/admin-panel",  // Link do panelu administracyjnego
+          label: "Panel Administracyjny",
+          enabled: true,
+        },
+      ];
+    }
+    return menuItems;
+  }, [user]);
 
   const handleNavigation = (link: string, index: number) => {
     setLoadingIndex(index); // Ustawiamy indeks ładowanego przycisku
@@ -32,7 +51,7 @@ export default function MenuGrid() {
 
   return (
     <div className="grid grid-cols-3 gap-4 flex-1 p-2">
-      {menuItems.map(({ icon: Icon, link, label, enabled }, index) => (
+      {menuWithAdmin.map(({ icon: Icon, link, label, enabled }, index) => (
         <button
           key={index}
           onClick={() => enabled && handleNavigation(link, index)}

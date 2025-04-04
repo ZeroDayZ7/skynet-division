@@ -1634,3 +1634,7 @@
 {"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:33:05"}
 {"action":"authentication","level":"info","message":"User authenticated","path":"/notifications/unread-count","timestamp":"2025-04-03 20:33:05","userId":"77"}
 {"level":"info","message":"Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: 77","timestamp":"2025-04-03 20:33:05"}
+{"action":"authentication","level":"info","message":"User authenticated","path":"/logout","timestamp":"2025-04-03 20:38:06","userId":"77"}
+{"level":"info","message":"User logged out successfully","timestamp":"2025-04-03 20:38:06","userId":77}
+{"level":"info","message":"User logged out and deleted Cookies","timestamp":"2025-04-03 20:38:06"}
+{"level":"info","message":"Server running on port 3001","timestamp":"2025-04-03 20:53:01"}

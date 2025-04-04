@@ -1,22 +1,41 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { Search, MenuIcon, Heart, ShoppingCart, Filter, MapPin, User, Plus, ArrowUpDown } from 'lucide-react';
+
+interface Category {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+interface Listing {
+  id: number;
+  title: string;
+  category: string;
+  price: number;
+  location: string;
+  image: string;
+  date: string;
+  offerType: 'sprzedam' | 'oddam';
+  saved: boolean;
+}
 
 const CitizenMarketplace = () => {
   // Stan aplikacji
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentCategory, setCurrentCategory] = useState('wszystko');
-  const [sortBy, setSortBy] = useState('najnowsze');
-  const [showFilters, setShowFilters] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [maxPrice, setMaxPrice] = useState(1000);
-  const [onlyFreeItems, setOnlyFreeItems] = useState(false);
-  const [offerType, setOfferType] = useState('wszystkie');
-  const [savedItems, setSavedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [currentCategory, setCurrentCategory] = useState<string>('wszystko');
+  const [sortBy, setSortBy] = useState<string>('najnowsze');
+  const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [selectedLocation, setSelectedLocation] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<number>(1000);
+  const [onlyFreeItems, setOnlyFreeItems] = useState<boolean>(false);
+  const [offerType, setOfferType] = useState<'wszystkie' | 'sprzedam' | 'oddam'>('wszystkie');
+  const [savedItems, setSavedItems] = useState<string[]>([]);
 
   // Przykładowe dane dla kategorii
-  const categories = [
+  const categories: Category[] = [
     { id: 'wszystko', name: 'Wszystko', icon: '🏠' },
     { id: 'meble', name: 'Meble', icon: '🪑' },
     { id: 'elektronika', name: 'Elektronika', icon: '📱' },
@@ -28,13 +47,13 @@ const CitizenMarketplace = () => {
   ];
 
   // Przykładowe dane dla lokalizacji
-  const locations = [
-    'Warszawa', 'Kraków', 'Łódź', 'Wrocław', 'Poznań', 
+  const locations: string[] = [
+    'Warszawa', 'Kraków', 'Łódź', 'Wrocław', 'Poznań',
     'Gdańsk', 'Szczecin', 'Bydgoszcz', 'Lublin', 'Katowice'
   ];
 
   // Przykładowe dane dla ofert
-  const sampleListings = [
+  const sampleListings: Listing[] = [
     {
       id: 1,
       title: 'Krzesło biurowe ergonomiczne',
@@ -96,31 +115,31 @@ const CitizenMarketplace = () => {
   const filteredListings = sampleListings.filter(item => {
     // Filtrowanie po kategorii
     if (currentCategory !== 'wszystko' && item.category !== currentCategory) return false;
-    
+
     // Filtrowanie po lokalizacji
     if (selectedLocation && item.location !== selectedLocation) return false;
-    
+
     // Filtrowanie po cenie
     if (item.price > maxPrice) return false;
-    
+
     // Filtrowanie po typie oferty (darmowe)
     if (onlyFreeItems && item.price > 0) return false;
-    
+
     // Filtrowanie po typie oferty (sprzedam/oddam)
     if (offerType !== 'wszystkie' && item.offerType !== offerType) return false;
-    
+
     // Filtrowanie po wyszukiwanej frazie
     if (searchQuery && !item.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    
+
     return true;
   });
 
   // Sortowanie wyników
   const sortedListings = [...filteredListings].sort((a, b) => {
     if (sortBy === 'najnowsze') {
-      return new Date(b.date) - new Date(a.date);
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     } else if (sortBy === 'najstarsze') {
-      return new Date(a.date) - new Date(b.date);
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
     } else if (sortBy === 'najdrozsze') {
       return b.price - a.price;
     } else if (sortBy === 'najtansze') {
@@ -130,10 +149,10 @@ const CitizenMarketplace = () => {
   });
 
   // Przełączanie zapisanych przedmiotów
-  const toggleSavedItem = (id) => {
-    const updatedSavedItems = savedItems.includes(id)
-      ? savedItems.filter(item => item !== id)
-      : [...savedItems, id];
+  const toggleSavedItem = (id: number) => { // Typ parametru id to number
+    const updatedSavedItems = savedItems.includes(String(id)) // Konwertuj id na string do porównania
+      ? savedItems.filter(item => item !== String(id)) // Konwertuj item na string do porównania
+      : [...savedItems, String(id)]; // Konwertuj id na string przed dodaniem
     setSavedItems(updatedSavedItems);
   };
 
@@ -182,7 +201,7 @@ const CitizenMarketplace = () => {
           <Filter size={16} className="mr-2" />
           <span>Filtry</span>
         </button>
-        
+
         <div className="flex">
           <button
             className="flex items-center px-3 py-2 border border-gray-300 rounded-l-lg"
@@ -191,7 +210,7 @@ const CitizenMarketplace = () => {
             <ArrowUpDown size={16} className="mr-2" />
             <span>{sortBy === 'najnowsze' ? 'Najnowsze' : 'Najstarsze'}</span>
           </button>
-          
+
           <button
             className="flex items-center px-3 py-2 border-t border-b border-r border-gray-300 rounded-r-lg"
             onClick={() => setSortBy(sortBy === 'najtansze' ? 'najdrozsze' : 'najtansze')}
@@ -200,7 +219,7 @@ const CitizenMarketplace = () => {
           </button>
         </div>
       </div>
-      
+
       {showFilters && (
         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
           <h3 className="font-semibold mb-3">Lokalizacja</h3>
@@ -214,7 +233,7 @@ const CitizenMarketplace = () => {
               <option key={location} value={location}>{location}</option>
             ))}
           </select>
-          
+
           <h3 className="font-semibold mb-3">Cena</h3>
           <div className="flex items-center justify-between mb-2">
             <span>do {maxPrice} zł</span>
@@ -228,7 +247,7 @@ const CitizenMarketplace = () => {
             onChange={(e) => setMaxPrice(parseInt(e.target.value))}
             className="w-full"
           />
-          
+
           <div className="flex items-center mt-4">
             <input
               type="checkbox"
@@ -239,7 +258,7 @@ const CitizenMarketplace = () => {
             />
             <label htmlFor="onlyFree">Tylko darmowe</label>
           </div>
-          
+
           <h3 className="font-semibold mt-4 mb-3">Typ oferty</h3>
           <div className="flex gap-2">
             <button
@@ -261,7 +280,7 @@ const CitizenMarketplace = () => {
               Oddam
             </button>
           </div>
-          
+
           <div className="mt-4 flex justify-between">
             <button
               className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg"
@@ -290,33 +309,33 @@ const CitizenMarketplace = () => {
   const renderListings = () => (
     <div className="bg-gray-100 p-4">
       <div className="text-sm text-gray-500 mb-2">Znaleziono {sortedListings.length} ogłoszeń</div>
-      
+
       <div className="space-y-4">
         {sortedListings.length > 0 ? (
           sortedListings.map(item => (
             <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow">
               <div className="relative">
-                <img src={item.image} alt={item.title} className="w-full h-48 object-cover" />
+                <Image src={item.image} alt={item.title} className="w-full h-48 object-cover" width={200} height={200} />
                 <button
                   className="absolute top-2 right-2 p-2 bg-white rounded-full shadow"
                   onClick={() => toggleSavedItem(item.id)}
                 >
-                  <Heart size={20} fill={savedItems.includes(item.id) ? "red" : "none"} color={savedItems.includes(item.id) ? "red" : "black"} />
+                  <Heart size={20} fill={savedItems.includes(String(item.id)) ? "red" : "none"} color={savedItems.includes(String(item.id)) ? "red" : "black"} />
                 </button>
                 {item.offerType === 'oddam' && (
                   <span className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-lg text-xs">Za darmo</span>
                 )}
               </div>
-              
+
               <div className="p-4">
                 <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
                 <p className="text-xl font-bold mb-2">{item.price > 0 ? `${item.price} zł` : 'Za darmo'}</p>
-                
+
                 <div className="flex items-center text-gray-500 text-sm mb-3">
                   <MapPin size={14} className="mr-1" />
                   <span>{item.location}</span>
                 </div>
-                
+
                 <div className="flex justify-between">
                   <span className="text-xs text-gray-500">
                     {new Date(item.date).toLocaleDateString('pl-PL')}

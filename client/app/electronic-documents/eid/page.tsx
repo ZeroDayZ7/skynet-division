@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 import { FaSpinner } from "react-icons/fa";
 import { z } from "zod";
 import sanitizeHtml from "sanitize-html";
@@ -170,10 +171,12 @@ export default function ProfilePage() {
               {/* Photo Section */}
               <div className="w-full md:w-1/3 flex flex-col items-center">
                 {userData.photo ? (
-                  <img
+                  <Image
                     src={sanitize(userData.photo)}
                     alt="Zdjęcie użytkownika"
-                    className="w-32 h-40 object-cover rounded-md border border-gray-300 shadow-sm"
+                    className="object-cover rounded-md border border-gray-300 shadow-sm"
+                    width={150}
+                    height={150}
                   />
                 ) : (
                   <div className="w-32 h-40 bg-gray-200 rounded-md flex items-center justify-center border border-gray-300">

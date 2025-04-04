@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Image from 'next/image';
 import BackButton from "@/components/ui/BackButton";
 import { FaSpinner } from "react-icons/fa";
 
@@ -47,7 +48,7 @@ export default function ProfilePage() {
     };
 
     fetchUserData();
-  }, []);
+  }, [apiUrl]);
 
   if (loading) {
     return (
@@ -68,7 +69,7 @@ export default function ProfilePage() {
       
       <div className="flex items-center mb-4">
         {userData.photo ? (
-          <img src={userData.photo} alt="User Photo" className="w-24 h-24 rounded-full border shadow-lg" />
+          <Image src={userData.photo} alt="User Photo" className="w-24 h-24 rounded-full border shadow-lg" />
         ) : (
           <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
             Brak zdjęcia

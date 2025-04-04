@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { FaExclamationTriangle, FaCheckCircle, FaInfoCircle, FaStar, FaSpinner } from "react-icons/fa";
-import BackButton from "@/components/ui/BackButton";
+import { type IconType } from "react-icons";
 
 // API URL z zmiennych środowiskowych
 const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
@@ -11,7 +11,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
 type NotificationType = "success" | "warning" | "error" | "info";
 
 // Mapowanie ikon dla typów powiadomień
-const ICONS: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
+const ICONS: Record<NotificationType, IconType> = {
   success: FaCheckCircle,
   warning: FaExclamationTriangle,
   error: FaExclamationTriangle,
@@ -41,11 +41,16 @@ interface Notification {
   created_at?: string; // ISO string daty
 }
 
+// Typ dla odpowiedzi z API
+interface NotificationsResponse {
+  notifications: Notification[];
+}
+
 export default function NotificationsList() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState<number>(1);
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   // Funkcja do pobierania powiadomień
@@ -67,12 +72,12 @@ export default function NotificationsList() {
         throw new Error("Failed to fetch notifications");
       }
 
-      const data = await response.json();
+      const data: NotificationsResponse = await response.json();
       if (!Array.isArray(data.notifications)) {
         throw new Error("Invalid response format");
       }
 
-      setNotifications((prevNotifications) => 
+      setNotifications((prevNotifications) =>
         pageNum === 1 ? data.notifications : [...prevNotifications, ...data.notifications]
       );
       setHasMore(data.notifications.length === 10); // Jeśli mniej niż 10, to koniec
@@ -81,7 +86,7 @@ export default function NotificationsList() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [apiUrl]); // Dodaj apiUrl do zależności useCallback
 
   // Pobieranie powiadomień przy zmianie strony
   useEffect(() => {
@@ -89,7 +94,7 @@ export default function NotificationsList() {
   }, [page, fetchNotifications]);
 
   // Funkcja do oznaczania powiadomienia jako przeczytanego
-  const markAsRead = async (notificationId: number) => {
+  const markAsRead = useCallback(async (notificationId: number) => {
     try {
       const response = await fetch(`${apiUrl}/api/users/notifications/${notificationId}/read`, {
         method: "PATCH",
@@ -109,13 +114,12 @@ export default function NotificationsList() {
     } catch (error) {
       console.error("Error marking notification as read:", error);
     }
-  };
+  }, [apiUrl]); // Dodaj apiUrl do zależności useCallback
 
   return (
     <div className="max-w-lg mx-auto p-4 bg-white min-h-screen">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-semibold">Powiadomienia</h2>
-        <BackButton />
       </div>
 
       {error && (
@@ -137,7 +141,7 @@ export default function NotificationsList() {
             return (
               <li
                 key={id}
-                onClick={() => !is_read && markAsRead(id)} // Oznacz jako przeczytane po kliknięciu
+                onClick={() => !is_read && notification.id && markAsRead(notification.id)} // Oznacz jako przeczytane po kliknięciu, tylko jeśli id istnieje
                 className={`flex justify-between items-center gap-3 p-3 border-l-4 rounded cursor-pointer transition-all ${
                   getBgColor(type)
                 } ${is_read ? "opacity-60" : "hover:bg-opacity-80"}`}

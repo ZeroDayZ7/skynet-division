@@ -7,7 +7,32 @@ import { FaTimes } from "react-icons/fa";
 const LanguageTrainer = () => {
   // Stan aplikacji
   const [currentLesson, setCurrentLesson] = useState(0);
-  const [userProgress, setUserProgress] = useState({
+
+  interface UserProgress {
+    lastPracticeDate: Date | null; // Poprawiono składnię typu
+    completedLessons: number; // Dodano opcjonalne właściwości, jeśli są potrzebne
+    totalPoints: number;
+    streak: number;
+    vocabularyMastered: number;
+    grammarMastered: number;
+  }
+  interface TranslationExercise {
+    type: "translation";
+    question: string;
+    answer: string;
+    options: string[];
+  }
+  
+  interface FillExercise {
+    type: "fill";
+    question: string;
+    answer: string;
+    hint?: string;
+  }
+
+  type Exercise = TranslationExercise | FillExercise;
+
+  const [userProgress, setUserProgress] = useState<UserProgress>({
     completedLessons: 0,
     totalPoints: 0,
     streak: 0,
@@ -41,13 +66,13 @@ const LanguageTrainer = () => {
             "Hello there",
             "Good night",
           ],
-        },
+        } as TranslationExercise,
         {
           type: "fill",
           question: "Uzupełnij: '_____ are you?'",
           answer: "How",
           hint: "Pytamy o samopoczucie",
-        },
+        } as FillExercise,
       ],
     },
     {
@@ -62,7 +87,7 @@ const LanguageTrainer = () => {
         },
       ],
     },
-  ];
+  ] as { id: number; title: string; exercises: Exercise[] }[];
 
   // Funkcja do sprawdzania odpowiedzi
   const checkAnswer = () => {

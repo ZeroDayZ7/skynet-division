@@ -27,9 +27,10 @@ User.init({
     type: DataTypes.INTEGER(11),
     allowNull: true,
   },
-  notifications: {
+  points: {
     type: DataTypes.INTEGER(11),
     allowNull: true,
+    defaultValue: 0,
   },
   activation_token: {
     type: DataTypes.STRING(200),

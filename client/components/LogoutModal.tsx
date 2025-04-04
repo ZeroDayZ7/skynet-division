@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { logout } from "../lib/utils/logout"; // Zaimportuj funkcję wylogowania
+import { logoutUser } from "@/services/auth.service";
+import { useAuth } from "@/context/auth-context"; // Import kontekstu
+import { useRouter } from "next/navigation";
 
 interface LogoutModalProps {
   isOpen: boolean;
@@ -8,15 +10,22 @@ interface LogoutModalProps {
 
 export default function LogoutModal({ isOpen, onClose }: LogoutModalProps) {
   const [loading, setLoading] = useState(false);
+  const { logout } = useAuth(); // Pobranie funkcji wylogowania z kontekstu
+  const router = useRouter();
 
   const handleLogout = async () => {
     setLoading(true);
     try {
-      await logout(); // Wywołaj funkcję wylogowania
+      await logoutUser(); // Wylogowanie na backendzie
+      logout(); // Wyczyść stan użytkownika w kontekście
+      router.replace("/login");
+      // window.location.replace("/login");
+      // window.location.href = "/login";
     } catch (error) {
       console.error("Error during logout process:", error);
     } finally {
       setLoading(false);
+      onClose(); // Zamknięcie modalu po zakończeniu procesu
     }
   };
 

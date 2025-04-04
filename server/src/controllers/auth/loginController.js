@@ -29,7 +29,8 @@ export const loginController = async (req, res) => {
         message: validationResult.code
       });
     }
-
+    SystemLog.info('REST', { validationResult });
+    // return;
     // 3. Generowanie tokena JWT
     const token = generateAuthToken({
       id: validationResult.user.id
@@ -38,6 +39,7 @@ export const loginController = async (req, res) => {
 
     // 4. Zapisywanie sesji
     req.session.userId = validationResult.user.id;
+    // req.session.role = validationResult.user.role;
 
     req.session.save(async (err) => {
       if (err) {
@@ -60,11 +62,16 @@ export const loginController = async (req, res) => {
       // 6. Zwrócenie odpowiedzi
       SystemLog.info('User logged in successfully', { 
         userId: validationResult.user.id,
+        role: validationResult.user.role,
         ip: userIp 
       });
 
       return res.status(200).json({
-        isAuthenticated: true
+        user:{
+          isAuthenticated: true,
+          role: validationResult.user.role,
+          points: validationResult.user.points
+        }
       });
     });
 

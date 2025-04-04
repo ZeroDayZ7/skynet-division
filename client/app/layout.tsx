@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 import SessionProvider from "@/components/SessionProvider";
+import { AuthProvider } from "@/context/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,10 +30,11 @@ export default function RootLayout({
     <html lang="pl">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SessionProvider>
+      ><AuthProvider>
+        {/* <SessionProvider> */}
           <main>{children}</main>
-        </SessionProvider>
+        {/* </SessionProvider> */}
+        </AuthProvider>
         <Toaster />
       </body>
     </html>

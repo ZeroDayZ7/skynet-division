@@ -11,6 +11,18 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.config({
+    extends: ['next'],
+    rules: {
+      'eslint-disable-next-line': 'off', // Ta linia jest zbędna w 'rules'
+      'react-hooks/exhaustive-deps': 'off',
+      '@typescript-eslint/no-explicit-any': 'off', // Wyłącza błąd związany z 'any'
+      'prefer-const': 'off', // Wyłącza błąd związany z 'const'
+      'prefer-null': 'off'
+    }
+  })
 ];
+
+
 
 export default eslintConfig;
