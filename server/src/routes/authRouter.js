@@ -13,7 +13,8 @@ const { authLimiter } = rateLimiterConfig;
 const router = express.Router();
 
 // Logowanie
-router.post('/login', authLimiter, loginController);
+// router.post('/login', authLimiter, loginController);
+router.post('/login', loginController);
 
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);

@@ -10,12 +10,13 @@ import { FaSpinner } from "react-icons/fa";
 
 export default function HeaderActions() {
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleNavigation = () => {
     setIsLoading(true);
     router.push("/notifications");
+    setIsLoading(false);
   };
 
   const handleLogout = () => {
@@ -27,7 +28,7 @@ export default function HeaderActions() {
       <div className="flex gap-4">
         {isLoading ? (
           <div className="flex flex-1 items-center justify-center">
-            <FaSpinner className="text-xl text-gray-600 animate-spin" />
+            <FaSpinner className="text-6xl text-gray-600 animate-spin" />
           </div>
         ) : (
           <button

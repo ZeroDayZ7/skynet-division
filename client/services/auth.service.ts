@@ -6,10 +6,11 @@ export interface SessionData {
   user?: {
     role: string;
     points: number;
+    notifications: number;
   };
 }
 
-export const loginUser = async (email: string, password: string): Promise<any> => {
+export const loginUser = async (email: string, password: string): Promise<SessionData> => {
   const res = await fetch(`${apiUrl}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,7 +21,7 @@ export const loginUser = async (email: string, password: string): Promise<any> =
   if (!res.ok) {
     throw new Error(data.message || "Błąd logowania");
   }
-  return data.user;
+  return data;
 };
 
 export const logoutUser = async (): Promise<void> => {
@@ -42,5 +43,5 @@ export const checkSession = async (): Promise<SessionData> => {
   if (!res.ok) {
     throw new Error(data.message || "Sesja nieważna");
   }
-  return data; // Zwraca { isAuthenticated, user? }
+  return data;
 };

@@ -6,8 +6,7 @@ import { useAuth } from "@/context/auth-context";
 
 export default function PointsDisplay() {
   const { user } = useAuth();
-  const [points, setPoints] = useState<number>(0); // Lokalny stan punktów
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [points, setPoints] = useState<number>(); // Lokalny stan punktów
 
   
   useEffect(() => {
@@ -16,15 +15,6 @@ export default function PointsDisplay() {
     }
   }, [user]); // Używamy 'user' w zależności od jego zmiany
 
-  // Funkcja dodawania losowych punktów
-  const handleEarnPoints = () => {
-    setIsAnimating(true);
-    // const earned = Math.floor(Math.random() * 50) + 10; // Losowe punkty 10-60
-    // const newPoints = points + earned;
-    // setPoints(newPoints);
-    // localStorage.setItem("userPoints", newPoints.toString());
-    setTimeout(() => setIsAnimating(false), 1000);
-  };
 
   return (
     <div

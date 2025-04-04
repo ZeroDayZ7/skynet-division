@@ -44,9 +44,10 @@ export default function LoginModal() {
       setIsLoading(true);
   
       try {
-        const user = await loginUser(email, password);
-        login(user);
-        router.replace("/dashboard");
+        const data = await loginUser(email, password);
+        console.log(data);
+        login(data.user);
+        router.push("/dashboard");
       } catch (err: any) {
         setError(err.message || "Wystąpił problem z logowaniem");
       } finally {
@@ -60,7 +61,7 @@ export default function LoginModal() {
         {/* LOGO */}
         <div className="flex flex-col items-center mb-6">
           <Image
-            src="/logo.jpg"
+            src="/logo/logo.jpg"
             alt="Logo aplikacji"
             className="rounded-full"
             width={200}

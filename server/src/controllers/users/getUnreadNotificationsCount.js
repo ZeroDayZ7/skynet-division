@@ -1,12 +1,10 @@
-import UserNotification from "#models/users/UserNotification.js"; // Ścieżka do modelu
-import SystemLog from "#utils/SystemLog.js"; // Ścieżka do loggera
+import UserNotification from "#models/users/UserNotification.js";
+import SystemLog from "#utils/SystemLog.js";
 
 // Funkcja do pobierania liczby nieprzeczytanych powiadomień dla użytkownika
-export async function getUnreadNotificationsCount(req, res) {
-  const userId = req.user?.id; // Zakładając, że masz dostęp do ID użytkownika z tokenu JWT lub sesji
-
+export async function getUnreadNotificationsCount(userId) {
   if (!userId) {
-    return res.status(401).json({ message: "Brak autoryzacji" });
+    throw new Error("Brak ID użytkownika");
   }
 
   SystemLog.info(`Pobieranie liczby nieprzeczytanych powiadomień dla użytkownika ID: ${userId}`);
@@ -20,9 +18,9 @@ export async function getUnreadNotificationsCount(req, res) {
       },
     });
 
-    return res.status(200).json({ unreadCount });
+    return unreadCount;
   } catch (error) {
     SystemLog.error("Błąd pobierania liczby nieprzeczytanych powiadomień", { userId, error });
-    return res.status(500).json({ message: "Błąd serwera", error: error.message });
+    throw new Error("Błąd pobierania liczby nieprzeczytanych powiadomień");
   }
 }

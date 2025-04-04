@@ -1,89 +1,101 @@
 // controllers/auth/loginController.js
 
-import authService from '#services/auth.service.js';
-import { generateAuthToken } from '#services/token.service.js';
-import SystemLog from '#utils/SystemLog.js';
+import authService from "#services/auth.service.js";
+import { generateAuthToken } from "#services/token.service.js";
+import SystemLog from "#utils/SystemLog.js";
+import { getUnreadNotificationsCount } from "#controllers/users/getUnreadNotificationsCount.js";
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
-  const userIp = req.headers['x-forwarded-for'] || req.ip; // Używamy req.ip zamiast req.connection.remoteAddress
+  const userIp = req.headers["x-forwarded-for"] || req.ip; // Używamy req.ip zamiast req.connection.remoteAddress
 
   try {
     // 1. Walidacja danych wejściowych
     if (!email || !password) {
-      SystemLog.warn('Login attempt with incomplete data', { email });
+      SystemLog.warn("Login attempt with incomplete data", { email });
       return res.status(400).json({
-        isAuthenticated: false
+        isAuthenticated: false,
       });
     }
 
     // 2. Weryfikacja użytkownika
-    const validationResult = await authService.validateUser(email, password, userIp);
+    const validationResult = await authService.validateUser(
+      email,
+      password,
+      userIp
+    );
     if (validationResult.error) {
-      SystemLog.warn('Invalid login attempt', { 
+      SystemLog.warn("Invalid login attempt", {
         email,
-        reason: validationResult.code
+        reason: validationResult.code,
       });
       return res.status(401).json({
         isAuthenticated: false,
-        message: validationResult.code
+        message: validationResult.code,
       });
     }
-    SystemLog.info('REST', { validationResult });
-    // return;
+
+    SystemLog.info("REST", { validationResult });
+
     // 3. Generowanie tokena JWT
     const token = generateAuthToken({
-      id: validationResult.user.id
+      id: validationResult.user.id,
       // Jeśli chcesz dodać role, dodaj je do tokenu
     });
 
+    // 6. Zwrócenie liczby nieprzeczytanych powiadomień
+    const unreadCount = await getUnreadNotificationsCount(validationResult.user.id);
     // 4. Zapisywanie sesji
     req.session.userId = validationResult.user.id;
-    // req.session.role = validationResult.user.role;
+    req.session.role = validationResult.user.role;
+    req.session.points = validationResult.user.points;
+    req.session.notifications = unreadCount;
 
     req.session.save(async (err) => {
       if (err) {
-        SystemLog.error('Session save error', {
+        SystemLog.error("Session save error", {
           userId: validationResult.user.id,
-          error: err.message
+          error: err.message,
         });
-        return res.status(500).json({ 
-          isAuthenticated: false
+        return res.status(500).json({
+          isAuthenticated: false,
         });
       }
 
       // 5. Ustawienie bezpiecznego ciasteczka
       res.cookie(process.env.ACCESS_COOKIE_NAME, token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: parseInt(process.env.JWT_EXPIRES_IN_MS || '900000', 10), // 15min domyślnie
+        secure: process.env.NODE_ENV === "production",
+        maxAge: parseInt(process.env.JWT_EXPIRES_IN_MS || "900000", 10), // 15min domyślnie
       });
 
-      // 6. Zwrócenie odpowiedzi
-      SystemLog.info('User logged in successfully', { 
+    
+      
+
+      SystemLog.info("User logged in successfully", {
         userId: validationResult.user.id,
         role: validationResult.user.role,
-        ip: userIp 
+        ip: userIp,
       });
 
       return res.status(200).json({
-        user:{
-          isAuthenticated: true,
+        isAuthenticated: true,
+        user: {
           role: validationResult.user.role,
-          points: validationResult.user.points
-        }
+          points: validationResult.user.points,
+          notifications: unreadCount
+        },
       });
     });
-
   } catch (error) {
-    SystemLog.error('Login process failed', {
+    SystemLog.error("Login process failed", {
       email,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
 
     return res.status(500).json({
-      isAuthenticated: false
+      isAuthenticated: false,
     });
   }
 };
