@@ -3,11 +3,13 @@ import express from 'express';
 import { getUserEIDData } from '#controllers/users/userEIDController.js'
 import { getUserNotifications } from '#controllers/users/userNotifications.js';
 import { getUnreadNotificationsCount } from '#controllers/users/getUnreadNotificationsCount.js';
+import { getUserPassportData } from '#controllers/users/userPassportController.js';
 
 const router = express.Router();
 
 // Logowanie
 router.post('/user-eid', getUserEIDData);
+router.post('/user-passport', getUserPassportData);
 
 router.post('/notifications', getUserNotifications);
 router.get('/notifications/unread-count', getUnreadNotificationsCount);

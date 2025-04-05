@@ -3,56 +3,47 @@ import { checkSession } from "@/services/auth.service";
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-
-  // Logowanie ścieżki
   console.log(`Middleware dla ścieżki: ${pathname}`);
 
-  // Pomijamy middleware dla stron publicznych, np. /login
   const publicPaths = ["/login", "/"];
   if (publicPaths.includes(pathname)) {
+    console.log("Ścieżka publiczna, pomijam middleware");
     return NextResponse.next();
   }
 
-  console.log(`CIASTECZKO ISTNIEJE`);
-  // Pobieranie wszystkich ciasteczek
-  const cookies = request.cookies;
+  // Pobieramy wszystkie ciasteczka z żądania
+  const sessionCookie = request.cookies.get("SESSION_KEY");
+  // Wszystkie ciasteczka jako string
+//   const cookieHeader = request.headers.get("cookie") || ""; 
+  // Tylko ciasteczko SESSION_KEY
+  const cookieHeader = sessionCookie ? `SESSION_KEY=${sessionCookie.value}` : "";
+//   console.log(`Ciasteczko SESSION_KEY: ${sessionCookie?.value || "brak"}`);
+//   console.log(`Wszystkie ciasteczka: ${cookieHeader}`);
 
-  // Logowanie wszystkich ciasteczek
-  console.log(`Wszystkie ciasteczka: ${JSON.stringify(cookies), null, 2}`);
-
-  // Sprawdzamy, czy ciasteczko SESSION_KEY istnieje
-  const sessionCookie = request.cookies.get('SESSION_KEY');
   if (!sessionCookie) {
-    console.log(`CIASTECZKO NIE ISTNIEJE`);
-    // Jeśli ciasteczko nie istnieje, przekierowujemy na stronę logowania
+    console.log("CIASTECZKO NIE ISTNIEJE, przekierowuję na /login");
     return NextResponse.redirect(new URL("/login", request.url));
-  }else{
-   
   }
 
-
   try {
-    // Sprawdzamy sesję na backendzie (jeśli ciasteczko istnieje)
-    const sessionData = await checkSession();
-    console.log(`SESSION: ${JSON.stringify(sessionData)}`);
+    // Przekazujemy ciasteczka do checkSession
+    const sessionData = await checkSession({ cookies: cookieHeader });
+    console.log(`Sesja z backendu: ${JSON.stringify(sessionData)}`);
 
     if (!sessionData.isAuthenticated) {
-      // Jeśli użytkownik nie jest zalogowany, przekierowujemy na /login
+      console.log("Użytkownik nieautoryzowany, przekierowuję na /login");
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Jeśli użytkownik jest zalogowany, kontynuujemy
+    console.log("Użytkownik autoryzowany, kontynuuję");
     const response = NextResponse.next();
-    console.log(`RESPONSE: ${response}`);
     return response;
   } catch (error) {
-    console.error("Middleware session check error:", error);
-    // W przypadku błędu przekierowujemy na /login
+    console.error("Błąd w middleware:", error);
     return NextResponse.redirect(new URL("/login", request.url));
   }
 }
 
-// Definiujemy, dla jakich ścieżek middleware ma działać
 export const config = {
-  matcher: ["/dashboard/:path*", "/profile/:path*"], // Chronione trasy
+  matcher: ["/dashboard/:path*", "/profile/:path*"],
 };

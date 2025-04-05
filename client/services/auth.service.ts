@@ -18,8 +18,9 @@ export const logoutUser = async (): Promise<void> => {
   });
 };
 
-export const checkSession = async (): Promise<SessionData> => {
-  return await fetchClient("/api/auth/status", {
+export const checkSession = async (options: { cookies?: string } = {}): Promise<SessionData> => {
+  return await fetchClient<SessionData>("/api/auth/status", {
     method: "GET",
+    cookies: options.cookies, // Przekazujemy ciasteczka z middleware
   });
 };

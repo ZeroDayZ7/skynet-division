@@ -30,23 +30,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-  const pathname = usePathname();
+  // const router = useRouter();
+  // const pathname = usePathname();
 
-  useEffect(() => {
-    // Tworzymy funkcję asynchroniczną wewnątrz useEffect
-    const fetchSessionData = async () => {
-      console.log('== AuthProvider ==');
-      try {
-        const sessionData = await checkSession(); // Asynchroniczne wywołanie
-        console.log(`SESSION: ${JSON.stringify(sessionData)}`);
-      } catch (error) {
-        console.error('Error checking session:', error);
-      }
-    };
+  // useEffect(() => {
+  //   // Tworzymy funkcję asynchroniczną wewnątrz useEffect
+  //   const fetchSessionData = async () => {
+  //     console.log('== AuthProvider ==');
+  //     try {
+  //       const sessionData = await checkSession(); // Asynchroniczne wywołanie
+  //       console.log(`SESSION: ${JSON.stringify(sessionData)}`);
+  //     } catch (error) {
+  //       console.error('Error checking session:', error);
+  //     }
+  //   };
   
-    fetchSessionData(); // Wywołanie funkcji asynchronicznej
-  }, []);
+  //   fetchSessionData(); // Wywołanie funkcji asynchronicznej
+  // }, []);
 
   const login = (user: User) => {
     setUser(user);

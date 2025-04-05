@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "@/context/auth-context";
 import { loginUser } from "@/services/auth.service";
+import { validateEmail, validatePassword } from "@/utils/formValidation";
 
 export default function LoginModal() {
   const { login } = useAuth(); // Używamy login z kontekstu
@@ -20,19 +21,13 @@ export default function LoginModal() {
 
   const validateForm = () => {
     let valid = true;
-    setEmailError("");
-    setPasswordError("");
-
-    if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setEmailError("Niepoprawny adres e-mail");
+    const emailErr = validateEmail(email);
+    const passwordErr = validatePassword(password);
+    setEmailError(emailErr);
+    setPasswordError(passwordErr);
+    if (emailErr || passwordErr) {
       valid = false;
     }
-
-    if (password.length < 6) {
-      setPasswordError("Hasło musi mieć co najmniej 6 znaków");
-      valid = false;
-    }
-
     return valid;
   };
 
@@ -48,7 +43,7 @@ export default function LoginModal() {
         // console.log(data);
         login(data.user);
         setTimeout(() => {
-          router.push("/dashboard");
+          router.replace("/dashboard");
         }, 100); // Krótki delay, aby ciasteczka się zapisały
       } catch (err: any) {
         setError(err.message || "Wystąpił problem z logowaniem");

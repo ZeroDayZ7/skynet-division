@@ -1,13 +1,9 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import Image from 'next/image';
+import Image from "next/image";
+import { cookies } from "next/headers";
 import BackButton from "@/components/ui/BackButton";
-import { FaSpinner } from "react-icons/fa";
 
-// Interfejs określający typ danych użytkownika
+// Interfejs danych użytkownika
 interface UserData {
-  user_id: number;
   first_name: string;
   second_name: string;
   last_name: string;
@@ -15,61 +11,61 @@ interface UserData {
   passport_number: string;
   issue_date: string;
   expiration_date: string;
-  photo?: string; // Pole opcjonalne
+  photo?: string;
   birth_date: string;
   birth_place: string;
 }
 
-export default function ProfilePage() {
-  const [userData, setUserData] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState(true);
+export default async function ProfilePage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
+  const cookieStore = await cookies();
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch(`${apiUrl}/api/user-passport`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
+  // Pobieranie wszystkich ciasteczek
+  const cookiesHeader = cookieStore.getAll().map(cookie => `${cookie.name}=${cookie.value}`).join("; ");
 
-        if (!response.ok) {
-          throw new Error("Błąd pobierania danych");
-        }
+  let userData: UserData | null = null;
 
-        const data: UserData = await response.json();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  try {
+    const res = await fetch(`${apiUrl}/api/users/user-passport`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Cookie": cookiesHeader, // Wysyłanie wszystkich ciasteczek
+      },
+      cache: "no-store", // zawsze pobierz nowe dane
+    });
 
-    fetchUserData();
-  }, []);
+    if (res.ok) {
+      userData = await res.json();
+      console.log(userData);
+    } else {
+      console.error("Błąd pobierania danych paszportu", await res.text());
+    }
+  } catch (err) {
+    console.error("Błąd połączenia z API", err);
+  }
 
-  if (loading) {
+  if (!userData) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+      <div className="p-4 text-center text-red-500">
+        Nie udało się załadować danych użytkownika.
       </div>
     );
   }
 
-  if (!userData) {
-    return <p className="text-center text-red-500">Nie udało się załadować danych użytkownika.</p>;
-  }
-
   return (
     <div className="profile-page p-4">
-      <BackButton />
       <h1 className="text-2xl font-bold mb-4">Profil Użytkownika</h1>
-      
+
       <div className="flex items-center mb-4">
         {userData.photo ? (
-          <Image src={userData.photo} alt="User Photo" className="w-24 h-24 rounded-full border shadow-lg" />
+          <Image
+            src={userData.photo}
+            alt="User Photo"
+            className="w-24 h-24 rounded-full border shadow-lg"
+            width={96}
+            height={96}
+          />
         ) : (
           <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
             Brak zdjęcia
