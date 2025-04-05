@@ -1,47 +1,25 @@
-const apiUrl = process.env.NEXT_PUBLIC_API_SERV; // Stała na poziomie pliku
+import { fetchClient } from "@/lib/fetchClient";
 
 // Interfejs dla danych zwracanych przez API (opcjonalne, dla lepszego typowania)
 export interface SessionData {
   isAuthenticated: boolean;
-  user?: {
-    role: string;
-    points: number;
-    notifications: number;
-  };
 }
 
-export const loginUser = async (email: string, password: string): Promise<SessionData> => {
-  const res = await fetch(`${apiUrl}/api/auth/login`, {
+export const loginUser = async (email: string, password: string): Promise<any> => {
+  return await fetchClient("/api/auth/login", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
     body: JSON.stringify({ email, password }),
   });
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message || "Błąd logowania");
-  }
-  return data;
 };
 
 export const logoutUser = async (): Promise<void> => {
-  const res = await fetch(`${apiUrl}/api/auth/logout`, {
+  await fetchClient("/api/auth/logout", {
     method: "POST",
-    credentials: "include",
   });
-  if (!res.ok) {
-    throw new Error("Błąd wylogowania");
-  }
 };
 
 export const checkSession = async (): Promise<SessionData> => {
-  const res = await fetch(`${apiUrl}/api/auth/status`, {
+  return await fetchClient("/api/auth/status", {
     method: "GET",
-    credentials: "include",
   });
-  const data = await res.json();
-  if (!res.ok) {
-    throw new Error(data.message || "Sesja nieważna");
-  }
-  return data;
 };

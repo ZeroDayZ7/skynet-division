@@ -5,7 +5,7 @@ import SystemLog from '#utils/SystemLog.js';
 export const validateUser = async (email, password, ip) => {
   const user = await userService.getUserDetailsForValidation(email);
 
-  SystemLog.info('userDetails:', user);
+  // SystemLog.info('userDetails:', user);
 
   if (!user || user.userBlock === 1 || user.activation_token !== null) {
     return {
@@ -29,7 +29,7 @@ export const validateUser = async (email, password, ip) => {
   await userService.updateLoginDetails(email, ip, user.lastLoginIp);
 
   // Nie trzeba tworzyć `userWithRole`, ponieważ `user` już zawiera `role`
-  SystemLog.warn('USR:', user);
+  // SystemLog.warn('USR:', user);
 
   return {
     error: false,

@@ -45,9 +45,11 @@ export default function LoginModal() {
   
       try {
         const data = await loginUser(email, password);
-        console.log(data);
+        // console.log(data);
         login(data.user);
-        router.push("/dashboard");
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 100); // Krótki delay, aby ciasteczka się zapisały
       } catch (err: any) {
         setError(err.message || "Wystąpił problem z logowaniem");
       } finally {
@@ -88,6 +90,7 @@ export default function LoginModal() {
               type="email"
               id="email"
               placeholder="E-mail"
+              autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`mt-1 block w-full p-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${
@@ -112,6 +115,7 @@ export default function LoginModal() {
               type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Hasło"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={`mt-1 block w-full p-3 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 ${

@@ -12,8 +12,21 @@ import apiRouter from '#routes/apiRouter.js'; // Statyczny import
 dotenv.config();
 
 const app = express();
+let counter = 1; // Inicjalizacja licznika
 
-console.log(`====================== START ===========================`);
+// Funkcja do dodawania kolejnych numerów i logowania
+function logWithCounter(message) {
+  console.log(`${message}: ${counter}`);
+  counter++; // Zwiększ licznik po każdym logowaniu
+}
+// Middleware do logowania z numeracją
+app.use((req, res, next) => {
+  console.log(`=============== START ================`);
+  logWithCounter(`NUMER: `);
+  console.log(`=============== STOP ================`);
+  next(); // Przejście do następnego middleware lub trasy
+});
+
 
 // // Security middlewares
 // app.use(helmet({
@@ -31,12 +44,12 @@ console.log(`====================== START ===========================`);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(consoleLogRequest);
+app.use(consoleLogRequest);
 app.disable('x-powered-by');
 
 // Session and language
 sessionManager(app);
-app.use(setLocale); // Używamy setLocale jako middleware
+// app.use(setLocale); // Używamy setLocale jako middleware
 
 // CORS
 const corsOptions = {

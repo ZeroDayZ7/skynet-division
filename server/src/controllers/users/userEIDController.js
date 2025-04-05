@@ -46,7 +46,6 @@ export async function getUserEIDData(req, res) {
     }
 
     userEID.photo = photoBase64;
-    SystemLog.info("Dane zwrócone:", JSON.stringify(userEID, null, 2));
     return res.status(200).json(userEID);
   } catch (error) {
     SystemLog.error("Błąd pobierania danych e-dowodu", { userId, error });

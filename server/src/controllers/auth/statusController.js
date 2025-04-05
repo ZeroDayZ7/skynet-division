@@ -1,21 +1,15 @@
 import SystemLog from "#utils/SystemLog.js"; // Załóżmy, że masz logger
 
 export const checkSessionStatus = async (req, res) => {
+  SystemLog.info(`checkSessionStatus: ${JSON.stringify(req.session.userId, null, 2)}`);
   if (req.session.userId) {
     try {
-      SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
-      return res.status(200).json({
-        user: {
-          role: req.session.role,
-          points: req.session.points,
-          notifications: req.session.notifications
-        },
-        isAuthenticated: true,
-      });
+      SystemLog.info(`checkSessionStatus TRY: ${JSON.stringify(req.session, null, 2)}`);
+      return res.status(200).json({ isAuthenticated: true });
     } catch (error) {
       return res
         .status(500)
-        .json({ success: false, message: "Error retrieving session status." });
+        .json({ message: "Error retrieving session status." });
     }
   } else {
     // 3. Usuń ciasteczka po stronie klienta
@@ -29,7 +23,7 @@ export const checkSessionStatus = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
     });
 
-    SystemLog.info("User logged out and deleted Cookies");
+    SystemLog.info(`User logged out and deleted CookiesE: ${JSON.stringify(req.session.userId, null, 2)}`);
 
     return res.status(200).json({ isAuthenticated: false });
   }

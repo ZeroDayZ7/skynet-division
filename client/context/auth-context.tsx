@@ -6,11 +6,10 @@ import {
   useContext,
   ReactNode,
   useEffect,
-  useCallback,
 } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { checkSession, SessionData } from "@/services/auth.service";
 import { FaSpinner } from "react-icons/fa";
+import { checkSession } from "@/services/auth.service";
 
 type User = {
   role: string;
@@ -23,7 +22,6 @@ type AuthContextType = {
   isAuthenticated: boolean | null;
   login: (user: User) => void;
   logout: () => void;
-  checkSession: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,64 +29,38 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isInitialLogin, setIsInitialLogin] = useState<boolean>(false); // Nowy stan
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
 
-  const checkSessionHandler = useCallback(async () => {
-    try {
-      const data: SessionData = await checkSession();
-      setIsAuthenticated(data.isAuthenticated);
-      if (data.isAuthenticated && data.user) {
-        const newUser: User = {
-          ...data.user,
-          notifications: data.user.notifications ?? 0, // Domyślna wartość dla notifications
-        };
-        setUser(newUser);
-        localStorage.setItem("user", JSON.stringify(newUser));
-        if (pathname === "/login") router.replace("/dashboard");
-      } else {
-        setUser(null);
-        localStorage.removeItem("user");
-        if (pathname !== "/login") router.replace("/login");
+  useEffect(() => {
+    // Tworzymy funkcję asynchroniczną wewnątrz useEffect
+    const fetchSessionData = async () => {
+      console.log('== AuthProvider ==');
+      try {
+        const sessionData = await checkSession(); // Asynchroniczne wywołanie
+        console.log(`SESSION: ${JSON.stringify(sessionData)}`);
+      } catch (error) {
+        console.error('Error checking session:', error);
       }
-    } catch (error) {
-      console.error("Session check error:", error);
-      setIsAuthenticated(false);
-      setUser(null);
-      if (pathname !== "/login") router.replace("/login");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [pathname, router]);
+    };
+  
+    fetchSessionData(); // Wywołanie funkcji asynchronicznej
+  }, []);
 
   const login = (user: User) => {
     setUser(user);
     setIsAuthenticated(true);
-    setIsInitialLogin(true); // Oznaczamy, że to pierwsze logowanie
     localStorage.setItem("user", JSON.stringify(user));
-    setIsLoading(false); // Wyłączamy loading po zalogowaniu
+    // if (pathname === "/login") router.push("/dashboard");
   };
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    setIsInitialLogin(false); // Resetujemy stan przy wylogowaniu
     localStorage.removeItem("user");
+    // router.replace("/login");
   };
-
-  useEffect(() => {
-    // Sprawdzamy sesję tylko, jeśli to nie jest pierwsze logowanie
-    if (!isInitialLogin) {
-      console.log(`E2`);
-      checkSessionHandler();
-    } else {
-      // Jeśli to pierwsze logowanie, resetujemy flagę po jednorazowym pominięciu
-      console.log(`E1`);
-      setIsInitialLogin(false);
-    }
-  }, [checkSessionHandler, isInitialLogin]);
 
   if (isLoading) {
     return (
@@ -100,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout, checkSession: checkSessionHandler }}
+      value={{ user, isAuthenticated, login, logout }}
     >
       {children}
     </AuthContext.Provider>
