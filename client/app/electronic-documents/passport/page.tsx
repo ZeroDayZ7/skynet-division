@@ -4,17 +4,22 @@ import BackButton from "@/components/ui/BackButton";
 
 // Interfejs danych użytkownika
 interface UserData {
-  first_name: string;
-  second_name: string;
-  last_name: string;
-  pesel: string;
   passport_number: string;
   issue_date: string;
   expiration_date: string;
+  country_code: string;
+  passport_type: string;
+  user: {
+    first_name: string;
+    second_name: string;
+    last_name: string;
+    pesel: string;
+    birth_date: string;
+    birth_place: string;
+  };
   photo?: string;
-  birth_date: string;
-  birth_place: string;
 }
+
 
 export default async function ProfilePage() {
   const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
@@ -73,21 +78,21 @@ export default async function ProfilePage() {
         )}
         <div className="ml-4">
           <h2 className="text-xl font-semibold">
-            {userData.first_name} {userData.second_name} {userData.last_name}
+            {userData.user.first_name} {userData.user.second_name} {userData.user.last_name}
           </h2>
-          <p className="text-gray-500">PESEL: {userData.pesel}</p>
+          <p className="text-gray-500">PESEL: {userData.user.pesel}</p>
         </div>
       </div>
 
       <div className="my-4">
         <h3 className="text-lg font-semibold">Dane osobowe</h3>
         <ul className="list-none p-0">
-          <li><strong>Imię:</strong> {userData.first_name}</li>
-          <li><strong>Drugie imię:</strong> {userData.second_name}</li>
-          <li><strong>Nazwisko:</strong> {userData.last_name}</li>
-          <li><strong>PESEL:</strong> {userData.pesel}</li>
-          <li><strong>Data urodzenia:</strong> {new Date(userData.birth_date).toLocaleDateString()}</li>
-          <li><strong>Miejsce urodzenia:</strong> {userData.birth_place}</li>
+          <li><strong>Imię:</strong> {userData.user.first_name}</li>
+          <li><strong>Drugie imię:</strong> {userData.user.second_name}</li>
+          <li><strong>Nazwisko:</strong> {userData.user.last_name}</li>
+          <li><strong>PESEL:</strong> {userData.user.pesel}</li>
+          <li><strong>Data urodzenia:</strong> {new Date(userData.user.birth_date).toLocaleDateString()}</li>
+          <li><strong>Miejsce urodzenia:</strong> {userData.user.birth_place}</li>
         </ul>
       </div>
 

@@ -37,7 +37,15 @@ UserData.init({
   },
   birth_place: {
     type: DataTypes.STRING(255),
-    allowNull: true,
+    allowNull: false,
+  },
+  gender: {
+    type: DataTypes.STRING(1),
+    allowNull: false, // Jeżeli nie ma obowiązkowego wymogu
+  },
+  nationality: {
+    type: DataTypes.STRING(100),
+    allowNull: false, // Jeżeli nie ma obowiązkowego wymogu
   },
 }, {
   sequelize,

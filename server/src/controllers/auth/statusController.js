@@ -1,10 +1,10 @@
 import SystemLog from "#utils/SystemLog.js"; // Załóżmy, że masz logger
 
 export const checkSessionStatus = async (req, res) => {
-  SystemLog.info(`checkSessionStatus: ${JSON.stringify(req.session.userId, null, 2)}`);
+  SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
   if (req.session.userId) {
     try {
-      SystemLog.info(`checkSessionStatus TRY: ${JSON.stringify(req.session, null, 2)}`);
+      SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
       return res.status(200).json({ isAuthenticated: true });
     } catch (error) {
       return res
@@ -23,7 +23,7 @@ export const checkSessionStatus = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
     });
 
-    SystemLog.info(`User logged out and deleted CookiesE: ${JSON.stringify(req.session.userId, null, 2)}`);
+    SystemLog.info("User logged out and deleted Cookies");
 
     return res.status(200).json({ isAuthenticated: false });
   }

@@ -35,8 +35,6 @@ export const loginController = async (req, res) => {
       });
     }
 
-    // SystemLog.info("REST", { validationResult });
-
     // 3. Generowanie tokena JWT
     const token = generateAuthToken({
       id: validationResult.user.id,
@@ -68,7 +66,7 @@ export const loginController = async (req, res) => {
         secure: process.env.NODE_ENV === "production",
         maxAge: parseInt(process.env.JWT_EXPIRES_IN_MS || "900000", 10), // 15min domyślnie
       });
-
+      SystemLog.info(`SESSION in loginConroller: ${JSON.stringify(req.session, null, 2)}`);
       SystemLog.info("User logged in successfully", {
         userId: validationResult.user.id,
         role: validationResult.user.role,
@@ -82,6 +80,8 @@ export const loginController = async (req, res) => {
           points: validationResult.user.points,
           notifications: unreadCount
         },
+        token: token
+
       });
     });
   } catch (error) {

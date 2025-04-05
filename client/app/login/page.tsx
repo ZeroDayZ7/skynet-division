@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import Image from 'next/image';
+import { useState, startTransition } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "@/context/auth-context";
-import { loginUser } from "@/services/auth.service";
 import { validateEmail, validatePassword } from "@/utils/formValidation";
+import { serverLogin } from '@/lib/auth.server'
 
 export default function LoginModal() {
   const { login } = useAuth(); // Używamy login z kontekstu
@@ -17,6 +17,7 @@ export default function LoginModal() {
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
   const router = useRouter();
 
   const validateForm = () => {
@@ -31,26 +32,34 @@ export default function LoginModal() {
     return valid;
   };
 
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (isLoading || !validateForm()) return;
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Zapobiegamy przeładowaniu strony
+    if (!validateForm()) return;
   
-      setError("");
-      setIsLoading(true);
+    setError("");
+    setIsLoading(true);
   
-      try {
-        const data = await loginUser(email, password);
-        // console.log(data);
-        login(data.user);
+    startTransition(async () => {
+      const result = await serverLogin(email, password);
+      if (result.success && result.user) {
+        document.cookie = `ACCESS_KEY=${result.token}; path=/; max-age=${
+          parseInt(process.env.NEXT_PUBLIC_JWT_EXPIRES_IN_MS || "900000", 10) /
+          1000
+        }; ${
+          process.env.NEXT_PUBLIC_NODE_ENV === "production" ? "secure" : ""
+        }`;
+        console.log(result.user);
+        login(result.user);
         setTimeout(() => {
           router.replace("/dashboard");
-        }, 100); // Krótki delay, aby ciasteczka się zapisały
-      } catch (err: any) {
-        setError(err.message || "Wystąpił problem z logowaniem");
-      } finally {
+        }, 100);
+      } else {
+        setError(result.error);
         setIsLoading(false);
       }
-    };
+    });
+  };
+  
 
   return (
     <div className="flex flex-col items-center">
@@ -136,7 +145,9 @@ export default function LoginModal() {
             <button
               type="submit"
               className={`w-full h-12 flex items-center justify-center rounded-md text-white transition duration-300 ${
-                isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-700"
+                isLoading
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-700"
               }`}
               disabled={isLoading}
             >

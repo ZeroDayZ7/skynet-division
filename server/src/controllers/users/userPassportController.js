@@ -8,9 +8,8 @@ import { defineAssociations } from "#models/associations.js";
 // Definiujemy asocjacje po załadowaniu modeli
 defineAssociations();
 
-const PHOTO_UPLOAD_DIR = path.join(process.cwd(), "private_uploads/passports"); // Zmieniona ścieżka do zdjęcia
+const PHOTO_UPLOAD_DIR = path.join(process.cwd(), "private_uploads/passports");
 
-// Pobieranie danych użytkownika paszportu
 export async function getUserPassportData(req, res) {
   const userId = req.user?.id;
   if (!userId) return res.status(401).json({ message: "Brak autoryzacji" });
@@ -18,8 +17,8 @@ export async function getUserPassportData(req, res) {
   SystemLog.info(`Pobieranie danych paszportu dla użytkownika ID: ${userId}`);
 
   try {
-    // Pobieranie danych paszportu oraz danych użytkownika w jednym zapytaniu
-    const userPassport = await Passport.findOne({
+    // Pobieranie danych BEZ raw: true
+    const userPassportInstance = await Passport.findOne({
       where: { user_id: userId },
       attributes: [
         "passport_number",
@@ -32,15 +31,18 @@ export async function getUserPassportData(req, res) {
         {
           model: UserData,
           as: "user", // Asocjacja z modelem User
-          attributes: ["first_name", "second_name", "last_name", "pesel", "birth_date", "birth_place"], // Imię, drugie imię, nazwisko
+          attributes: ["first_name", "second_name", "last_name", "pesel", "birth_date", "birth_place", "gender", "nationality"],
         },
       ],
-      raw: true, // Otrzymujemy czysty obiekt
+      // raw: true, // USUNIĘTE
     });
 
-    if (!userPassport) {
+    if (!userPassportInstance) {
       return res.status(404).json({ message: "Dane paszportu nie znalezione" });
     }
+
+    // Konwersja instancji modelu do zwykłego obiektu JS
+    const plainUserPassport = userPassportInstance.get({ plain: true });
 
     // Pobranie zdjęcia paszportu
     const photoPath = path.join(PHOTO_UPLOAD_DIR, `${userId}.jpg`);
@@ -53,13 +55,16 @@ export async function getUserPassportData(req, res) {
     } catch (error) {
       SystemLog.warn(`Zdjęcie paszportu nie znalezione: ${photoPath}`);
     }
-    SystemLog.info(`PASSPORT: ${JSON.stringify(userPassport, null, 2)}`);
 
-    userPassport.photo = photoBase64;
+    // Dodanie zdjęcia do ZWYKŁEGO obiektu
+    plainUserPassport.photo = photoBase64;
 
-  
+    // Logowanie obiektu, który zostanie wysłany
+    SystemLog.info(`PASSPORT DATA TO SEND: ${JSON.stringify(plainUserPassport, null, 2)}`);
 
-    return res.status(200).json(userPassport);
+    // Wysłanie ZWYKŁEGO obiektu w odpowiedzi
+    return res.status(200).json(plainUserPassport);
+
   } catch (error) {
     SystemLog.error("Błąd pobierania danych paszportu", { userId, error });
     return res.status(500).json({ message: "Błąd serwera", error: error.message });
