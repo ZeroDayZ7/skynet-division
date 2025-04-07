@@ -18,7 +18,7 @@ const menuItems = [
   { icon: FaIdCard, link: "/electronic-documents", label: "eDokumenty", enabled: true },
   { icon: FaNewspaper, link: "/citizens-projects", label: "Projekty Obywatelskie", enabled: true },
   { icon: FaLanguage, link: "/language-trainer", label: "Trener Języka", enabled: true },
-  { icon: FaBriefcase, link: "/jobs-board", label: "Praca", enabled: true },
+  { icon: FaBriefcase, link: "/jobs", label: "Praca", enabled: true },
   { icon: FaShoppingCart, link: "/market", label: "Market", enabled: true },
   { icon: FaTools, link: "/settings", label: "Ustawienia", enabled: true },
 ];

@@ -16,6 +16,7 @@ export interface LoginResponse {
     notifications: number;
   };
   token?: string;
+  message?: string;
 }
 
 // Logowanie użytkownika

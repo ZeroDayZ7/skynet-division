@@ -3,10 +3,6 @@ import fs from "fs/promises"; // Używamy promisowego API FS
 import Passport from "#models/users/UserPassportData.js"; // Nowy model paszportu
 import UserData from "#models/users/UserData.js"; // Model użytkownika
 import SystemLog from "#utils/SystemLog.js";
-import { defineAssociations } from "#models/associations.js";
-
-// Definiujemy asocjacje po załadowaniu modeli
-defineAssociations();
 
 const PHOTO_UPLOAD_DIR = path.join(process.cwd(), "private_uploads/passports");
 

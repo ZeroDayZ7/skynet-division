@@ -10,11 +10,23 @@ export const loginController = async (req, res) => {
   const userIp = req.headers["x-forwarded-for"] || req.ip; // Używamy req.ip zamiast req.connection.remoteAddress
 
   try {
+    //  if (req.session.userId) {
+    //     try {
+    //       SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
+    //       return res.status(200).json({ message: "Jesteś już zalogowany" });
+    //     } catch (error) {
+    //       return res
+    //         .status(500)
+    //         .json({ message: "Error retrieving session status." });
+    //     }
+    //   }
+
     // 1. Walidacja danych wejściowych
     if (!email || !password) {
       SystemLog.warn("Login attempt with incomplete data", { email });
       return res.status(400).json({
         isAuthenticated: false,
+        message: "Uzupełnij poprawnie dane"
       });
     }
 
@@ -27,11 +39,11 @@ export const loginController = async (req, res) => {
     if (validationResult.error) {
       SystemLog.warn("Invalid login attempt", {
         email,
-        reason: validationResult.code,
+        reason: validationResult.message,
       });
       return res.status(401).json({
         isAuthenticated: false,
-        message: validationResult.code,
+        message: validationResult.message,
       });
     }
 
@@ -66,13 +78,13 @@ export const loginController = async (req, res) => {
         secure: process.env.NODE_ENV === "production",
         maxAge: parseInt(process.env.JWT_EXPIRES_IN_MS || "900000", 10), // 15min domyślnie
       });
-      SystemLog.info(`SESSION in loginConroller: ${JSON.stringify(req.session, null, 2)}`);
+
       SystemLog.info("User logged in successfully", {
         userId: validationResult.user.id,
         role: validationResult.user.role,
         ip: userIp,
       });
-
+ 
       return res.status(200).json({
         isAuthenticated: true,
         user: {

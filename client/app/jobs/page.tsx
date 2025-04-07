@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { FaPlusCircle, FaSearch, FaFilter, FaSpinner } from "react-icons/fa";
 
 const actions = [
-  { id: 1, name: "Dodaj Ogłoszenie", icon: FaPlusCircle, enabled: true, link: "/jobs-board/new" },
-  { id: 2, name: "Szukaj Pracy", icon: FaSearch, enabled: true, link: "/jobs-board/search" },
+  { id: 1, name: "Dodaj Ogłoszenie", icon: FaPlusCircle, enabled: true, link: "/jobs/new" },
+  { id: 2, name: "Szukaj Pracy", icon: FaSearch, enabled: true, link: "/jobs/search" },
   { id: 3, name: "Filtruj Wyniki", icon: FaFilter, enabled: false, link: "#" }
 ];
 

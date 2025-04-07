@@ -2,39 +2,39 @@ import bcrypt from 'bcrypt';
 import userService from './user.service.js';
 import SystemLog from '#utils/SystemLog.js';
 
+const ERROR_CODES = {
+  INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
+  USER_BLOCKED: 'USER_BLOCKED',
+  ACCOUNT_NOT_ACTIVE: 'ACCOUNT_NOT_ACTIVE',
+  INVALID_PASSWORD: 'INVALID_PASSWORD',
+};
+
+const ERROR_MESSAGES = {
+  [ERROR_CODES.INVALID_CREDENTIALS]: 'Podano niepoprawne dane logowania.',
+  [ERROR_CODES.USER_BLOCKED]: 'Twoje konto zostało zablokowane.',
+  [ERROR_CODES.ACCOUNT_NOT_ACTIVE]: 'Twoje konto nie zostało jeszcze aktywowane.',
+  [ERROR_CODES.INVALID_PASSWORD]: 'Podane hasło jest nieprawidłowe.',
+};
+
+const createError = (code) => ({
+  error: true,
+  message: ERROR_MESSAGES[code],
+});
+
 export const validateUser = async (email, password, ip) => {
   const user = await userService.getUserDetailsForValidation(email);
 
-  // SystemLog.info('userDetails:', user);
-
-  if (!user || user.userBlock === 1 || user.activation_token !== null) {
-    return {
-      error: true,
-      code: user
-        ? user.userBlock
-          ? 'LOGIN.USER_BLOCKED'
-          : 'LOGIN.ACCOUNT_ACTIVATE_FALSE'
-        : 'LOGIN.WRONG_DATA'
-    };
-  }
+  if (!user) return createError(ERROR_CODES.INVALID_CREDENTIALS);
+  if (user.userBlock === 1) return createError(ERROR_CODES.USER_BLOCKED);
+  if (user.activation_token !== null) return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
 
   const isPasswordValid = await bcrypt.compare(password, user.pass);
-  if (!isPasswordValid) {
-    return {
-      error: true
-    };
-  }
+  if (!isPasswordValid) return createError(ERROR_CODES.INVALID_PASSWORD);
 
-  // Zoptymalizowana aktualizacja licznika logowań i adresu IP
   await userService.updateLoginDetails(email, ip, user.lastLoginIp);
+  SystemLog.info('User logged in successfully:', { email, ip });
 
-  // Nie trzeba tworzyć `userWithRole`, ponieważ `user` już zawiera `role`
-  // SystemLog.warn('USR:', user);
-
-  return {
-    error: false,
-    user
-  };
+  return { error: false, user };
 };
 
 export default { validateUser };

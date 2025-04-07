@@ -8,6 +8,7 @@ import helmet from 'helmet';
 import { setLocale } from '#language/i18nSetup.js'; // Import setLocale
 import { consoleLogRequest } from '#tools/tools.js';
 import apiRouter from '#routes/apiRouter.js'; // Statyczny import
+import defineUserAssociations from '#config/associations.js'
 
 dotenv.config();
 
@@ -46,6 +47,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(consoleLogRequest);
 app.disable('x-powered-by');
+
+defineUserAssociations();
 
 // Session and language
 sessionManager(app);

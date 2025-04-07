@@ -33,20 +33,41 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // const router = useRouter();
   // const pathname = usePathname();
 
-  // useEffect(() => {
-  //   // Tworzymy funkcję asynchroniczną wewnątrz useEffect
-  //   const fetchSessionData = async () => {
-  //     console.log('== AuthProvider ==');
-  //     try {
-  //       const sessionData = await checkSession(); // Asynchroniczne wywołanie
-  //       console.log(`SESSION: ${JSON.stringify(sessionData)}`);
-  //     } catch (error) {
-  //       console.error('Error checking session:', error);
-  //     }
-  //   };
+  useEffect(() => {
+    setIsLoading(true);
+
+    const initializeAuth = async () => {
+      console.log("== AuthProvider ==");
   
-  //   fetchSessionData(); // Wywołanie funkcji asynchronicznej
-  // }, []);
+      const localUser = localStorage.getItem("user");
+      if (localUser) {
+        try {
+          const parsedUser = JSON.parse(localUser);
+          setUser(parsedUser);
+          setIsAuthenticated(true);
+          console.log("Załadowano użytkownika z localStorage:", parsedUser);
+        } catch (err) {
+          console.error("Błąd parsowania użytkownika z localStorage", err);
+          localStorage.removeItem("user"); // Czyszczenie na wszelki wypadek
+        }
+      }
+  
+      // // Sprawdzamy aktualną sesję na serwerze
+      // try {
+      //   const sessionData = await checkSession();
+      //   console.log(`SESSION: ${JSON.stringify(sessionData)}`);
+  
+      //   if (!sessionData.isAuthenticated) {
+      //     logout(); // Wyloguj jeśli sesja wygasła po stronie serwera
+      //   }
+      // } catch (error) {
+      //   console.error("Błąd sprawdzania sesji:", error);
+      // }
+    };
+    setIsLoading(false);
+    initializeAuth();
+  }, []);
+  
 
   const login = (user: User) => {
     setUser(user);
