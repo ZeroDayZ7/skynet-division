@@ -1,3 +1,3 @@
 cls
-start cmd /k "cd server && nodemon server.js"
+start cmd /k "cd server && npm run dev"
 

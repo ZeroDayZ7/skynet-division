@@ -1,0 +1,23 @@
+import bcrypt from 'bcrypt';
+import userService from './user.service';  // Usuń '.js' z importu, TypeScript obsługuje automatyczne rozpoznawanie plików TS
+import SystemLog from '#utils/SystemLog';  // Zmieniłem import na odpowiednią ścieżkę do SystemLog
+import { createError } from '#errors/errorFactory'; // Zaimportuj createError z errorFactory.ts
+import { ERROR_CODES } from '#errors/errorCodes';
+
+export const validateUser = async (email: string, password: string, ip: string) => {
+  const user = await userService.getUserDetailsForValidation(email);
+
+  if (!user) return createError(ERROR_CODES.INVALID_CREDENTIALS);
+  if (user.userBlock === true) return createError(ERROR_CODES.USER_BLOCKED);
+  if (user.activation_token !== null) return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
+
+  const isPasswordValid = await bcrypt.compare(password, user.pass);
+  if (!isPasswordValid) return createError(ERROR_CODES.INVALID_CREDENTIALS);
+
+  await userService.updateLoginDetails(email, ip, user.lastLoginIp ?? "");
+  SystemLog.info('AUTH SERVICES TS:', { email, ip });
+
+  return { error: false, user };
+};
+
+export default { validateUser };

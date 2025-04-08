@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import SystemLog from '#utils/SystemLog.js';
-import jwtConfig from '#config/jwt.config.js';
+// import jwtConfig from '#config/jwt.config.js';
 
 // Funkcja pomocnicza do szyfrowania ID
 const encryptId = (id) => {
@@ -15,7 +15,7 @@ const encryptId = (id) => {
   encrypted += cipher.final('hex');
   return `${iv.toString('hex')}:${encrypted}`;
 };
-
+ 
 /**
  * Generuje token JWT z zaszyfrowanym ID użytkownika
  * @param {Object} user - Obiekt użytkownika

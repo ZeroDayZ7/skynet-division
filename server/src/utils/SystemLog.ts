@@ -1,30 +1,48 @@
-import { transports, createLogger, format } from 'winston';
+import { transports, createLogger, format, Logger } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { env } from 'process';
 
-const logLevels = {
+// Definicja poziomów logowania z typami
+const logLevels: Record<string, number> = {
   error: 0,
   warn: 1,
   info: 2,
   debug: 3,
 };
 
+// Personalizacja kolorów
+const customColors = {
+  error: 'red',
+  warn: 'yellow',
+  info: 'green',
+  debug: 'cyan',
+};
+format.colorize().addColors(customColors);
+
+// Format dla konsoli z kolorami
 const consoleFormat = format.combine(
-  format.colorize({ all: true }),
+  format.colorize({ all: true }), // Kolory dla wszystkich poziomów
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.printf(({ timestamp, level, message, ...meta }) => {
     return `${timestamp} [${level}]: ${message} ${
-      Object.keys(meta).length ? JSON.stringify(meta) : ''
+      Object.keys(meta).length ? JSON.stringify(meta, null, 2) : ''
     }`;
   })
 );
 
+// Format dla plików (bez kolorów, JSON)
 const fileFormat = format.combine(
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   format.json()
 );
 
-const SystemLog = createLogger({
+// Interfejs dla loggera z metodą debugObject
+interface CustomLogger extends Logger {
+  debugObject: (message: string, object: any) => void;
+}
+
+// Tworzenie loggera
+const SystemLog: CustomLogger = createLogger({
   levels: logLevels,
   level: env.NODE_ENV === 'development' ? 'debug' : 'info',
   format: fileFormat,
@@ -51,9 +69,10 @@ const SystemLog = createLogger({
   ],
   exceptionHandlers: [new transports.File({ filename: 'logs/exceptions.log' })],
   rejectionHandlers: [new transports.File({ filename: 'logs/rejections.log' })],
-});
+}) as CustomLogger;
 
-SystemLog.debugObject = (message, object) => {
+// Dodanie metody debugObject
+SystemLog.debugObject = (message: string, object: any): void => {
   if (SystemLog.isDebugEnabled()) {
     SystemLog.debug(message, { object: JSON.stringify(object, null, 2) });
   }

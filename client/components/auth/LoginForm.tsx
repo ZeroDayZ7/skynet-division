@@ -82,9 +82,10 @@ export default function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-mail</FormLabel>
+              <FormLabel htmlFor="email">E-mail</FormLabel>
               <FormControl>
                 <Input
+                  id="email"
                   placeholder="E-mail"
                   autoComplete="username"
                   disabled={isLoading}
@@ -104,10 +105,11 @@ export default function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="relative">
-              <FormLabel>Hasło</FormLabel>
+              <FormLabel htmlFor="password">Hasło</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Hasło"
                     autoComplete="current-password"

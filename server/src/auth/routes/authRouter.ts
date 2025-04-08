@@ -1,23 +1,22 @@
 import express from 'express';
 
 // import loginEndpoint from '#endpoints/v1/auth/login.js';
-import { loginController } from '#controllers/auth/loginController.js';
-import { logoutController } from '#controllers/auth/logoutController.js';
-import { checkSessionStatus } from '#controllers/auth/statusController.js';
+import { loginController } from '#auth/controllers/auth/loginController';
+import { logoutController } from '#auth/controllers/auth/logoutController';
+import { checkSessionStatus } from '#auth/controllers/auth/statusController.js';
 
-import { authMiddleware } from '#middlewares/auth.js';
-import rateLimiterConfig from '#config/rateLimiterConfig.js'; // Import domyślny
+// import { authMiddleware } from '#middlewares/auth.js';
+import rateLimiterConfig from '#middlewares/rateLimiter'; // Import domyślny
 
 const { authLimiter } = rateLimiterConfig;
 
 const router = express.Router();
 
 // Logowanie
-// router.post('/login', authLimiter, loginController);
-router.post('/login', loginController);
+router.post('/login', authLimiter, loginController);
 
 // Wylogowanie
-router.post('/logout', authMiddleware, logoutController);
+// router.post('/logout', authMiddleware, logoutController);
 
 // Status
 router.get('/status', checkSessionStatus);

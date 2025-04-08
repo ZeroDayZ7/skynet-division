@@ -10,7 +10,7 @@ const ERROR_CODES = {
 };
 
 const ERROR_MESSAGES = {
-  [ERROR_CODES.INVALID_CREDENTIALS]: 'Podano niepoprawne dane logowania.',
+  [ERROR_CODES.INVALID_CREDENTIALS]: 'Nieprawidłowy e-mail lub hasło',
   [ERROR_CODES.USER_BLOCKED]: 'Twoje konto zostało zablokowane.',
   [ERROR_CODES.ACCOUNT_NOT_ACTIVE]: 'Twoje konto nie zostało jeszcze aktywowane.',
   [ERROR_CODES.INVALID_PASSWORD]: 'Podane hasło jest nieprawidłowe.',
@@ -29,7 +29,7 @@ export const validateUser = async (email, password, ip) => {
   if (user.activation_token !== null) return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
 
   const isPasswordValid = await bcrypt.compare(password, user.pass);
-  if (!isPasswordValid) return createError(ERROR_CODES.INVALID_PASSWORD);
+  if (!isPasswordValid) return createError(ERROR_CODES.INVALID_CREDENTIALS);
 
   await userService.updateLoginDetails(email, ip, user.lastLoginIp);
   SystemLog.info('User logged in successfully:', { email, ip });

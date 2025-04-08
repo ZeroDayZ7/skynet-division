@@ -1,0 +1,34 @@
+import { Request, Response, NextFunction } from "express";
+import SystemLog from "#utils/SystemLog";
+
+// Typ dla odpowiedzi kontrolera
+interface SessionStatusResponse {
+  isAuthenticated: boolean;
+  message?: string;
+}
+
+export const checkSessionStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  // Logowanie sesji dla debugowania
+  SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
+
+  if (req.session.userId) {
+    // Sesja istnieje, użytkownik jest zalogowany
+    res.status(200).json({ isAuthenticated: true });
+  } else {
+    // Sesja nie istnieje, użytkownik nie jest zalogowany
+    res.clearCookie(process.env.ACCESS_COOKIE_NAME, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.clearCookie(process.env.SESSION_COOKIE_NAME, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    SystemLog.info("User session not found, cookies cleared");
+    res.status(200).json({ isAuthenticated: false });
+  }
+};
