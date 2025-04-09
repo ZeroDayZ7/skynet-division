@@ -17,9 +17,7 @@ export default function JobBoard() {
   const handleNavigation = (link: string) => {
     if (link !== "#") {
       setIsLoading(true);
-      setTimeout(() => {
-        router.push(link);
-      }, 500);
+      router.push(link);
     }
   };
 

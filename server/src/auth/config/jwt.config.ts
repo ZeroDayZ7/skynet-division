@@ -1,5 +1,3 @@
-import { Secret } from "jsonwebtoken";
-
 // JWT configuration interface
 export interface JwtConfig {
   secret: string | Buffer;

@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
-import sessionManager from '#tools/sessionManager';
+import sessionManager from '#services/session.services';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import SystemLog from '#utils/SystemLog';
@@ -45,7 +45,7 @@ app.use((req: Request, res: Response, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(requestLogger);
+// app.use(requestLogger);
 app.disable('x-powered-by');
 
 
@@ -59,9 +59,9 @@ const corsOptions = {
   origin: process.env.API_URL,
   credentials: true,
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', "X-CSRF-Token"],
   exposedHeaders: ['Content-Length'],
-  maxAge: parseInt(process.env.C_MAX_AGE),
+  maxAge: parseInt(process.env.CORS_EXPIRES),
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));

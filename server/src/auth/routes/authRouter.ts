@@ -7,16 +7,19 @@ import { checkSessionStatus } from '#auth/controllers/auth/statusController.js';
 
 // import { authMiddleware } from '#middlewares/auth.js';
 import rateLimiterConfig from '#middlewares/rateLimiter'; // Import domyślny
+import { validateRequest } from "#auth/middleware/validateRequest";
+import { loginSchema } from "#auth/validators/loginSchema";
+import { authMiddleware } from '#auth/middleware/auth.middleware';
 
 const { authLimiter } = rateLimiterConfig;
 
 const router = express.Router();
 
 // Logowanie
-router.post('/login', authLimiter, loginController);
+router.post('/login', authLimiter, validateRequest(loginSchema), loginController);
 
 // Wylogowanie
-// router.post('/logout', authMiddleware, logoutController);
+router.post('/logout', authMiddleware, logoutController);
 
 // Status
 router.get('/status', checkSessionStatus);

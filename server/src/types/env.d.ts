@@ -19,7 +19,6 @@ declare namespace NodeJS {
       JWT_SECRET: string;
       JWT_EXPIRES_IN: string;
       JWT_ISSUER: string;
-      JWT_EXPIRES_IN_MS: string;
       JWT_COOKIE_NAME: string
   
      
@@ -33,7 +32,10 @@ declare namespace NodeJS {
       SESSION_MAX_AGE: string;
   
       ENCRYPTION_KEY: string;
+
+      CSRF_COOKIE_NAME: string;
   
+      CORS_EXPIRES: string;
   
       PHOTO_UPLOAD_DIR: string;
     }

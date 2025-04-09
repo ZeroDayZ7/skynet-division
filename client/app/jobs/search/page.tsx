@@ -19,7 +19,6 @@ const JobSearchPage = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
       router.push(
         `/job-board/results?search=${encodeURIComponent(
           searchQuery
@@ -31,7 +30,6 @@ const JobSearchPage = () => {
           postalCode
         )}&radius=${radius}&salaryMin=${salaryMin}&salaryMax=${salaryMax}`
       );
-    }, 500);
   };
 
   return (

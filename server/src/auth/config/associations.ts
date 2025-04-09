@@ -1,7 +1,9 @@
-import Users from "#models/users/Users.js";
-import UserData from "#models/users/UserData.js";
-import UserEIDData from "#models/users/UserEIDData.js";
+import Users from "#auth/models/Users";
+import UserData from "#auth/models/UserData";
+import UserEIDData from "#auth/models/UserEIDData";
 import Passport from "#models/users/UserPassportData.js";
+import UserNotification from "#auth/models/UserNotification";
+import NotificationTemplate from "#auth/models/NotificationTemplate";
 
 export default function defineUserAssociations() {
   // Relacja Users <-> UserData
@@ -17,5 +19,6 @@ export default function defineUserAssociations() {
   UserEIDData.belongsTo(UserData, { foreignKey: "user_id", as: "user", targetKey: "user_id" });
 }
 
+  UserNotification.belongsTo(NotificationTemplate, { foreignKey: "notification_id", as: "template"});
 // Wywołanie definicji asocjacji od razu przy imporcie (opcjonalne)
 // defineUserAssociations();

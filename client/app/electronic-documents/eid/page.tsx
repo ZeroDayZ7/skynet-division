@@ -63,7 +63,8 @@ export default async function ProfilePage() {
     if (!dateString) return "Brak";
     try {
       return format(new Date(dateString), "dd.MM.yyyy");
-    } catch (e) {
+    } catch (error) {
+      console.error("Błąd formatu daty:", error);
       return "Nieprawidłowa data";
     }
   };
@@ -74,7 +75,7 @@ export default async function ProfilePage() {
         {/* ID Card Container with perspective effect */}
         <div className="relative transform transition-all duration-500 hover:scale-105 hover:rotate-1">
           {/* Card Body */}
-          <div className="bg-white rounded-xl shadow-2xl overflow-hidden border border-blue-200">
+          <div className="rounded-xl shadow-2xl overflow-hidden border border-blue-200">
             {/* Eagle watermark in background */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
               <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-blue-900">

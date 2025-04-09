@@ -2,55 +2,30 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FaSignOutAlt } from "react-icons/fa";
 import Notifications from "@/components/notification/Notification";
-import LogoutModal from "@/components/LogoutModal";
+import LogoutDialog from "@/components/auth/LogoutDialog";
+import { ModeToggle } from "../theme/theme-button";
 
 import { FaSpinner } from "react-icons/fa";
 
 export default function HeaderActions() {
-  const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const router = useRouter();
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleNavigation = () => {
-    setIsLoading(true);
-    router.push("/notifications");
-    setIsLoading(false);
-  };
 
-  const handleLogout = () => {
-    setIsModalOpen(true);
-  };
+  //   if (isLoading) {
+  //     return (
+  //       <div className="flex justify-center items-center min-h-screen">
+  //         <FaSpinner className="text-4xl text-blue-500 animate-spin" />
+  //       </div>
+  //     );
+  //   }
 
   return (
-    <>
-      <div className="flex gap-4">
-        {isLoading ? (
-          <div className="flex flex-1 items-center justify-center">
-            <FaSpinner className="text-6xl text-gray-600 animate-spin" />
-          </div>
-        ) : (
-          <button
-            onClick={handleNavigation}
-            className="text-gray-600 hover:text-blue-500 text-2xl"
-          >
-            <Notifications />
-          </button>
-        )}
-        <button
-          onClick={handleLogout}
-          className="text-gray-600 hover:text-red-500 text-2xl"
-        >
-          <FaSignOutAlt />
-        </button>
+      <div className="flex">
+          <Notifications />
+          <ModeToggle />
+          <LogoutDialog />
       </div>
-      {isModalOpen && (
-        <LogoutModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
-    </>
   );
 }

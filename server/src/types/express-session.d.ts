@@ -3,9 +3,11 @@ import session from 'express-session';
 
 declare module 'express-session' {
   interface SessionData {
-    userId?: number;
+    userId: number;
+    csrfToken: string;
     role?: string;
-    points?: number;
-    notifications?: number;
+    points: number;
+    notifications?: number | null;
+    
   }
 }

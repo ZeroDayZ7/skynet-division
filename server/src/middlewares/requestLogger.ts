@@ -11,7 +11,7 @@ const maskSensitiveData = (data: any): any => {
 
   const sensitiveKeys = [
     'password', 'token', 'authorization', 
-    'access_token', 'refresh_token', 'cookie'
+    'access_token', 'refresh_token', 'cook4ie'
   ];
 
   return Object.keys(data).reduce((acc, key) => {

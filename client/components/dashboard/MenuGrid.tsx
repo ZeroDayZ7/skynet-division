@@ -55,7 +55,8 @@ export default function MenuGrid() {
         <button
           key={index}
           onClick={() => enabled && handleNavigation(link, index)}
-          className={`flex flex-col items-center justify-center p-4 bg-gray-200 rounded-xl shadow-md hover:bg-gray-300 transition ${
+          className={`flex flex-col items-center justify-center p-4 bg-gray-200 rounded-xl shadow-md hover:bg-gray-300 transition dark:bg-gray-800 
+            ${
             enabled ? "" : "opacity-50 cursor-not-allowed"
           }`}
           disabled={!enabled || loadingIndex === index} // Wyłączamy przycisk podczas ładowania
@@ -63,9 +64,9 @@ export default function MenuGrid() {
           {loadingIndex === index ? (
             <FaSpinner className="text-4xl text-gray-700 animate-spin" />
           ) : (
-            <Icon className="text-4xl text-gray-700" />
+            <Icon className="text-4xl text-gray-700 dark:text-gray-200" />
           )}
-          <span className="text-sm text-gray-800 mt-2">{label}</span>
+          <span className="text-sm text-gray-700 mt-2 dark:text-gray-200">{label}</span>
         </button>
       ))}
     </div>

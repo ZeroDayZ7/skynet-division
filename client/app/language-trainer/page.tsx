@@ -199,7 +199,7 @@ const LanguageTrainer = () => {
     const currentExercise = lessons[currentLesson].exercises[0];
 
     return (
-      <div className="p-4 bg-white rounded-lg shadow">
+      <div className="p-4 rounded-lg shadow">
         <div className="flex justify-between items-center mb-4">
           <div className="text-sm font-medium">
             Lekcja {currentLesson + 1}/{lessons.length}
@@ -334,7 +334,7 @@ const LanguageTrainer = () => {
       <div className="p-4">{renderCurrentView()}</div>
 
       {currentView !== "dashboard" && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+        <div className="fixed bottom-0 left-0 right-0 border-t border-gray-200 p-4">
           <button
             onClick={() => setCurrentView("dashboard")}
             className="w-full bg-gray-200 hover:bg-gray-300 py-2 px-4 rounded-lg font-medium transition duration-200"

@@ -44,12 +44,9 @@ export default function NewProjectForm() {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
-
-    setTimeout(() => {
       setIsSubmitting(false);
       toast("Event has been created.");
       // router.push("/citizens-projects/list");
-    }, 100);
   };
 
   return (

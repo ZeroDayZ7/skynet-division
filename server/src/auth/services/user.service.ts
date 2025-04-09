@@ -7,24 +7,33 @@ import { UserAttributes } from '#auth/types/UserAttributes';
 export const getUserDetailsForValidation = async (email: string): Promise<UserAttributes | null> => {
   const user = await User.findOne({
     where: { email },
-    attributes: ['activation_token', 'userBlock', 'lastLoginIp', 'role', 'pass', 'id', 'points'], // Pobieramy wszystkie potrzebne atrybuty
+    attributes: [ 'id', 'pass', 'activation_token', 'userBlock', 'points', 'role'], // Pobieramy wszystkie potrzebne atrybuty
+  });
+
+  return user ? user.get({ plain: true }) : null;
+};
+
+// Funkcja do pobierania szczegółów użytkownika po ID (po validacji)
+export const getUserDetailsById = async (userId: number): Promise<UserAttributes | null> => {
+  const user = await User.findOne({
+    where: { id: userId },
+    attributes: ['points', 'role'], // Pobieramy dane do zwrócenia użytkownikowi
   });
 
   return user ? user.get({ plain: true }) : null;
 };
 
 // Funkcja do aktualizacji szczegółów logowania
-export const updateLoginDetails = async (email: string, currentIp: string, lastLoginIp: string): Promise<void> => {
+export const updateLoginDetails = async (id: number, currentIp: string, lastLoginIp: string): Promise<void> => {
   const updates: { [key: string]: any } = {
-    login_count: sequelize.literal('login_count + 1'),
-    login_date: new Date(),
+    login_count: sequelize.literal('login_count + 1')
   };
 
   if (currentIp !== lastLoginIp) {
     updates.lastLoginIp = currentIp;
   }
 
-  await User.update(updates, { where: { email } });
+  await User.update(updates, { where: { id } });
 };
 
-export default { getUserDetailsForValidation, updateLoginDetails };
+export default { getUserDetailsForValidation, getUserDetailsById, updateLoginDetails };

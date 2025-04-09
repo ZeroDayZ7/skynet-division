@@ -1,21 +1,37 @@
 import { Response } from 'express';
 import { jwtConfig } from '#/auth/config/jwt.config';
 
-// Function to set auth token in cookie
 export const setAuthCookie = (res: Response, token: string): void => {
   res.cookie(jwtConfig.cookieName, token, {
     ...jwtConfig.cookieOptions,
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: parseInt(process.env.JWT_EXPIRES_IN || "900000", 10), // Zsynchronizuj z JWT
+    sameSite: "strict",
   });
 };
 
-// Function to clear auth cookie
+export const setCSRFCookie = (res: Response, token: string): void => {
+  res.cookie(process.env.CSRF_COOKIE_NAME as string, token, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: parseInt(process.env.JWT_EXPIRES_IN || "900000", 10),
+    sameSite: "strict",
+  });
+};
+
 export const clearAuthCookie = (res: Response): void => {
   res.clearCookie(jwtConfig.cookieName, {
     ...jwtConfig.cookieOptions,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
+    secure: process.env.NODE_ENV === 'production',
+  });
+};
+
+export const clearCSRFCookie = (res: Response): void => {
+  res.clearCookie(process.env.CSRF_COOKIE_NAME as string, {
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    
   });
 };

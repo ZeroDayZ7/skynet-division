@@ -1,8 +1,8 @@
-import UserNotification from "#models/users/UserNotification.js";
-import SystemLog from "#utils/SystemLog.js";
+import UserNotification from "#auth/models/UserNotification";
+import SystemLog from "#utils/SystemLog";
 
-// Funkcja do pobierania liczby nieprzeczytanych powiadomień dla użytkownika
-export async function getUnreadNotificationsCount(userId) {
+// Typowanie funkcji, zakładając, że userId jest stringiem lub numerem
+export async function getUnreadNotificationsCount(userId: number): Promise<number> {
   if (!userId) {
     throw new Error("Brak ID użytkownika");
   }
@@ -20,7 +20,7 @@ export async function getUnreadNotificationsCount(userId) {
 
     return unreadCount;
   } catch (error) {
-    SystemLog.error("Błąd pobierania liczby nieprzeczytanych powiadomień", { userId, error });
-    throw new Error("Błąd pobierania liczby nieprzeczytanych powiadomień");
+    SystemLog.error("Błąd pobierania powiadomień", { userId, error });
+    throw new Error("Błąd pobierania powiadomień");
   }
 }

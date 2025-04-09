@@ -29,12 +29,12 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   // const router = useRouter();
   // const pathname = usePathname();
 
   useEffect(() => {
-    setIsLoading(true);
+    
 
     const initializeAuth = async () => {
       console.log("== AuthProvider ==");
@@ -49,6 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } catch (err) {
           console.error("Błąd parsowania użytkownika z localStorage", err);
           localStorage.removeItem("user"); // Czyszczenie na wszelki wypadek
+        } finally {
+          setIsLoading(false);
         }
       }
   

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import LogoutModal from "../../components/LogoutModal";
+import LogoutModal from "../../components/auth/LogoutDialog";
 import { FaPlusCircle, FaProjectDiagram, FaSpinner } from "react-icons/fa";
 
 export default function CitizenProjectsHome() {

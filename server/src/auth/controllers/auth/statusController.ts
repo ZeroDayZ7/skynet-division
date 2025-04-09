@@ -9,14 +9,14 @@ interface SessionStatusResponse {
 
 export const checkSessionStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   // Logowanie sesji dla debugowania
-  SystemLog.info(`SESSION is ACTIVE: ${JSON.stringify(req.session, null, 2)}`);
+  SystemLog.info(`checkSessionStatus /status : ${JSON.stringify(req.session, null, 2)}`);
 
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     res.status(200).json({ isAuthenticated: true });
   } else {
     // Sesja nie istnieje, użytkownik nie jest zalogowany
-    res.clearCookie(process.env.ACCESS_COOKIE_NAME, {
+    res.clearCookie(process.env.JWT_COOKIE_NAME, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

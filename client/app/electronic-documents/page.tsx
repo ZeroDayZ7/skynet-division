@@ -7,7 +7,6 @@ import { FaIdCard, FaCar, FaPassport, FaUser, FaFileInvoice, FaClipboardList, Fa
 // Symulacja pobierania dokumentów z bazy danych
 const fetchDocumentsFromDatabase = async () => {
   return new Promise<{ id: number, name: string, icon: React.ElementType, enabled: boolean, link: string }[]>(resolve => {
-    setTimeout(() => {
       const documents = [
         { id: 1, name: "E-Dowód", icon: FaIdCard, enabled: true, link: "/electronic-documents/eid" },
         { id: 2, name: "Prawo jazdy", icon: FaCar, enabled: true, link: "/electronic-documents/driving-license" },
@@ -18,7 +17,6 @@ const fetchDocumentsFromDatabase = async () => {
         { id: 7, name: "Karta EKUZ", icon: FaRegCreditCard, enabled: true, link: "/ekuz" }
       ];
       resolve(documents);
-    }, 100); // Symulacja czasu ładowania (2 sekundy)
   });
 };
 
@@ -45,9 +43,7 @@ export default function DocumentsPage() {
 
   const handleNavigation = (link: string) => {
     setLoading(true);
-    setTimeout(() => {
-      router.push(link);
-    }, 100);
+    router.push(link);
   };
 
   return (

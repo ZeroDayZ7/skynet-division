@@ -18,10 +18,10 @@ export default function PointsDisplay() {
 
   return (
     <div
-      className={`flex items-center bg-yellow-100 px-4 py-2 rounded-full shadow-md`}
+      className={`flex items-center bg-yellow-100 px-4 py-2 rounded-full shadow-md dark:bg-gray-700`}
     >
-      <FaCoins className="text-yellow-500 text-2xl mr-2" />
-      <span className="font-bold text-gray-800">{points} pkt</span>
+      <FaCoins className="text-yellow-500 text-2xl mr-2 dark:text-gray-200" />
+      <span className="font-bold text-gray-700 dark:text-gray-200">{points} pkt</span>
     </div>
   );
 }

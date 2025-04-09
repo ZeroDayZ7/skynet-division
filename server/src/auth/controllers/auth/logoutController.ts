@@ -1,38 +1,34 @@
 import { Request, Response, NextFunction } from "express";
 import SystemLog from "#utils/SystemLog";
+import { clearAuthCookie, clearCSRFCookie } from "#/auth/utils/cookie.utils";
 
 export const logoutController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     // 1. Sprawdź, czy użytkownik jest zalogowany
-    if (!req.session?.userId) {
-      SystemLog.warn("Logout attempt without active session");
-      res.status(401).json({
-        success: false,
-        isLoggedIn: false,
-      });
-      return;
-    }
+    // if (!req.session?.userId) {
+    //   SystemLog.warn("Logout attempt without active session");
+    //   res.status(401).json({
+    //     success: false,
+    //     isLoggedIn: false,
+    //   });
+    //   return;
+    // }
 
     const userId = req.session.userId;
 
     // 2. Usuń sesję po stronie serwera
-    await new Promise<void>((resolve, reject) => {
+    if (req.session) {
       req.session.destroy((err) => {
         if (err) {
-          SystemLog.error("Error destroying session", {
-            userId,
+          SystemLog.error("Failed to destroy session during logout", {
             error: err.message,
-            stack: err.stack,
           });
-          reject(err);
-        } else {
-          resolve();
         }
       });
-    });
+    }
 
     // 3. Usuń ciasteczka po stronie klienta
-    res.clearCookie(process.env.ACCESS_COOKIE_NAME || "accessToken", {
+    res.clearCookie(process.env.JWT_COOKIE_NAME || "accessToken", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
