@@ -1,22 +1,30 @@
-const apiUrl = process.env.NEXT_PUBLIC_API_SERV || "http://localhost:3000"; // Domyślna wartość dla dev
-const crsfCookieName = process.env.NEXT_PUBLIC_CSRF_COOKIE_NAME || "csrf"; // Domyślna wartość dla dev
+const apiUrl = process.env.NEXT_PUBLIC_API_SERV || "http://localhost:3000";
+const crsfCookieName = process.env.NEXT_PUBLIC_CSRF_COOKIE_NAME || "csrf";
 const DEFAULT_TIMEOUT = 5000;
 
 interface FetchOptions extends RequestInit {
   timeout?: number;
-  cookies?: string; // Dodajemy opcję dla ciasteczek z middleware
-  csrf?: boolean;  // Opcja dla tokenu CSRF
+  cookies?: string; // Ciasteczka z middleware lub Server Component
+  csrf?: boolean;   // Czy dołączać CSRF
 }
-
-// Funkcja do pobierania tokenu CSRF z ciasteczka
-const getCsrfTokenFromCookies = (): string | null => {
-  const matches = document.cookie.match(new RegExp('(^| )' + crsfCookieName + '=([^;]+)')); // Używamy zmiennej crsf
-  return matches ? matches[2] : null;
-};
 
 interface FetchErrorResponse {
   message?: string;
 }
+
+// Funkcja do pobierania tokenu CSRF
+const getCsrfTokenFromCookies = (cookies?: string): string | null => {
+  if (typeof window !== "undefined") {
+    // Po stronie klienta: użyj document.cookie
+    const matches = document.cookie.match(new RegExp(`(^| )${crsfCookieName}=([^;]+)`));
+    return matches ? matches[2] : null;
+  } else if (cookies) {
+    // Po stronie serwera: parsuj przekazane ciasteczka
+    const matches = cookies.match(new RegExp(`(^| )${crsfCookieName}=([^;]+)`));
+    return matches ? matches[2] : null;
+  }
+  return null;
+};
 
 export async function fetchClient<T = any>(
   endpoint: string,
@@ -27,21 +35,18 @@ export async function fetchClient<T = any>(
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   let csrfToken = null;
-
-  // Jeśli wymagany jest token CSRF, pobieramy go z ciasteczka
   if (csrf) {
-    csrfToken = getCsrfTokenFromCookies(); // Pobieramy token CSRF z ciasteczka
-    console.log("CSRF Token z ciasteczka:", csrfToken); // Logujemy wartość tokenu CSRF
+    csrfToken = getCsrfTokenFromCookies(cookies);
+    console.log("CSRF Token:", csrfToken);
   }
 
   const headers = {
     "Content-Type": "application/json",
-    ...(cookies ? { Cookie: cookies } : {}), // Przekazujemy ciasteczka w middleware
+    ...(cookies && typeof window === "undefined" ? { Cookie: cookies } : {}), // Ciasteczka tylko po stronie serwera
     ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
     ...(rest.headers || {}),
   };
 
-  // Logujemy wysyłane nagłówki
   console.log("Wysyłane nagłówki:", headers);
 
   try {
@@ -68,8 +73,7 @@ export async function fetchClient<T = any>(
       throw new Error(`Błąd: ${response.status}`);
     }
 
-    // @ts-expect-error - nie zwracamy nic, ale typowo jako T
-    return undefined; // spełnia Promise<T>, np. T = void
+    return undefined as T; // Dla przypadków bez JSON
   } catch (err: any) {
     if (err.name === "AbortError") {
       throw new Error("Przekroczono limit czasu odpowiedzi serwera");

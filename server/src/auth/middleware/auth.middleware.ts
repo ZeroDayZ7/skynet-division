@@ -56,6 +56,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
     // }
 
     const jwtToken = getJwtTokenFromRequest(req);
+
     if (jwtToken) {
       SystemLog.info("JWT token", {
         token: jwtToken,
@@ -113,10 +114,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
 
     // Step 5: Attach user data to request
 
-    SystemLog.info("User authenticated successfully", {
-      action: "authentication",
-      path: req.path,
-    });
+    SystemLog.info("========= User authenticated successfully  ========== ");
 
     next();
   } catch (error) {

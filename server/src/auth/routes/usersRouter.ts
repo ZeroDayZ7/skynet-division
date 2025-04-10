@@ -4,11 +4,12 @@ import { getUserEIDData } from '#auth/controllers/users/userEIDController'
 // import { getUserNotifications } from '#controllers/users/userNotifications.js';
 // import { getUnreadNotificationsCount } from '#controllers/users/getUnreadNotificationsCount.js';
 // import { getUserPassportData } from '#controllers/users/userPassportController.js';
+import { authMiddleware } from '#auth/middleware/auth.middleware';
 
 const router = express.Router();
 
 // Elektroniczny dowód
-router.post('/user-eid', getUserEIDData);
+router.post('/user-eid', authMiddleware, getUserEIDData);
 // router.post('/user-passport', getUserPassportData);
 
 // router.post('/notifications', getUserNotifications);

@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '#config/db.config';
+import sequelize from '#auth/config/db.config';
 import bcrypt from 'bcrypt';
 import { UserAttributes, UserCreationAttributes } from '#auth/types/UserAttributes';
 

@@ -1,6 +1,12 @@
 import { fetchClient } from "@/lib/fetchClient";
+import { cookies } from "next/headers";
+// Interfejs odpowiedzi z backendu
 
-// Interfejs dla danych użytkownika
+interface BackendResponse {
+  success: boolean;
+  data: UserDataEID;
+}
+
 export interface UserDataEID {
   user: {
     first_name: string;
@@ -16,12 +22,23 @@ export interface UserDataEID {
   photo?: string | null;
 }
 
-// Funkcja pobierająca dane e-dowodu użytkownika
-export const getUserEIDData = async (options: {cookies?: string} = {}): Promise<UserDataEID | null> => {
-  // Używamy fetchClient i zwracamy wynik
-  return fetchClient<UserDataEID>("/api/users/user-eid", {
+export const getUserEIDData = async (): Promise<UserDataEID | null> => {
+  const cookieStore = await cookies();
+  const cookiesHeader = cookieStore
+    .getAll()
+    .map((cookie) => `${cookie.name}=${cookie.value}`)
+    .join("; ");
+
+  const response = await fetchClient<BackendResponse>("/api/users/user-eid", {
     method: "POST",
-    cookies: options.cookies,             // Używamy tokenu CSRF, jeśli jest wymagany
-    
+    cookies: cookiesHeader,
+    csrf: true,
   });
+
+  if (!response.success) {
+    console.error("Błąd odpowiedzi backendu:", response);
+    return null;
+  }
+
+  return response.data;
 };
