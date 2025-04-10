@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FaArrowLeft } from "react-icons/fa"; // Ikona strzałki w lewo
+import { Button } from "./button";
 
 // Komponent przycisku cofania
 export default function BackButton() {
@@ -12,12 +13,13 @@ export default function BackButton() {
   };
 
   return (
-    <button 
-      onClick={goBack} 
-      className="text-blue-500 flex items-center gap-2 cursor-pointer"
+    <Button 
+      onClick={goBack}
+      variant={'ghost'}
+      className="hover:text-blue-400"
     >
       <FaArrowLeft />
       Cofnij
-    </button>
+    </Button>
   );
 }

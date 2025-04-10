@@ -1,23 +1,23 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Toaster } from "@/components/ui/sonner";
-import "./globals.css";
-import { AuthProvider } from "@/context/auth-context";
-import { ThemeProvider } from "@/components/theme/theme-provider";
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { Toaster } from '@/components/ui/sonner';
+import './globals.css';
+import { AuthProvider } from '@/context/auth-context';
+import { ThemeProvider } from '@/components/theme/theme-provider';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "Aplikacja Obywatelska",
-  description: "Zarządzaj Polska z jednego miejsca!",
+  title: 'Aplikacja Obywatelska',
+  description: 'Zarządzaj Polska z jednego miejsca!',
   robots: {
     index: false, // Blokuje indeksowanie
     follow: false, // Blokuje podążanie za linkami
@@ -36,19 +36,13 @@ export const metadata: Metadata = {
   referrer: 'no-referrer', // Zapobiega przesyłaniu informacji o refererze (większa prywatność)
 };
 
-
-export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pl" suppressHydrationWarning={true}>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-          <main>{children}</main>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            {children}
           </ThemeProvider>
         </AuthProvider>
         <Toaster />

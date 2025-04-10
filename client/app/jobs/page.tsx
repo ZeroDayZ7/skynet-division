@@ -34,7 +34,7 @@ export default function JobBoard() {
               <button
                 key={id}
                 onClick={() => enabled && handleNavigation(link)}
-                className={`flex flex-col items-center justify-center p-6 rounded-xl shadow-md transition ${
+                className={`flex flex-col items-center justify-center p-6 rounded shadow-md transition ${
                 enabled ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
                 disabled={!enabled}
@@ -45,7 +45,7 @@ export default function JobBoard() {
             ))}
           </div>
 
-          <div className="p-6 bg-gray-100 rounded-xl shadow-md">
+          <div className="p-6 bg-gray-100 rounded shadow-md">
             <h2 className="text-lg font-semibold">Oferty Pracy</h2>
             <p className="text-gray-700">Lista dostępnych ofert pracy będzie tutaj.</p>
           </div>

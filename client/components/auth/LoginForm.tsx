@@ -1,31 +1,24 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { loginUser } from "@/services/auth.service";
-import { useAuth } from "@/context/auth-context";
+import { loginUser } from '@/services/auth.service';
+import { useAuth } from '@/context/auth-context';
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
-import { FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 
 // 🧠 1. Zod Schema
 const loginSchema = z.object({
-  email: z.string().email({ message: "Nieprawidłowy adres e-mail" }),
-  password: z.string().min(6, { message: "Hasło musi mieć min. 6 znaków" }),
+  email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
+  password: z.string().min(6, { message: 'Hasło musi mieć min. 6 znaków' }),
 });
 
 type LoginSchema = z.infer<typeof loginSchema>;
@@ -36,34 +29,34 @@ export default function LoginForm() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   // 🧠 2. useForm z resolverem Zod
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "yovasec567@fincainc.com",
-      password: "Zaq1@wsx",
+      email: 'yovasec567@fincainc.com',
+      password: 'Zaq1@wsx',
     },
   });
 
   // 🧠 3. Obsługa logowania
   const onSubmit = async (values: LoginSchema) => {
     if (isLoading) return;
-    setError("");
+    setError('');
     setIsLoading(true);
-  
+
     try {
       const response = await loginUser(values.email, values.password);
       if (!response.isAuthenticated) {
-        throw new Error(response.message || "Błąd logowania");
+        throw new Error(response.message || 'Błąd logowania');
       }
       login(response.user);
-      router.replace("/dashboard");
+      router.replace('/dashboard');
     } catch (err: unknown) {
       // Zakładamy, że err to Error, bo rzuciliśmy go sami
       const error = err as Error;
-      setError(error.message || "Wystąpił problem z logowaniem");
+      setError(error.message || 'Wystąpił problem z logowaniem');
     } finally {
       setIsLoading(false);
     }
@@ -72,10 +65,8 @@ export default function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-          <div className="text-red-500 text-sm text-center min-h-[20px]">
-            {error}
-          </div>
-      
+        <div className="min-h-[20px] text-center text-sm text-red-500">{error}</div>
+
         {/* E-mail */}
         <FormField
           control={form.control}
@@ -84,16 +75,10 @@ export default function LoginForm() {
             <FormItem>
               <FormLabel htmlFor="email">E-mail</FormLabel>
               <FormControl>
-                <Input
-                  id="email"
-                  placeholder="E-mail"
-                  autoComplete="username"
-                  disabled={isLoading}
-                  {...field}
-                />
+                <Input id="email" placeholder="E-mail" autoComplete="username" disabled={isLoading} {...field} />
               </FormControl>
               <div className="min-h-[20px]">
-              <FormMessage />
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -110,7 +95,7 @@ export default function LoginForm() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Hasło"
                     autoComplete="current-password"
                     disabled={isLoading}
@@ -119,7 +104,7 @@ export default function LoginForm() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500"
+                    className="absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-300"
                     disabled={isLoading}
                   >
                     {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -127,7 +112,7 @@ export default function LoginForm() {
                 </div>
               </FormControl>
               <div className="min-h-[20px]">
-              <FormMessage />
+                <FormMessage />
               </div>
             </FormItem>
           )}
@@ -135,7 +120,7 @@ export default function LoginForm() {
 
         {/* Przycisk logowania */}
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? <FaSpinner className="animate-spin mr-2" /> : "Zaloguj"}
+          {isLoading ? <FaSpinner className="mr-2 animate-spin" /> : 'Zaloguj'}
         </Button>
       </form>
     </Form>

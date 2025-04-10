@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
+import React from "react";
 import {
   FaIdCard,
   FaNewspaper,
@@ -10,65 +8,31 @@ import {
   FaShoppingCart,
   FaTools,
   FaBriefcase,
-  FaSpinner,
-  FaUserShield,  // Ikona dla panelu admina
 } from "react-icons/fa";
+import MenuGrid from '@/components/ui/MenuGrid';
 
 const menuItems = [
-  { icon: FaIdCard, link: "/electronic-documents", label: "eDokumenty", enabled: true },
-  { icon: FaNewspaper, link: "/citizens-projects", label: "Projekty Obywatelskie", enabled: true },
-  { icon: FaLanguage, link: "/language-trainer", label: "Trener Języka", enabled: true },
-  { icon: FaBriefcase, link: "/jobs", label: "Praca", enabled: true },
-  { icon: FaShoppingCart, link: "/market", label: "Market", enabled: true },
-  { icon: FaTools, link: "/settings", label: "Ustawienia", enabled: true },
+  { icon: FaIdCard,        link: "/electronic-documents",  name: "eDokumenty",            enabled: true },
+  { icon: FaNewspaper,     link: "/citizens-projects",     name: "Projekty Obywatelskie", enabled: true },
+  { icon: FaLanguage,      link: "/language-trainer",      name: "Trener Języka",         enabled: true },
+  { icon: FaBriefcase,     link: "/jobs",                  name: "Praca",                 enabled: true },
+  { icon: FaShoppingCart,  link: "/market",                name: "Market",                enabled: true },
+  { icon: FaTools,         link: "/settings",              name: "Ustawienia",            enabled: true },
 ];
 
-export default function MenuGrid() {
-  const { user } = useAuth();  // Pobieramy użytkownika z kontekstu
-  const router = useRouter();
-  const [loadingIndex, setLoadingIndex] = useState<number | null>(null); // Śledzi, który przycisk się ładuje
+// Mapowanie na format DashboardMenu
+const documentItems = menuItems.map((doc) => ({
+  icon: doc.icon,
+  link: doc.link,
+  label: doc.name,
+  enabled: doc.enabled,
+  hidden: false, // Domyślnie widoczne, można zmienić dla konkretnych
+}));
 
-  // Dodajemy przycisk administracyjny tylko dla użytkowników z rolą admin, z użyciem useMemo
-  const menuWithAdmin = useMemo(() => {
-    if (user?.role === "admin") {
-      return [
-        ...menuItems,
-        {
-          icon: FaUserShield,
-          link: "/admin-panel",  // Link do panelu administracyjnego
-          label: "Panel Administracyjny",
-          enabled: true,
-        },
-      ];
-    }
-    return menuItems;
-  }, [user]);
-
-  const handleNavigation = (link: string, index: number) => {
-    setLoadingIndex(index); // Ustawiamy indeks ładowanego przycisku
-    router.push(link);
-  };
-
+export default function DashboardMenu() {
   return (
-    <div className="grid grid-cols-3 gap-4 flex-1 p-2">
-      {menuWithAdmin.map(({ icon: Icon, link, label, enabled }, index) => (
-        <button
-          key={index}
-          onClick={() => enabled && handleNavigation(link, index)}
-          className={`flex flex-col items-center justify-center p-4 bg-gray-200 rounded-xl shadow-md hover:bg-gray-300 transition dark:bg-gray-800 
-            ${
-            enabled ? "" : "opacity-50 cursor-not-allowed"
-          }`}
-          disabled={!enabled || loadingIndex === index} // Wyłączamy przycisk podczas ładowania
-        >
-          {loadingIndex === index ? (
-            <FaSpinner className="text-4xl text-gray-700 animate-spin" />
-          ) : (
-            <Icon className="text-4xl text-gray-700 dark:text-gray-200" />
-          )}
-          <span className="text-sm text-gray-700 mt-2 dark:text-gray-200">{label}</span>
-        </button>
-      ))}
+    <div className="mx-auto">
+      <MenuGrid items={documentItems} showAdmin={true}/>
     </div>
   );
 }

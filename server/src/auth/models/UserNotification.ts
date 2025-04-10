@@ -2,7 +2,7 @@ import {
   Model,
   DataTypes
 } from "sequelize";
-import sequelize from "#config/db.js";
+import sequelize from "#config/db.config.js";
 import NotificationTemplate from "#auth/models/NotificationTemplate";
 import {
   UserNotificationAttributes,

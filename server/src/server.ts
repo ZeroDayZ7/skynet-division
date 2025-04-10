@@ -4,11 +4,11 @@ import sessionManager from '#services/session.services';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import SystemLog from '#utils/SystemLog';
-import helmet from 'helmet';
-import { setLocale } from '#language/i18nSetup'; // Import setLocale
-import { requestLogger } from '#middlewares/requestLogger';
+// import helmet from 'helmet';
+// import { setLocale } from '#language/i18nSetup'; // Import setLocale
+// import { requestLogger } from '#middlewares/requestLogger';
 import apiRouter from '#routes/apiRouter.js'; // Statyczny import
-import defineUserAssociations from '#config/associations'
+import defineUserAssociations from '#auth/config/associations'
 
 dotenv.config();
 

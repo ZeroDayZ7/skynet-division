@@ -95,7 +95,7 @@ export default async function PassportPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-[360px] sm:max-w-[480px] md:max-w-[640px] bg-gradient-to-b from-blue-900 to-blue-800 rounded-xl shadow-2xl overflow-hidden relative transform transition-transform hover:scale-105">
+      <div className="w-full max-w-[360px] sm:max-w-[480px] md:max-w-[640px] bg-gradient-to-b from-blue-900 to-blue-800 rounded shadow-2xl overflow-hidden relative transform transition-transform hover:scale-105">
         {/* Nagłówek paszportu */}
         <div className="p-4 text-white flex justify-between items-center border-b border-blue-700">
           <div className="flex items-center">

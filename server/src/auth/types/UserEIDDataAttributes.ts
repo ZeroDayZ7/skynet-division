@@ -1,4 +1,5 @@
 export interface UserEIDDataAttributes {
+    photo?: string | null;
     id: number;
     user_id: number;
     document_number: string;

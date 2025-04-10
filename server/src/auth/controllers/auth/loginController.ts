@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { promisify } from "util";
 import authService from "#auth/services/auth.service";
-import { TokenPayload, generateAuthToken } from "#auth/utils/token.utils";
+import { generateAuthToken } from "#auth/utils/token.utils";
 import SystemLog from "#utils/SystemLog";
 import { UserAttributes } from "#auth/types/UserAttributes";
 import { generateCSRFToken } from "#auth/utils/CSRF.utils";

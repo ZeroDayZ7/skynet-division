@@ -14,6 +14,10 @@ const getCsrfTokenFromCookies = (): string | null => {
   return matches ? matches[2] : null;
 };
 
+interface FetchErrorResponse {
+  message?: string;
+}
+
 export async function fetchClient<T = any>(
   endpoint: string,
   options: FetchOptions = {}
@@ -54,7 +58,8 @@ export async function fetchClient<T = any>(
     if (contentType?.includes("application/json")) {
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data?.message || `Błąd: ${response.status}`);
+        const errorData = data as FetchErrorResponse;
+        throw new Error(errorData.message || `Błąd: ${response.status}`);
       }
       return data as T;
     }

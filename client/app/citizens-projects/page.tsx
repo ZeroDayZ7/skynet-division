@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import LogoutModal from "../../components/auth/LogoutDialog";
 import { FaPlusCircle, FaProjectDiagram, FaSpinner } from "react-icons/fa";
 
 export default function CitizenProjectsHome() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
@@ -16,7 +14,7 @@ export default function CitizenProjectsHome() {
   };
 
   return (
-    <div className="citizens-projects flex flex-col min-h-screen p-4">
+    <div className="citizens-projects flex flex-col p-4">
       {/* Ekran ładowania */}
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
@@ -28,14 +26,16 @@ export default function CitizenProjectsHome() {
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => handleNavigation("/citizens-projects/new")}
-              className="flex flex-col items-center justify-center p-6 bg-green-500 text-white rounded-xl shadow-md hover:bg-green-600 transition"
+              className="flex flex-col items-center justify-center p-6 bg-green-600 
+              text-white rounded shadow-md hover:bg-green-600 transition dark:text-black"
             >
               <FaPlusCircle className="text-4xl" />
               <span className="mt-2">Dodaj Projekt</span>
             </button>
             <button
               onClick={() => handleNavigation("/citizens-projects/list")}
-              className="flex flex-col items-center justify-center p-6 bg-blue-500 text-white rounded-xl shadow-md hover:bg-blue-600 transition"
+              className="flex flex-col items-center justify-center p-6 bg-blue-600 
+              text-white rounded shadow-md hover:bg-blue-600 transition"
             >
               <FaProjectDiagram className="text-4xl" />
               <span className="mt-2">Zobacz Projekty</span>
@@ -43,7 +43,7 @@ export default function CitizenProjectsHome() {
           </div>
 
           {/* Sekcja z informacjami */}
-          <div className="p-6 bg-gray-100 rounded-xl shadow-md">
+          <div className="p-6 bg-gray-100 rounded shadow-md">
             <h2 className="text-lg font-semibold">Jak działają projekty obywatelskie?</h2>
             <p className="mt-2 text-gray-700">
               Mieszkańcy mogą zgłaszać swoje pomysły na poprawę społeczności. Każdy projekt przechodzi głosowanie i może zostać sfinansowany przez budżet obywatelski.
@@ -52,8 +52,6 @@ export default function CitizenProjectsHome() {
         </div>
       )}
 
-      {/* Modal wylogowania */}
-      <LogoutModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

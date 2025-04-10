@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FaHome } from "react-icons/fa"; // Ikona domu
+import { Button } from "./button";
 
 // Komponent przycisku menu głównego / dashboardu
 export default function MainMenuButton() {
@@ -12,12 +13,13 @@ export default function MainMenuButton() {
   };
 
   return (
-    <button
+    <Button
+      variant={'ghost'}
       onClick={goToDashboard}
-      className="text-blue-500 flex items-center gap-2 cursor-pointer"
+      className="hover:text-blue-400"
     >
       <FaHome />
       Menu główne
-    </button>
+    </Button>
   );
 }

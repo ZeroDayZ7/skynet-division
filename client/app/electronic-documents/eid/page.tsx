@@ -2,51 +2,19 @@ import Image from "next/image";
 import ErrorMessage from "@/components/ui/ErrorMessage";
 import { cookies } from "next/headers";
 import { format } from "date-fns";
+import { getUserEIDData } from "@/services/users-electronic-documents-services";
+import { UserDataEID } from "@/services/users-electronic-documents-services";
 
 // User data interface (tailored for Polish ID card)
-interface UserData {
-  user: {
-    first_name: string;
-    second_name: string;
-    last_name: string;
-    pesel: string;
-    birth_date: string;
-    birth_place: string;
-  };
-  document_number: string | null;
-  issue_date: string | null;
-  expiration_date: string | null;
-  photo?: string | null;
-}
 
 export default async function ProfilePage() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_SERV;
-  const cookieStore = await cookies();
-  const cookiesHeader = cookieStore
-    .getAll()
-    .map((cookie) => `${cookie.name}=${cookie.value}`)
-    .join("; ");
 
-  let userData: UserData | null = null;
+  let userData: UserDataEID | null = null;
 
   try {
-    const res = await fetch(`${apiUrl}/api/users/user-eid`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cookie": cookiesHeader,
-      },
-      cache: "no-store",
-    });
-
-    if (res.ok) {
-      userData = await res.json();
-      console.log(userData);
-    } else {
-      console.error("Błąd pobierania danych dowodu osobistego", await res.text());
-    }
-  } catch (err) {
-    console.error("Błąd połączenia z API", err);
+    userData = await getUserEIDData(); 
+  } catch (error) {
+    console.error("Błąd pobierania danych dowodu osobistego", error);
   }
 
   if (!userData) {
@@ -75,7 +43,7 @@ export default async function ProfilePage() {
         {/* ID Card Container with perspective effect */}
         <div className="relative transform transition-all duration-500 hover:scale-105 hover:rotate-1">
           {/* Card Body */}
-          <div className="rounded-xl shadow-2xl overflow-hidden border border-blue-200">
+          <div className="rounded shadow-2xl overflow-hidden border border-blue-200">
             {/* Eagle watermark in background */}
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
               <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor" className="text-blue-900">

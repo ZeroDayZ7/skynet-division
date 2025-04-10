@@ -39,7 +39,7 @@ export default function LogoutDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="hover:text-red-500">
           <FaSignOutAlt />
         </Button>
       </AlertDialogTrigger>
@@ -52,7 +52,7 @@ export default function LogoutDialog() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Anuluj</AlertDialogCancel>
-          <AlertDialogAction onClick={handleLogout}>
+          <AlertDialogAction onClick={handleLogout} className="bg-red-300">
             {loading ? "Wylogowywanie..." : "Wyloguj"}
           </AlertDialogAction>
         </AlertDialogFooter>

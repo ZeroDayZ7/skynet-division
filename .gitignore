@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 /server/logs/
+/server/dist/
 /.pnp
 .pnp.*
 .yarn/*

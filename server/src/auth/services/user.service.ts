@@ -1,4 +1,4 @@
-import sequelize from '#auth/config/db'; // Import instancji Sequelize
+import sequelize from '#auth/config/db.config'; // Import instancji Sequelize
 import User from '#auth/models/Users'; // Import modelu User z typem UserAttributes
 import { UserAttributes } from '#auth/types/UserAttributes'; 
 

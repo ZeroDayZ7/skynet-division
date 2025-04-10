@@ -4,6 +4,7 @@ import express from 'express';
 import { loginController } from '#auth/controllers/auth/loginController';
 import { logoutController } from '#auth/controllers/auth/logoutController';
 import { checkSessionStatus } from '#auth/controllers/auth/statusController.js';
+import { checkEmailAvailabilityController } from '#auth/controllers/registration/checkEmailAvailabilityController';
 
 // import { authMiddleware } from '#middlewares/auth.js';
 import rateLimiterConfig from '#middlewares/rateLimiter'; // Import domyślny
@@ -21,8 +22,14 @@ router.post('/login', authLimiter, validateRequest(loginSchema), loginController
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);
 
+router.post('/check-email', authMiddleware, checkEmailAvailabilityController);
+
 // Status
 router.get('/status', checkSessionStatus);
+
+
+
+
 
 // Rejestracja
 // router.post('/register', require('../endpoints/registrationEndpoint.js'));
