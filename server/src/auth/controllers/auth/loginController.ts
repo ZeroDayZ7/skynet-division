@@ -7,7 +7,8 @@ import { UserAttributes } from '#ro/auth/types/UserAttributes';
 import { generateCSRFToken } from '#ro/auth/utils/CSRF.utils';
 import { LoginInput } from '#ro/auth/validators/loginSchema';
 import { setAuthCookie, setCSRFCookie } from '#ro/auth/utils/cookie.utils';
-import { getUnreadNotificationsCount } from '../users/getUnreadNotificationsCount';
+import { getUnreadNotificationsCount } from '#ro/auth/controllers/users/getUnreadNotificationsCount';
+import AppError from '#ro/utils/AppError';
 
 // Typ dla wyniku walidacji użytkownika
 interface ValidationResult {
@@ -17,17 +18,13 @@ interface ValidationResult {
 }
 
 export const loginController = async (req: Request<LoginInput>, res: Response): Promise<void> => {
-  const { email, password } = req.validatedData;
+  const { email, password } = req.validatedData as LoginInput;
   const userIp = Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.ip || '';
 
   try {
     // Weryfikacja użytkownika
     const validationResult = (await authService.validateUser(email, password, userIp)) as ValidationResult;
     if (validationResult.error || !validationResult.user) {
-      SystemLog.warn('Invalid login attempt', {
-        email,
-        reason: validationResult.message || 'Nieprawidłowe dane logowania',
-      });
       res.status(401).json({
         isAuthenticated: false,
         message: validationResult.message || 'Nieprawidłowy email lub hasło',
