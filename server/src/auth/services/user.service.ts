@@ -23,19 +23,6 @@ export const getUserDetailsById = async (userId: number): Promise<UserAttributes
   return user ? user.get({ plain: true }) : null;
 };
 
-// Funkcja do aktualizacji szczegółów logowania
-export const updateLoginDetails = async (id: number, currentIp: string, lastLoginIp: string): Promise<void> => {
-  const updates: { [key: string]: any } = {
-    login_count: sequelize.literal('login_count + 1')
-  };
-
-  if (currentIp !== lastLoginIp) {
-    updates.lastLoginIp = currentIp;
-  }
-
-  await User.update(updates, { where: { id } });
-};
-
 // Funkcja do pobierania liczby prób logowania
 export const getLoginAttempts = async (email: string): Promise<number> => {
   const user = await User.findOne({
@@ -54,14 +41,6 @@ export const incrementLoginAttempts = async (email: string): Promise<void> => {
   );
 };
 
-// Funkcja do resetowania liczby prób logowania po udanym logowaniu
-export const resetLoginAttempts = async (email: string): Promise<void> => {
-  await User.update(
-    { loginAttempts: 0, lastLoginAttempt: null },
-    { where: { email } }
-  );
-};
-
 // Funkcja do blokowania użytkownika (np. po osiągnięciu zbyt wielu prób logowania)
 export const blockUser = async (email: string): Promise<void> => {
   await User.update(
@@ -70,12 +49,29 @@ export const blockUser = async (email: string): Promise<void> => {
   );
 };
 
+// Funkcja do resetowania liczby prób logowania po udanym logowaniu
+export const updateAfterLoginSuccess = async (userId: number, currentIp: string, lastLoginIp: string): Promise<void> => {
+  const updates: { [key: string]: any } = {
+    login_count: sequelize.literal('login_count + 1'),
+    loginAttempts: 0,
+    lastLoginAttempt: null,
+  };
+
+  if (currentIp !== lastLoginIp) {
+    updates.lastLoginIp = currentIp;
+  }
+
+  await User.update(updates, { where: { id: userId } });
+};
+
+
+
+
 export default { 
   getUserDetailsForValidation, 
   getUserDetailsById, 
-  updateLoginDetails,
   getLoginAttempts, 
   incrementLoginAttempts, 
-  resetLoginAttempts, 
-  blockUser
+  blockUser,
+  updateAfterLoginSuccess
 };

@@ -19,7 +19,6 @@ export const loginController = async (req: Request, res: Response): Promise<void
   try {
     // Weryfikacja użytkownika
     const validationResult = await authService.validateUser(email, password, userIp);
-    SystemLog.debug(`Validation result: ${JSON.stringify(validationResult)}`);
     if (validationResult.error) {
       throw new AppError(validationResult.code);
     }

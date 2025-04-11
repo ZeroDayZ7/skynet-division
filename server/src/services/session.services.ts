@@ -42,7 +42,7 @@ export default function sessionManager(app: Express): void {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
-    rolling: true,
+    rolling: true, // Sesja będzie odnawiana przy każdym żądaniu
     proxy: process.env.NODE_ENV === 'production',
     cookie: {
       maxAge: parseInt(process.env.SESSION_EXPIRES || '900000', 10), // Domyślnie 15 minut

@@ -28,7 +28,6 @@ type ValidationResult = ErrorResult | SuccessResult;
  */
 export const validateUser = async (email: string, password: string, ip: string): Promise<ValidationResult> => {
   if (!ip || !isIP(ip)) {
-    SystemLog.warn('Invalid IP address provided', { ip });
     return createError(ERROR_CODES.INVALID_REQUEST);
   }
 
@@ -58,8 +57,7 @@ export const validateUser = async (email: string, password: string, ip: string):
     return createError(ERROR_CODES.INVALID_CREDENTIALS);
   }
 
-  await userService.resetLoginAttempts(email);
-  await userService.updateLoginDetails(user.id, ip, user.lastLoginIp ?? '');
+  await userService.updateAfterLoginSuccess(user.id, ip, user.lastLoginIp ?? '');
   SystemLog.info('Authentication successful');
 
   return { error: false, user };
