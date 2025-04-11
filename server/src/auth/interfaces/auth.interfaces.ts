@@ -12,10 +12,7 @@ export interface DecodedToken extends JwtPayload {
 
 // User object structure attached to request
 export interface AuthenticatedUser {
-  sub: {
-    id: number;
-  },
-  id?: string;
+  id: number;
   role?: string;
   email?: string;
 }

@@ -14,9 +14,8 @@ export default function MainMenuButton() {
 
   return (
     <Button
-      variant={'ghost'}
+      variant={'btn_1'}
       onClick={goToDashboard}
-      className="hover:text-blue-400"
     >
       <FaHome />
       Menu główne

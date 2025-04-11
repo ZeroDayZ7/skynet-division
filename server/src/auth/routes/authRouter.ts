@@ -34,8 +34,8 @@ router.get('/status', checkSessionStatus);
 // router.post('/refresh-token', require('../endpoints/auth/refreshToken.js'));
 
 // Obsługuje inne niezdefiniowane trasy (404)
-router.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
+// router.use((req, res) => {
+//   res.status(404).json({ error: 'Not Found' });
+// });
 
 export default router; // Zmiana na ESM

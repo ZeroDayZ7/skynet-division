@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { promisify } from 'util';
 import authService from '#ro/auth/services/auth.service';
-import { generateJwtToken } from '#ro/auth/utils/token.utils';
+import { generateJwtToken } from '#ro/auth/utils/jwtToken.utils';
 import SystemLog from '#ro/utils/SystemLog';
-import { generateCSRFToken } from '#ro/auth/utils/CSRF.utils';
+import { generateCsrfToken } from '#ro/auth/utils/csrfToken.utils';
 import { LoginInput } from '#ro/auth/validators/loginSchema';
 import { setJwtCookie, setCSRFCookie } from '#ro/auth/utils/cookie.utils';
 import { getUnreadNotificationsCount } from '#ro/auth/controllers/users/getUnreadNotificationsCount';
@@ -20,12 +20,12 @@ export const loginController = async (req: Request, res: Response): Promise<void
     // Weryfikacja użytkownika
     const validationResult = await authService.validateUser(email, password, userIp);
     if (validationResult.error) {
-      throw new AppError(validationResult.code);
+      throw new AppError(validationResult.code, 400);
     }
 
     const user = validationResult.user;
     const token = generateJwtToken({ id: user.id });
-    const tokenCSRF = generateCSRFToken();
+    const tokenCSRF = generateCsrfToken();
 
     const unread = await getUnreadNotificationsCount(user.id);
     req.session.userId = user.id;
@@ -55,7 +55,7 @@ export const loginController = async (req: Request, res: Response): Promise<void
     if (error instanceof AppError) {
       error.sendErrorResponse(res);
     } else {
-      const appError = new AppError('SERVER_ERROR');
+      const appError = new AppError('SERVER_ERROR', 500);
       appError.sendErrorResponse(res);
     }
   }

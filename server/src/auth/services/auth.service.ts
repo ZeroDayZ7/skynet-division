@@ -32,7 +32,7 @@ export const validateUser = async (email: string, password: string, ip: string):
   }
 
   const loginAttempts = await userService.getLoginAttempts(email);
-  if (loginAttempts >= 5) {
+  if (loginAttempts >= 555) {
     await userService.blockUser(email);
     return createError(ERROR_CODES.USER_BLOCKED);
   }

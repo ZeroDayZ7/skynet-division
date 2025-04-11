@@ -10,8 +10,8 @@ const router = express.Router();
 router.use('/auth', authRouter);
 router.use('/users', authMiddleware, usersRouter);
 
-router.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
+// router.use((req, res) => {
+//   res.status(404).json({ error: 'Not Found' });
+// });
 
 export default router; // Zmiana na ESM

@@ -13,13 +13,13 @@ export const validateRequest = <T>(schema: ZodSchema<T>) =>
   (req: Request, res: Response, next: NextFunction): void => {
     try {
       const validatedData = schema.parse(req.body);
-      req.validatedData = validatedData; // Dodane do rozszerzenia interfejsu `Request`
+      req.validatedData = validatedData;
       next();
     } catch (error: any) {
       if (error instanceof ZodError) {
         const firstError = error.errors?.[0]?.message || 'Nieprawidłowe dane wejściowe';
-        return next(new AppError(firstError, 400, true, 'VALIDATION_ERROR'));
+        throw new AppError('VALIDATION_ERROR', 400, false, firstError); // 1: dla programisty, 4: dla użytkownika
       }
-      return next(new AppError('Błąd walidacji danych', 500, false, 'VALIDATION_FAILED'));
+      throw new AppError('VALIDATION_FAILED', 500, false); // Inny błąd
     }
   };

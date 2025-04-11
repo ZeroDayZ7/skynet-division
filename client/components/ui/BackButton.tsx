@@ -15,8 +15,7 @@ export default function BackButton() {
   return (
     <Button 
       onClick={goBack}
-      variant={'ghost'}
-      className="hover:text-blue-400"
+      variant={'btn_1'}
     >
       <FaArrowLeft />
       Cofnij

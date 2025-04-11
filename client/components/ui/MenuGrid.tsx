@@ -66,17 +66,17 @@ export default function MenuGrid({
         <button
           key={filteredItems[index].id ?? index} // Używamy id lub index
           onClick={() => enabled && handleNavigation(link, index)}
-          className={`flex flex-col items-center justify-center p-4 rounded shadow-md transition
-            bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700
-            ${enabled ? "" : "opacity-50 cursor-not-allowed"}`}
+          className={`flex flex-col items-center justify-center p-4 rounded shadow-md
+            bg-card dark:hover:text-green-500 border hover:bg-zinc-100 transition-colors
+            ${enabled ? "" : "opacity-50 cursor-not-allowed disabled:bg-card"}`}
           disabled={!enabled || loadingIndex === index}
         >
           {loadingIndex === index ? (
             <FaSpinner className="text-4xl mb-2 text-gray-700 dark:text-gray-200 animate-spin" />
           ) : (
-            <Icon className="text-4xl mb-2 text-gray-700 dark:text-gray-200" />
+            <Icon className="text-4xl mb-2" />
           )}
-          <span className="text-sm text-gray-700 font-medium dark:text-gray-200">{label}</span>
+          <span className="text-sm">{label}</span>
         </button>
       ))}
     </div>

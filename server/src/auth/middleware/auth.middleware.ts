@@ -1,111 +1,67 @@
-// auth.middleware.ts
 import { Request, Response, NextFunction } from 'express';
-import { getJwtTokenFromRequest, decodeJwtToken } from '#ro/auth/utils/token.utils';
-import { clearAuthCookie, clearCSRFCookie } from '#ro/auth/utils/cookie.utils';
-import { createError } from '#ro/errors/errorFactory';
 import SystemLog from '#ro/utils/SystemLog';
-import jwt from 'jsonwebtoken';
+import AppError from '#ro/errors/AppError';
+import { decodeJwtToken } from '#ro/auth/utils/jwtToken.utils';
+import { verifyCsrfToken } from '#ro/auth/utils/csrfToken.utils';
 
-const { TokenExpiredError, JsonWebTokenError } = jwt;
-
-const handleLogout = (req: Request, res: Response, error: ReturnType<typeof createError>): void => {
-  // Clear cookies
-  clearAuthCookie(res);
-  clearCSRFCookie(res);
-
-  // Clear session data
-  if (req.session) {
-    req.session.destroy((err) => {
-      if (err) {
-        SystemLog.error('Failed to destroy session during logout', {
-          error: err.message,
-        });
-      }
-    });
+const getJwtToken = (req: Request): string => {
+  const authHeader = (req.headers.authorization || req.headers.Authorization) as string | undefined;
+  if (authHeader?.startsWith('Bearer ')) {
+    return authHeader.split(' ')[1];
   }
+  if (req.cookies?.[process.env.JWT_COOKIE_NAME || 'accessToken']) {
+    return req.cookies[process.env.JWT_COOKIE_NAME || 'accessToken'];
+  }
+  throw new AppError('AUTH_TOKEN_MISSING', 401, true);
+};
 
-  // Send error response
-  res.status(401).json(error);
+const getCsrfToken = (req: Request): string => {
+  const csrfToken = req.headers['x-csrf-token'] as string | undefined;
+  if (csrfToken) return csrfToken;
+  throw new AppError('CSRF_TOKEN_MISSING', 403, true);
 };
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
+  // 1. Sprawdzenie sesji
+  if (!req.session || !req.session.userId || !req.session.csrfToken) {
+    SystemLog.warn('Próba autoryzacji bez aktywnej sesji lub CSRF', { ip: req.ip, path: req.path });
+    throw new AppError('NOT_AUTHENTICATED', 401, true);
+  }
+
+  const sessionUserId = req.session.userId;
+  const expectedCsrfToken = req.session.csrfToken;
+
+  // 2. Pobranie i weryfikacja CSRF
+  let csrfToken: string;
   try {
-    // Step 4: Check CSRF token from session
-    const csrfToken = req.session.csrfToken;
-    const csrfHeader = req.headers['x-csrf-token'] as string;
-
-    if (csrfHeader === csrfToken) {
-      SystemLog.info(`csrfHeader: ${csrfHeader}===${csrfToken}`);
-    }
-
-    if (!csrfToken || !csrfHeader || csrfToken !== csrfHeader) {
-      SystemLog.warn('CSRF token validation failed');
-      return handleLogout(req, res, createError('CSRF_TOKEN_INVALID'));
-    }
-
-    // const crsfToken = getCsrfTokenFromRequest(req);
-    // if (!crsfToken) {
-    //   SystemLog.warn('Missing CSRF token', { action: 'authentication', ip: req.ip, path: req.path });
-    //   return handleLogout(req, res, createError('AUTH_TOKEN_MISSING'));
-    // }
-
-    const jwtToken = getJwtTokenFromRequest(req);
-    if (!jwtToken) {
-      SystemLog.warn('Missing JWT token', { action: 'authentication', ip: req.ip, path: req.path });
-      return handleLogout(req, res, createError('AUTH_TOKEN_MISSING'));
-    }
-
-    let decoded;
-    try {
-      decoded = decodeJwtToken(jwtToken);
-      req.user = decoded;
-      SystemLog.info(`decoded: ${JSON.stringify(decoded)}`);
-    } catch (error) {
-      if (error instanceof TokenExpiredError) {
-        SystemLog.warn('JWT token expired', { action: 'token_validation', ip: req.ip, path: req.path });
-        return handleLogout(req, res, createError('AUTH_TOKEN_EXPIRED'));
-      }
-      if (error instanceof JsonWebTokenError) {
-        SystemLog.warn('Invalid JWT token', { action: 'token_validation', ip: req.ip, path: req.path });
-        return handleLogout(req, res, createError('AUTH_TOKEN_INVALID'));
-      }
-      throw error; // Unexpected errors
-    }
-
-    // Step 3: Decrypt user ID from token
-    // const userId = decryptId(decoded.sub);
-    // if (!userId) {
-    //   SystemLog.warn('Invalid or undecryptable user ID in token', {
-    //     action: 'token_validation',
-    //     jwtSubject: decoded.sub,
-    //   });
-    //   return handleLogout(req, res, createError('AUTH_TOKEN_INVALID'));
-    // }
-
-    // // Step 4: Check CSRF token from session
-    // const csrfToken = req.session.csrfToken;
-    // const csrfHeader = req.headers['x-csrf-token'] as string;
-    // if (!csrfToken || !csrfHeader || csrfToken !== csrfHeader) {
-    //   SystemLog.warn('CSRF token validation failed', {
-    //     action: 'csrf_validation',
-    //     userId,
-    //     ip: req.ip,
-    //     path: req.path,
-    //   });
-    //   return handleLogout(req, res, createError('CSRF_TOKEN_INVALID'));
-    // }
-
-    // Step 5: Attach user data to request
-
-    SystemLog.info('========= User authenticated successfully  ========== ');
-
-    next();
+    csrfToken = getCsrfToken(req);
+    verifyCsrfToken(csrfToken, expectedCsrfToken);
   } catch (error) {
-    SystemLog.error('Authentication middleware error', {
-      error: error instanceof Error ? error.message : 'Unknown error',
+    throw error instanceof AppError ? error : new AppError('CSRF_TOKEN_INVALID', 403, true);
+  }
+
+  // 3. Pobranie i dekodowanie JWT
+  let jwtToken: string;
+  let decoded: { sub: { id: number } };
+  try {
+    jwtToken = getJwtToken(req);
+    decoded = decodeJwtToken(jwtToken);
+  } catch (error) {
+    throw error instanceof AppError ? error : new AppError('AUTH_TOKEN_INVALID', 401, true);
+  }
+
+  // 4. Porównanie userId
+  if (decoded.sub.id !== sessionUserId) {
+    SystemLog.warn('Niezgodność userId między JWT a sesją', {
       ip: req.ip,
       path: req.path,
+      jwtUserId: decoded.sub.id,
+      sessionUserId,
     });
-    return handleLogout(req, res, createError('AUTHENTICATION_FAILED'));
+    throw new AppError('AUTH_TOKEN_INVALID', 401, true);
   }
+
+  req.user = { id: Number(decoded.sub.id) }; // Konwersja na string, jeśli req.user.id jest string
+  SystemLog.info('Użytkownik pomyślnie zweryfikowany', { userId: sessionUserId });
+  next();
 };

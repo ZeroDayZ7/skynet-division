@@ -1,54 +1,44 @@
-"use client";
+import { SettingsSection } from "@/components/settings/SettingsSection";
+import { SettingsCard } from "@/components/settings/SettingsCard";
+import { Shield, User, Bell, Lock } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-
-export default function Settings() {
+export default function SettingsPage() {
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-10">
-      <h1 className="text-2xl font-bold mb-6">Ustawienia konta</h1>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-8">Ustawienia</h1>
+      
+      <SettingsSection title="Konto">
+        <SettingsCard 
+          title="Profil" 
+          description="Zarządzaj swoimi danymi osobowymi"
+          icon={<User className="w-5 h-5" />}
+          href="/settings/profile"
+        />
+      </SettingsSection>
 
-      {/* Zmiana adresu e-mail */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Zmień adres e-mail</h2>
-        <div>
-          <Label htmlFor="new-email">Nowy e-mail</Label>
-          <Input id="new-email" type="email" placeholder="nowy@email.com" />
-        </div>
-        <div>
-          <Label htmlFor="email-password">Hasło</Label>
-          <Input id="email-password" type="password" placeholder="Twoje hasło" />
-        </div>
-        <Button type="submit">Zmień e-mail</Button>
-      </div>
+      <SettingsSection title="Powiadomienia">
+        <SettingsCard 
+          title="Preferencje" 
+          description="Dostosuj powiadomienia"
+          icon={<Bell className="w-5 h-5" />}
+          href="/settings/notifications"
+        />
+      </SettingsSection>
 
-      {/* Zmiana hasła */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Zmień hasło</h2>
-        <div>
-          <Label htmlFor="current-password">Obecne hasło</Label>
-          <Input id="current-password" type="password" />
-        </div>
-        <div>
-          <Label htmlFor="new-password">Nowe hasło</Label>
-          <Input id="new-password" type="password" />
-        </div>
-        <div>
-          <Label htmlFor="confirm-password">Potwierdź nowe hasło</Label>
-          <Input id="confirm-password" type="password" />
-        </div>
-        <Button type="submit">Zmień hasło</Button>
-      </div>
-
-      {/* Usunięcie konta */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-red-600">Usuń konto</h2>
-        <p className="text-sm text-muted-foreground">
-          Tej operacji nie można cofnąć. Spowoduje trwałe usunięcie konta i wszystkich danych.
-        </p>
-        <Button variant="destructive">Usuń konto</Button>
-      </div>
+      <SettingsSection title="Bezpieczeństwo">
+        <SettingsCard 
+          title="Ochrona konta" 
+          description="Zabezpieczenia i logowania"
+          icon={<Shield className="w-5 h-5" />}
+          href="/settings/security"
+        />
+        <SettingsCard 
+          title="Autoryzacja" 
+          description="Ustawienia uwierzytelniania"
+          icon={<Lock className="w-5 h-5" />}
+          href="/settings/auth"
+        />
+      </SettingsSection>
     </div>
   );
 }

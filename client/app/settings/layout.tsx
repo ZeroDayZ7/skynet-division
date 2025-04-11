@@ -6,7 +6,8 @@ export default function DocumentsLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex h-screen flex-col">
       {/* TopBar */}
-      <header className="fixed top-0 right-0 left-0 z-50 flex h-10 items-center space-x-4 border-b bg-gray-100 px-4 py-3 shadow dark:bg-gray-900">
+      <header className="fixed top-0 right-0 left-0 z-50 flex h-10 items-center 
+      space-x-4 border-b px-4 py-3 shadow bg-card text-card-foreground">
         <BackButton />
         <MainMenuButton />
         <ModeToggle />

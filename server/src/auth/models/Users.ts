@@ -31,7 +31,7 @@ Users.init(
       primaryKey: true,
     },
     email: {
-      type: DataTypes.STRING(88),
+      type: DataTypes.STRING(100),
       allowNull: false,
       unique: true,
       validate: {
@@ -39,15 +39,19 @@ Users.init(
       }
     },
     pass: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING(60),
       allowNull: false,
       validate: {
         len: [6, 100],
       }
     },
     pin: {
-      type: DataTypes.CHAR,
+      type: DataTypes.STRING(60),
       allowNull: true,
+      defaultValue: null,
+      validate: {
+        len: [4, 4]
+      }
     },
     points: {
       type: DataTypes.INTEGER.UNSIGNED,
