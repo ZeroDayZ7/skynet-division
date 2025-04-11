@@ -1,14 +1,15 @@
 {
   "version": "0.2.0",
   "configurations": [
+    // 🔁 1. Debug z nodemon + tsx
     {
       "type": "node",
       "request": "launch",
       "name": "Debug with nodemon + tsx",
       "runtimeExecutable": "nodemon",
-      "program": "${workspaceFolder}/server/src/server.ts", // To jest OK - wskazuje nodemonowi co obserwować
-      "cwd": "${workspaceFolder}/server", // <--- DODAJ TĘ LINIĘ! (Ustawia CWD na katalog /server)
-      "restart": false,
+      "program": "${workspaceFolder}/server/src/server.ts",
+      "cwd": "${workspaceFolder}/server",
+      "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "runtimeArgs": [
@@ -16,10 +17,31 @@
         "--exec",
         "tsx",
         "-r",
-        "dotenv/config" // dotenv będzie teraz szukać .env w CWD, czyli w /server
+        "dotenv/config"
       ],
       "env": {
-        "NODE_ENV": "development" // Ta zmienna jest ustawiana bezpośrednio
+        "NODE_ENV": "development"
+      }
+    },
+
+    // ▶️ 2. Debug tylko z node + tsx (bez restartów)
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug with tsx (no nodemon)",
+      "runtimeExecutable": "node",
+      "program": "${workspaceFolder}/server/src/server.ts",
+      "cwd": "${workspaceFolder}/server",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeArgs": [
+        "--require",
+        "dotenv/config",
+        "--import",
+        "tsx"
+      ],
+      "env": {
+        "NODE_ENV": "development"
       }
     }
   ]

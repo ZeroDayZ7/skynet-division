@@ -1,23 +1,66 @@
+import { isIP } from 'is-ip';
 import bcrypt from 'bcrypt';
-import userService from '#ro/auth/services/user.service';  // Usuń '.js' z importu, TypeScript obsługuje automatyczne rozpoznawanie plików TS
-import SystemLog from '#ro/utils/SystemLog';  // Zmieniłem import na odpowiednią ścieżkę do SystemLog
-import { createError } from '#ro/errors/errorFactory'; // Zaimportuj createError z errorFactory.ts
+import userService from '#ro/auth/services/user.service';
+import SystemLog from '#ro/utils/SystemLog';
+import { createError } from '#ro/errors/errorFactory';
 import { ERROR_CODES } from '#ro/errors/errorCodes';
+import { UserAttributes } from '#ro/auth/types/UserAttributes';
 
-export const validateUser = async (email: string, password: string, ip: string) => {
+interface ErrorResult {
+  error: true;
+  message: string;
+  code: string;
+  statusCode: number;
+  [key: string]: any;
+}
+
+interface SuccessResult {
+  error: false;
+  user: UserAttributes;
+}
+
+type ValidationResult = ErrorResult | SuccessResult;
+
+/**
+ * Funkcja walidacji użytkownika podczas logowania.
+ * Sprawdza próbę logowania, blokuje konto po zbyt wielu nieudanych próbach
+ * i zwraca odpowiedni wynik.
+ */
+export const validateUser = async (email: string, password: string, ip: string): Promise<ValidationResult> => {
+  if (!ip || !isIP(ip)) {
+    SystemLog.warn('Invalid IP address provided', { ip });
+    return createError(ERROR_CODES.INVALID_REQUEST);
+  }
+
+  const loginAttempts = await userService.getLoginAttempts(email);
+  if (loginAttempts >= 5) {
+    await userService.blockUser(email);
+    return createError(ERROR_CODES.USER_BLOCKED);
+  }
 
   const user = await userService.getUserDetailsForValidation(email);
-  if (!user) return createError(ERROR_CODES.INVALID_CREDENTIALS);
-  if (user.userBlock === true) return createError(ERROR_CODES.USER_BLOCKED);
-  if (user.activation_token !== null) return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
+  if (!user) {
+    await userService.incrementLoginAttempts(email);
+    return createError(ERROR_CODES.INVALID_CREDENTIALS);
+  }
+
+  if (user.userBlock === true) {
+    return createError(ERROR_CODES.USER_BLOCKED);
+  }
+
+  if (user.activation_token !== null) {
+    return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
+  }
 
   const isPasswordValid = await bcrypt.compare(password, user.pass);
-  if (!isPasswordValid) return createError(ERROR_CODES.INVALID_CREDENTIALS);
+  if (!isPasswordValid) {
+    await userService.incrementLoginAttempts(email);
+    return createError(ERROR_CODES.INVALID_CREDENTIALS);
+  }
 
-  await userService.updateLoginDetails(user.id, ip, user.lastLoginIp ?? "");
-  SystemLog.info('AUTH.SERVICES.TS');
-
-  // await userService.getUserDetailsById(user.id);
+  await userService.resetLoginAttempts(email);
+  await userService.updateLoginDetails(user.id, ip, user.lastLoginIp ?? '');
+  SystemLog.info('Authentication successful');
 
   return { error: false, user };
 };

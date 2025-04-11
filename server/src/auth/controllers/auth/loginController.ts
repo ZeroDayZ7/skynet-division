@@ -3,44 +3,32 @@ import { promisify } from 'util';
 import authService from '#ro/auth/services/auth.service';
 import { generateJwtToken } from '#ro/auth/utils/token.utils';
 import SystemLog from '#ro/utils/SystemLog';
-import { UserAttributes } from '#ro/auth/types/UserAttributes';
 import { generateCSRFToken } from '#ro/auth/utils/CSRF.utils';
 import { LoginInput } from '#ro/auth/validators/loginSchema';
-import { setAuthCookie, setCSRFCookie } from '#ro/auth/utils/cookie.utils';
+import { setJwtCookie, setCSRFCookie } from '#ro/auth/utils/cookie.utils';
 import { getUnreadNotificationsCount } from '#ro/auth/controllers/users/getUnreadNotificationsCount';
-import AppError from '#ro/utils/AppError';
-
-// Typ dla wyniku walidacji użytkownika
-interface ValidationResult {
-  error: boolean;
-  message?: string;
-  user?: UserAttributes;
-}
-
-export const loginController = async (req: Request<LoginInput>, res: Response): Promise<void> => {
-  const { email, password } = req.validatedData as LoginInput;
-  const userIp = Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.ip || '';
+import AppError from '#ro/errors/AppError';
+/**
+ * Kontroler logowania użytkownika.
+ * Waliduje dane, generuje tokeny i ustawia sesję oraz ciasteczka.
+ */
+export const loginController = async (req: Request, res: Response): Promise<void> => {
+  const { email, password } = req.validatedData as LoginInput; // Popraw typowanie poniżej
+  const userIp = Array.isArray(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'][0] : req.ip || 'unknown';
 
   try {
     // Weryfikacja użytkownika
-    const validationResult = (await authService.validateUser(email, password, userIp)) as ValidationResult;
-    if (validationResult.error || !validationResult.user) {
-      res.status(401).json({
-        isAuthenticated: false,
-        message: validationResult.message || 'Nieprawidłowy email lub hasło',
-      });
-      return;
+    const validationResult = await authService.validateUser(email, password, userIp);
+    SystemLog.debug(`Validation result: ${JSON.stringify(validationResult)}`);
+    if (validationResult.error) {
+      throw new AppError(validationResult.code);
     }
 
     const user = validationResult.user;
-    // Generowanie tokena JWT
     const token = generateJwtToken({ id: user.id });
     const tokenCSRF = generateCSRFToken();
-    // const gey = getU
 
-    // Zapisywanie sesji (opcjonalne)
     const unread = await getUnreadNotificationsCount(user.id);
-
     req.session.userId = user.id;
     req.session.csrfToken = tokenCSRF;
     req.session.points = user.points ?? 0;
@@ -50,16 +38,11 @@ export const loginController = async (req: Request<LoginInput>, res: Response): 
     const saveSession = promisify(req.session.save.bind(req.session));
     await saveSession();
 
-    // Logowanie sesji po zapisaniu
     SystemLog.info('Session saved');
 
-    //Ustawienie bezpiecznego ciasteczka
-    setAuthCookie(res, token);
+    setJwtCookie(res, token);
     setCSRFCookie(res, tokenCSRF);
 
-    SystemLog.info(`LOGIN.CONTROLLER.TS`);
-
-    // 6. Zwrócenie odpowiedzi
     res.status(200).json({
       isAuthenticated: true,
       user: {
@@ -70,14 +53,11 @@ export const loginController = async (req: Request<LoginInput>, res: Response): 
       tokenCSRF,
     });
   } catch (error: any) {
-    SystemLog.error('Login process failed', {
-      email,
-      error: error.message,
-      stack: error.stack,
-    });
-    res.status(500).json({
-      isAuthenticated: false,
-      message: 'Wystąpił błąd serwera',
-    });
+    if (error instanceof AppError) {
+      error.sendErrorResponse(res);
+    } else {
+      const appError = new AppError('SERVER_ERROR');
+      appError.sendErrorResponse(res);
+    }
   }
 };

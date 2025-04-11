@@ -10,4 +10,5 @@ export const ERROR_CODES = {
   AUTH_TOKEN_INVALID: 'AUTH_TOKEN_INVALID',
   CSRF_TOKEN_INVALID: 'CSRF_TOKEN_INVALID',
   AUTHENTICATION_FAILED: 'AUTHENTICATION_FAILED',
+  INVALID_REQUEST: 'INVALID_REQUEST'
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały

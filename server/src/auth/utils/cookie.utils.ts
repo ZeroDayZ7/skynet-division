@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { jwtConfig } from '#ro/auth/config/jwt.config';
 
-export const setAuthCookie = (res: Response, token: string): void => {
+export const setJwtCookie = (res: Response, token: string): void => {
   res.cookie(jwtConfig.cookieName, token, {
     ...jwtConfig.cookieOptions,
     httpOnly: true,

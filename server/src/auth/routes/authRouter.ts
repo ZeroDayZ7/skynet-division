@@ -9,7 +9,7 @@ import { checkEmailAvailabilityController } from '#ro/auth/controllers/registrat
 // import { authMiddleware } from '#ro/middlewares/auth.js';
 import rateLimiterConfig from '#ro/middlewares/rateLimiter'; // Import domyślny
 import { validateRequest } from '#ro/auth/middleware/validateRequest';
-import { loginSchema } from '#ro/auth/validators/loginSchema';
+import { loginSchema, LoginInput } from '#ro/auth/validators/loginSchema';
 import { authMiddleware } from '#ro/auth/middleware/auth.middleware';
 
 const { authLimiter } = rateLimiterConfig;
@@ -17,7 +17,7 @@ const { authLimiter } = rateLimiterConfig;
 const router = express.Router();
 
 // Logowanie
-router.post('/login', authLimiter, validateRequest(loginSchema), loginController);
+router.post('/login', authLimiter, validateRequest<LoginInput>(loginSchema), loginController);
 
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);

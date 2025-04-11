@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { NextFunction, Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import sessionManager from '#services/session.services';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -10,6 +10,7 @@ import SystemLog from '#ro/utils/SystemLog';
 // import { requestLogger } from '#ro/middlewares/requestLogger';
 import apiRouter from '#ro/routes/apiRouter'; // Statyczny import
 import defineUserAssociations from '#ro/auth/config/associations'
+import { errorMiddleware } from './middlewares/errorMiddleware';
 
 const app = express();
 let counter = 1; // Inicjalizacja licznika
@@ -66,8 +67,14 @@ app.use(cors(corsOptions));
 // API routes
 app.use('/api', apiRouter); // Używamy .default z dynamicznego importu
 
+app.use(errorMiddleware);
+
+app.use((req: Request, res: Response) => {
+  res.status(404).send("Nic tu nie ma, lamusie! Spróbuj czegoś innego.");
+});
+
 // Error handling
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: Request, res: Response) => {
   SystemLog.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
 });
