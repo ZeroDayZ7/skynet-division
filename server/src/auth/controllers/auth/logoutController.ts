@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import SystemLog from "#utils/SystemLog";
-import { clearAuthCookie, clearCSRFCookie } from "#/auth/utils/cookie.utils";
+import SystemLog from "#ro/utils/SystemLog";
+import { clearAuthCookie, clearCSRFCookie } from "#ro//auth/utils/cookie.utils";
 
 export const logoutController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

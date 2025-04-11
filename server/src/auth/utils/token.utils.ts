@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import jwt from 'jsonwebtoken';
-import { jwtConfig } from '#auth/config/jwt.config';
+import { jwtConfig } from '#ro/auth/config/jwt.config';
 
 // Interfejs dla payloadu tokena (tylko id)
 export interface TokenPayload {
@@ -36,7 +36,7 @@ export const getCsrfTokenFromRequest = (req: Request): string | null => {
 };
 
 // Funkcja do generowania tokena JWT
-export const generateAuthToken = (user: { id: number }): string => {
+export const generateJwtToken = (user: { id: number }): string => {
   const tokenPayload: TokenPayload = {
     sub: { id: user.id }, // sub jako obiekt
   };
@@ -51,7 +51,7 @@ export const generateAuthToken = (user: { id: number }): string => {
 };
 
 // Funkcja do dekodowania tokena
-export const decodeAuthToken = (token: string): TokenPayload => {
+export const decodeJwtToken = (token: string): TokenPayload => {
   // Weryfikacja tokena i rzutowanie na unknown, a potem na TokenPayload
   const decoded = jwt.verify(token, jwtConfig.secret) as unknown;
 

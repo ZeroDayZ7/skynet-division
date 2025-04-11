@@ -1,6 +1,6 @@
-import UserNotification from "#models/users/UserNotification.js";
-import NotificationTemplate from "#models/users/NotificationTemplate.js";
-import SystemLog from "#utils/SystemLog.js";
+import UserNotification from "#ro/models/users/UserNotification.js";
+import NotificationTemplate from "#ro/models/users/NotificationTemplate.js";
+import SystemLog from "#ro/utils/SystemLog.js";
 
 export async function getUserNotifications(req, res) {
   const userId = req.user?.id;

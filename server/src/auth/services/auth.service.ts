@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import userService from '#auth/services/user.service';  // Usuń '.js' z importu, TypeScript obsługuje automatyczne rozpoznawanie plików TS
-import SystemLog from '#utils/SystemLog';  // Zmieniłem import na odpowiednią ścieżkę do SystemLog
-import { createError } from '#errors/errorFactory'; // Zaimportuj createError z errorFactory.ts
-import { ERROR_CODES } from '#errors/errorCodes';
+import userService from '#ro/auth/services/user.service';  // Usuń '.js' z importu, TypeScript obsługuje automatyczne rozpoznawanie plików TS
+import SystemLog from '#ro/utils/SystemLog';  // Zmieniłem import na odpowiednią ścieżkę do SystemLog
+import { createError } from '#ro/errors/errorFactory'; // Zaimportuj createError z errorFactory.ts
+import { ERROR_CODES } from '#ro/errors/errorCodes';
 
 export const validateUser = async (email: string, password: string, ip: string) => {
 
@@ -15,7 +15,7 @@ export const validateUser = async (email: string, password: string, ip: string) 
   if (!isPasswordValid) return createError(ERROR_CODES.INVALID_CREDENTIALS);
 
   await userService.updateLoginDetails(user.id, ip, user.lastLoginIp ?? "");
-  SystemLog.info('AUTH SERVICES TS:', { email, ip });
+  SystemLog.info('AUTH.SERVICES.TS');
 
   // await userService.getUserDetailsById(user.id);
 

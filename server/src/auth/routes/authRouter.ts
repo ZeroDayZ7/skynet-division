@@ -1,16 +1,16 @@
 import express from 'express';
 
-// import loginEndpoint from '#endpoints/v1/auth/login.js';
-import { loginController } from '#auth/controllers/auth/loginController';
-import { logoutController } from '#auth/controllers/auth/logoutController';
-import { checkSessionStatus } from '#auth/controllers/auth/statusController.js';
-import { checkEmailAvailabilityController } from '#auth/controllers/registration/checkEmailAvailabilityController';
+// import loginEndpoint from '#ro/endpoints/v1/auth/login.js';
+import { loginController } from '#ro/auth/controllers/auth/loginController';
+import { logoutController } from '#ro/auth/controllers/auth/logoutController';
+import { checkSessionStatus } from '#ro/auth/controllers/auth/statusController.js';
+import { checkEmailAvailabilityController } from '#ro/auth/controllers/registration/checkEmailAvailabilityController';
 
-// import { authMiddleware } from '#middlewares/auth.js';
-import rateLimiterConfig from '#middlewares/rateLimiter'; // Import domyślny
-import { validateRequest } from "#auth/middleware/validateRequest";
-import { loginSchema } from "#auth/validators/loginSchema";
-import { authMiddleware } from '#auth/middleware/auth.middleware';
+// import { authMiddleware } from '#ro/middlewares/auth.js';
+import rateLimiterConfig from '#ro/middlewares/rateLimiter'; // Import domyślny
+import { validateRequest } from '#ro/auth/middleware/validateRequest';
+import { loginSchema } from '#ro/auth/validators/loginSchema';
+import { authMiddleware } from '#ro/auth/middleware/auth.middleware';
 
 const { authLimiter } = rateLimiterConfig;
 
@@ -26,10 +26,6 @@ router.post('/check-email', authMiddleware, checkEmailAvailabilityController);
 
 // Status
 router.get('/status', checkSessionStatus);
-
-
-
-
 
 // Rejestracja
 // router.post('/register', require('../endpoints/registrationEndpoint.js'));

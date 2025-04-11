@@ -2,13 +2,9 @@
   "name": "server",
   "type": "module",
   "imports": {
-    "#*": "./src/*",
-    "#root/*": "./src/*",
-    "#language/*": "./src/language/*",
-    "#services/*": "./src/services/*",
-    "#routes/*": "./src/routes/*",
-    "#utils/*": "./src/utils/*",
-    "#photo/*": "./private_uploads/users/*"
+    "#ro/*": ["./src/*"],
+    "#services/*": ["./src/services/*"],
+    "#photo/*": ["./private_uploads/users/*"]
   },
   "version": "1.0.0",
   "description": "",

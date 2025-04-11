@@ -1,6 +1,6 @@
-import sequelize from '#auth/config/db.config'; // Import instancji Sequelize
-import User from '#auth/models/Users'; // Import modelu User z typem UserAttributes
-import { UserAttributes } from '#auth/types/UserAttributes'; 
+import sequelize from '#ro/auth/config/db.config'; // Import instancji Sequelize
+import User from '#ro/auth/models/Users'; // Import modelu User z typem UserAttributes
+import { UserAttributes } from '#ro/auth/types/UserAttributes'; 
 
 
 // Funkcja do pobierania szczegółów użytkownika na potrzeby walidacji

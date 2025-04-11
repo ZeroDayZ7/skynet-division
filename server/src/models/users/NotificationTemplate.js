@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "#config/db.js";
+import sequelize from "#ro/config/db.js";
 
 class NotificationTemplate extends Model {}
 

@@ -1,30 +1,27 @@
-import express, { NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
+dotenv.config();
+import express, { NextFunction, Request, Response } from 'express';
 import sessionManager from '#services/session.services';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import SystemLog from '#utils/SystemLog';
+import SystemLog from '#ro/utils/SystemLog';
 // import helmet from 'helmet';
-// import { setLocale } from '#language/i18nSetup'; // Import setLocale
-// import { requestLogger } from '#middlewares/requestLogger';
-import apiRouter from '#routes/apiRouter.js'; // Statyczny import
-import defineUserAssociations from '#auth/config/associations'
-
-dotenv.config();
+// import { setLocale } from '#ro/language/i18nSetup'; // Import setLocale
+// import { requestLogger } from '#ro/middlewares/requestLogger';
+import apiRouter from '#ro/routes/apiRouter'; // Statyczny import
+import defineUserAssociations from '#ro/auth/config/associations'
 
 const app = express();
 let counter = 1; // Inicjalizacja licznika
 
 // Funkcja do dodawania kolejnych numerów i logowania
-function logWithCounter(message: string) {
-  console.log(`${message}: ${counter}`);
+function logWithCounter() {
+  console.log(`=========== ${counter} =========`);
   counter++; // Zwiększ licznik po każdym logowaniu
 }
 // Middleware do logowania z numeracją
 app.use((req: Request, res: Response, next) => {
-  console.log(`=============== START ================`);
-  logWithCounter(`NUMER: `);
-  console.log(`=============== STOP ================`);
+  logWithCounter();
   next(); 
 });
 

@@ -2,11 +2,11 @@ import {
   Model,
   DataTypes
 } from "sequelize";
-import sequelize from "#auth/config/db.config.js";
+import sequelize from "#ro/auth/config/db.config.js";
 import {
   NotificationTemplateAttributes,
   NotificationTemplateCreationAttributes
-} from "#auth/types/NotificationTemplateAttributes";
+} from "#ro/auth/types/NotificationTemplateAttributes";
 
 class NotificationTemplate extends Model<
   NotificationTemplateAttributes,

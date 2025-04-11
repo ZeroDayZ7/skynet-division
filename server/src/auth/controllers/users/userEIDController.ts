@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import SystemLog from '#utils/SystemLog.js';
-import { fetchUserEIDData } from '#auth/services/user.data.service';
-import { HTTP_STATUS } from '#auth/config/httpStatus';
+import SystemLog from '#ro/utils/SystemLog.js';
+import { fetchUserEIDData } from '#ro/auth/services/user.data.service';
+import { HTTP_STATUS } from '#ro/auth/config/httpStatus';
 
 export const getUserEIDData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.session.userId;

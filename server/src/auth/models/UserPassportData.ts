@@ -1,9 +1,9 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "#auth/config/db.config.js";
+import sequelize from "#ro/auth/config/db.config.js";
 import {
   PassportAttributes,
   PassportCreationAttributes
-} from "#auth/types/PassportAttributes.js";
+} from "#ro/auth/types/PassportAttributes.js";
 
 class Passport extends Model<PassportAttributes, PassportCreationAttributes>
   implements PassportAttributes {

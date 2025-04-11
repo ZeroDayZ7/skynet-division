@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { jwtConfig } from '#auth/config/jwt.config';
-import SystemLog from '#/utils/SystemLog';
+import { jwtConfig } from '#ro/auth/config/jwt.config';
+import SystemLog from '#ro/utils/SystemLog';
 
 // Function to encrypt user ID
 export const encryptId = (userId: string): string => {

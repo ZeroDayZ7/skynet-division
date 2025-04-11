@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "#config/db.js";
-import NotificationTemplate from "#models/users/NotificationTemplate.js";
+import sequelize from "#ro/config/db.js";
+import NotificationTemplate from "#ro/models/users/NotificationTemplate.js";
 
 class UserNotification extends Model {}
 

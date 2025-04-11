@@ -1,6 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '#auth/config/db.config';
-import { UserReferralAttributes, UserReferralCreationAttributes } from '#auth/types/UserReferralAttributes';
+import sequelize from '#ro/auth/config/db.config';
+import { UserReferralAttributes, UserReferralCreationAttributes } from '#ro/auth/types/UserReferralAttributes';
 
 // Powiązanie modelu z interfejsem UserReferralAttributes
 class UserReferrals extends Model<UserReferralAttributes, UserReferralCreationAttributes> {

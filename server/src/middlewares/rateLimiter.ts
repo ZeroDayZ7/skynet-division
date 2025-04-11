@@ -1,6 +1,6 @@
 import rateLimit, { RateLimitRequestHandler } from 'express-rate-limit';
 import { Request, Response, NextFunction } from 'express';
-import SystemLog from '#utils/SystemLog'; // Zakładam, że masz TS w SystemLog
+import SystemLog from '#ro/utils/SystemLog'; // Zakładam, że masz TS w SystemLog
 
 // Stałe czasu
 const TIME = {
@@ -15,7 +15,7 @@ const authLimiter: RateLimitRequestHandler | ((req: Request, res: Response, next
   ? (req: Request, res: Response, next: NextFunction) => {
       // W środowisku deweloperskim pomijamy limitowanie i logujemy
       if (req.path.includes('/login')) {
-        SystemLog.debug('[DEV] Rate limiting disabled for login', { ip: req.ip });
+        SystemLog.debug('[DEV] Rate limiting disabled for login');
       }
       next();
     }

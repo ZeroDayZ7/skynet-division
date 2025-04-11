@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
-import { checkEmailAvailability } from '#auth/services/register.service';
-import SystemLog from '#utils/SystemLog';
+import { checkEmailAvailability } from '#ro/auth/services/register.service';
+import SystemLog from '#ro/utils/SystemLog';
 
 // Tworzymy schemę walidacji Zod
 const emailSchema = z.object({

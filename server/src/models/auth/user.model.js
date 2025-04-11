@@ -1,4 +1,4 @@
-import sequelize from '#config/db.js'; // Import instancji Sequelize
+import sequelize from '#ro/config/db.js'; // Import instancji Sequelize
 import { Model, DataTypes } from 'sequelize';
 
 

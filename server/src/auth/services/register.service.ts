@@ -1,7 +1,7 @@
-import Users from "#auth/models/Users"; // Importuj model User
+import Users from "#ro/auth/models/Users"; // Importuj model User
 import bcrypt from "bcrypt"; // Jeśli używasz hashowania haseł
-import { UserAttributes } from "#auth/types/UserAttributes";
-import SystemLog from "#utils/SystemLog";
+import { UserAttributes } from "#ro/auth/types/UserAttributes";
+import SystemLog from "#ro/utils/SystemLog";
 
 // Funkcja do sprawdzania dostępności e-maila
 export const checkEmailAvailability = async (email: string): Promise<boolean> => {

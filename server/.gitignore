@@ -2,8 +2,7 @@
 
 # dependencies
 /node_modules
-/src/dist/** */
-/logs/
+/logs
 /.pnp
 .pnp.*
 .yarn/*

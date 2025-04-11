@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug with nodemon + tsx",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/server/src/server.ts", // To jest OK - wskazuje nodemonowi co obserwować
+      "cwd": "${workspaceFolder}/server", // <--- DODAJ TĘ LINIĘ! (Ustawia CWD na katalog /server)
+      "restart": false,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "runtimeArgs": [
+        "--inspect",
+        "--exec",
+        "tsx",
+        "-r",
+        "dotenv/config" // dotenv będzie teraz szukać .env w CWD, czyli w /server
+      ],
+      "env": {
+        "NODE_ENV": "development" // Ta zmienna jest ustawiana bezpośrednio
+      }
+    }
+  ]
+}

@@ -1,10 +1,10 @@
 import express from 'express';
 
-import { getUserEIDData } from '#auth/controllers/users/userEIDController'
-// import { getUserNotifications } from '#controllers/users/userNotifications.js';
-// import { getUnreadNotificationsCount } from '#controllers/users/getUnreadNotificationsCount.js';
-// import { getUserPassportData } from '#controllers/users/userPassportController.js';
-import { authMiddleware } from '#auth/middleware/auth.middleware';
+import { getUserEIDData } from '#ro/auth/controllers/users/userEIDController'
+// import { getUserNotifications } from '#ro/controllers/users/userNotifications.js';
+// import { getUnreadNotificationsCount } from '#ro/controllers/users/getUnreadNotificationsCount.js';
+// import { getUserPassportData } from '#ro/controllers/users/userPassportController.js';
+import { authMiddleware } from '#ro/auth/middleware/auth.middleware';
 
 const router = express.Router();
 

@@ -1,9 +1,9 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "#auth/config/db.config.js";
+import sequelize from "#ro/auth/config/db.config.js";
 import {
   UserEIDDataAttributes,
   UserEIDDataCreationAttributes,
-} from "#auth/types/UserEIDDataAttributes.js";
+} from "#ro/auth/types/UserEIDDataAttributes.js";
 
 class UserEIDData extends Model<UserEIDDataAttributes, UserEIDDataCreationAttributes>
   implements UserEIDDataAttributes {

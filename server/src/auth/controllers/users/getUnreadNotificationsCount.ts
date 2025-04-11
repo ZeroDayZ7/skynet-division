@@ -1,5 +1,5 @@
-import UserNotification from "#auth/models/UserNotification";
-import SystemLog from "#utils/SystemLog";
+import UserNotification from "#ro/auth/models/UserNotification";
+import SystemLog from "#ro/utils/SystemLog";
 
 // Typowanie funkcji, zakładając, że userId jest stringiem lub numerem
 export async function getUnreadNotificationsCount(userId: number): Promise<number> {

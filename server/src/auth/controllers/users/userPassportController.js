@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs/promises"; // Używamy promisowego API FS
-import Passport from "#models/users/UserPassportData.js"; // Nowy model paszportu
-import UserData from "#models/users/UserData.js"; // Model użytkownika
-import SystemLog from "#utils/SystemLog.js";
+import Passport from "#ro/models/users/UserPassportData.js"; // Nowy model paszportu
+import UserData from "#ro/models/users/UserData.js"; // Model użytkownika
+import SystemLog from "#ro/utils/SystemLog.js";
 
 const PHOTO_UPLOAD_DIR = path.join(process.cwd(), "private_uploads/passports");
 

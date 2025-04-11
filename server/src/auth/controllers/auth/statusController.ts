@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import SystemLog from "#utils/SystemLog";
+import SystemLog from "#ro/utils/SystemLog";
 
 // Typ dla odpowiedzi kontrolera
 interface SessionStatusResponse {
@@ -9,7 +9,7 @@ interface SessionStatusResponse {
 
 export const checkSessionStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   // Logowanie sesji dla debugowania
-  SystemLog.info(`checkSessionStatus /status : ${JSON.stringify(req.session, null, 2)}`);
+  // SystemLog.info(`checkSessionStatus /status : ${JSON.stringify(req.session, null, 2)}`);
 
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany

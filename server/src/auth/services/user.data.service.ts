@@ -1,8 +1,8 @@
 import path from "path";
 import fs from "fs/promises";
-import UserEIDData from "#auth/models/UserEIDData";
-import UserData from "#auth/models/UserData";
-import SystemLog from "#utils/SystemLog.js";
+import UserEIDData from "#ro/auth/models/UserEIDData";
+import UserData from "#ro/auth/models/UserData";
+import SystemLog from "#ro/utils/SystemLog.js";
 
 const PHOTO_UPLOAD_DIR = path.join(process.cwd(), "private_uploads/users");
 

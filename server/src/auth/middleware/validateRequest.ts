@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { ZodSchema } from "zod";
-import { LoginInput } from "#auth/validators/loginSchema";
+import { LoginInput } from "#ro/auth/validators/loginSchema";
 
 export const validateRequest = (schema: ZodSchema<LoginInput>) =>
   (req: Request, res: Response, next: NextFunction): void => {

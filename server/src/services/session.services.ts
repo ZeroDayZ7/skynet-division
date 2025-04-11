@@ -2,8 +2,8 @@ import session from 'express-session';
 import connectSessionSequelize from 'connect-session-sequelize';
 import { Sequelize } from 'sequelize';
 import { Express } from 'express';
-import sequelize from '#auth/config/db.config'; // Zakładam, że eksportuje instancję Sequelize
-import SystemLog from '#utils/SystemLog';
+import sequelize from '#ro/auth/config/db.config'; // Zakładam, że eksportuje instancję Sequelize
+import SystemLog from '#ro/utils/SystemLog';
 
 // Stałe czasu
 const TIME = {
@@ -73,11 +73,5 @@ export default function sessionManager(app: Express): void {
   sessionStore.startExpiringSessions();
 
   // Logowanie konfiguracji dla debugowania
-  SystemLog.info('Session manager initialized', {
-    sessionConfig: {
-      name: sessionConfig.name,
-      secret: '[hidden]',
-      cookie: sessionConfig.cookie,
-    },
-  });
+  SystemLog.info('Session manager initialized');
 }
