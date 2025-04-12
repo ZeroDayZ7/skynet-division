@@ -284,7 +284,7 @@ const JobPostingPage = () => {
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center p-4 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200"
+              className="w-full flex items-center justify-center p-4 bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200"
               disabled={isLoading}
             >
               <FaSave className="text-xl mr-2" />

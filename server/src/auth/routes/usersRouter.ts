@@ -4,12 +4,17 @@ import { getUserEIDData } from '#ro/auth/controllers/users/userEIDController'
 // import { getUserNotifications } from '#ro/controllers/users/userNotifications.js';
 // import { getUnreadNotificationsCount } from '#ro/controllers/users/getUnreadNotificationsCount.js';
 import { getUserPassportData } from '#ro/auth/controllers/users/userPassportController';
+import { authMiddleware } from '../middleware/auth.middleware';
+import { checkPinController } from '../controllers/users/settings/security/pin/checkPinController';
 
 const router = express.Router();
 
 // Elektroniczny dowód
-router.post('/user-eid', getUserEIDData);
-router.post('/user-passport', getUserPassportData);
+router.post('/user-eid', authMiddleware, getUserEIDData);
+router.post('/user-passport', authMiddleware, getUserPassportData);
+
+router.get('/pin-status', checkPinController);
+router.post('/set-pin', checkPinController);
 
 // router.post('/notifications', getUserNotifications);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);

@@ -30,8 +30,13 @@ declare namespace NodeJS {
       SESSION_SECRET_KEY: string;
       SESSION_COOKIE_DOMAIN: string;
       SESSION_MAX_AGE: string;
-  
+
+      // EncryptionConfig
       ENCRYPTION_KEY: string;
+      ENCRYPTION_ALGORITHM: string;
+      IV_LENGTH: string;
+      TAG_LENGTH: string;
+
 
       CSRF_COOKIE_NAME: string;
   

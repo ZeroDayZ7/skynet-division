@@ -27,7 +27,7 @@ export default function CitizenProjectsHome() {
             <button
               onClick={() => handleNavigation("/citizens-projects/new")}
               className="flex flex-col items-center justify-center p-6 bg-green-600 
-              text-white rounded shadow-md hover:bg-green-600 transition dark:text-black"
+              rounded shadow-md hover:bg-green-600 transition dark:text-black"
             >
               <FaPlusCircle className="text-4xl" />
               <span className="mt-2">Dodaj Projekt</span>
@@ -35,7 +35,7 @@ export default function CitizenProjectsHome() {
             <button
               onClick={() => handleNavigation("/citizens-projects/list")}
               className="flex flex-col items-center justify-center p-6 bg-blue-600 
-              text-white rounded shadow-md hover:bg-blue-600 transition"
+              rounded shadow-md hover:bg-blue-600 transition"
             >
               <FaProjectDiagram className="text-4xl" />
               <span className="mt-2">Zobacz Projekty</span>

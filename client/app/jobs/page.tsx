@@ -35,7 +35,7 @@ export default function JobBoard() {
                 key={id}
                 onClick={() => enabled && handleNavigation(link)}
                 className={`flex flex-col items-center justify-center p-6 rounded shadow-md transition ${
-                enabled ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                enabled ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
                 disabled={!enabled}
               >

@@ -36,7 +36,7 @@ export default function EIDCard({ userData }: EIDCardProps) {
     <div className="flex items-center justify-center p-4">
       <Card className="w-full max-w-[360px] sm:max-w-[480px] md:max-w-[640px] border border-blue-200 dark:border-blue-700 bg-white dark:bg-gray-800">
         {/* Nagłówek karty */}
-        <CardHeader className="bg-blue-900 text-white p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+        <CardHeader className="bg-blue-900 p-4 sm:p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
           <div>
             <h1 className="text-xl sm:text-2xl font-bold tracking-wide">DOWÓD OSOBISTY</h1>
             <p className="text-xs sm:text-sm mt-1 opacity-90">RZECZPOSPOLITA POLSKA</p>
@@ -167,7 +167,7 @@ export default function EIDCard({ userData }: EIDCardProps) {
         </CardContent>
 
         {/* Stopka */}
-        <CardFooter className="bg-blue-700 text-white p-2 flex justify-between items-center text-xs">
+        <CardFooter className="bg-blue-700 p-2 flex justify-between items-center text-xs">
           <span>POL</span>
           <span className="opacity-80">ID CARD</span>
           <span className="font-mono">{new Date().getFullYear()}</span>

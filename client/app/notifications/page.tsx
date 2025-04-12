@@ -176,7 +176,7 @@ export default function NotificationsList() {
       {hasMore && !loading && (
         <button
           onClick={() => setPage((prev) => prev + 1)}
-          className="mt-4 w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="mt-4 w-full p-2 bg-blue-500 rounded hover:bg-blue-600 transition"
         >
           Pokaż więcej
         </button>

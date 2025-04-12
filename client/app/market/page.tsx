@@ -294,7 +294,7 @@ const CitizenMarketplace = () => {
               Wyczyść filtry
             </button>
             <button
-              className="px-4 py-2 text-white bg-blue-500 rounded-lg"
+              className="px-4 py-2 bg-blue-500 rounded-lg"
               onClick={() => setShowFilters(false)}
             >
               Zastosuj
@@ -323,7 +323,7 @@ const CitizenMarketplace = () => {
                   <Heart size={20} fill={savedItems.includes(String(item.id)) ? "red" : "none"} color={savedItems.includes(String(item.id)) ? "red" : "black"} />
                 </button>
                 {item.offerType === 'oddam' && (
-                  <span className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-lg text-xs">Za darmo</span>
+                  <span className="absolute top-2 left-2 bg-green-500 px-2 py-1 rounded-lg text-xs">Za darmo</span>
                 )}
               </div>
 
@@ -351,7 +351,7 @@ const CitizenMarketplace = () => {
           <div className="bg-white p-6 rounded-lg text-center">
             <p className="text-gray-500">Nie znaleziono ogłoszeń spełniających kryteria.</p>
             <button
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="mt-4 px-4 py-2 bg-blue-500 rounded-lg"
               onClick={() => {
                 setSearchQuery('');
                 setCurrentCategory('wszystko');
@@ -372,7 +372,7 @@ const CitizenMarketplace = () => {
   // Renderowanie przycisku dodawania nowego ogłoszenia
   const renderAddButton = () => (
     <div className="fixed bottom-20 right-4">
-      <button className="bg-blue-500 text-white p-4 rounded-full shadow-lg">
+      <button className="bg-blue-500 p-4 rounded-full shadow-lg">
         <Plus size={24} />
       </button>
     </div>

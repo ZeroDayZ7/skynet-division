@@ -187,7 +187,7 @@ const LanguageTrainer = () => {
 
       <button
         onClick={() => setCurrentView("lesson")}
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition duration-200"
+        className="w-full bg-blue-500 hover:bg-blue-600 py-3 px-4 rounded-lg font-medium transition duration-200"
       >
         Rozpocznij naukę
       </button>
@@ -261,7 +261,7 @@ const LanguageTrainer = () => {
             </div>
             <button
               onClick={nextLesson}
-              className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition duration-200"
+              className="w-full mt-4 bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg font-medium transition duration-200"
             >
               Następne zadanie
             </button>
@@ -269,7 +269,7 @@ const LanguageTrainer = () => {
         ) : (
           <button
             onClick={checkAnswer}
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition duration-200"
+            className="w-full bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg font-medium transition duration-200"
           >
             Sprawdź odpowiedź
           </button>
@@ -292,7 +292,7 @@ const LanguageTrainer = () => {
       </div>
       <button
         onClick={() => setCurrentView("dashboard")}
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg font-medium transition duration-200"
+        className="w-full bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded-lg font-medium transition duration-200"
       >
         Wróć do tablicy postępów
       </button>

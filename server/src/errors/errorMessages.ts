@@ -12,5 +12,6 @@ export const ERROR_MESSAGES = {
   AUTHENTICATION_FAILED: 'Błąd autoryzacji.',
   INVALID_ADDRESS_IP: 'Nieprawidłowy adres IP.',
   INVALID_REQUEST: 'Nieprawidłowe żądanie.',
-  NOT_FOUND: 'Nie znaleziono'
+  NOT_FOUND: 'Nie znaleziono',
+  UNAUTHORIZED: 'Nieautoryzowany dostęp'
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały
