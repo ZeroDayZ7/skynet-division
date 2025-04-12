@@ -6,7 +6,7 @@ import { ModeToggle } from '@/components/theme/theme-button';
 
 export default function HeaderActions() {
   return (
-    <div className="flex">
+    <div className="flex dark:text-green-500">
       <Notifications />
       <ModeToggle />
       <LogoutDialog />

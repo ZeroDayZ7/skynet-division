@@ -4,7 +4,6 @@ import { useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
-  InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 
@@ -51,6 +50,7 @@ export function VerifyPinModal({
       await new Promise((resolve) => setTimeout(resolve, 1000));
       onSuccess();
     } catch (err) {
+      console.log(err);
       setError("Nieprawidłowy kod PIN lub hasło");
     } finally {
       setIsLoading(false);

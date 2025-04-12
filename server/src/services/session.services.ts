@@ -71,7 +71,4 @@ export default function sessionManager(app: Express): void {
     );
 
   sessionStore.startExpiringSessions();
-
-  // Logowanie konfiguracji dla debugowania
-  SystemLog.info('Session manager initialized');
 }

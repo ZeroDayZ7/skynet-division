@@ -111,6 +111,7 @@ export default function RegisterForm() {
         throw new Error(response.message);
       }
     } catch (error) {
+      console.log(error);
       toast.error('Wystąpił błąd podczas rejestracji.');
     }
     setIsSubmitting(false);

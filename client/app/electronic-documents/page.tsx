@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaIdCard, FaCar, FaPassport, FaUser, FaFileInvoice, FaClipboardList, FaRegCreditCard, FaSpinner } from "react-icons/fa";
+import { FaIdCard, FaCar, FaPassport, FaUser, FaFileInvoice, FaClipboardList, FaRegCreditCard } from "react-icons/fa";
 import MenuGrid from '@/components/ui/MenuGrid';
 
 // Symulacja pobierania dokumentów z bazy danych
@@ -28,7 +28,7 @@ const documentItems = documents.map((doc) => ({
 export default function Documents() {
   return (
     <div className="mx-auto">
-      <h1 className="text-2xl font-bold my-4">Twoje dokumenty</h1>
+      <h1 className="text-2xl font-bold my-4 dark:text-green-500">Twoje dokumenty</h1>
       <MenuGrid items={documentItems} />
     </div>
   );

@@ -17,7 +17,7 @@ let counter = 1; // Inicjalizacja licznika
 
 // Funkcja do dodawania kolejnych numerów i logowania
 function logWithCounter() {
-  console.log(`=========== ${counter} =========`);
+  SystemLog.info(`=========== ${counter} =========`);
   counter++; // Zwiększ licznik po każdym logowaniu
 }
 // Middleware do logowania z numeracją

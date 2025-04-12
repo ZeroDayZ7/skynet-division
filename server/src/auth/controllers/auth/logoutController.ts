@@ -14,7 +14,7 @@ export const logoutController = async (req: Request, res: Response): Promise<voi
 
   if (!req.session || !req.session.userId) {
     SystemLog.warn('Próba wylogowania bez aktywnej sesji', { ip: req.ip });
-    throw new AppError('NOT_AUTHENTICATED');
+    throw new AppError('AUTHENTICATION_FAILED', 400);
   }
 
   const destroySession = promisify(req.session.destroy.bind(req.session));

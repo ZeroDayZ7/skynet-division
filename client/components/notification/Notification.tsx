@@ -26,8 +26,8 @@ const Notifications = () => {
 
           {count > 0 && (
             <span className="absolute top-0 right-2 translate-x-1/2 -translate-y-1/2 
-            bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 
-            flex items-center justify-center select-none dark:bg-gray-700">
+            bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 
+            flex items-center justify-center select-none dark:bg-card dark:border dark:text-green-300">
               {displayCount}
             </span>
           )}
