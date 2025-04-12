@@ -6,7 +6,7 @@ export default async function ProfilePage() {
 
   try {
     userData = await getUserEIDData();
-    console.log("Dane e-dowodu:", userData);
+    console.log("Pobrano dane e-dowodu:");
   } catch (error) {
     console.error("Błąd pobierania danych dowodu osobistego", error);
   }

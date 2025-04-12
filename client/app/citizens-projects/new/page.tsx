@@ -136,7 +136,7 @@ export default function NewProjectForm() {
           <button 
             type="submit" 
             disabled={isSubmitting} 
-            className="w-full p-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
+            className="w-full p-3 bg-blue-600 rounded-md hover:bg-blue-700 transition duration-300"
           >
             {isSubmitting ? "Wysyłanie..." : "Dodaj Projekt"}
           </button>

@@ -23,10 +23,10 @@ export default function SecurityPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 dark:text-green-500">
       <h1 className="text-3xl font-bold mb-8">Bezpieczeństwo</h1>
 
-      <div className="space-y-6">
+      <div className="space-y-6 dark:text-green-500">
         <Card>
           <CardHeader>
             <CardTitle>Ochrona konta</CardTitle>

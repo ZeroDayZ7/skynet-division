@@ -7,7 +7,7 @@ export default async function ProfilePage() {
 
   try {
     passportData = await getUserPassportData();
-    console.log("Dane paszportu:", passportData);
+    console.log("Pobrano dane paszportu:");
   } catch (error) {
     console.error("Błąd pobierania danych paszportu", error);
   }

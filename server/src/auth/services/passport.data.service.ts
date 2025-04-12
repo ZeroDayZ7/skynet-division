@@ -73,7 +73,7 @@ try {
 
   plainUserPassport.photo = photoBase64;
 
-  SystemLog.info(`Dane paszportu do wysłania`, plainUserPassport);
+  SystemLog.info(`Dane paszportu do wysłania`);
   
   return plainUserPassport as UserPassportDataResponse;
 } catch (error) {
