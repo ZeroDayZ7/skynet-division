@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../db');
 const bcrypt = require('bcrypt');
-const { i18n } = require('../language/i18nSetup');
+const { i18n } = require('../../src/language/i18nSetup');
 const { sendEmail } = require('../tools/emailUtils');
 
 const router = express.Router();

@@ -4,11 +4,12 @@ import {
   PassportAttributes,
   PassportCreationAttributes
 } from "#ro/auth/types/PassportAttributes.js";
+import UserData from "./UserData";
 
 class Passport extends Model<PassportAttributes, PassportCreationAttributes>
   implements PassportAttributes {
-  public id!: number;
-  public user_id!: number;
+  public readonly id!: number;
+  public readonly user_id!: number;
   public passport_number!: string;
   public issue_date!: Date;
   public expiration_date!: Date;
@@ -61,5 +62,7 @@ Passport.init(
     timestamps: true,
   }
 );
+
+// Passport.belongsTo(UserData, { foreignKey: 'user_id', as: 'user_data' });
 
 export default Passport;

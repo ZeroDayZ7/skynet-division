@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../db');
 const bcrypt = require('bcrypt');
-const { i18n } = require('../language/i18nSetup');
-const { verifyJwtToken } = require('../tools/tokenTools');
+const { i18n } = require('../../src/language/i18nSetup');
+const { verifyJwtToken } = require('../../Z-TEST/tools/tokenTools');
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import { isIP } from 'is-ip';
 import bcrypt from 'bcrypt';
-import userService from '#ro/auth/services/user.service';
+import userService from '#ro/auth/services/user.login.service';
 import SystemLog from '#ro/utils/SystemLog';
 import { createError } from '#ro/errors/errorFactory';
 import { ERROR_CODES } from '#ro/errors/errorCodes';

@@ -20,7 +20,7 @@ export const loginController = async (req: Request, res: Response): Promise<void
     // Weryfikacja użytkownika
     const validationResult = await authService.validateUser(email, password, userIp);
     if (validationResult.error) {
-      throw new AppError(validationResult.code, 400);
+      throw new AppError('INVALID_REQUEST', 400);
     }
 
     const user = validationResult.user;

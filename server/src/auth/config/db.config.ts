@@ -1,6 +1,7 @@
 import SystemLog from '#ro/utils/SystemLog';
 import 'dotenv/config'; // Import konfiguracji z pliku .env
 import { Sequelize } from 'sequelize'; // Import Sequelize
+// import defineUserAssociations from '#ro/auth/config/associations';
 
 // Tworzenie instancji Sequelize
 const sequelize = new Sequelize({
@@ -14,13 +15,15 @@ const sequelize = new Sequelize({
 });
 
 // Testowanie połączenia
-sequelize.authenticate()
+sequelize
+  .authenticate()
   .then(() => {
     SystemLog.info(`MySQL Connected via Sequelize...`);
+    
   })
   .catch((err) => {
-    SystemLog.error(`Błąd połączenia z MySQL:`);
-    
+    SystemLog.error(`Błąd połączenia z MySQL:`, err);
+
     throw err;
   });
 

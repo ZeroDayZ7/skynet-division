@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '#ro/auth/config/db.config';
-import bcrypt from 'bcrypt';
 import { UserAttributes, UserCreationAttributes } from '#ro/auth/types/UserAttributes';
 
 // Powiązanie modelu z interfejsem UserAttributes

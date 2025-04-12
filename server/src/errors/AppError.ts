@@ -20,7 +20,7 @@ class AppError extends Error {
     isOperational: boolean = true,
     message?: string
   ) {
-    const fallbackMessage = ERROR_MESSAGES[code] || 'Wystąpił nieznany błąd.';
+    const fallbackMessage = ERROR_MESSAGES[code] || 'Wystąpił błąd serwera [AppError].';
     super(message || fallbackMessage);
 
     this.name = this.constructor.name;

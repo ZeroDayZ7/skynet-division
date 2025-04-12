@@ -5,7 +5,6 @@ import { HTTP_STATUS } from '#ro/auth/config/httpStatus';
 
 export const getUserEIDData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userId = req.session.userId;
-  SystemLog.info(`${userId}`);
 
   if (!userId) {
     SystemLog.warn(`Brak autoryzacji w kontrolerze getUserEIDData: ${userId}`,);
@@ -28,7 +27,7 @@ export const getUserEIDData = async (req: Request, res: Response, next: NextFunc
       return;
     }
 
-    SystemLog.info('Pobrano dane e-dowodu', { userEIDData });
+    SystemLog.info('Pobrano dane e-dowodu');
     res.status(HTTP_STATUS.OK).json({
       success: true,
       data: userEIDData,

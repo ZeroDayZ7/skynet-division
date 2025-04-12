@@ -1,9 +1,10 @@
-import { Model, DataTypes, Optional } from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "#ro/auth/config/db.config.js";
 import {
   UserDataAttributes,
   UserDataCreationAttributes,
 } from "#ro/auth/types/UserDataAttributes.js";
+
 
 class UserData extends Model<UserDataAttributes, UserDataCreationAttributes>
   implements UserDataAttributes {
@@ -72,5 +73,8 @@ UserData.init(
     timestamps: false,
   }
 );
+
+// UserData.belongsTo(Users, { foreignKey: "user_id", as: "user" });
+// UserData.hasOne(Passport, { foreignKey: 'user_id', as: 'passport' });
 
 export default UserData;

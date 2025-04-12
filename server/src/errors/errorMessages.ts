@@ -11,5 +11,6 @@ export const ERROR_MESSAGES = {
   CSRF_TOKEN_INVALID: 'Token CSRF jest nieprawidłowy.',
   AUTHENTICATION_FAILED: 'Błąd autoryzacji.',
   INVALID_ADDRESS_IP: 'Nieprawidłowy adres IP.',
-  INVALID_REQUEST: 'Nieprawidłowe żądanie.'
+  INVALID_REQUEST: 'Nieprawidłowe żądanie.',
+  NOT_FOUND: 'Nie znaleziono'
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały

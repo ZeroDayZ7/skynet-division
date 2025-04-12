@@ -9,7 +9,7 @@ import SystemLog from '#ro/utils/SystemLog';
 // import { setLocale } from '#ro/language/i18nSetup'; // Import setLocale
 // import { requestLogger } from '#ro/middlewares/requestLogger';
 import apiRouter from '#ro/routes/apiRouter'; // Statyczny import
-import defineUserAssociations from '#ro/auth/config/associations'
+import defineUserAssociations from '#ro/auth/config/associations';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 
 const app = express();
@@ -46,7 +46,7 @@ app.use(cookieParser());
 // app.use(requestLogger);
 app.disable('x-powered-by');
 
-
+defineUserAssociations();
 
 // Session and language
 sessionManager(app);
@@ -81,6 +81,6 @@ app.use((err: Error, req: Request, res: Response) => {
 
 // Server start
 app.listen(process.env.PORT, () => {
-  defineUserAssociations();
+ 
   SystemLog.info(`Server running on port ${process.env.PORT}`);
 });

@@ -18,14 +18,14 @@ const getJwtToken = (req: Request): string => {
 const getCsrfToken = (req: Request): string => {
   const csrfToken = req.headers['x-csrf-token'] as string | undefined;
   if (csrfToken) return csrfToken;
-  throw new AppError('CSRF_TOKEN_MISSING', 403, true);
+  throw new AppError('CSRF_TOKEN_INVALID', 403, true);
 };
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   // 1. Sprawdzenie sesji
   if (!req.session || !req.session.userId || !req.session.csrfToken) {
-    SystemLog.warn('Próba autoryzacji bez aktywnej sesji lub CSRF', { ip: req.ip, path: req.path });
-    throw new AppError('NOT_AUTHENTICATED', 401, true);
+    SystemLog.warn('Próba autoryzacji bez aktywnej sesji lub CSRF');
+    throw new AppError('AUTHENTICATION_FAILED', 401, true);
   }
 
   const sessionUserId = req.session.userId;
@@ -52,16 +52,11 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
 
   // 4. Porównanie userId
   if (decoded.sub.id !== sessionUserId) {
-    SystemLog.warn('Niezgodność userId między JWT a sesją', {
-      ip: req.ip,
-      path: req.path,
-      jwtUserId: decoded.sub.id,
-      sessionUserId,
-    });
+    SystemLog.warn('Niezgodność userId między JWT a sesją');
     throw new AppError('AUTH_TOKEN_INVALID', 401, true);
   }
 
-  req.user = { id: Number(decoded.sub.id) }; // Konwersja na string, jeśli req.user.id jest string
-  SystemLog.info('Użytkownik pomyślnie zweryfikowany', { userId: sessionUserId });
+  req.user = { id: Number(decoded.sub.id) };
+  SystemLog.info('Użytkownik pomyślnie zweryfikowany [authMiddleware] ');
   next();
 };
