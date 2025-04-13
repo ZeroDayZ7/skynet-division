@@ -7,20 +7,31 @@ import { Label } from '@/components/ui/label';
 import { SetPinModal } from './SetPinModal';
 import { useSetPin } from '@/hooks/useSetPin';
 import { toast } from 'sonner'; // Zakładam, że używasz shadcn toast
+import { useSuccessModal } from '@/components/ui/successProvider';
 
 export function PinSettings() {
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
   const { pinExists } = useSetPin(() => setIsSetPinModalOpen(false));
+  const { show: showSuccess } = useSuccessModal();
+
 
   const handleSuccess = (message: string) => {
     setIsSetPinModalOpen(false); // Zamknij modal
-    toast.success("Sukces", {
-      description: `${message}`,
-      richColors: true,
-      duration: 5000,
-      position: "top-center",
-      icon: "✔",
+    
+    console.log(`message: ${message}`);
+
+    showSuccess('Sukces', {
+      description: message,
+      duration: 3000,
+      icon: '✔',
     });
+
+    // toast.success('Sukces', {
+    //   description: `${message}`,
+    //   duration: 5000,
+    //   icon: '✔',
+    // });
+    
   };
 
   return (
@@ -28,7 +39,7 @@ export function PinSettings() {
       <div className="flex items-center justify-between">
         <div>
           <Label htmlFor="pin">Kod PIN</Label>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Dodaj lub zmień dodatkową warstwę zabezpieczeń
           </p>
         </div>
@@ -46,6 +57,7 @@ export function PinSettings() {
         onClose={() => setIsSetPinModalOpen(false)}
         onSuccess={handleSuccess}
       />
+
     </>
   );
 }

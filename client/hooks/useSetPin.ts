@@ -40,6 +40,8 @@ export function useSetPin(onSuccess: () => void): UseSetPinReturn {
     checkPinStatus();
   }, []);
 
+  
+
   const resetForm = () => {
     setError('');
     setSuccessMessage(''); // Czyść sukces
