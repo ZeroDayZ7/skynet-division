@@ -1,12 +1,33 @@
-// components/settings/SecurityPage.tsx
-'use client';
-
+// app/settings/security/page.tsx
+// SSR
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PinSettings } from '@/components/settings/security/pin/PinSettings';
-import { TwoFactorSettings } from '@/components/settings/security/TwoFactorSettings';
-import { LoginHistory } from '@/components/settings/security/LoginHistory';
+import { TwoFactorSwitch } from './TwoFactorSwitch';
 
-export default function SecuritySettings() {
+async function getTwoFactorStatus() {
+  try {
+    const response = await fetch('http://localhost:3000/api/two-factor/status', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch 2FA status');
+    }
+
+    const data = await response.json();
+    return data.isEnabled as boolean;
+  } catch (error) {
+    console.error('Error fetching 2FA status:', error);
+    return false;
+  }
+}
+
+export default async function SecuritySettings() {
+  const isTwoFactorEnabled = await getTwoFactorStatus();
+
   return (
     <div className="container mx-auto px-4 py-8 dark:text-green-500">
       <h1 className="text-3xl font-bold mb-8">Bezpieczeństwo</h1>
@@ -17,17 +38,7 @@ export default function SecuritySettings() {
             <CardTitle>Ochrona konta</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <PinSettings />
-            <TwoFactorSettings />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Historia logowań</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <LoginHistory />
+            <TwoFactorSwitch initialEnabled={isTwoFactorEnabled} />
           </CardContent>
         </Card>
       </div>

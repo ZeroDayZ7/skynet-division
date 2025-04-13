@@ -1,6 +1,5 @@
 // hooks/useSetPin.ts
 import { useState, useCallback } from 'react';
-import { fetchClient } from '@/lib/fetchClient';
 import { nanoid } from 'nanoid';
 
 interface SetPinResponse {
@@ -21,6 +20,14 @@ interface UseSetPinReturn {
   resetForm: () => void;
 }
 
+export function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+}
+
 export function useSetPin(onSuccess: (message: string) => void): UseSetPinReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -35,27 +42,43 @@ export function useSetPin(onSuccess: (message: string) => void): UseSetPinReturn
     setIsLoading(true);
     try {
       console.log(`[${hookId}] handleSubmit called with data:`, data);
-      const response = await fetchClient<SetPinResponse>('/api/users/set-pin', {
+      const csrfToken = getCookie('csrf');
+      if (!csrfToken) {
+        throw new Error('CSRF token not found');
+      }
+
+      const response = await fetch('http://localhost:3000/api/users/set-pin', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
+        },
+        credentials: 'include',
         body: JSON.stringify({
           pin: data.pin,
           confirmPin: data.confirmPin,
           password: data.password,
         }),
-        csrf: true,
       });
 
       console.log(`[${hookId}] set-pin response:`, response);
 
-      if (response.success) {
-        const message = response.message || 'PIN został ustawiony poprawnie';
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `Failed to set PIN: ${response.status}`);
+      }
+
+      const result: SetPinResponse = await response.json();
+
+      if (result.success) {
+        const message = result.message || 'PIN został ustawiony poprawnie';
         onSuccess(message);
         resetForm();
         return message;
       } else {
-        setError(response.message || 'Błąd podczas zapisywania PIN-u');
+        setError(result.message || 'Błąd podczas zapisywania PIN-u');
         setTimeout(() => setError(''), 5000);
-        throw new Error(response.message);
+        throw new Error(result.message);
       }
     } catch (err: any) {
       setError(err.message || 'Wystąpił błąd podczas zapisywania PIN-u');

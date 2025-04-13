@@ -1,4 +1,4 @@
-// app/api/users/set-pin/route.ts
+// app/api/two-factor/toggle/route.ts
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 
@@ -19,16 +19,16 @@ export async function POST(request: Request) {
       .map((cookie) => `${cookie.name}=${cookie.value}`)
       .join('; ');
 
-    const { pin, confirmPin, password } = await request.json();
+    const { enable } = await request.json();
 
-    if (!pin || !confirmPin || !password) {
+    if (typeof enable !== 'boolean') {
       return NextResponse.json(
-        { message: 'Brak wymaganych danych' },
+        { message: 'Invalid request body' },
         { status: 400 }
       );
     }
 
-    const response = await fetch(`${process.env.EXPRESS_API_URL}/api/users/set-pin`, {
+    const response = await fetch(`${process.env.EXPRESS_API_URL}/api/two-factor/toggle`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,21 +36,17 @@ export async function POST(request: Request) {
         Cookie: cookieHeader,
       },
       credentials: 'include',
-      body: JSON.stringify({ pin, confirmPin, password }),
+      body: JSON.stringify({ enable }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      return NextResponse.json(
-        { message: errorData.message || `Express error: ${response.status}` },
-        { status: response.status }
-      );
+      throw new Error(`Express error: ${response.status}`);
     }
 
     const data = await response.json();
     return NextResponse.json(data);
   } catch (error: any) {
-    console.error('set-pin error:', error);
+    console.error('two-factor toggle error:', error);
     return NextResponse.json(
       { message: error.message || 'Internal Server Error' },
       { status: 500 }
