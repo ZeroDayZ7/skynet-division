@@ -10,6 +10,7 @@ import { checkPinStatus } from '#ro/auth/services/pin.service';
 export const checkPinController = async (req: Request, res: Response): Promise<void> => {
   try {
     // Zakładam, że użytkownik jest uwierzytelniony i mamy jego ID w sesji lub tokenie
+    // SystemLog.debug(`${JSON.stringify(req, null, 2)}`);
     const userId = req.session.userId || req.user?.id;
     if (!userId) {
       throw new AppError('UNAUTHORIZED', 401);

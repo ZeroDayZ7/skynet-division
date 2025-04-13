@@ -14,7 +14,7 @@ const router = express.Router();
 router.post('/user-eid', authMiddleware, getUserEIDData);
 router.post('/user-passport', authMiddleware, getUserPassportData);
 
-router.get('/pin-status', checkPinController);
+router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', authMiddleware, setPinController);
 
 // router.post('/notifications', getUserNotifications);

@@ -1,3 +1,4 @@
+// components/settings/security/pin/PinSettings.tsx
 'use client';
 
 import { useState } from 'react';
@@ -6,16 +7,34 @@ import { SetPinModal } from './SetPinModal';
 import PinButton from './PinButton';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
+import { useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 
 export function PinSettings() {
   const componentId = nanoid();
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
-  const [pinWasSet, setPinWasSet] = useState(false);
+  const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
+  const router = useRouter();
 
-  const handlePinSetSuccess = () => {
-    setPinWasSet(true);
-    toast.success('Kod PIN został ustawiony');
+  const handlePinSetSuccess = (message: string) => {
+    setIsSetPinModalOpen(false);
+    setIsPinSet(true); // Zaktualizuj lokalny stan po sukcesie
+    toast.success('Sukces', {
+      description: message,
+      richColors: true,
+      duration: 5000,
+      position: 'top-center',
+      icon: '✔',
+    });
+    router.refresh(); // Odśwież stronę
   };
+
+  const handlePinButtonClick = (pinStatus: boolean) => {
+    setIsPinSet(pinStatus);
+    setIsSetPinModalOpen(true);
+  };
+
+  console.log(`[${componentId}] PinSettings mounted`);
 
   return (
     <>
@@ -26,14 +45,19 @@ export function PinSettings() {
             Dodaj lub zmień dodatkową warstwę zabezpieczeń
           </p>
         </div>
-        <PinButton onClick={() => setIsSetPinModalOpen(true)} />
+        <Suspense fallback={<button disabled className="opacity-50">Ładowanie...</button>}>
+          <PinButton onClick={handlePinButtonClick} />
+        </Suspense>
       </div>
 
-      <SetPinModal
-        isOpen={isSetPinModalOpen}
-        onClose={() => setIsSetPinModalOpen(false)}
-        onSuccess={handlePinSetSuccess}
-      />
+      {isPinSet !== null && (
+        <SetPinModal
+          isOpen={isSetPinModalOpen}
+          onClose={() => setIsSetPinModalOpen(false)}
+          onSuccess={handlePinSetSuccess}
+          isPinSet={isPinSet}
+        />
+      )}
     </>
   );
 }

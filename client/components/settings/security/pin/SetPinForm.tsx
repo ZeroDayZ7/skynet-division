@@ -1,4 +1,4 @@
-// components/SetPinForm.tsx
+// components/settings/security/pin/SetPinForm.tsx
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,9 +27,10 @@ interface SetPinFormProps {
   isLoading: boolean;
   onSubmit: (data: PinFormData) => void;
   onCancel: () => void;
+  isPinSet: boolean;
 }
 
-export function SetPinForm({ error, isLoading, onSubmit, onCancel }: SetPinFormProps) {
+export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: SetPinFormProps) {
   const form = useForm<PinFormData>({
     resolver: zodResolver(pinSchema),
     defaultValues: {
@@ -47,7 +48,7 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel }: SetPinFormP
           name="pin"
           render={({ field }) => (
             <FormItem className="flex flex-col items-center">
-              <FormLabel>Nowy kod PIN (4 cyfry)</FormLabel>
+              <FormLabel>{isPinSet ? 'Nowy kod PIN' : 'Kod PIN (4 cyfry)'}</FormLabel>
               <FormControl>
                 <InputOTP {...field} maxLength={4}>
                   <InputOTPGroup className="justify-center">
@@ -68,7 +69,7 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel }: SetPinFormP
           name="confirmPin"
           render={({ field }) => (
             <FormItem className="flex flex-col items-center">
-              <FormLabel>Potwierdź kod PIN</FormLabel>
+              <FormLabel>{isPinSet ? 'Potwierdź nowy kod PIN' : 'Potwierdź kod PIN'}</FormLabel>
               <FormControl>
                 <InputOTP {...field} maxLength={4}>
                   <InputOTPGroup className="justify-center">
@@ -114,7 +115,7 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel }: SetPinFormP
             Anuluj
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Zapisywanie...' : 'Zapisz zmiany'}
+            {isLoading ? 'Zapisywanie...' : isPinSet ? 'Zmień PIN' : 'Ustaw PIN'}
           </Button>
         </div>
       </form>

@@ -30,11 +30,12 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
 
   const sessionUserId = req.session.userId;
   const expectedCsrfToken = req.session.csrfToken;
-
   // 2. Pobranie i weryfikacja CSRF
   let csrfToken: string;
   try {
     csrfToken = getCsrfToken(req);
+    SystemLog.warn(`csrfToken req: ${csrfToken}`);
+    SystemLog.warn(`expectedCsrfToken session: ${expectedCsrfToken}`);
     verifyCsrfToken(csrfToken, expectedCsrfToken);
   } catch (error) {
     throw error instanceof AppError ? error : new AppError('CSRF_TOKEN_INVALID', 403, true);

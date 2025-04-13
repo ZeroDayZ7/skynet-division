@@ -14,6 +14,7 @@ export const ERROR_MESSAGES = {
   INVALID_REQUEST: 'Nieprawidłowe żądanie.',
   NOT_FOUND: 'Nie znaleziono',
   UNAUTHORIZED: 'Nieautoryzowany dostęp',
-  VALIDATION_ERROR: 'VALIDATION_ERROR'
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  CSRF_GENERATION_FAILED: 'CSRF_GENERATION_FAILED'
   
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały

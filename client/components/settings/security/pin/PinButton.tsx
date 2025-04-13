@@ -1,3 +1,4 @@
+// components/settings/security/pin/PinButton.tsx
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -5,7 +6,11 @@ import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function PinButton({ onClick }: { onClick: () => void }) {
+interface PinButtonProps {
+  onClick: (isPinSet: boolean) => void;
+}
+
+export default function PinButton({ onClick }: PinButtonProps) {
   const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -13,18 +18,14 @@ export default function PinButton({ onClick }: { onClick: () => void }) {
     const fetchPinStatus = async () => {
       try {
         setLoading(true);
-
-        // Czekaj przynajmniej 1 sekundę
-        const delay = new Promise((resolve) => setTimeout(resolve, 1000));
-        const request = fetch('/api/users/pin-status', {
+        const response = await fetch('http://localhost:3000/api/users/pin-status', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
           cache: 'no-store',
+          credentials: 'include',
         });
-
-        const [response] = await Promise.all([request, delay]);
 
         if (!response.ok) {
           throw new Error('Nie udało się sprawdzić statusu PIN');
@@ -55,7 +56,12 @@ export default function PinButton({ onClick }: { onClick: () => void }) {
 
   if (isPinSet === null) {
     return (
-      <Button variant="outline" disabled className="dark:hover:text-green-500">
+      <Button
+        variant="outline"
+        disabled
+        className="dark:hover:text-green-500"
+        aria-label="Błąd ładowania PIN-u"
+      >
         Błąd ładowania
       </Button>
     );
@@ -64,7 +70,7 @@ export default function PinButton({ onClick }: { onClick: () => void }) {
   return (
     <Button
       variant="outline"
-      onClick={onClick}
+      onClick={() => onClick(isPinSet)}
       className="dark:hover:text-green-500"
       aria-label={isPinSet ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
     >

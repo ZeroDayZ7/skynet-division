@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const response = await fetch(`${process.env.EXPRESS_API_URL}/api/users/set-pin`, {
+    const response = await fetch(`http://localhost:3001/api/users/set-pin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

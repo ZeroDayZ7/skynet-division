@@ -57,13 +57,13 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction): 
   if (SystemLog.isDebugEnabled()) {
     SystemLog.debug(`Request details [${requestId}]:`, {
       method: req.method,
-      url: req.originalUrl,
+      // url: req.originalUrl,
       headers: maskSensitiveData(req.headers),
-      cookies: maskSensitiveData(req.cookies),
+      // cookies: maskSensitiveData(req.cookies),
       params: req.params,
       query: req.query,
       body: maskSensitiveData(req.body),
-      apiUrl: process.env.API_URL
+      // apiUrl: process.env.API_URL
     });
   }
 
