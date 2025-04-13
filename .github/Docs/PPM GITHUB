@@ -1,0 +1,87 @@
+Oto opis funkcji w GitHub Desktop w języku polskim:
+
+---
+
+### **1. Amend commit...**  
+**"Popraw commit..."**  
+Pozwala zmodyfikować ostatni commit, dodając do niego nowe zmiany lub edytując jego wiadomość. Przydatne, gdy zapomniałeś dodać plik lub chcesz poprawić opis commita.
+
+---
+
+### **2. Undo commit...**  
+**"Cofnij commit..."**  
+Usuwa ostatni commit, ale zachowuje wprowadzone zmiany w Twoim lokalnym repozytorium. Zmiany trafiają z powrotem do "staged" lub "unstaged".
+
+---
+
+### **3. Reset to commit...**  
+**"Przywróć do commita..."**  
+Cofa repozytorium do stanu z wybranego commita. Dostępne opcje:  
+- **Soft**: Zachowuje zmiany jako "staged"  
+- **Mixed** (domyślne): Zachowuje zmiany jako "unstaged"  
+- **Hard**: Usuwa wszystkie zmiany po wybranym commicie  
+
+---
+
+### **4. Checkout commit**  
+**"Przełącz na commit"**  
+Tymczasowo przełącza repozytorium na stan z wybranego commita (tzw. "detached HEAD"). Pozwala przeglądać historię bez modyfikowania gałęzi.
+
+---
+
+### **5. Reorder commit**  
+**"Zmień kolejność commitów"**  
+Pozwala zmienić kolejność commitów w historii. Przydatne przy porządkowaniu pracy przed wysłaniem zmian do zdalnego repozytorium.
+
+---
+
+### **6. Revert changes in commit**  
+**"Cofnij zmiany z commita"**  
+Tworzy nowy commit, który odwraca zmiany wprowadzone w wybranym commicie. Bezpieczny sposób na "cofnięcie" zmian bez modyfikowania historii.
+
+---
+
+### **7. Create branch from commit**  
+**"Utwórz gałąź z commita"**  
+Tworzy nową gałąź zaczynającą się od wybranego commita. Przydatne do testowania starszych wersji lub tworzenia poprawek.
+
+---
+
+### **8. Create Tag...**  
+**"Utwórz tag..."**  
+Dodaje etykietę (tag) do wybranego commita, np. oznaczając wersję (`v1.0.0`). Tagi są stałymi punktami w historii projektu.
+
+---
+
+### **9. Cherry-pick commit...**  
+**"Wybierz commit..."**  
+Kopiuje zmiany z wybranego commita i stosuje je w obecnej gałęzi. Przydatne do przenoszenia pojedynczych poprawek między gałęziami.
+
+---
+
+### **10. Copy SHA**  
+**"Kopiuj SHA"**  
+Kopiuje unikalny identyfikator commita (40-znakowy hash). SHA służy do precyzyjnego odwoływania się do konkretnego commita.
+
+---
+
+### **11. Copy tag**  
+**"Kopiuj tag"**  
+Kopiuje nazwę tagu (np. do użycia w poleceniach Git).
+
+---
+
+### **12. View on GitHub**  
+**"Zobacz na GitHub"**  
+Otwiera wybrany commit w przeglądarce na stronie GitHub.
+
+---
+
+### Kiedy używać?  
+- **Poprawianie historii**: `Amend`, `Reorder`, `Undo`  
+- **Eksperymentowanie**: `Checkout`, `Create branch`  
+- **Cofanie zmian**: `Revert`, `Reset`  
+- **Oznaczanie wersji**: `Create Tag`  
+- **Współpraca**: `Cherry-pick`, `View on GitHub`  
+
+Wszystkie te operacje działają na lokalnym repozytorium – aby zmiany były widoczne na GitHubie, trzeba wykonać `Push`.
