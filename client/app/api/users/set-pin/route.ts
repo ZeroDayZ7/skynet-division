@@ -1,59 +1,46 @@
-// app/api/users/set-pin/route.ts
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
+// pages/api/users/set-pin.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-export async function POST(request: Request) {
+interface SetPinRequest {
+  pin: string;
+  confirmPin: string;
+  password: string;
+}
+
+interface SetPinResponse {
+  success: boolean;
+  message?: string;
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
+
+  const { pin, confirmPin, password } = req.body as SetPinRequest;
+
+  if (!pin || !confirmPin || !password) {
+    return res.status(400).json({ message: 'Brak wymaganych danych' });
+  }
+
   try {
-    const cookieStore = await cookies();
-    const csrfToken = cookieStore.get('csrf');
-
-    if (!csrfToken || !csrfToken.value) {
-      return NextResponse.json(
-        { message: 'CSRF token is required' },
-        { status: 403 }
-      );
-    }
-
-    const cookieHeader = cookieStore
-      .getAll()
-      .map((cookie) => `${cookie.name}=${cookie.value}`)
-      .join('; ');
-
-    const { pin, confirmPin, password } = await request.json();
-
-    if (!pin || !confirmPin || !password) {
-      return NextResponse.json(
-        { message: 'Brak wymaganych danych' },
-        { status: 400 }
-      );
-    }
-
-    const response = await fetch(`${process.env.EXPRESS_API_URL}/api/users/set-pin`, {
+    const response = await fetch(`http://localhost:3001/api/users/set-pin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CSRF-Token': csrfToken.value,
-        Cookie: cookieHeader,
+        Cookie: req.headers.cookie || '',
       },
-      credentials: 'include',
       body: JSON.stringify({ pin, confirmPin, password }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      return NextResponse.json(
-        { message: errorData.message || `Express error: ${response.status}` },
-        { status: response.status }
-      );
+      throw new Error(`Express error: ${response.status}`);
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    const data: SetPinResponse = await response.json();
+    res.status(200).json(data);
   } catch (error: any) {
     console.error('set-pin error:', error);
-    return NextResponse.json(
-      { message: error.message || 'Internal Server Error' },
-      { status: 500 }
-    );
+    res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 }

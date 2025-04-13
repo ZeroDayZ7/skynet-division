@@ -1,17 +1,18 @@
-// app/settings/security/PinButton.tsx
+// components/settings/security/pin/PinButton.tsx
 'use client';
 
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { SetPinModal } from './SetPinModal';
 
-export default function PinButton() {
+interface PinButtonProps {
+  onClick: (isPinSet: boolean) => void;
+}
+
+export default function PinButton({ onClick }: PinButtonProps) {
   const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchPinStatus = async () => {
@@ -44,22 +45,6 @@ export default function PinButton() {
     fetchPinStatus();
   }, []);
 
-  const handlePinSetSuccess = (message: string) => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsPinSet(true);
-      setIsModalOpen(false);
-      setIsSaving(false);
-      toast.success('Sukces', {
-        description: message,
-        richColors: true,
-        duration: 5000,
-        position: 'top-center',
-        icon: '✔',
-      });
-    }, 1000); // Symulacja opóźnienia dla UX
-  };
-
   if (loading) {
     return (
       <Button variant="outline" disabled>
@@ -83,32 +68,13 @@ export default function PinButton() {
   }
 
   return (
-    <>
-      <Button
-        variant="outline"
-        onClick={() => setIsModalOpen(true)}
-        className="dark:hover:text-green-500"
-        aria-label={isPinSet ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
-        disabled={isSaving}
-      >
-        {isSaving ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Zapisywanie...
-          </>
-        ) : isPinSet ? (
-          'Zmień PIN'
-        ) : (
-          'Ustaw PIN'
-        )}
-      </Button>
-
-      <SetPinModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={handlePinSetSuccess}
-        isPinSet={isPinSet}
-      />
-    </>
+    <Button
+      variant="outline"
+      onClick={() => onClick(isPinSet)}
+      className="dark:hover:text-green-500"
+      aria-label={isPinSet ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
+    >
+      {isPinSet ? 'Zmień PIN' : 'Ustaw PIN'}
+    </Button>
   );
 }
