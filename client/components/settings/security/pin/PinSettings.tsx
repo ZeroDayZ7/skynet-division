@@ -1,37 +1,20 @@
-// components/PinSettings.tsx
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { SetPinModal } from './SetPinModal';
-import { useSetPin } from '@/hooks/useSetPin';
-import { toast } from 'sonner'; // Zakładam, że używasz shadcn toast
-import { useSuccessModal } from '@/components/ui/successProvider';
+import PinButton from './PinButton';
+import { toast } from 'sonner';
+import { nanoid } from 'nanoid';
 
 export function PinSettings() {
+  const componentId = nanoid();
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
-  const { pinExists } = useSetPin(() => setIsSetPinModalOpen(false));
-  const { show: showSuccess } = useSuccessModal();
+  const [pinWasSet, setPinWasSet] = useState(false);
 
-
-  const handleSuccess = (message: string) => {
-    setIsSetPinModalOpen(false); // Zamknij modal
-    
-    console.log(`message: ${message}`);
-
-    showSuccess('Sukces', {
-      description: message,
-      duration: 3000,
-      icon: '✔',
-    });
-
-    // toast.success('Sukces', {
-    //   description: `${message}`,
-    //   duration: 5000,
-    //   icon: '✔',
-    // });
-    
+  const handlePinSetSuccess = () => {
+    setPinWasSet(true);
+    toast.success('Kod PIN został ustawiony');
   };
 
   return (
@@ -43,21 +26,14 @@ export function PinSettings() {
             Dodaj lub zmień dodatkową warstwę zabezpieczeń
           </p>
         </div>
-        <Button
-          variant="outline"
-          onClick={() => setIsSetPinModalOpen(true)}
-          className="dark:hover:text-green-500"
-        >
-          {pinExists ? 'Zmień PIN' : 'Ustaw PIN'}
-        </Button>
+        <PinButton onClick={() => setIsSetPinModalOpen(true)} />
       </div>
 
       <SetPinModal
         isOpen={isSetPinModalOpen}
         onClose={() => setIsSetPinModalOpen(false)}
-        onSuccess={handleSuccess}
+        onSuccess={handlePinSetSuccess}
       />
-
     </>
   );
 }

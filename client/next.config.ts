@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
-  reactStrictMode: true,
+  reactStrictMode: false,
 };
 
 export default nextConfig;

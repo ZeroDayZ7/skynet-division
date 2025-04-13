@@ -20,7 +20,7 @@ export const checkPinStatus = async (userId: number): Promise<PinStatusResult> =
   }
 
   return {
-    isPinSet: user.pin !== null,
+    isPinSet: user.pin !!== null,
   };
 };
 

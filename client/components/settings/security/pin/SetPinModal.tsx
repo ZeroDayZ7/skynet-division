@@ -3,19 +3,16 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { SetPinForm } from './SetPinForm';
-import { useSetPin, PinFormData } from '@/hooks/useSetPin';
+import { useSetPin } from '@/hooks/useSetPin';
 
 interface SetPinModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: (message: string) => void; // Zmodyfikowano, aby przekazywać komunikat
+  onSuccess: (message: string) => void;
 }
 
 export function SetPinModal({ isOpen, onClose, onSuccess }: SetPinModalProps) {
-  const { isLoading, error, successMessage, pinExists, handleSubmit, resetForm } = useSetPin(() => {
-    onSuccess(successMessage); // Przekazuj komunikat sukcesu
-    onClose(); // Zamknij modal po sukcesie
-  });
+  const { isLoading, error, handleSubmit, resetForm } = useSetPin(onSuccess);
 
   const handleClose = () => {
     resetForm();
@@ -26,18 +23,13 @@ export function SetPinModal({ isOpen, onClose, onSuccess }: SetPinModalProps) {
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="mx-auto sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>
-            {pinExists === null ? 'Ładowanie...' : pinExists ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
-          </DialogTitle>
+          <DialogTitle>Ustaw lub zmień kod PIN</DialogTitle>
           <DialogDescription>
-            {pinExists
-              ? 'Wprowadź nowy kod PIN i potwierdź go, aby zmienić istniejący PIN.'
-              : 'Ustaw nowy kod PIN, aby dodać dodatkową warstwę zabezpieczeń.'}
+            Wprowadź nowy kod PIN i potwierdź go, aby dodać lub zmienić warstwę zabezpieczeń.
           </DialogDescription>
         </DialogHeader>
         <SetPinForm
           error={error}
-          successMessage={successMessage} // Przekazuj komunikat sukcesu
           isLoading={isLoading}
           onSubmit={handleSubmit}
           onCancel={handleClose}

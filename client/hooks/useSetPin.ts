@@ -1,6 +1,7 @@
 // hooks/useSetPin.ts
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { fetchClient } from '@/lib/fetchClient';
+import { nanoid } from 'nanoid';
 
 interface SetPinResponse {
   success: boolean;
@@ -16,43 +17,24 @@ export interface PinFormData {
 interface UseSetPinReturn {
   isLoading: boolean;
   error: string;
-  successMessage: string; // Nowy stan dla sukcesu
-  pinExists: boolean | null;
-  handleSubmit: (data: PinFormData) => Promise<void>;
+  handleSubmit: (data: PinFormData) => Promise<string>;
   resetForm: () => void;
 }
 
-export function useSetPin(onSuccess: () => void): UseSetPinReturn {
+export function useSetPin(onSuccess: (message: string) => void): UseSetPinReturn {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [successMessage, setSuccessMessage] = useState(''); // Nowy stan
-  const [pinExists, setPinExists] = useState<boolean | null>(null);
+  const hookId = nanoid();
 
-  useEffect(() => {
-    async function checkPinStatus() {
-      try {
-        const response = await fetchClient<{ isPinSet: boolean }>('/api/users/pin-status');
-        setPinExists(response.isPinSet);
-      } catch (err) {
-        setError('Błąd podczas sprawdzania stanu PIN-u');
-      }
-    }
-    checkPinStatus();
+  const resetForm = useCallback(() => {
+    setError('');
   }, []);
 
-  
-
-  const resetForm = () => {
+  const handleSubmit = useCallback(async (data: PinFormData) => {
     setError('');
-    setSuccessMessage(''); // Czyść sukces
-  };
-
-  const handleSubmit = async (data: PinFormData) => {
-    setError('');
-    setSuccessMessage('');
-
     setIsLoading(true);
     try {
+      console.log(`[${hookId}] handleSubmit called with data:`, data);
       const response = await fetchClient<SetPinResponse>('/api/users/set-pin', {
         method: 'POST',
         body: JSON.stringify({
@@ -63,25 +45,30 @@ export function useSetPin(onSuccess: () => void): UseSetPinReturn {
         csrf: true,
       });
 
+      console.log(`[${hookId}] set-pin response:`, response);
+
       if (response.success) {
-        setSuccessMessage(response.message || 'PIN został ustawiony poprawnie');
-        onSuccess();
+        const message = response.message || 'PIN został ustawiony poprawnie';
+        onSuccess(message);
         resetForm();
+        return message;
       } else {
         setError(response.message || 'Błąd podczas zapisywania PIN-u');
+        setTimeout(() => setError(''), 5000);
+        throw new Error(response.message);
       }
     } catch (err: any) {
       setError(err.message || 'Wystąpił błąd podczas zapisywania PIN-u');
+      setTimeout(() => setError(''), 5000);
+      throw err;
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [onSuccess, resetForm]);
 
   return {
     isLoading,
     error,
-    successMessage, // Zwróć sukces
-    pinExists,
     handleSubmit,
     resetForm,
   };

@@ -26,7 +26,7 @@ export function LoginHistory() {
       setIsHistoryLoaded(true);
     } catch (error: any) {
       toast.error("Błąd", {
-        description: 'Nie udało się pobrać historii logowań',
+        description: error || 'Nie udało się pobrać historii logowań',
         richColors: true,
         duration: 5000,
         position: "top-center",

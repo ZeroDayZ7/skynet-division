@@ -1,9 +1,8 @@
-// pages/api/user/pin-status.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { fetchClient } from '@/lib/fetchClient';
+import { fetchClient } from '@/lib/fetchClient'; // dostosuj ścieżkę do siebie
 
 interface PinStatusResponse {
-  pinExists: boolean;
+  isPinSet: boolean;
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -12,18 +11,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Przekazujemy ciasteczka, aby Express mógł zweryfikować sesję
-    const cookies = req.headers.cookie || '';
-    const response = await fetchClient<PinStatusResponse>(
-      `${process.env.EXPRESS_API_URL}/api/user/pin-status`,
-      {
-        method: 'GET',
-        headers: { Cookie: cookies },
-      }
-    );
+    const data: PinStatusResponse = await fetchClient('/api/users/pin-status', {
+      method: 'GET',
+      cookies: req.headers.cookie,
+    });
 
-    res.status(200).json(response);
+    res.status(200).json(data);
   } catch (error: any) {
+    console.error('pin-status error:', error);
     res.status(500).json({ message: error.message || 'Internal Server Error' });
   }
 }

@@ -3,11 +3,11 @@
 import React from "react";
 import {
   FaIdCard,
-  FaNewspaper,
-  FaLanguage,
-  FaShoppingCart,
+  // FaNewspaper,
+  // FaLanguage,
+  // FaShoppingCart,
   FaTools,
-  FaBriefcase,
+  // FaBriefcase,
 } from "react-icons/fa";
 import MenuGrid from '@/components/ui/MenuGrid';
 

@@ -6,7 +6,8 @@ import { PinSettings } from '@/components/settings/security/pin/PinSettings';
 import { TwoFactorSettings } from '@/components/settings/security/TwoFactorSettings';
 import { LoginHistory } from '@/components/settings/security/LoginHistory';
 
-export default function SecurityPage() {
+export default function SecuritySettings() {
+  console.log('SecuritySettings rendered');
   return (
     <div className="container mx-auto px-4 py-8 dark:text-green-500">
       <h1 className="text-3xl font-bold mb-8">Bezpieczeństwo</h1>

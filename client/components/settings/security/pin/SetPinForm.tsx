@@ -24,13 +24,12 @@ type PinFormData = z.infer<typeof pinSchema>;
 
 interface SetPinFormProps {
   error: string;
-  successMessage: string; // Nowy prop
   isLoading: boolean;
   onSubmit: (data: PinFormData) => void;
   onCancel: () => void;
 }
 
-export function SetPinForm({ error, successMessage, isLoading, onSubmit, onCancel }: SetPinFormProps) {
+export function SetPinForm({ error, isLoading, onSubmit, onCancel }: SetPinFormProps) {
   const form = useForm<PinFormData>({
     resolver: zodResolver(pinSchema),
     defaultValues: {
@@ -108,7 +107,6 @@ export function SetPinForm({ error, successMessage, isLoading, onSubmit, onCance
 
         <div className="min-h-[20px]">
           {error && <p className="text-destructive text-center text-sm font-medium">{error}</p>}
-          {successMessage && <p className="text-green-600 text-center text-sm font-medium">{successMessage}</p>}
         </div>
 
         <div className="flex justify-end gap-2 pt-4">

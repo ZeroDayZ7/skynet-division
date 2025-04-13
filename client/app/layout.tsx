@@ -4,7 +4,6 @@ import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { SuccessModalProvider } from '@/components/ui/successProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -43,9 +42,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <AuthProvider>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <SuccessModalProvider>
             {children}
-            </SuccessModalProvider>
           </ThemeProvider>
         </AuthProvider>
         <Toaster richColors position="top-center"/>

@@ -47,7 +47,7 @@ export async function fetchClient<T = any>(
     ...(rest.headers || {}),
   };
 
-  console.log("Wysyłane nagłówki:", headers);
+  // console.log("Wysyłane nagłówki:", headers);
 
   try {
     const response = await fetch(`${apiUrl}${endpoint}`, {
