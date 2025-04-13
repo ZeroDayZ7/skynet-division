@@ -1,13 +1,27 @@
-// components/settings/security/pin/PinSettings.tsx
+// components/PinSettings.tsx
 'use client';
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { SetPinModal } from './SetPinModal';
+import { useSetPin } from '@/hooks/useSetPin';
+import { toast } from 'sonner'; // Zakładam, że używasz shadcn toast
 
 export function PinSettings() {
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
+  const { pinExists } = useSetPin(() => setIsSetPinModalOpen(false));
+
+  const handleSuccess = (message: string) => {
+    setIsSetPinModalOpen(false); // Zamknij modal
+    toast.success("Sukces", {
+      description: `${message}`,
+      richColors: true,
+      duration: 5000,
+      position: "top-center",
+      icon: "✔",
+    });
+  };
 
   return (
     <>
@@ -23,14 +37,14 @@ export function PinSettings() {
           onClick={() => setIsSetPinModalOpen(true)}
           className="dark:hover:text-green-500"
         >
-          Ustaw/Zmień PIN
+          {pinExists ? 'Zmień PIN' : 'Ustaw PIN'}
         </Button>
       </div>
 
       <SetPinModal
         isOpen={isSetPinModalOpen}
         onClose={() => setIsSetPinModalOpen(false)}
-        onSuccess={() => setIsSetPinModalOpen(false)}
+        onSuccess={handleSuccess}
       />
     </>
   );

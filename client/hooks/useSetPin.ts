@@ -1,40 +1,38 @@
 // hooks/useSetPin.ts
 import { useState, useEffect } from 'react';
-import { fetchClient } from '@/lib/fetchClient'; // Załóżmy, że masz wcześniej zdefiniowany fetchClient
+import { fetchClient } from '@/lib/fetchClient';
 
 interface SetPinResponse {
   success: boolean;
   message?: string;
 }
 
-interface UseSetPinReturn {
+export interface PinFormData {
   pin: string;
   confirmPin: string;
   password: string;
+}
+
+interface UseSetPinReturn {
   isLoading: boolean;
   error: string;
+  successMessage: string; // Nowy stan dla sukcesu
   pinExists: boolean | null;
-  setPin: (value: string) => void;
-  setConfirmPin: (value: string) => void;
-  setPassword: (value: string) => void;
-  handleSubmit: (e: React.FormEvent) => Promise<void>;
+  handleSubmit: (data: PinFormData) => Promise<void>;
   resetForm: () => void;
 }
 
 export function useSetPin(onSuccess: () => void): UseSetPinReturn {
-  const [pin, setPin] = useState('');
-  const [confirmPin, setConfirmPin] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Nowy stan
   const [pinExists, setPinExists] = useState<boolean | null>(null);
 
-  // Pobierz stan PIN-u przy pierwszym renderowaniu
   useEffect(() => {
     async function checkPinStatus() {
       try {
-        const response = await fetchClient<{ pinExists: boolean }>('/api/users/pin-status');
-        setPinExists(response.pinExists);
+        const response = await fetchClient<{ isPinSet: boolean }>('/api/users/pin-status');
+        setPinExists(response.isPinSet);
       } catch (err) {
         setError('Błąd podczas sprawdzania stanu PIN-u');
       }
@@ -42,44 +40,29 @@ export function useSetPin(onSuccess: () => void): UseSetPinReturn {
     checkPinStatus();
   }, []);
 
-  // Reset formularza
   const resetForm = () => {
-    setPin('');
-    setConfirmPin('');
-    setPassword('');
     setError('');
+    setSuccessMessage(''); // Czyść sukces
   };
 
-  // Obsługa wysyłania formularza
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (data: PinFormData) => {
     setError('');
-
-    // Walidacja
-    if (pin.length !== 4 || !/^\d{4}$/.test(pin)) {
-      setError('Kod PIN musi składać się z 4 cyfr');
-      return;
-    }
-
-    if (pin !== confirmPin) {
-      setError('Kody PIN nie są identyczne');
-      return;
-    }
-
-    if (!password) {
-      setError('Wprowadź aktualne hasło');
-      return;
-    }
+    setSuccessMessage('');
 
     setIsLoading(true);
     try {
-      const response = await fetchClient<SetPinResponse>('/api/set-pin', {
+      const response = await fetchClient<SetPinResponse>('/api/users/set-pin', {
         method: 'POST',
-        body: JSON.stringify({ pin, password }),
-        csrf: true, // Włącz CSRF, jeśli wymagane
+        body: JSON.stringify({
+          pin: data.pin,
+          confirmPin: data.confirmPin,
+          password: data.password,
+        }),
+        csrf: true,
       });
 
       if (response.success) {
+        setSuccessMessage(response.message || 'PIN został ustawiony poprawnie');
         onSuccess();
         resetForm();
       } else {
@@ -93,15 +76,10 @@ export function useSetPin(onSuccess: () => void): UseSetPinReturn {
   };
 
   return {
-    pin,
-    confirmPin,
-    password,
     isLoading,
     error,
+    successMessage, // Zwróć sukces
     pinExists,
-    setPin,
-    setConfirmPin,
-    setPassword,
     handleSubmit,
     resetForm,
   };

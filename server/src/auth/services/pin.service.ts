@@ -24,4 +24,11 @@ export const checkPinStatus = async (userId: number): Promise<PinStatusResult> =
   };
 };
 
-export default { checkPinStatus };
+/**
+ * Ustawia zakodowany PIN użytkownika.
+ */
+export const setUserPin = async (userId: number, hashedPin: string): Promise<void> => {
+  await Users.update({ pin: hashedPin }, { where: { id: userId as number} });
+};
+
+export default { checkPinStatus, setUserPin };

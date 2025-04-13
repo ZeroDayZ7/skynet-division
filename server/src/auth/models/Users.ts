@@ -48,9 +48,6 @@ Users.init(
       type: DataTypes.STRING(60),
       allowNull: true,
       defaultValue: null,
-      validate: {
-        len: [4, 4]
-      }
     },
     points: {
       type: DataTypes.INTEGER.UNSIGNED,

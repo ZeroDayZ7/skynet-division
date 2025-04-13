@@ -2,7 +2,7 @@ export interface UserAttributes {
   id: number;
   email: string | null;
   pass: string;
-  pin: number | null;
+  pin: string | null;
   points: number | null;
   activation_token: string | null;
   reset_password_token: string | null;

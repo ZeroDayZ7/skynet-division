@@ -1,10 +1,11 @@
+// auth/services/auth.services.ts
 import { isIP } from 'is-ip';
-import bcrypt from 'bcrypt';
 import userService from '#ro/auth/services/user.login.service';
 import SystemLog from '#ro/utils/SystemLog';
 import { createError } from '#ro/errors/errorFactory';
 import { ERROR_CODES } from '#ro/errors/errorCodes';
 import { UserAttributes } from '#ro/auth/types/UserAttributes';
+import { verifyUserPassword } from '#ro/auth/utils/auth.utils';
 
 interface ErrorResult {
   error: true;
@@ -21,11 +22,6 @@ interface SuccessResult {
 
 type ValidationResult = ErrorResult | SuccessResult;
 
-/**
- * Funkcja walidacji użytkownika podczas logowania.
- * Sprawdza próbę logowania, blokuje konto po zbyt wielu nieudanych próbach
- * i zwraca odpowiedni wynik.
- */
 export const validateUser = async (email: string, password: string, ip: string): Promise<ValidationResult> => {
   if (!ip || !isIP(ip)) {
     return createError(ERROR_CODES.INVALID_REQUEST);
@@ -51,7 +47,7 @@ export const validateUser = async (email: string, password: string, ip: string):
     return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.pass);
+  const isPasswordValid = await verifyUserPassword(user.id, password);
   if (!isPasswordValid) {
     await userService.incrementLoginAttempts(email);
     return createError(ERROR_CODES.INVALID_CREDENTIALS);

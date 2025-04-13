@@ -1,32 +1,22 @@
 // components/SetPinModal.tsx
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { SetPinForm } from './SetPinForm';
-import { useSetPin } from '@/hooks/useSetPin';
+import { useSetPin, PinFormData } from '@/hooks/useSetPin';
 
 interface SetPinModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (message: string) => void; // Zmodyfikowano, aby przekazywać komunikat
 }
 
 export function SetPinModal({ isOpen, onClose, onSuccess }: SetPinModalProps) {
-  const {
-    pin,
-    confirmPin,
-    password,
-    isLoading,
-    error,
-    pinExists,
-    setPin,
-    setConfirmPin,
-    setPassword,
-    handleSubmit,
-    resetForm,
-  } = useSetPin(onSuccess);
+  const { isLoading, error, successMessage, pinExists, handleSubmit, resetForm } = useSetPin(() => {
+    onSuccess(successMessage); // Przekazuj komunikat sukcesu
+    onClose(); // Zamknij modal po sukcesie
+  });
 
-  // Reset formularza przy zamykaniu modalu
   const handleClose = () => {
     resetForm();
     onClose();
@@ -39,16 +29,16 @@ export function SetPinModal({ isOpen, onClose, onSuccess }: SetPinModalProps) {
           <DialogTitle>
             {pinExists === null ? 'Ładowanie...' : pinExists ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
           </DialogTitle>
+          <DialogDescription>
+            {pinExists
+              ? 'Wprowadź nowy kod PIN i potwierdź go, aby zmienić istniejący PIN.'
+              : 'Ustaw nowy kod PIN, aby dodać dodatkową warstwę zabezpieczeń.'}
+          </DialogDescription>
         </DialogHeader>
         <SetPinForm
-          pin={pin}
-          confirmPin={confirmPin}
-          password={password}
           error={error}
+          successMessage={successMessage} // Przekazuj komunikat sukcesu
           isLoading={isLoading}
-          onPinChange={setPin}
-          onConfirmPinChange={setConfirmPin}
-          onPasswordChange={setPassword}
           onSubmit={handleSubmit}
           onCancel={handleClose}
         />

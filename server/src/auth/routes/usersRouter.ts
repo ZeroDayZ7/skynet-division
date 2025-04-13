@@ -6,6 +6,7 @@ import { getUserEIDData } from '#ro/auth/controllers/users/userEIDController'
 import { getUserPassportData } from '#ro/auth/controllers/users/userPassportController';
 import { authMiddleware } from '../middleware/auth.middleware';
 import { checkPinController } from '../controllers/users/settings/security/pin/checkPinController';
+import { setPinController } from '../controllers/users/settings/security/pin/setPinController';
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.post('/user-eid', authMiddleware, getUserEIDData);
 router.post('/user-passport', authMiddleware, getUserPassportData);
 
 router.get('/pin-status', checkPinController);
-router.post('/set-pin', checkPinController);
+router.post('/set-pin', authMiddleware, setPinController);
 
 // router.post('/notifications', getUserNotifications);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);

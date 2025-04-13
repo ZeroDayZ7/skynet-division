@@ -21,7 +21,7 @@ export const checkPinController = async (req: Request, res: Response): Promise<v
     SystemLog.info(`Checked PIN status for user ID: ${userId}`);
 
     res.status(200).json({
-      isPinSet: result.isPinSet,
+      pinExists: result.isPinSet,
     });
   } catch (error: any) {
     if (error instanceof AppError) {
