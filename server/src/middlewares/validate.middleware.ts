@@ -7,7 +7,7 @@ export const validateRequest = <T>(
   schema: ZodSchema<T>,
   source: RequestSource = 'body'
 ) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, res: Response, next: NextFunction): void => {
     const data = req[source];
 
     try {
@@ -17,10 +17,7 @@ export const validateRequest = <T>(
       next();
     } catch (err) {
       if (err instanceof ZodError) {
-        return res.status(400).json({
-          message: 'Błąd walidacji',
-          errors: err.flatten(),
-        });
+        return;
       }
 
       next(err);

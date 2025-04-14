@@ -48,7 +48,7 @@ export default function sessionManager(app: Express): void {
       maxAge: parseInt(process.env.SESSION_EXPIRES || '900000', 10), // Domyślnie 15 minut
       httpOnly: true, // Zabezpieczenie przed dostępem z JS
       secure: process.env.NODE_ENV === 'production', // Tylko HTTPS w produkcji
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // 'none' wymaga secure
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'strict', // 'none' wymaga secure
       // domain: process.env.SESSION_COOKIE_DOMAIN || undefined,
       // path: '/', // Domyślna ścieżka
     },

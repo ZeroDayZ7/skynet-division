@@ -9,7 +9,7 @@ export const passwordSchema = z
   .regex(/^[^\s]+$/, 'Hasło nie może zawierać spacji');
 
 // Schemat walidacji PIN-u
-export const pinSchema = z
+export const pinSchemas = z
   .string()
   .length(4, 'PIN musi mieć dokładnie 4 cyfry')
   .regex(/^\d+$/, 'PIN może zawierać tylko cyfry');
@@ -54,7 +54,7 @@ export const dateSchema = z
 // Eksport wszystkich schematów jako obiekt dla łatwiejszego importu
 export const validators = {
   password: passwordSchema,
-  pin: pinSchema,
+  pin: pinSchemas,
   email: emailSchema,
   username: usernameSchema,
   surname: surnameSchema,

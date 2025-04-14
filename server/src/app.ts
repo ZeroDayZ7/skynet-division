@@ -12,25 +12,11 @@ import { globalLimiter } from './middlewares/core/DDOS/globalLimiter.middleware'
 import { corsMiddleware } from './middlewares/security/cors.middleware';
 import { helmetMiddleware } from './middlewares/security/helmet.middleware';
 
+
 const app = express();
-let counter = 1;
-
-function logWithCounter() {
-  SystemLog.info(`=========== ${counter} =========`);
-  counter++;
-}
-
-app.use((req: Request, res: Response, next) => {
-  logWithCounter();
-  next();
-});
-
-// app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(requestLogger);
-app.disable('x-powered-by');
 
 // Baza / relacje
 defineUserAssociations();
@@ -43,9 +29,9 @@ app.use(corsMiddleware)
 // Limiter
 app.use(globalLimiter);
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(requestLoggerDev);
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   app.use(requestLoggerDev);
+// }
 
 // Routing
 app.use('/api', apiRouter);

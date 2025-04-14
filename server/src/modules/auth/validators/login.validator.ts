@@ -1,6 +1,6 @@
 // validators/login.validators.ts
 import { z } from 'zod';
-import { emailSchema, passwordSchema } from './config.validator';
+import { emailSchema, passwordSchema } from '../../../validators/config.validator';
 
 export const loginSchema = z.object({
   email: emailSchema,

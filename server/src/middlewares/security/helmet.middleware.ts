@@ -5,12 +5,18 @@ const helmetOptions: HelmetOptions = {
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // ⚠️ 'unsafe-inline' to ryzyko XSS
+      styleSrc: ["'self'", "'unsafe-inline'"],  // ⚠️ 'unsafe-inline' to ryzyko
       imgSrc: ["'self'", 'data:'],
       connectSrc: ["'self'", process.env.API_URL ?? 'http://localhost:3000'],
     },
   },
+  xssFilter: true,       // Ustawia `X-XSS-Protection: 1; mode=block`
+  noSniff: true,         // Ustawia `X-Content-Type-Options: nosniff`
+  frameguard: { action: 'deny' }, // Ustawia `X-Frame-Options: DENY`
+  referrerPolicy: { policy: 'strict-origin-when-cross-origin' }, // Nowy nagłówek
+  hsts: { maxAge: 31536000, includeSubDomains: true }, // Wymusza HTTPS
+  hidePoweredBy: true,   // Usuwa nagłówek `X-Powered-By`
 };
 
 export const helmetMiddleware = helmet(helmetOptions);
