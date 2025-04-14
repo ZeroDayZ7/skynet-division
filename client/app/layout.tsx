@@ -36,6 +36,7 @@ export const metadata: Metadata = {
   referrer: 'no-referrer', // Zapobiega przesyłaniu informacji o refererze (większa prywatność)
 };
 
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pl" suppressHydrationWarning={true}>

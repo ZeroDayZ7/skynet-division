@@ -1,86 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config();
-import express, { Request, Response } from 'express';
-import sessionManager from '#services/session.services';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import SystemLog from '#ro/utils/SystemLog';
-// import helmet from 'helmet';
-// import { setLocale } from '#ro/language/i18nSetup'; // Import setLocale
-// import { requestLogger } from '#ro/middlewares/requestLogger';
-import apiRouter from '#ro/routes/apiRouter'; // Statyczny import
-import defineUserAssociations from '#ro/auth/config/associations';
-import { errorMiddleware } from './middlewares/errorMiddleware';
+import app from './app';
+import SystemLog from '#ro/common/utils/SystemLog';
 
-const app = express();
-let counter = 1; // Inicjalizacja licznika
+const PORT = process.env.PORT || 3000;
 
-// Funkcja do dodawania kolejnych numerów i logowania
-function logWithCounter() {
-  SystemLog.info(`=========== ${counter} =========`);
-  counter++; // Zwiększ licznik po każdym logowaniu
-}
-// Middleware do logowania z numeracją
-app.use((req: Request, res: Response, next) => {
-  logWithCounter();
-  next(); 
-});
-
-
-// // Security middlewares
-// app.use(helmet({
-//   contentSecurityPolicy: {
-//     directives: {
-//       defaultSrc: ["'self'"],
-//       scriptSrc: ["'self'", "'unsafe-inline'"],
-//       styleSrc: ["'self'", "'unsafe-inline'"],
-//       imgSrc: ["'self'", 'data:'],
-//       connectSrc: ["'self'", process.env.API_URL]
-//     }
-//   }
-// }));
- 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-// app.use(requestLogger);
-app.disable('x-powered-by');
-
-defineUserAssociations();
-
-// Session and language
-sessionManager(app);
-// app.use(setLocale); // Używamy setLocale jako middleware
-
-// CORS
-const corsOptions = {
-  origin: process.env.API_URL,
-  credentials: true,
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', "X-CSRF-Token"],
-  exposedHeaders: ['Content-Length'],
-  maxAge: parseInt(process.env.CORS_EXPIRES),
-  optionsSuccessStatus: 200
-};
-app.use(cors(corsOptions));
-
-// API routes
-app.use('/api', apiRouter); // Używamy .default z dynamicznego importu
-
-app.use(errorMiddleware);
-
-app.use((req: Request, res: Response) => {
-  res.status(404).send("Nic tu nie ma, lamusie! Spróbuj czegoś innego.");
-});
-
-// Error handling
-app.use((err: Error, req: Request, res: Response) => {
-  SystemLog.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
-});
-
-// Server start
-app.listen(process.env.PORT, () => {
- 
-  SystemLog.info(`Server running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  SystemLog.info(`🚀 Server running on port ${PORT}`);
 });

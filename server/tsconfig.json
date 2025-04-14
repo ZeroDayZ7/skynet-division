@@ -10,6 +10,7 @@
           "#ro/*": ["./src/*"],
           "#services/*": ["./src/services/*"],
           "#photo/*": ["./private_uploads/users/*"],
+          "#errors/*": ["./src/common/errors/*"],
         },                                   
                                  
     "outDir": "./.dist",                                   /* Specify an output folder for all emitted files. */

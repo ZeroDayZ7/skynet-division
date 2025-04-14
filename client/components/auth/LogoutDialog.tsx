@@ -28,7 +28,7 @@ export default function LogoutDialog() {
     try {
       await logoutUser();
       logout();
-      router.replace("/login");
+      router.replace("/");
     } catch (error) {
       console.error("Błąd przy wylogowywaniu:", error);
     } finally {

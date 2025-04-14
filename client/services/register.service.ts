@@ -41,3 +41,22 @@ export const registerUser = async (email: string): Promise<RegisterResponse> => 
     throw new Error("Błąd podczas rejestracji użytkownika");
   }
 };
+
+// export const registerUserV2 = async (email: string): Promise<RegisterResponse> => {
+//   try {
+//     const response = await fetchClient("/api/register", {
+//       method: "POST",
+//       body: JSON.stringify({ email }),
+//       credentials: "include",
+//       csrf: true,
+//     });
+// }};
+
+export const registerUserV2 = async (userData: RegisterResponse): Promise<RegisterResponse> => {
+    return await fetchClient("/api/register", {
+      method: "POST",
+      body: JSON.stringify(userData),
+      credentials: "include",
+      csrf: true,
+    });
+  };

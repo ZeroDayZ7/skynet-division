@@ -2,15 +2,10 @@
   "name": "server",
   "type": "module",
   "imports": {
-    "#ro/*": [
-      "./src/*"
-    ],
-    "#services/*": [
-      "./src/services/*"
-    ],
-    "#photo/*": [
-      "./private_uploads/users/*"
-    ]
+    "#ro/*": ["./src/*"],
+    "#services/*": ["./src/services/*"],
+    "#photo/*": ["./private_uploads/users/*"],
+    "#errors/*": ["./src/common/errors/*"]
   },
   "version": "1.0.0",
   "description": "",

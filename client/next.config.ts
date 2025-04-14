@@ -9,15 +9,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/login',
-        permanent: true,
-      },
-    ];
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/login123',
+  //       permanent: true,
+  //     },
+  //   ];
+  // },
   async headers() {
     const apiUrl = process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:3001';
     return [
@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
-  reactStrictMode: false,
+  reactStrictMode: true,
 };
 
 export default nextConfig;
