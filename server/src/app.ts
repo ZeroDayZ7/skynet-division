@@ -2,12 +2,11 @@ import express, { Request, Response } from 'express';
 import sessionManager from '#ro/middlewares/core/session.middlewares';
 import cookieParser from 'cookie-parser';
 import SystemLog from '#ro/common/utils/SystemLog';
-// import helmet from 'helmet';
 // import { setLocale } from '#ro/language/i18nSetup';
-import { requestLoggerDev } from './middlewares/core/requestLogger';
+import { requestLoggerDev } from './middlewares/core/requestLogger.middleware';
 import apiRouter from '#ro/routes/apiRouter';
 import defineUserAssociations from '#ro/config/associations';
-import { errorMiddleware } from './common/errors/errorMiddleware';
+import { globalErrorMiddleware } from './common/errors/globalErrorMiddleware';
 
 import { globalLimiter } from './middlewares/core/DDOS/globalLimiter.middleware';
 import { corsMiddleware } from './middlewares/security/cors.middleware';
@@ -52,7 +51,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/api', apiRouter);
 
 // Błędy
-app.use(errorMiddleware);
+app.use(globalErrorMiddleware);
 
 app.use((req: Request, res: Response) => {
   res.status(404).send("Nic tu nie ma, lamusie! Spróbuj czegoś innego.");

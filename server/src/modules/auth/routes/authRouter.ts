@@ -8,13 +8,13 @@ import { checkSessionStatus } from '#ro/modules/auth/controllers/statusControlle
 
 // import { authMiddleware } from '#ro/middlewares/auth.js';
 import { validateRequest } from '#ro/common/middlewares/validateRequest';
-import { loginSchema, LoginInput } from '#ro/modules/auth/validators/login.validators';
+import { loginSchema, LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 
 const router = express.Router();
 
 // Logowanie
-router.post('/login', validateRequest<LoginInput>(loginSchema), loginController);
+router.post('/login', validateRequest<LoginPayload>(loginSchema), loginController);
 
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);

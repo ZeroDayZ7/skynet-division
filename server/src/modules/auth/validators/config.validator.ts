@@ -22,14 +22,14 @@ export const emailSchema = z
   .trim();
 
 // Schemat walidacji nazwy użytkownika
-export const userNameSchema = z
+export const usernameSchema = z
   .string()
   .min(2, 'Pole musi mieć co najmniej 2 znaki')
   .max(50, 'Pole nie może mieć więcej niż 50 znaków')
   .regex(/^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-]+$/, 'Pole zawiera niedozwolone znaki');
 
 // Schemat walidacji nazwiska
-export const surNameSchema = z
+export const surnameSchema = z
   .string()
   .min(2, 'Pole musi mieć co najmniej 2 znaki')
   .max(50, 'Pole nie może mieć więcej niż 50 znaków')
@@ -56,8 +56,8 @@ export const validators = {
   password: passwordSchema,
   pin: pinSchema,
   email: emailSchema,
-  username: userNameSchema,
-  surname: surNameSchema,
+  username: usernameSchema,
+  surname: surnameSchema,
   document: idDocumentNumber,
   uuid: uuidSchema,
   date: dateSchema,

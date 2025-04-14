@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { promisify } from 'util';
 import SystemLog from '#ro/common/utils/SystemLog';
 import { clearAuthCookie, clearCSRFCookie } from '#ro/common/utils/cookie.utils';
-import AppError from '#ro/errors/AppError';
+import AppError from '#errors/AppError';
 
 /**
  * Kontroler wylogowania użytkownika.

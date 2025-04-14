@@ -1,7 +1,6 @@
 // validators/register.validators.ts
 import { z } from 'zod';
-import { emailSchema, passwordSchema, idDocumentNumber, userNameSchema, surNameSchema } from './config.validators';
-import { validators } from '#ro/auth/validators/config.validators';
+import { validators } from '#ro/modules/auth/validators/config.validator';
 
 export const RegisterSchema = z.object({
   firstName: validators.username,

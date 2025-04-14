@@ -1,6 +1,6 @@
 // validators/register.validators.ts
 import { z } from 'zod';
-import { pinSchema, passwordSchema } from './config.validators';
+import { pinSchema, passwordSchema } from './config.validator';
 
 export const setPinSchema = z
 .object({

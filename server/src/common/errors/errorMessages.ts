@@ -14,8 +14,10 @@ export const ERROR_MESSAGES = {
   NOT_FOUND: 'Nie znaleziono',
   UNAUTHORIZED: 'Nieautoryzowany dostęp',
   VALIDATION_ERROR: 'VALIDATION_ERROR',
+  VALIDATION_FAILED: 'VALIDATION_FAILED',
   CSRF_TOKEN_INVALID: 'Token CSRF jest nieprawidłowy.',
   CSRF_GENERATION_FAILED: 'CSRF_GENERATION_FAILED',
-  CSRF_MISSING_TOKEN: 'CSRF_MISSING_TOKEN'
+  CSRF_MISSING_TOKEN: 'CSRF_MISSING_TOKEN',
+  VALIDATION_DATA_MISSING: 'VALIDATION_DATA_MISSING'
   
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały

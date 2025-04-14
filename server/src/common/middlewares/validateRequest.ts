@@ -1,10 +1,11 @@
-import { Request, Response, NextFunction } from 'express';
+// middleware/validation.ts
 import { ZodSchema, ZodError } from 'zod';
+import { Request, Response, NextFunction } from 'express';
 import AppError from '#ro/common/errors/AppError';
 
 /**
  * Middleware walidujący dane wejściowe za pomocą schematu Zod.
- * Przekazuje zweryfikowane dane do `req.validatedData`.
+ * Przekazuje zweryfikowane dane do `req._validatedData`.
  *
  * @param schema - Schemat Zod do walidacji danych wejściowych
  * @returns Middleware Express
@@ -12,14 +13,14 @@ import AppError from '#ro/common/errors/AppError';
 export const validateRequest = <T>(schema: ZodSchema<T>) =>
   (req: Request, res: Response, next: NextFunction): void => {
     try {
-      const validatedData = schema.parse(req.body);
-      req.validatedData = validatedData;
+      req._validatedData = schema.parse(req.body);  // Walidacja i przypisanie danych
       next();
-    } catch (error: any) {
+    } catch (error) {
+      // Obsługa błędów walidacji
       if (error instanceof ZodError) {
         const firstError = error.errors?.[0]?.message || 'Nieprawidłowe dane wejściowe';
-        throw new AppError('VALIDATION_ERROR', 400, false, firstError); // 1: dla programisty, 4: dla użytkownika
+        throw new AppError('VALIDATION_ERROR', 400, false, firstError);
       }
-      throw new AppError('VALIDATION_FAILED', 500, false); // Inny błąd
+      throw new AppError('VALIDATION_FAILED', 500);
     }
   };

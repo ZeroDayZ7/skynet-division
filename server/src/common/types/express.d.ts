@@ -6,7 +6,7 @@ declare global {
       user?:{
         id: number;
       }
-      validatedData?: unknown;
+      _validatedData?: unknown;
       csrfToken?: any;
     }
   }

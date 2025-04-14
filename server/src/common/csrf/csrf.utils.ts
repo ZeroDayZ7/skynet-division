@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import SystemLog from '#ro/common/utils/SystemLog';
-import AppError from '#ro/errors/AppError';
+import AppError from '#errors/AppError';
 
 export const generateCsrfToken = (): string => {
   try {

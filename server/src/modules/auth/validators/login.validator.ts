@@ -1,10 +1,10 @@
 // validators/login.validators.ts
 import { z } from 'zod';
-import { emailSchema, passwordSchema } from './config.validators';
+import { emailSchema, passwordSchema } from './config.validator';
 
 export const loginSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
 });
 
-export type LoginInput = z.infer<typeof loginSchema>;
+export type LoginPayload = z.infer<typeof loginSchema>;

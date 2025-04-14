@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import SystemLog from "#ro/common/utils/SystemLog.js";
-import AppError from "#ro/errors/AppError.js";
+import AppError from '#errors/AppError';
 import { getUserPassportDataService } from "#ro/modules/auth/services/passport.data.service";
 
 export async function getUserPassportData(req: Request, res: Response): Promise<void> { 

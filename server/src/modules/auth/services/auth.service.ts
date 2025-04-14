@@ -1,62 +1,53 @@
 // auth/services/auth.services.ts
-import { isIP } from 'is-ip';
 import userService from '#ro/modules/auth/services/user.service';
 import SystemLog from '#ro/common/utils/SystemLog';
-import { createError } from '#ro/errors/errorFactory';
-import { ERROR_CODES } from '#ro/errors/errorCodes';
+import AppError from '#errors/AppError';
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes';
 import { verifyUserPassword } from '#ro/common/utils/auth.utils';
 
-interface ErrorResult {
-  error: true;
-  message: string;
-  code: string;
-  statusCode: number;
-  [key: string]: any;
-}
+// Usuń ErrorResult, SuccessResult i ValidationResult - nie są już potrzebne
 
-interface SuccessResult {
-  error: false;
-  user: UserAttributes;
-}
-
-type ValidationResult = ErrorResult | SuccessResult;
-
-export const validateUser = async (email: string, password: string, ip: string): Promise<ValidationResult> => {
-  if (!ip || !isIP(ip)) {
-    return createError(ERROR_CODES.INVALID_REQUEST);
-  }
-
+export const validateUser = async (
+  email: string,
+  password: string,
+  ip: string
+): Promise<UserAttributes> => { // Zwracamy bezpośrednio UserAttributes
   const loginAttempts = await userService.getLoginAttempts(email);
   if (loginAttempts >= 555) {
     await userService.blockUser(email);
-    return createError(ERROR_CODES.USER_BLOCKED);
+    throw new AppError('USER_BLOCKED', 403);
   }
 
   const user = await userService.getUserDetailsForValidation(email);
   if (!user) {
     await userService.incrementLoginAttempts(email);
-    return createError(ERROR_CODES.INVALID_CREDENTIALS);
+    throw new AppError('INVALID_CREDENTIALS', 401);
   }
 
   if (user.userBlock === true) {
-    return createError(ERROR_CODES.USER_BLOCKED);
+    throw new AppError('USER_BLOCKED', 403);
   }
 
   if (user.activation_token !== null) {
-    return createError(ERROR_CODES.ACCOUNT_NOT_ACTIVE);
+    throw new AppError('ACCOUNT_NOT_ACTIVE', 400);
   }
 
   const isPasswordValid = await verifyUserPassword(user.id, password);
   if (!isPasswordValid) {
     await userService.incrementLoginAttempts(email);
-    return createError(ERROR_CODES.INVALID_CREDENTIALS);
+    throw new AppError('INVALID_CREDENTIALS', 401);
   }
 
   await userService.updateAfterLoginSuccess(user.id, ip, user.lastLoginIp ?? '');
   SystemLog.info('Authentication successful');
 
-  return { error: false, user };
+  return user; // Zwracamy tylko user, bez obiektu { error: false, user }
 };
 
-export default { validateUser };
+// Eksportujemy obiekt serwisu z funkcjami
+const authService = {
+  validateUser,
+  // inne funkcje serwisu jeśli są...
+};
+
+export default authService; // Eksport domyślny jako obiekt
