@@ -2,10 +2,18 @@
   "name": "server",
   "type": "module",
   "imports": {
-    "#ro/*": ["./src/*"],
-    "#services/*": ["./src/services/*"],
-    "#photo/*": ["./private_uploads/users/*"],
-    "#errors/*": ["./src/common/errors/*"]
+    "#ro/*": [
+      "./src/*"
+    ],
+    "#services/*": [
+      "./src/services/*"
+    ],
+    "#photo/*": [
+      "./private_uploads/users/*"
+    ],
+    "#errors/*": [
+      "./src/common/errors/*"
+    ]
   },
   "version": "1.0.0",
   "description": "",
@@ -14,11 +22,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/server.js",
     "build": "tsc",
-    "dev": "nodemon --exec tsx src/server.ts"
+    "dev": "nodemon --exec tsx src/server.ts",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate"
   },
   "author": "neo1020",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.6.0",
     "bcrypt": "^5.1.1",
     "compression": "^1.8.0",
     "connect-session-sequelize": "^7.1.7",
@@ -52,6 +63,7 @@
     "@types/nodemailer": "^6.4.17",
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.9",
+    "prisma": "^6.6.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.19.3",

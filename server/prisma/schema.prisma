@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model citizen_project_comments {
+  id               Int              @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  project_id       Int              @db.UnsignedInt
+  user_id          Int
+  comment          String           @db.Text
+  created_at       DateTime         @default(now()) @db.Timestamp(0)
+  citizen_projects citizen_projects @relation(fields: [project_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "citizen_project_comments_ibfk_1")
+
+  @@index([project_id], map: "project_id")
+  @@index([user_id], map: "user_id")
+}
+
+model citizen_project_votes {
+  id         Int                             @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  user_id    Int
+  project_id Int                             @db.UnsignedInt
+  vote_type  citizen_project_votes_vote_type
+  created_at DateTime                        @default(now()) @db.Timestamp(0)
+
+  @@unique([user_id, project_id], map: "user_id")
+  @@index([project_id], map: "project_id")
+}
+
+model citizen_projects {
+  id                       Int                        @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  title                    String                     @db.VarChar(255)
+  description              String                     @db.Text
+  budget                   Int                        @default(0) @db.UnsignedInt
+  location                 String                     @db.VarChar(50)
+  category                 String                     @db.VarChar(50)
+  creator_id               Int                        @db.UnsignedInt
+  created_at               DateTime                   @default(now()) @db.Timestamp(0)
+  updated_at               DateTime                   @default(now()) @db.Timestamp(0)
+  upvotes                  Int?                       @default(0)
+  downvotes                Int?                       @default(0)
+  citizen_project_comments citizen_project_comments[]
+  users                    users                      @relation(fields: [creator_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "citizen_projects_ibfk_1")
+
+  @@index([creator_id], map: "citizen_projects_ibfk_1")
+}
+
+model contact {
+  id         Int      @id @default(autoincrement())
+  email      String   @db.VarChar(50)
+  subject    String   @db.VarChar(50)
+  message    String   @db.Text
+  created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model document_types {
+  id   Int    @id @db.TinyInt
+  name String @unique(map: "name") @db.VarChar(20)
+}
+
+model job_postings {
+  id           Int      @id @default(autoincrement()) @db.UnsignedInt
+  title        String   @db.VarChar(255)
+  company      String   @db.VarChar(255)
+  location     String   @db.VarChar(255)
+  category     String   @db.VarChar(255)
+  postal_code  String   @db.VarChar(20)
+  salary_min   Decimal? @db.Decimal(10, 2)
+  salary_max   Decimal? @db.Decimal(10, 2)
+  description  String   @db.Text
+  requirements String   @db.Text
+  user_id      Int      @db.UnsignedInt
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  users        users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "ibfk_1")
+
+  @@index([user_id], map: "ibfk_1")
+}
+
+model notification_templates {
+  id                 Int                  @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  title              String               @db.VarChar(100)
+  message            String               @db.Text
+  type               String?              @db.VarChar(50)
+  created_at         DateTime             @default(now()) @db.Timestamp(0)
+  user_notifications user_notifications[]
+}
+
+model sequelize_meta {
+  name String @id @unique(map: "name") @db.VarChar(255)
+}
+
+model sessions {
+  sid       String    @id @db.VarChar(36)
+  expires   DateTime? @db.DateTime(0)
+  data      String?   @db.Text
+  createdAt DateTime  @db.DateTime(0)
+  updatedAt DateTime  @db.DateTime(0)
+}
+
+model user_data {
+  id                 Int                 @id @default(autoincrement()) @db.UnsignedInt
+  user_id            Int                 @unique(map: "unique_user_id") @db.UnsignedInt
+  first_name         String              @db.VarChar(100)
+  second_name        String?             @db.VarChar(100)
+  last_name          String              @db.VarChar(100)
+  pesel              String              @unique(map: "unique_pesel") @db.VarChar(11)
+  birth_date         DateTime            @db.Date
+  birth_place        String?             @db.VarChar(255)
+  gender             String?             @db.VarChar(1)
+  nationality        String?             @db.VarChar(100)
+  user_eid_data      user_eid_data?
+  user_passport_data user_passport_data?
+}
+
+model user_details {
+  id            Int      @id @unique(map: "id") @default(autoincrement()) @db.UnsignedInt
+  user_id       Int
+  hire_date     DateTime @db.Date
+  contract_type String   @db.VarChar(50)
+  hourly_rate   Decimal? @db.Decimal(10, 2)
+  salary        Decimal? @db.Decimal(10, 2)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
+  isActive      Int?     @db.TinyInt
+
+  @@index([user_id], map: "user_id")
+}
+
+model user_eid_data {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  user_id         Int       @unique(map: "unique_user_id") @db.UnsignedInt
+  document_number String    @unique(map: "unique_document_number") @db.VarChar(20)
+  issue_date      DateTime  @db.Date
+  expiration_date DateTime  @db.Date
+  user_data       user_data @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "bfk_1")
+}
+
+model user_notifications {
+  id                     Int                    @id @default(autoincrement()) @db.UnsignedInt
+  user_id                Int                    @db.UnsignedInt
+  notification_id        Int                    @db.UnsignedInt
+  is_read                Boolean                @default(false)
+  received_at            DateTime               @default(now()) @db.Timestamp(0)
+  users                  users                  @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "user_notifications_ibfk_1")
+  notification_templates notification_templates @relation(fields: [notification_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "user_notifications_ibfk_2")
+
+  @@index([notification_id], map: "notification_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_passport_data {
+  id              Int       @id @default(autoincrement()) @db.UnsignedInt
+  user_id         Int       @unique(map: "unique_user_id") @db.UnsignedInt
+  passport_number String    @unique(map: "unique_passport_number") @db.VarChar(20)
+  issue_date      DateTime  @db.Date
+  expiration_date DateTime  @db.Date
+  country_code    String    @default("POL") @db.VarChar(3)
+  passport_type   String    @default("P") @db.VarChar(10)
+  createdAt       DateTime  @default(now()) @db.DateTime(0)
+  updatedAt       DateTime  @default(now()) @db.DateTime(0)
+  user_data       user_data @relation(fields: [user_id], references: [user_id], onUpdate: Restrict, map: "cfk_1")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model user_referrals {
+  id               Int      @id @default(autoincrement()) @db.UnsignedInt
+  referrer_id      Int      @db.UnsignedInt
+  referred_user_id Int      @db.UnsignedInt
+  created_at       DateTime @default(now()) @db.Timestamp(0)
+}
+
+model users {
+  id                 Int                  @id @default(autoincrement()) @db.UnsignedInt
+  email              String               @unique(map: "unique_email") @db.VarChar(100)
+  pass               String               @db.VarChar(60)
+  pin                String?              @db.VarChar(60)
+  points             Int                  @default(0) @db.UnsignedInt
+  activation_token   String?              @db.VarChar(200)
+  login_count        Int?                 @default(0) @db.UnsignedInt
+  role               String?              @db.VarChar(10)
+  userBlock          Boolean              @default(false)
+  loginAttempts      Int                  @default(0) @db.TinyInt
+  lastLoginAttempt   DateTime?            @db.DateTime(0)
+  lastLoginIp        String?              @db.VarChar(45)
+  createdAt          DateTime             @default(now()) @db.DateTime(0)
+  updatedAt          DateTime             @default(now()) @db.DateTime(0)
+  citizen_projects   citizen_projects[]
+  job_postings       job_postings[]
+  user_notifications user_notifications[]
+}
+
+enum citizen_project_votes_vote_type {
+  up
+  down
+}
