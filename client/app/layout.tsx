@@ -1,9 +1,8 @@
+// app/layout.tsx
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
-import { AuthProvider } from '@/context/auth-context';
-import { ThemeProvider } from '@/components/theme/theme-provider';
+import { ClientWrapper } from '@/components/ClientWrapper';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,34 +18,25 @@ export const metadata: Metadata = {
   title: 'Aplikacja Obywatelska',
   description: 'Zarządzaj Polska z jednego miejsca!',
   robots: {
-    index: false, // Blokuje indeksowanie
-    follow: false, // Blokuje podążanie za linkami
+    index: false,
+    follow: false,
     googleBot: {
       index: false,
       follow: false,
-      noimageindex: true, // Blokuje indeksowanie obrazów (np. zdjęcia z ePassport)
+      noimageindex: true,
     },
   },
-  // manifest: '/manifest.json', // Web App Manifest dla bezpiecznej instalacji jako PWA
-  // icons: {
-  //   icon: '/favicon.ico',
-  //   apple: '/apple-touch-icon.png', // Ikona dla urządzeń Apple
-  // },
   applicationName: 'Aplikacja Obywatelska',
-  referrer: 'no-referrer', // Zapobiega przesyłaniu informacji o refererze (większa prywatność)
+  referrer: 'no-referrer',
 };
-
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="pl" suppressHydrationWarning={true}>
+    <html lang="pl" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </AuthProvider>
-        <Toaster richColors position="top-center"/>
+        <ClientWrapper>
+          {children}
+        </ClientWrapper>
       </body>
     </html>
   );

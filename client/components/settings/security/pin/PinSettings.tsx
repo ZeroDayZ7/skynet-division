@@ -14,12 +14,22 @@ import { usePinStatus } from './hooks/usePinStatus';
 export function PinSettings() {
   const componentId = nanoid();
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
-  const { isPinSet, loading, setIsPinSet } = usePinStatus();
+  const { isPinSet, loading, error, refetch } = usePinStatus();
   const router = useRouter();
+
+  // Obsługa błędów z usePinStatus
+  if (error) {
+    toast.error('Błąd', {
+      description: error.message || 'Nie udało się pobrać statusu PIN',
+      richColors: true,
+      duration: 5000,
+      position: 'top-center',
+      icon: '❌',
+    });
+  }
 
   const handlePinSetSuccess = (message: string) => {
     setIsSetPinModalOpen(false);
-    setIsPinSet(true); // Aktualizuj stan
     toast.success('Sukces', {
       description: message,
       richColors: true,
@@ -27,7 +37,7 @@ export function PinSettings() {
       position: 'top-center',
       icon: '✔',
     });
-    router.refresh(); // Odśwież stronę
+    refetch(); // Refetch zamiast router.refresh
   };
 
   const handlePinButtonClick = () => {
