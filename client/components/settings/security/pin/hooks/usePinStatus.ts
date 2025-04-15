@@ -10,7 +10,7 @@ export function usePinStatus() {
     const fetchPinStatus = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:3001/api/users/pin-status', {
+        const response = await fetch('http://localhost:3000/api/users/pin-status', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -3,7 +3,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PinSettings } from '@/components/settings/security/pin/PinSettings';
-import { TwoFactorSettings } from '@/components/settings/security/TwoFactorSettings';
+import { TwoFactorSettings } from '@/components/settings/security/TwoFactorSettings/TwoFactorSettings';
 import { LoginHistory } from '@/components/settings/security/LoginHistory';
 
 export default function SecuritySettings() {
