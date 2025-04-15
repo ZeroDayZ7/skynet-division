@@ -9,16 +9,17 @@ import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
 import { Suspense } from 'react';
+import { usePinStatus } from './hooks/usePinStatus';
 
 export function PinSettings() {
   const componentId = nanoid();
   const [isSetPinModalOpen, setIsSetPinModalOpen] = useState(false);
-  const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
+  const { isPinSet, loading, setIsPinSet } = usePinStatus();
   const router = useRouter();
 
   const handlePinSetSuccess = (message: string) => {
     setIsSetPinModalOpen(false);
-    setIsPinSet(true); // Zaktualizuj lokalny stan po sukcesie
+    setIsPinSet(true); // Aktualizuj stan
     toast.success('Sukces', {
       description: message,
       richColors: true,
@@ -29,9 +30,10 @@ export function PinSettings() {
     router.refresh(); // Odśwież stronę
   };
 
-  const handlePinButtonClick = (pinStatus: boolean) => {
-    setIsPinSet(pinStatus);
-    setIsSetPinModalOpen(true);
+  const handlePinButtonClick = () => {
+    if (isPinSet !== null) {
+      setIsSetPinModalOpen(true);
+    }
   };
 
   console.log(`[${componentId}] PinSettings mounted`);
@@ -46,7 +48,7 @@ export function PinSettings() {
           </p>
         </div>
         <Suspense fallback={<button disabled className="opacity-50">Ładowanie...</button>}>
-          <PinButton onClick={handlePinButtonClick} />
+          <PinButton isPinSet={isPinSet} loading={loading} onClick={handlePinButtonClick} />
         </Suspense>
       </div>
 
