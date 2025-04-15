@@ -7,7 +7,7 @@ import {
   // FaLanguage,
   // FaShoppingCart,
   FaTools,
-  // FaBriefcase,
+  FaBriefcase,
 } from "react-icons/fa";
 import MenuGrid from '@/components/ui/MenuGrid';
 
@@ -17,6 +17,7 @@ const menuItems = [
   // { icon: FaLanguage,      link: "/language-trainer",      name: "Trener Języka",         enabled: true },
   // { icon: FaBriefcase,     link: "/jobs",                  name: "Praca",                 enabled: true },
   // { icon: FaShoppingCart,  link: "/market",                name: "Market",                enabled: true },
+  { icon: FaBriefcase,  link: "/test",                name: "TEST",                enabled: true },
   { icon: FaTools,         link: "/settings",              name: "Ustawienia",            enabled: true },
 ];
 

@@ -11,7 +11,7 @@ const TIME = {
   DAY: 24 * 60 * 60 * 1000,
 };
 
-export default function sessionManagerPrisma(app: Express): void {
+export default function sessionManager(app: Express): void {
   const prisma = new PrismaClient();
 
   // Konfiguracja Prisma Session Store

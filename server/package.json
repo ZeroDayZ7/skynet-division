@@ -24,7 +24,8 @@
     "build": "tsc",
     "dev": "nodemon --exec tsx src/server.ts",
     "prisma:migrate": "npx prisma migrate dev",
-    "prisma:generate": "npx prisma generate"
+    "prisma:generate": "npx prisma generate",
+    "diff": "npx prisma migrate diff --from-url=mysql://root:root@localhost:3306/crimscity --to-schema-datamodel=./prisma/schema.prisma --script"
   },
   "author": "neo1020",
   "license": "ISC",
@@ -63,6 +64,7 @@
     "@types/node": "^22.14.0",
     "@types/nodemailer": "^6.4.17",
     "@types/uuid": "^10.0.0",
+    "dotenv-cli": "^8.0.0",
     "nodemon": "^3.1.9",
     "prisma": "^6.6.0",
     "ts-node": "^10.9.2",

@@ -196,3 +196,10 @@ enum citizen_project_votes_vote_type {
   up
   down
 }
+
+model session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt   DateTime
+}

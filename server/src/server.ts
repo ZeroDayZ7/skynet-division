@@ -7,7 +7,7 @@ import SystemLog from '#ro/common/utils/SystemLog';
 async function startServer() {
   try {
     // Inicjalizacja Prisma i Sequelize
-    await initializePrisma();
+    // await initializePrisma();
     await initializeSequelize();
 
     const PORT = process.env.PORT || 3000;
@@ -24,7 +24,7 @@ async function startServer() {
 async function shutdown() {
   SystemLog.info('Shutting down server...');
   try {
-    await disconnectPrisma();
+    // await disconnectPrisma();
     await disconnectSequelize();
     SystemLog.info('Server stopped');
     process.exit(0);
