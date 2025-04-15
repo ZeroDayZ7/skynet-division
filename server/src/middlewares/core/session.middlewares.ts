@@ -2,7 +2,7 @@ import session from 'express-session';
 import connectSessionSequelize from 'connect-session-sequelize';
 import { Sequelize } from 'sequelize';
 import { Express } from 'express';
-import sequelize from '#ro/config/db.config'; // Zakładam, że eksportuje instancję Sequelize
+import sequelize from '#ro/config/sequelize.config'; // Zakładam, że eksportuje instancję Sequelize
 import SystemLog from '#ro/common/utils/SystemLog';
 
 // Stałe czasu

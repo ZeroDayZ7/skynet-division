@@ -1,15 +1,15 @@
-// server.ts
 import 'dotenv/config';
 import app from './app';
 import { initializePrisma, disconnectPrisma } from '#ro/config/prisma.config';
+import { initializeSequelize, disconnectSequelize } from '#ro/config/sequelize.config';
 import SystemLog from '#ro/common/utils/SystemLog';
 
 async function startServer() {
   try {
-    // Inicjalizacja Prismy
+    // Inicjalizacja Prisma i Sequelize
     await initializePrisma();
+    await initializeSequelize();
 
-    // Start serwera
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       SystemLog.info(`Server running on port ${PORT}`);
@@ -20,23 +20,21 @@ async function startServer() {
   }
 }
 
-startServer();
-
 // Graceful shutdown
-process.on('SIGTERM', async () => {
+async function shutdown() {
   SystemLog.info('Shutting down server...');
   try {
     await disconnectPrisma();
+    await disconnectSequelize();
     SystemLog.info('Server stopped');
     process.exit(0);
   } catch (error) {
     SystemLog.error('Error during shutdown:', error);
     process.exit(1);
   }
-});
+}
 
-process.on('SIGINT', async () => {
-  SystemLog.info('Received SIGINT, shutting down...');
-  await disconnectPrisma();
-  process.exit(0);
-});
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
+
+startServer();

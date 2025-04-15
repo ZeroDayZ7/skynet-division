@@ -1,4 +1,4 @@
-import sequelize from '#ro/config/db.config'; // Import instancji Sequelize
+import sequelize from '#ro/config/sequelize.config'; // Import instancji Sequelize
 import User from '#ro/modules/auth/models/Users';
 import UserData from '#ro/modules/auth/models/UserData'; // Zakładając, że masz model UserData
 import { hashValue } from '#ro/common/utils/auth.utils'; // Funkcja haszująca hasło

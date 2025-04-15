@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import sequelize from "#ro/config/db.config.js";
+import sequelize from "#ro/config/sequelize.config.js";
 import {
   PassportAttributes,
   PassportCreationAttributes
