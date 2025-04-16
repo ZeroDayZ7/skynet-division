@@ -11,7 +11,7 @@
         "run",
         "dev"
       ],
-      "cwd": "${workspaceFolder}/server",
+      "cwd": "${workspaceFolder}/client",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {

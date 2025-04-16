@@ -3,8 +3,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import Image from "next/image";
-import ErrorMessage from "@/components/ui/ErrorMessage";
-import { UserDataPassport } from "@/services/users-electronic-documents-services";
+import ErrorMessage from "@/components/errors/ErrorMessage";
+import { UserDataPassport } from "@/app/api/users/electronic-documents/useGetUserPassportData";
 
 // Interfejs propsów komponentu
 interface PassportCardProps {

@@ -1,20 +1,20 @@
 import express from 'express';
 
-// import { getUserEIDData } from '#ro/modules/auth/controllers/users/userEIDController'
-// import { getUserNotifications } from '#ro/controllers/users/userNotifications.js';
-// import { getUnreadNotificationsCount } from '#ro/controllers/users/getUnreadNotificationsCount.js';
-// import { getUserPassportData } from '#ro/modules/auth/controllers/users/userPassportController';
 import { authMiddleware } from '../../../common/middlewares/auth.middleware';
+import { validateRequest } from '#ro/middlewares/validate.middleware';
+import { pinSchema, PinPayload } from '../validators/pin.validation';
+
 import { checkPinController } from '#ro/modules/user/controller/checkPinController';
 import { setPinController } from '#ro/modules/user/controller/setPinController';
-import { pinSchema, PinPayload } from '../validators/pin.validation';
-import { validateRequest } from '#ro/middlewares/validate.middleware';
+
+import { getUserEIDData } from '../controller/usersData/userEIDController';
+import { getUserPassportData } from '../controller/usersData/userPassportController';
 
 const router = express.Router();
 
 // Elektroniczny dowód
-// router.post('/user-eid', authMiddleware, getUserEIDData);
-// router.post('/user-passport', authMiddleware, getUserPassportData);
+router.post('/user-eid', authMiddleware, getUserEIDData);
+router.post('/user-passport', authMiddleware, getUserPassportData);
 
 router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);

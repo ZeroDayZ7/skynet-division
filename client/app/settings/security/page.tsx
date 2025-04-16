@@ -2,7 +2,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { PinSettings } from '@/components/settings/security/pin/PinSettings';
+// import { PinSettings } from '@/components/settings/security/pin/PinSettings';
 import { TwoFactorSettings } from '@/components/settings/security/TwoFactorSettings';
 import { LoginHistory } from '@/components/settings/security/LoginHistory';
 
@@ -17,7 +17,6 @@ export default function SecuritySettings() {
             <CardTitle>Ochrona konta</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <PinSettings />
             <TwoFactorSettings />
           </CardContent>
         </Card>

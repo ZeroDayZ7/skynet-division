@@ -1,69 +1,62 @@
-// components/settings/security/TwoFactorSettings.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { fetchClient } from '@/lib/fetchClient';
 import { toast } from 'sonner';
+
+// dynamiczne ładowanie PinSettings z SSR wyłączonym
+const PinSettings = dynamic(() => import('./pin/PinSettings'), {
+  ssr: false,
+  loading: () => <p className="text-sm text-muted-foreground mt-2">Ładowanie ustawień PIN...</p>,
+});
 
 export function TwoFactorSettings() {
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleToggle2FA = async (checked: boolean) => {
-    setIsLoading(true);
-    try {
-      const response = await fetchClient<{ success: boolean; message?: string }>(
-        '/api/user/two-factor',
-        {
-          method: 'POST',
-          body: JSON.stringify({ enabled: checked }),
-          csrf: true,
-        }
-      );
+  const handleToggle2FA = (checked: boolean) => {
 
-      if (response.success) {
-        setTwoFactorEnabled(checked);
-        toast.success("Sukces", {
-          description: `Uwierzytelnianie dwuskładnikowe ${checked ? 'włączone' : 'wyłączone'}.`,
-          richColors: true,
-          duration: 5000,
-          position: "top-center",
-          icon: "✔",
+
+      setTwoFactorEnabled(checked);
+      if (checked) {
+        toast.success('2FA włączone', {
+          description: 'Kod z aplikacji autoryzacyjnej będzie wymagany przy logowaniu.',
+          icon: '🔐',
         });
-        // ⚠️
       } else {
-        throw new Error(response.message || 'Błąd operacji');
+        toast.warning('2FA wyłączone', {
+          description: 'Dwuetapowe uwierzytelnianie zostało wyłączone.',
+          icon: '⚠️',
+        });
       }
-    } catch (error: any) {
-      toast.error("Błąd", {
-        description: error.message || 'Nie udało się zmienić ustawień 2FA',
-        richColors: true,
-        duration: 5000,
-        position: "top-center",
-        icon: "❌",
-      });
-      setTwoFactorEnabled(!checked); // Przywracamy stan
-    } finally {
-      setIsLoading(false);
-    }
+      
+  
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div>
-        <Label htmlFor="2fa">Uwierzytelnianie dwuskładnikowe</Label>
-        <p className="text-sm text-muted-foreground">
-          Wymagaj kodu z aplikacji autoryzacyjnej przy logowaniu
-        </p>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <Label htmlFor="2fa">Uwierzytelnianie dwuskładnikowe</Label>
+          <p className="text-sm text-muted-foreground">
+            Wymagaj kodu z aplikacji autoryzacyjnej przy logowaniu
+          </p>
+        </div>
+        <Switch
+          id="2fa"
+          checked={twoFactorEnabled}
+          onCheckedChange={handleToggle2FA}
+        />
       </div>
-      <Switch
-        id="2fa"
-        checked={twoFactorEnabled}
-        onCheckedChange={handleToggle2FA}
-        disabled={isLoading}
-      />
+
+      {twoFactorEnabled && (
+        <div className="pt-2 border-t mt-4">
+          {/* <Suspense fallback={<p>Ładowanie ustawień PIN...</p>}> */}
+            <PinSettings />
+          {/* </Suspense> */}
+        </div>
+      )}
     </div>
   );
 }

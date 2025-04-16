@@ -7,7 +7,7 @@ import MenuGrid from '@/components/ui/MenuGrid';
 // Symulacja pobierania dokumentów z bazy danych
 const documents = [
   { id: 1, name: "E-Dowód",              icon: FaIdCard,         enabled: true,  link: "/electronic-documents/eid" },
-  { id: 2, name: "Prawo jazdy",          icon: FaCar,            enabled: true,  link: "/electronic-documents/driving-license" },
+  { id: 2, name: "Prawo jazdy",          icon: FaCar,            enabled: false,  link: "/electronic-documents/driving-license" },
   { id: 3, name: "Paszport",             icon: FaPassport,       enabled: true,  link: "/electronic-documents/passport" },
   { id: 4, name: "Legitymacja studencka",icon: FaUser,           enabled: false, link: "/legitymacja" },
   { id: 5, name: "E-Faktury",            icon: FaFileInvoice,    enabled: false,  link: "/e-faktury" },

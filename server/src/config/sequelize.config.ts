@@ -15,8 +15,8 @@ const sequelize =
     username: process.env.DB_USERNAME || 'root',
     password: process.env.DB_PASSWORD || 'root',
     database: process.env.DB_DATABASE || 'crimscity',
-    logging: false,
-    // logging: process.env.NODE_ENV === 'development' ? (msg) => SystemLog.info(msg) : false,
+    // logging: false,
+    logging: process.env.NODE_ENV === 'development' ? (msg) => SystemLog.info(msg) : false,
   });
 
 // Zachowaj instancję globalnie w środowisku deweloperskim

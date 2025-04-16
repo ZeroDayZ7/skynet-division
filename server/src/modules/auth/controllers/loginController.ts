@@ -6,7 +6,7 @@ import SystemLog from '#ro/common/utils/SystemLog';
 import { generateCsrfToken } from '#ro/common/csrf/csrf.utils';
 import { LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { setJwtCookie, setCSRFCookie } from '#ro/common/utils/cookie.utils';
-import { getUnreadNotificationsCount } from '#ro/modules/auth/controllers/users/getUnreadNotificationsCount';
+import { getUnreadNotificationsCount } from '#ro/modules/user/controller/usersData/getUnreadNotificationsCount';
 import AppError from '#ro/common/errors/AppError';
 import { isIP } from 'is-ip';
 import { getValidatedData } from '#ro/utils/request';
@@ -24,7 +24,7 @@ export const loginController = async (req: Request, res: Response): Promise<void
 const validIp = isIP(ip) ? ip : ''; 
   try {
     // Weryfikacja użytkownika
-    const user = await authService.validateUser(email, password, ip);
+    const user = await authService.validateUser(email, password, validIp);
     const token = generateJwtToken({ id: user.id });
     const tokenCSRF = generateCsrfToken();
 

@@ -4,11 +4,12 @@ import AppError from '#errors/AppError';
 import { getUserPassportDataService } from "#ro/modules/auth/services/passport.data.service";
 
 export async function getUserPassportData(req: Request, res: Response): Promise<void> { 
-  const userId = req.user?.id as number;
-  const UserIdSession = req.session.userId;
+  // const userId = req.user?.id as number;
+  // const UserIdSession = req.session.userId;
+  const userId = req.session.userId;
  
   if (typeof userId !== 'number') {
-    SystemLog.error(`Passport controller userId: ${userId} - UserIdSession: ${UserIdSession}`);
+    SystemLog.error(`Passport controller userId: ${userId}`);
     throw new AppError('AUTHENTICATION_FAILED', 401, true);
   }
   

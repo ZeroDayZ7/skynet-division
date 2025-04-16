@@ -1,12 +1,15 @@
-// lib/getCsrfToken.ts
 export function getCsrfToken(): string | null {
-    const name = 'csrf-token';
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-      const [key, value] = cookie.trim().split('=');
-      if (key === name) {
-        return decodeURIComponent(value);
-      }
+  if (typeof document === 'undefined') return null;
+
+  const cookieName = process.env.NEXT_PUBLIC_CSRF_COOKIE_NAME || 'csrf-token';
+  const cookies = document.cookie.split(';');
+
+  for (const cookie of cookies) {
+    const [key, value] = cookie.trim().split('=');
+    if (key === cookieName) {
+      return decodeURIComponent(value);
     }
-    return null;
   }
+
+  return null;
+}

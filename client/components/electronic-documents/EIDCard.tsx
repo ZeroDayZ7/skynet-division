@@ -1,9 +1,9 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
-import ErrorMessage from "@/components/ui/ErrorMessage";
+import ErrorMessage from "@/components/errors/ErrorMessage";
 import Image from "next/image";
-import { UserDataEID } from "@/services/users-electronic-documents-services";
+import { UserDataEID } from "@/app/api/users/electronic-documents/useGetUserEIDData";
 
 // Interfejs propsów komponentu
 interface EIDCardProps {
