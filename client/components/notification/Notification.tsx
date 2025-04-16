@@ -53,7 +53,7 @@ const Notifications = () => {
           {loading ? (
             <p className="text-center text-gray-500">Ładowanie...</p>
           ) : error ? (
-            <p className="text-center text-red-500">Błąd: {error}</p>
+            <p className="text-center text-red-500">Błąd pobierania powiadomień: {error}</p>
           ) : notifications.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center mt-4">
               Brak nowych powiadomień.
