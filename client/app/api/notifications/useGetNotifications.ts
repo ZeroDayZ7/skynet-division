@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { fetchClient } from '@/lib/fetchClient';
+import { useAuth } from '@/context/auth-context';
 
 export type NotificationType = 'success' | 'warning' | 'error' | 'info';
 
@@ -29,6 +30,8 @@ export const useGetNotifications = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const { updateNotificationsContext } = useAuth();
+
   const fetchNotifications = useCallback(async ({ page, limit }: { page: number, limit: number }) => {
     setLoading(true);
     setError(null);
@@ -41,9 +44,10 @@ export const useGetNotifications = () => {
           csrf: true,
         }
       );
-      console.log(`notifications: ${JSON.stringify(data.notifications, null, 2)}`);
+      // console.log(`notifications: ${JSON.stringify(data.notifications, null, 2)}`);
       setNotifications(data.notifications || []);
       setTotal(data.total || 0);
+      updateNotificationsContext(data.total || 0);
       setPage(page);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nieznany błąd');

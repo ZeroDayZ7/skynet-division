@@ -22,6 +22,7 @@ type AuthContextType = {
   isAuthenticated: boolean | null;
   login: (user: User) => void;
   logout: () => void;
+  updateNotificationsContext: (count: number) => void; // 👈 nowa funkcja
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -85,6 +86,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // router.replace("/login");
   };
 
+  const updateNotificationsContext = (count: number) => {
+    if (!user) return;
+    const updatedUser = { ...user, notifications: count };
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  };
+  
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -95,7 +104,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, logout }}
+      value={{ 
+        user, 
+        isAuthenticated, 
+        login, 
+        logout, 
+        updateNotificationsContext }}
     >
       {children}
     </AuthContext.Provider>

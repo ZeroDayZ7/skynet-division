@@ -51,6 +51,27 @@ export const dateSchema = z
   .string()
   .datetime({ message: 'Nieprawidłowy format daty' });
 
+// Schemat walidacji paginacji
+export const paginationSchema = z.object({
+  page: z
+    .number({
+      required_error: 'Parametr "page" jest wymagany',
+      invalid_type_error: '"page" musi być liczbą',
+    })
+    .int()
+    .min(1, '"page" musi być większe niż 0'),
+
+  limit: z
+    .number({
+      required_error: 'Parametr "limit" jest wymagany',
+      invalid_type_error: '"limit" musi być liczbą',
+    })
+    .int()
+    .min(1, '"limit" musi być większe niż 0')
+    .max(10, '"limit" nie może przekraczać 100'),
+});
+
+
 // Eksport wszystkich schematów jako obiekt dla łatwiejszego importu
 export const validators = {
   password: passwordSchema,
@@ -61,4 +82,5 @@ export const validators = {
   document: idDocumentNumber,
   uuid: uuidSchema,
   date: dateSchema,
+  pagination: paginationSchema
 };

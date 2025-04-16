@@ -12,6 +12,7 @@ import { getUserPassportData } from '../controller/usersData/userPassportControl
 
 import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
 import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
+import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.post('/user-passport', authMiddleware, getUserPassportData);
 router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);
 
-router.post('/notifications', authMiddleware, getUserNotifications);
+router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchema), authMiddleware, getUserNotifications);
 router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
