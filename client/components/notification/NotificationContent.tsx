@@ -25,7 +25,7 @@ const NotificationContent = ({
   const validNotifications = Array.isArray(notifications) ? notifications : [];
 
   return (
-    <div className="">
+    <div>
       {loading ? (
         <p className="text-center text-gray-500">Ładowanie...</p>
       ) : error ? (
