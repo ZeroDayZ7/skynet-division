@@ -12,7 +12,7 @@ interface NotificationsResponse {
 export const useGetNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [total, setTotal] = useState(0);
-  const [limit] = useState(10); // Można dodać możliwość zmiany
+  // const [limit] = useState(5); // Można dodać możliwość zmiany
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,8 +31,10 @@ export const useGetNotifications = () => {
         }
       );
       // console.log(`notifications: ${JSON.stringify(data.notifications, null, 2)}`);
-      setNotifications(data.notifications || []);
+      // setNotifications(data.notifications || []);
+      setNotifications((prev) => [...prev, ...(data.notifications || [])]);
       setTotal(data.total || 0);
+      
       updateNotificationsContext(data.total || 0);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nieznany błąd');
@@ -41,12 +43,15 @@ export const useGetNotifications = () => {
     }
   }, []);
 
+  const hasMore = notifications.length < total;
+
   return {
     notifications,
     total,
-    limit,
+    // limit,
     loading,
     error,
     fetchNotifications,
+    hasMore
   };
 };

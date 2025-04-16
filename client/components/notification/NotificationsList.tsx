@@ -4,7 +4,6 @@ import { FaExclamationTriangle, FaCheckCircle, FaInfoCircle } from 'react-icons/
 import { useMarkNotificationsAsRead } from '@/app/api/notifications/useMarkNotificationAsRead';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '../ui/badge';
-import { NotificationPagination } from './NotificationPagination';
 import { Notification, NotificationType } from './types/notification.types';
 
 const ICONS: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
@@ -24,73 +23,79 @@ const BG_COLORS: Record<NotificationType | 'default', string> = {
 
 const getBgColor = (type: NotificationType | string) => BG_COLORS[type as NotificationType] || BG_COLORS.default;
 
-
-export const NotificationsList = ({ 
-  notifications, 
-  total, 
-  page, 
-  limit, 
-  onPageChange 
+export const NotificationsList = ({
+  notifications,
+  onLoadMore,
+  hasMore,
+  loading,
 }: {
-  notifications: Notification[],
-  total: number,
-  page: number,
-  limit: number,
-  onPageChange: (page: number) => void,
+  notifications: Notification[];
+  onLoadMore: () => void;
+  hasMore: boolean;
+  loading: boolean;
 }) => {
   const { handleNotificationClick, marked } = useMarkNotificationsAsRead();
 
-  if(notifications.length === 0) return null;
+  if (notifications.length === 0) return null;
 
   return (
     <>
-    <ul className="space-y-2">
-      <AnimatePresence>
-        {notifications.map((notif) => {
-          const Icon = ICONS[notif.template.type] || FaInfoCircle;
-          const isMarked = marked.has(notif.id);
+      <ul className="space-y-2">
+        <AnimatePresence>
+          {notifications.map((notif) => {
+            const Icon = ICONS[notif.template.type] || FaInfoCircle;
+            const isMarked = marked.has(notif.id);
 
-          return !isMarked && (
-            <motion.li
-              key={notif.id}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-              layout
-              className={`flex items-start gap-2 p-3 rounded-md border ${getBgColor(notif.template.type)}`}
-            >
-              <Icon className="mt-1" />
-              <div className="flex-1">
-                {notif.template.title && <p className="font-semibold">{notif.template.title}</p>}
-                <p>{notif.template.message}</p>
-                {notif.created_at && (
-                  <p className="text-xs text-black dark:text-white mt-1">
-                    {new Date(notif.created_at).toLocaleString()}
-                  </p>
+            return !isMarked && (
+              <motion.li
+                key={notif.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+                layout
+                className={`flex items-start gap-2 p-3 rounded-md border ${getBgColor(notif.template.type)}`}
+              >
+                <Icon className="mt-1" />
+                <div className="flex-1">
+                  {notif.template.title && <p className="font-semibold">{notif.template.title}</p>}
+                  <p>{notif.template.message}</p>
+                  {notif.created_at && (
+                    <p className="text-xs text-black dark:text-white mt-1">
+                      {new Date(notif.created_at).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+
+                {!notif.is_read && (
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer whitespace-nowrap"
+                    onClick={() => handleNotificationClick(notif.id)}
+                    aria-label={`Oznacz powiadomienie ${notif.id} jako przeczytane`}
+                  >
+                    Nowe
+                  </Badge>
                 )}
-              </div>
+              </motion.li>
+            );
+          })}
+        </AnimatePresence>
+      </ul>
 
-              {!notif.is_read && (
-                <Badge
-                  variant="outline"
-                  className="cursor-pointer whitespace-nowrap"
-                  onClick={() => handleNotificationClick(notif.id)}
-                  aria-label={`Oznacz powiadomienie ${notif.id} jako przeczytane`}
-                >
-                  Nowe
-                </Badge>
-              )}
-            </motion.li>
-          );
-        })}
-      </AnimatePresence>
-    </ul>
-    <NotificationPagination
-        page={page}
-        total={total}
-        limit={limit}
-        onPageChange={onPageChange}
-      />
-    </>    
+      {hasMore && !loading && (
+        <div className="text-center mt-4">
+          <button
+            onClick={onLoadMore}
+            className="text-sm px-4 py-2 bg-muted rounded hover:bg-muted-foreground"
+          >
+            Pokaż więcej
+          </button>
+        </div>
+      )}
+
+      {loading && (
+        <p className="text-center text-gray-500 mt-4">Ładowanie...</p>
+      )}
+    </>
   );
 };

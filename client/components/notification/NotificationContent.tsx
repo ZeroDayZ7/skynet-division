@@ -4,46 +4,28 @@ import { NotificationsList } from '@/components/notification/NotificationsList';
 import { Notification } from './types/notification.types';
 
 export type NotificationContentProps = {
-  notifications: Notification[]; // Typowanie powinno być bardziej precyzyjne, np. Notification[]
-  total: number;
-  page: number;
-  limit: number;
-  onPageChange: (page: number) => void;
+  notifications: Notification[];
+  onLoadMore: () => void;
+  hasMore: boolean;
   loading: boolean;
   error: string | null;
 };
 
-const NotificationContent = ({
-  notifications,
-  total,
-  page,
-  limit,
-  onPageChange,
-  loading,
-  error,
-}: NotificationContentProps) => {
-  // Sprawdzamy, czy notifications jest tablicą
+const NotificationContent = ({ notifications, onLoadMore, hasMore, loading, error }: NotificationContentProps) => {
   const validNotifications = Array.isArray(notifications) ? notifications : [];
 
   return (
-    <div>
+    <div className="flex h-full flex-col p-6">
       {loading ? (
         <p className="text-center text-gray-500">Ładowanie...</p>
       ) : error ? (
         <p className="text-center text-red-500">Błąd: {error}</p>
-        
       ) : validNotifications.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center mt-4">
-          Brak nowych powiadomień.
-        </p>
+        <div className="mt-4 text-center">
+          <p className="text-muted-foreground mt-2 text-sm">Brak nowych powiadomień. Jesteś na bieżąco!</p>
+        </div>
       ) : (
-        <NotificationsList
-          notifications={validNotifications} // Używamy teraz `validNotifications`
-          total={total}
-          page={page}
-          limit={limit}
-          onPageChange={onPageChange}
-        />
+        <NotificationsList notifications={validNotifications} onLoadMore={onLoadMore} hasMore={hasMore} loading={loading} />
       )}
     </div>
   );
