@@ -1,47 +1,35 @@
 'use client';
 
 import { memo, useState, useEffect } from 'react';
-import { FaBell } from 'react-icons/fa';
 import { useAuth } from '@/context/auth-context';
-import { Button } from '../ui/button';
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { useGetNotifications } from '@/app/api/notifications/useGetNotifications';
-import { NotificationsList } from '@/components/notification/NotificationsList';
+import NotificationButton from './NotificationButton';
+import NotificationContent from './NotificationContent';
 
 const Notifications = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const { notifications, loading, error, fetchNotifications } = useGetNotifications();
+  const { notifications, total, loading, error, fetchNotifications } = useGetNotifications();
+  const [page, setPage] = useState(1);
+  const limit = 5; // Możesz to dostosować
 
   const count = user?.notifications ?? 0;
-  const displayCount = count > 9 ? '9+' : count;
 
   // Ładuj powiadomienia po otwarciu
   useEffect(() => {
-    if (open) fetchNotifications();
-  }, [open]);
+    if (open) fetchNotifications({ page, limit }); // Przekazujesz teraz obiekt z page i limit
+  }, [open, page, limit, fetchNotifications]); // Dodajemy fetchNotifications do zależności, aby uniknąć ostrzeżeń o stale zmieniającej się funkcji
+
+  const onPageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <div className="relative inline-block">
-          <Button variant="ghost" size="icon">
-            <FaBell />
-          </Button>
-          {count > 0 && (
-            <span className="absolute top-0 right-2 translate-x-1/2 -translate-y-1/2 
-              bg-orange-300 text-xs font-bold rounded-full w-5 h-5 
-              flex items-center justify-center select-none dark:bg-card dark:border dark:text-green-300">
-              {displayCount}
-            </span>
-          )}
+          <NotificationButton count={count} />
         </div>
       </SheetTrigger>
       <SheetContent side="right" className="w-full sm:w-96">
@@ -49,19 +37,15 @@ const Notifications = () => {
           <SheetTitle>Powiadomienia</SheetTitle>
           <SheetDescription>Oto Twoje najnowsze powiadomienia.</SheetDescription>
         </SheetHeader>
-        <div className=" overflow-y-auto">
-          {loading ? (
-            <p className="text-center text-gray-500">Ładowanie...</p>
-          ) : error ? (
-            <p className="text-center text-red-500">Błąd pobierania powiadomień: {error}</p>
-          ) : notifications.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center mt-4">
-              Brak nowych powiadomień.
-            </p>
-          ) : (
-            <NotificationsList notifications={notifications} />
-          )}
-        </div>
+        <NotificationContent
+          notifications={notifications}
+          total={total}
+          page={page}
+          limit={limit}
+          onPageChange={onPageChange}
+          loading={loading}
+          error={error}
+        />
       </SheetContent>
     </Sheet>
   );

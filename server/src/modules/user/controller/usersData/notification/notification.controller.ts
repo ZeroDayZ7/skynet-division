@@ -13,13 +13,11 @@ export const getUserNotifications = async (req: Request, res: Response, next: Ne
 
     const { page = 1, limit = 10 } = req.body;
 
-    const notifications = await fetchUserNotifications(userId, Number(page), Number(limit));
+    const { notifications, total } = await fetchUserNotifications(userId, Number(page), Number(limit));
+    SystemLog.warn(`notifications: ${JSON.stringify(notifications, null, 2)}`);
 
     SystemLog.info(`Pobrano powiadomienia użytkownika #${userId}`);
-    res.status(200).json({
-      success: true,
-      notifications,
-    });
+    res.status(200).json({ success: true, notifications, total });
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

@@ -11,6 +11,7 @@ import { getUserEIDData } from '../controller/usersData/userEIDController';
 import { getUserPassportData } from '../controller/usersData/userPassportController';
 
 import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
+import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);
 
 router.post('/notifications', authMiddleware, getUserNotifications);
+router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
 

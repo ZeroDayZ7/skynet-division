@@ -8,22 +8,35 @@ export const fetchUserNotifications = async (
 ) => {
   const offset = (page - 1) * limit;
 
-  const notifications = await NotificationModel.findAll({
+  const { count, rows } = await NotificationModel.findAndCountAll({
     where: { 
-        user_id: userId,
-        is_read: 0,
+      user_id: userId,
+      is_read: 0,
     },
     order: [['created_at', 'DESC']],
     offset,
     limit,
-    include : [
-        {
-            model: NotificationTemplateModel,
-            as: 'template',
-            attributes: ['id', 'title', 'message', 'type', 'created_at']
-        }
-    ]
+    attributes: ['id'],
+    include: [
+      {
+        model: NotificationTemplateModel,
+        as: 'template',
+        attributes: ['title', 'message', 'type', 'created_at'],
+      },
+    ],
   });
-
-  return notifications;
+  
+  return { notifications: rows, total: count };  
 };
+
+export const markUserNotificationsAsRead = async (userId: number, ids: number[]) => {
+    await NotificationModel.update(
+      { is_read: true },
+      {
+        where: {
+          user_id: userId,
+          id: ids,
+        },
+      }
+    );
+  };
