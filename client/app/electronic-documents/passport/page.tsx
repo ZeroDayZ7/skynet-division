@@ -2,7 +2,7 @@
 import { useGetUserPassportData } from "@/app/api/users/electronic-documents/useGetUserPassportData";
 import PassportCard from "@/components/electronic-documents/PassportCard";
 
-export default async function ProfilePage() {
+export default async function PassportPage() {
   let passportData = null;
 
   try {

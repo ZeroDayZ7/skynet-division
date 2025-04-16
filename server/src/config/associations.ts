@@ -3,7 +3,7 @@ import UserData from '#ro/modules/auth/models/UserData';
 import UserEIDData from '#ro/modules/auth/models/UserEIDData';
 import Passport from '#ro/modules/auth/models/UserPassportData';
 import UserNotification from '#ro/modules/auth/models/UserNotification';
-import NotificationTemplate from '#ro/modules/auth/models/NotificationTemplate';
+import NotificationTemplate from '#ro/modules/user/models/notification.template.model';
 
 export default function defineUserAssociations() {
   // Relacja Users <-> UserData

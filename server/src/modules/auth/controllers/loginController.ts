@@ -6,7 +6,7 @@ import SystemLog from '#ro/common/utils/SystemLog';
 import { generateCsrfToken } from '#ro/common/csrf/csrf.utils';
 import { LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { setJwtCookie, setCSRFCookie } from '#ro/common/utils/cookie.utils';
-import { getUnreadNotificationsCount } from '#ro/modules/user/controller/usersData/getUnreadNotificationsCount';
+import { getUnreadNotificationsCount } from '#ro/modules/user/controller/usersData/notification/getUnreadNotificationsCount.controller';
 import AppError from '#ro/common/errors/AppError';
 import { isIP } from 'is-ip';
 import { getValidatedData } from '#ro/utils/request';

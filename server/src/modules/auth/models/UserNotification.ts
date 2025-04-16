@@ -3,7 +3,7 @@ import {
   DataTypes
 } from "sequelize";
 import sequelize from "#ro/config/sequelize.config";
-import NotificationTemplate from "#ro/modules/auth/models/NotificationTemplate";
+import NotificationTemplate from "#ro/modules/user/models/notification.template.model";
 import {
   UserNotificationAttributes,
   UserNotificationCreationAttributes

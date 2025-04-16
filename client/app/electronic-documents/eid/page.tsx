@@ -1,7 +1,7 @@
 import { useGetUserEIDData } from "@/app/api/users/electronic-documents/useGetUserEIDData";
 import EIDCard from "@/components/electronic-documents/EIDCard";
 
-export default async function ProfilePage() {
+export default async function EIDPage() {
   let userData = null;
 
   try {

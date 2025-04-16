@@ -10,6 +10,8 @@ import { setPinController } from '#ro/modules/user/controller/setPinController';
 import { getUserEIDData } from '../controller/usersData/userEIDController';
 import { getUserPassportData } from '../controller/usersData/userPassportController';
 
+import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
+
 const router = express.Router();
 
 // Elektroniczny dowód
@@ -19,7 +21,7 @@ router.post('/user-passport', authMiddleware, getUserPassportData);
 router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);
 
-// router.post('/notifications', getUserNotifications);
+router.post('/notifications', authMiddleware, getUserNotifications);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
 

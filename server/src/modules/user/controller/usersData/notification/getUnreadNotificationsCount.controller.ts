@@ -11,6 +11,7 @@ export async function getUnreadNotificationsCount(userId: number): Promise<numbe
 
   try {
     // Zliczanie liczby nieprzeczytanych powiadomień
+    // is_read = true (czyli 1) → przeczytane
     const unreadCount = await UserNotification.count({
       where: {
         user_id: userId,
