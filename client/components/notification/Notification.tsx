@@ -1,11 +1,12 @@
 'use client';
 
-import { memo, useState, useEffect } from 'react';
+import { memo, useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '@/context/auth-context';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { useGetNotifications } from '@/app/api/notifications/useGetNotifications';
 import NotificationButton from './NotificationButton';
 import NotificationContent from './NotificationContent';
+import debounce from 'lodash.debounce';
 
 const Notifications = () => {
   const { user } = useAuth();
@@ -21,9 +22,12 @@ const Notifications = () => {
     if (open) fetchNotifications({ page, limit }); // Przekazujesz teraz obiekt z page i limit
   }, [open, page, limit, fetchNotifications]); // Dodajemy fetchNotifications do zależności, aby uniknąć ostrzeżeń o stale zmieniającej się funkcji
 
-  const onPageChange = (newPage: number) => {
-    setPage(newPage);
-  };
+  const debouncedOnPageChange = useCallback(
+    debounce((newPage: number) => {
+      setPage(newPage);
+    }, 300),
+    []
+  );
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -42,7 +46,7 @@ const Notifications = () => {
           total={total}
           page={page}
           limit={limit}
-          onPageChange={onPageChange}
+          onPageChange={debouncedOnPageChange}
           loading={loading}
           error={error}
         />

@@ -1,35 +1,37 @@
 'use client';
 
 import { FaExclamationTriangle, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
-import { type Notification } from '@/app/api/notifications/useGetNotifications';
 import { useMarkNotificationsAsRead } from '@/app/api/notifications/useMarkNotificationAsRead';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Badge } from '../ui/badge';
 import { NotificationPagination } from './NotificationPagination';
+import { Notification, NotificationType } from './types/notification.types';
 
-const ICONS = {
+const ICONS: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
   success: FaCheckCircle,
   warning: FaExclamationTriangle,
   error: FaExclamationTriangle,
   info: FaInfoCircle,
 };
 
-const getBgColor = (type: string) => {
-  switch (type) {
-    case 'success':
-      return 'text-green-700 border-l-4 border-green-500 dark:bg-card dark:text-green-200 dark:border-green-400';
-    case 'warning':
-      return 'text-yellow-700 border-l-4 border-yellow-500 dark:card dark:text-yellow-200 dark:border-yellow-400';
-    case 'error':
-      return 'text-red-700 border-l-4 border-red-500 dark:card dark:text-red-200 dark:border-red-400';
-    case 'info':
-      return 'text-blue-700 border-l-4 border-blue-500 dark:card dark:text-blue-100 dark:border-sky-400';
-    default:
-      return 'text-gray-700 border-l-4 border-gray-500 dark:card dark:text-gray-200 dark:border-gray-400';
-  }
+const BG_COLORS: Record<NotificationType | 'default', string> = {
+  success: 'text-green-700 border-l-4 border-green-500 dark:bg-card dark:text-green-200 dark:border-green-400',
+  warning: 'text-yellow-700 border-l-4 border-yellow-500 dark:bg-card dark:text-yellow-200 dark:border-yellow-400',
+  error: 'text-red-700 border-l-4 border-red-500 dark:bg-card dark:text-red-200 dark:border-red-400',
+  info: 'text-blue-700 border-l-4 border-blue-500 dark:bg-card dark:text-blue-100 dark:border-sky-400',
+  default: 'text-gray-700 border-l-4 border-gray-500 dark:bg-card dark:text-gray-200 dark:border-gray-400',
 };
 
-export const NotificationsList = ({ notifications, total, page, limit, onPageChange }: {
+const getBgColor = (type: NotificationType | string) => BG_COLORS[type as NotificationType] || BG_COLORS.default;
+
+
+export const NotificationsList = ({ 
+  notifications, 
+  total, 
+  page, 
+  limit, 
+  onPageChange 
+}: {
   notifications: Notification[],
   total: number,
   page: number,
@@ -37,6 +39,8 @@ export const NotificationsList = ({ notifications, total, page, limit, onPageCha
   onPageChange: (page: number) => void,
 }) => {
   const { handleNotificationClick, marked } = useMarkNotificationsAsRead();
+
+  if(notifications.length === 0) return null;
 
   return (
     <>
@@ -71,6 +75,7 @@ export const NotificationsList = ({ notifications, total, page, limit, onPageCha
                   variant="outline"
                   className="cursor-pointer whitespace-nowrap"
                   onClick={() => handleNotificationClick(notif.id)}
+                  aria-label={`Oznacz powiadomienie ${notif.id} jako przeczytane`}
                 >
                   Nowe
                 </Badge>

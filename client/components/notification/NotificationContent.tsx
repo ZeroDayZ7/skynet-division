@@ -1,9 +1,10 @@
 'use client';
 
 import { NotificationsList } from '@/components/notification/NotificationsList';
+import { Notification } from './types/notification.types';
 
-type NotificationContentProps = {
-  notifications: any[]; // Typowanie powinno być bardziej precyzyjne, np. Notification[]
+export type NotificationContentProps = {
+  notifications: Notification[]; // Typowanie powinno być bardziej precyzyjne, np. Notification[]
   total: number;
   page: number;
   limit: number;
@@ -29,7 +30,8 @@ const NotificationContent = ({
       {loading ? (
         <p className="text-center text-gray-500">Ładowanie...</p>
       ) : error ? (
-        <p className="text-center text-red-500">Błąd pobierania powiadomień: {error}</p>
+        <p className="text-center text-red-500">Błąd: {error}</p>
+        
       ) : validNotifications.length === 0 ? (
         <p className="text-sm text-muted-foreground text-center mt-4">
           Brak nowych powiadomień.

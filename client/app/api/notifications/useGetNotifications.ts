@@ -3,19 +3,7 @@
 import { useCallback, useState } from 'react';
 import { fetchClient } from '@/lib/fetchClient';
 import { useAuth } from '@/context/auth-context';
-
-export type NotificationType = 'success' | 'warning' | 'error' | 'info';
-
-export interface Notification {
-  id: number;
-  template: {
-    type: NotificationType;
-    title?: string;
-    message: string;
-  };
-  is_read?: boolean;
-  created_at?: string;
-}
+import { Notification } from '@/components/notification/types/notification.types';
 
 interface NotificationsResponse {
   notifications: Notification[];
@@ -24,9 +12,7 @@ interface NotificationsResponse {
 export const useGetNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [total, setTotal] = useState(0);
-  const [page, setPage] = useState(1);
   const [limit] = useState(10); // Można dodać możliwość zmiany
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,7 +34,6 @@ export const useGetNotifications = () => {
       setNotifications(data.notifications || []);
       setTotal(data.total || 0);
       updateNotificationsContext(data.total || 0);
-      setPage(page);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nieznany błąd');
     } finally {
@@ -59,7 +44,6 @@ export const useGetNotifications = () => {
   return {
     notifications,
     total,
-    page,
     limit,
     loading,
     error,
