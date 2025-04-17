@@ -8,7 +8,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ./client/.env
+      - .env
     depends_on:
       - server
     environment:
@@ -23,11 +23,11 @@ services:
   server:
     build:
       context: ./server
-    container_name: next-node-server
+    container_name: node-server
     ports:
       - "5000:5000"
     env_file:
-      - ./server/.env
+      - .env
     depends_on:
       - mysql
     environment:
@@ -44,7 +44,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: next-phpmyadmin
+    container_name: phpmyadmin
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
@@ -57,7 +57,7 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: mysql-next
+    container_name: mysql
     ports:
       - "3306:3306"
     environment:

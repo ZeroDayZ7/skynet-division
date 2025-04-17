@@ -1,44 +1,36 @@
-// LoginPage.tsx
-'use client';
-
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { LoginForm } from './LoginForm';
-import { useLoginForm } from './useLoginForm';
-// import { useRouter } from 'next/navigation'; // Jeśli potrzebujesz przekierowania
+import Image from 'next/image';
 
-export default function LoginPage() {
-  // Użyj nowego hooka, który zawiera całą logikę formularza
-  const {
-    form,
-    isLoading,
-    isSubmitting,
-    showPassword,
-    toggleShowPassword,
-    onSubmit, // Ten onSubmit pochodzi z form.handleSubmit opakowanego w hooku
-    formError,
-    csrfTokenReady
-  } = useLoginForm();
-
-  // const router = useRouter(); // Do ewentualnego przekierowania
-
-  // Logikę PO pomyślnym zalogowaniu można obsłużyć w `useLoginForm`
-  // lub tutaj, np. obserwując jakiś stan z kontekstu Auth
-
+export default function MainPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold mb-6 text-center">Logowanie</h1>
-        <LoginForm
-          form={form}
-          isLoading={isLoading}
-          isSubmitting={isSubmitting}
-          showPassword={showPassword}
-          toggleShowPassword={toggleShowPassword}
-          onSubmit={onSubmit} // Przekaż handler z hooka
-          formError={formError} // Przekaż błąd
-          csrfTokenReady={csrfTokenReady} // Przekaż stan gotowości tokenu
-        />
-        {/* Możesz dodać tutaj linki np. do rejestracji czy odzyskiwania hasła */}
-      </div>
+    <div className="mx-auto px-4 py-8 flex flex-col items-center space-y-6">
+      <Image
+        src="/images/logo.jpg"
+        alt="Logo aplikacji"
+        className="rounded-full"
+        width={200}
+        height={112}
+        priority
+      />
+      <h1 className="mt-4 text-2xl font-bold text-gray-700 dark:text-gray-200">Aplikacja Obywatelska</h1>
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Zaloguj się</CardTitle>
+          <CardDescription>
+            Wpisz swoje dane, aby uzyskać dostęp do konta.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <LoginForm />
+        </CardContent>
+      </Card>
     </div>
   );
 }
