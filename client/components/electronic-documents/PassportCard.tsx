@@ -1,9 +1,9 @@
-// components/electronic-documents/PassportCard.tsx
+
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
-import Image from "next/image";
 import ErrorMessage from "@/components/errors/ErrorMessage";
+import Image from "next/image";
 import { UserDataPassport } from "@/app/api/users/electronic-documents/useGetUserPassportData";
 
 // Interfejs propsów komponentu

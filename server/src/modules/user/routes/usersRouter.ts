@@ -19,7 +19,7 @@ const router = express.Router();
 
 // Elektroniczny dowód
 router.post('/user-eid', csrfMiddleware, authMiddleware, getUserEIDData);
-router.post('/user-passport', authMiddleware, getUserPassportData);
+router.post('/user-passport', csrfMiddleware, authMiddleware, getUserPassportData);
 
 router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);

@@ -32,9 +32,9 @@ sessionManager(app);
 // Limiter
 app.use(globalLimiter);
 
-if (process.env.NODE_ENV !== 'production') {
-  app.use(requestLoggerDev);
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   app.use(requestLoggerDev);
+// }
 app.post("/api/test", (req, res) => {
   SystemLog.warn(`Wiadomość z Next server:", ${JSON.stringify(req.body, null, 2)}`);
   res.json({ status: true, data: req.body });

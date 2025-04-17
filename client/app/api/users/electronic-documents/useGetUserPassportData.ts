@@ -1,5 +1,7 @@
+"use server";
 import { fetchClient } from '@/lib/fetchClient';
 import { cookies } from 'next/headers';
+import { fetchCsrfToken } from '@/lib/csrf';
 // Interfejs odpowiedzi z backendu
 
 interface BackendResponsePassport {
@@ -23,6 +25,10 @@ export interface UserDataPassport {
 // Pobieranie danych usżytkownika = PASSPORT
 export const useGetUserPassportData = async (): Promise<UserDataPassport | null> => {
   const cookieStore = await cookies();
+  const SESSION_KEY = cookieStore.get("SESSION_KEY")?.value || "";
+
+  const csrfToken = await fetchCsrfToken(SESSION_KEY);
+
   const cookiesHeader = cookieStore
     .getAll()
     .map((cookie) => `${cookie.name}=${cookie.value}`)
@@ -31,7 +37,10 @@ export const useGetUserPassportData = async (): Promise<UserDataPassport | null>
   const response = await fetchClient<BackendResponsePassport>('/api/users/user-passport', {
     method: 'POST',
     cookies: cookiesHeader,
-    csrf: true,
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRF-Token": csrfToken,
+    },
   });
 
   return response.data;

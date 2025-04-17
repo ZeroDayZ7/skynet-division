@@ -1,15 +1,16 @@
+
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import ErrorMessage from "@/components/errors/ErrorMessage";
 import Image from "next/image";
 import { UserDataEID } from "@/app/api/users/electronic-documents/useGetUserEIDData";
-import { error } from "console";
+// import { error } from "console";
 
 // Interfejs propsów komponentu
 interface EIDCardProps {
   userData: UserDataEID | null;
-  errorMessage?: string; // Opcjonalny komunikat błędu
+  // errorMessage?: string; // Opcjonalny komunikat błędu
   
 }
 
@@ -24,14 +25,13 @@ const formatDate = (dateString: string | null) => {
   }
 };
 
-export default function EIDCard({ userData, errorMessage }: EIDCardProps) {
+export default function EIDCard({ userData }: EIDCardProps) {
   // Jeśli brak danych, zwróć komunikat o błędzie
-  if (!errorMessage || !userData) {
+  if (!userData) {
     return (
       <ErrorMessage
         title="Błąd ładowania danych"
-        message={errorMessage || "Nie udało się pobrać danych dowodu osobistego."}
-        suggestion="Spróbuj ponownie później lub skontaktuj się z administratorem."
+        message="Nie udało się pobrać danych dowodu osobistego."
       />
     );
   }
