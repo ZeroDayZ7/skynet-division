@@ -5,14 +5,14 @@ services:
     build:
       context: ./client
     container_name: next-client
-    ports:
-      - "3000:3000"
+    expose:
+      - "3000"
     env_file:
       - .env
     depends_on:
       - server
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:5000
+      NEXT_PUBLIC_API_URL: https://twojadomena.pl/api
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -24,8 +24,8 @@ services:
     build:
       context: ./server
     container_name: node-server
-    ports:
-      - "5000:5000"
+    expose:
+      - "5000"
     env_file:
       - .env
     depends_on:
@@ -45,13 +45,13 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
+    expose:
+      - "80"
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_USER: ${MYSQL_USER}
       PMA_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "8080:80"
     networks:
       - app-network
 
@@ -67,6 +67,36 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    depends_on:
+      - client
+      - server
+      - phpmyadmin
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt
+    entrypoint: >
+      sh -c "certbot certonly --webroot --webroot-path=/var/www/certbot
+             --email your@email.com --agree-tos --no-eff-email
+             -d twojadomena.pl -d www.twojadomena.pl"
     networks:
       - app-network
 

@@ -13,11 +13,12 @@ import { getUserPassportData } from '../controller/usersData/userPassportControl
 import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
 import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
 import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
+import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 
 const router = express.Router();
 
 // Elektroniczny dowód
-router.post('/user-eid', authMiddleware, getUserEIDData);
+router.post('/user-eid', csrfMiddleware, authMiddleware, getUserEIDData);
 router.post('/user-passport', authMiddleware, getUserPassportData);
 
 router.get('/pin-status', authMiddleware, checkPinController);

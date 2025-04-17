@@ -9,7 +9,8 @@ import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { LoginSchema } from './useLoginForm'; // Importuj typ z hooka
 // import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Przykład komponentu do błędów
 import { Terminal } from "lucide-react" // Ikona do alertu
-import { useRouter } from 'next/navigation';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Przykład komponentu do błędów
+
 
 interface LoginFormProps {
   form: UseFormReturn<LoginSchema>; // Przyjmij całą instancję form
@@ -41,15 +42,13 @@ export function LoginForm({
       <form onSubmit={onSubmit} className="space-y-4">
         {/* Wyświetl błąd ogólny formularza */}
         {formError && (
-          <p>{formError}</p>
-
-          //  <Alert variant="destructive">
-          //    <Terminal className="h-4 w-4" />
-          //    <AlertTitle>Błąd Logowania</AlertTitle>
-          //    <AlertDescription>
-          //      {formError}
-          //    </AlertDescription>
-          //  </Alert>
+           <Alert variant="destructive">
+             <Terminal className="h-4 w-4" />
+             <AlertTitle>Błąd Logowania</AlertTitle>
+             <AlertDescription>
+               {formError}
+             </AlertDescription>
+           </Alert>
         )}
 
         {/* Pole Email */}
@@ -58,9 +57,14 @@ export function LoginForm({
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-mail</FormLabel>
+              <FormLabel htmlFor='email'>E-mail</FormLabel>
               <FormControl>
-                <Input {...field} disabled={isDisabled} autoComplete="username" placeholder="email@example.com" />
+                <Input 
+                {...field}
+                id="email"
+                disabled={isDisabled} 
+                autoComplete="username" 
+                placeholder="email@example.com" />
               </FormControl>
               <FormMessage /> {/* Błędy walidacji dla pola */}
             </FormItem>
@@ -73,11 +77,12 @@ export function LoginForm({
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Hasło</FormLabel>
+              <FormLabel htmlFor='password'>Hasło</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
                     {...field}
+                    id='password'
                     type={showPassword ? 'text' : 'password'}
                     disabled={isDisabled}
                     autoComplete="current-password"

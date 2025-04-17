@@ -33,6 +33,7 @@ const validIp = isIP(ip) ? ip : '';
     req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
     req.session.notifications = unread;
+    delete req.session.csrfToken; // Usuń csrfToken z sesji, jeśli istnieje
 
     const saveSession = promisify(req.session.save.bind(req.session));
     await saveSession();

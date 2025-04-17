@@ -33,7 +33,7 @@ export default function MainPage() {
         priority
       />
       <h1 className="mt-4 text-2xl font-bold text-gray-700 dark:text-gray-200">Aplikacja Obywatelska</h1>
-      <Card className="w-[350px]">
+      <Card className="w-[360px]">
         <CardHeader>
           <CardTitle>Zaloguj się</CardTitle>
           <CardDescription>

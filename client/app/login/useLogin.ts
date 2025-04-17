@@ -26,11 +26,13 @@ export function useLogin() {
         body: JSON.stringify(values),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Nieprawidłowy email lub hasło');
+        const errorMessage = data?.message || 'Błąd podczas logowania, Spróbuj później';
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
       console.log('Dane użytkownika po zalogowaniu:', data);
       return data;  // Zwracamy dane użytkownika (np. token JWT, dane użytkownika)
 
