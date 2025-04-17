@@ -1,3 +1,4 @@
+'use client'
 import {
   Card,
   CardContent,
@@ -6,9 +7,21 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { LoginForm } from './LoginForm';
+import { useLoginForm } from './useLoginForm';
 import Image from 'next/image';
 
 export default function MainPage() {
+  const {
+    form,
+    isLoading,
+    isSubmitting,
+    showPassword,
+    toggleShowPassword,
+    onSubmit, // Ten onSubmit pochodzi z form.handleSubmit opakowanego w hooku
+    formError,
+    csrfTokenReady
+  } = useLoginForm();
+
   return (
     <div className="mx-auto px-4 py-8 flex flex-col items-center space-y-6">
       <Image
@@ -28,9 +41,19 @@ export default function MainPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <LoginForm />
+        <LoginForm
+          form={form}
+          isLoading={isLoading}
+          isSubmitting={isSubmitting}
+          showPassword={showPassword}
+          toggleShowPassword={toggleShowPassword}
+          onSubmit={onSubmit} // Przekaż handler z hooka
+          formError={formError} // Przekaż błąd
+          csrfTokenReady={csrfTokenReady} // Przekaż stan gotowości tokenu
+        />
         </CardContent>
       </Card>
     </div>
   );
 }
+

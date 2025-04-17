@@ -10,11 +10,16 @@ import { checkSessionStatus } from '#ro/modules/auth/controllers/statusControlle
 import { validateRequest } from '#ro/common/middlewares/validateRequest';
 import { loginSchema, LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
+import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 
 const router = express.Router();
 
 // Logowanie
-router.post('/login', validateRequest<LoginPayload>(loginSchema), loginController);
+router.post('/login', 
+    csrfMiddleware, 
+    validateRequest<LoginPayload>(loginSchema), 
+    loginController
+);
 
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);

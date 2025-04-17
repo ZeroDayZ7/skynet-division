@@ -26,11 +26,10 @@ const validIp = isIP(ip) ? ip : '';
     // Weryfikacja użytkownika
     const user = await authService.validateUser(email, password, validIp);
     const token = generateJwtToken({ id: user.id });
-    const tokenCSRF = generateCsrfToken();
+    // const tokenCSRF = generateCsrfToken();
 
     const unread = await getUnreadNotificationsCount(user.id);
     req.session.userId = user.id;
-    req.session.csrfToken = tokenCSRF;
     req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
     req.session.notifications = unread;
@@ -41,7 +40,7 @@ const validIp = isIP(ip) ? ip : '';
     SystemLog.info('Session saved');
 
     setJwtCookie(res, token);
-    setCSRFCookie(res, tokenCSRF);
+    // setCSRFCookie(res, tokenCSRF);
 
     res.status(200).json({
       isAuthenticated: true,
@@ -50,7 +49,7 @@ const validIp = isIP(ip) ? ip : '';
         points: user.points,
         notifications: unread,
       },
-      tokenCSRF,
+      // tokenCSRF,
     });
   } catch (error: any) {
     if (error instanceof AppError) {

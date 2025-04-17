@@ -11,7 +11,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { FaSpinner } from "react-icons/fa";
 import { checkSession } from "@/services/auth.service";
 
-type User = {
+export type User = {
   role: string;
   points: number;
   notifications: number;
