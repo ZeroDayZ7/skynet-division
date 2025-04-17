@@ -1,129 +1,119 @@
-// app/login/LoginForm.tsx
+// LoginForm.tsx
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { toast } from 'sonner';
-
-import { loginUser } from '@/services/auth.service';
-import { useAuth } from '@/context/auth-context';
-
+import { UseFormReturn } from 'react-hook-form'; // Importuj typy react-hook-form
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { LoginSchema } from './useLoginForm'; // Importuj typ z hooka
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Przykład komponentu do błędów
+import { Terminal } from "lucide-react" // Ikona do alertu
 
-// Schema Zod
-const loginSchema = z.object({
-  email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
-  password: z.string().min(6, { message: 'Hasło musi mieć min. 6 znaków' }),
-});
+interface LoginFormProps {
+  form: UseFormReturn<LoginSchema>; // Przyjmij całą instancję form
+  isLoading: boolean;
+  isSubmitting: boolean;
+  showPassword?: boolean; // Opcjonalne, jeśli logika jest w hooku
+  toggleShowPassword?: () => void; // Opcjonalne
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>; // Handler z hooka
+  formError: string | null; // Błąd do wyświetlenia
+  csrfTokenReady: boolean; // Informacja o gotowości tokenu
+}
 
-type LoginSchema = z.infer<typeof loginSchema>;
+export function LoginForm({
+  form,
+  isLoading,
+  isSubmitting,
+  showPassword,
+  toggleShowPassword,
+  onSubmit,
+  formError,
+  csrfTokenReady
+}: LoginFormProps) {
 
-export function LoginForm() {
-  const { login } = useAuth();
-  const router = useRouter();
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const form = useForm<LoginSchema>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: process.env.NODE_ENV === 'development' ? 'yovasec567@fincainc.com' : '',
-      password: process.env.NODE_ENV === 'development' ? 'Zaq1@wsx' : '',
-    },
-  });
-
-  const onSubmit = async (values: LoginSchema) => {
-    if (isLoading) return;
-    setIsLoading(true);
-
-    try {
-      const response = await loginUser(values.email, values.password);
-      if (!response.isAuthenticated) {
-        throw new Error(response.message || 'Błąd logowania');
-      }
-      login(response.user);
-      toast.success('Zalogowano pomyślnie');
-      router.replace('/dashboard');
-    } catch (err: unknown) {
-      const error = err as Error;
-      toast.error(error.message || 'Wystąpił problem z logowaniem');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // isLoading teraz obejmuje też czas ładowania CSRF
+  const isDisabled = isLoading || isSubmitting;
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}> {/* Rozpakuj całą instancję form */}
+      <form onSubmit={onSubmit} className="space-y-4">
+        {/* Wyświetl błąd ogólny formularza */}
+        {formError && (
+           <Alert variant="destructive">
+             <Terminal className="h-4 w-4" />
+             <AlertTitle>Błąd Logowania</AlertTitle>
+             <AlertDescription>
+               {formError}
+             </AlertDescription>
+           </Alert>
+        )}
+
+        {/* Pole Email */}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="email">E-mail</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input
-                  id="email"
-                  placeholder="Wprowadź e-mail"
-                  autoComplete="username"
-                  disabled={isLoading}
-                  {...field}
-                />
+                <Input {...field} disabled={isDisabled} autoComplete="username" placeholder="email@example.com" />
               </FormControl>
-              <FormMessage />
+              <FormMessage /> {/* Błędy walidacji dla pola */}
             </FormItem>
           )}
         />
 
+        {/* Pole Hasło */}
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="relative">
-              <FormLabel htmlFor="password">Hasło</FormLabel>
+            <FormItem>
+              <FormLabel>Hasło</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Wprowadź hasło"
-                    autoComplete="current-password"
-                    disabled={isLoading}
                     {...field}
+                    type={showPassword ? 'text' : 'password'}
+                    disabled={isDisabled}
+                    autoComplete="current-password"
+                    placeholder="******"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    disabled={isLoading}
-                    aria-label={showPassword ? 'Ukryj hasło' : 'Pokaż hasło'}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                  {/* Przycisk do pokazywania hasła */}
+                  {toggleShowPassword && (
+                     <button
+                       type="button"
+                       onClick={toggleShowPassword}
+                       className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:cursor-not-allowed"
+                       disabled={isDisabled}
+                       aria-label={showPassword ? "Ukryj hasło" : "Pokaż hasło"}
+                     >
+                       {showPassword ? <FaEyeSlash /> : <FaEye />}
+                     </button>
+                  )}
                 </div>
               </FormControl>
-              <FormMessage />
+              <FormMessage /> {/* Błędy walidacji dla pola */}
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? (
+        {/* Przycisk Submit */}
+        <Button type="submit" className="w-full" disabled={isDisabled || !csrfTokenReady}>
+          {isSubmitting || isLoading ? ( // Pokaż spinner, gdy trwa wysyłanie LUB ładowanie CSRF
             <>
-              <FaSpinner className="mr-2 animate-spin" />
-              Logowanie...
+              <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
+              {isSubmitting ? 'Logowanie...' : 'Ładowanie...'}
             </>
           ) : (
             'Zaloguj się'
           )}
         </Button>
+         {/* Informacja o braku tokenu, jeśli przycisk jest wyłączony z tego powodu */}
+         {!csrfTokenReady && !isLoading && (
+            <p className="text-xs text-muted-foreground text-center">Formularz nie jest gotowy (brak tokenu CSRF).</p>
+         )}
       </form>
     </Form>
   );
