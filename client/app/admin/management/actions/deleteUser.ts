@@ -6,6 +6,7 @@ import { fetchClient } from '@/lib/fetchClient';
 
 export async function deleteUser(userId: string) {
   try {
+    console.log(`[deleteUser] Rozpoczynanie usuwania dla userId: ${userId}`);
     const cookieStore = await cookies();
     const cookiesHeader = cookieStore
       .getAll()
@@ -19,9 +20,12 @@ export async function deleteUser(userId: string) {
     });
 
     if (!response.ok) {
+      console.error(`[deleteUser] Błąd odpowiedzi serwera: ${response.status}`);
       throw new Error('Błąd usuwania użytkownika');
     }
+    console.log(`[deleteUser] Użytkownik usunięty: userId=${userId}`);
   } catch (error) {
-    console.error('Błąd usuwania:', error);
+    console.error(`[deleteUser] Błąd podczas usuwania:`, error);
+    throw error;
   }
 }

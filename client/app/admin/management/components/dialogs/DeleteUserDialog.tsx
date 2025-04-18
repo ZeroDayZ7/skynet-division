@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { deleteUser } from '../../actions/deleteUser';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DeleteUserDialogProps {
   userId: string | null;
@@ -14,10 +14,17 @@ interface DeleteUserDialogProps {
 
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ userId, onClose }) => {
   const router = useRouter();
-  const [open, setOpen] = useState(!!userId);
+  const [open, setOpen] = useState(false);
+
+  // Synchronizuj stan open z userId
+  useEffect(() => {
+    console.log(`DeleteUserDialog: Aktualizacja userId=${userId}`);
+    setOpen(!!userId);
+  }, [userId]);
 
   const handleConfirm = async () => {
     if (userId) {
+      console.log(`Potwierdzono usunięcie użytkownika: userId=${userId}`);
       await deleteUser(userId);
       router.refresh();
       setOpen(false);
@@ -25,12 +32,16 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ userId, onCl
     }
   };
 
-  if (!userId) return null;
+  if (!userId) {
+    console.log('DeleteUserDialog: Brak userId, nie renderuję dialogu');
+    return null;
+  }
 
   return (
     <Dialog
       open={open}
       onOpenChange={(open) => {
+        console.log(`DeleteUserDialog: Zmiana stanu open=${open}`);
         setOpen(open);
         if (!open) onClose();
       }}
@@ -43,7 +54,14 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ userId, onCl
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end space-x-2">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              console.log('Anulowano usunięcie');
+              setOpen(false);
+              onClose();
+            }}
+          >
             Anuluj
           </Button>
           <Button variant="destructive" onClick={handleConfirm}>

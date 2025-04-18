@@ -26,5 +26,6 @@ export const ERROR_MESSAGES = {
   INVALID_USER_ID: 'INVALID_USER_ID',
   DB_UPDATE_FAILED: 'DB_UPDATE_FAILED',
   DB_DELETE_FAILED: 'DB_DELETE_FAILED',
+  DB_FETCH_FAILED: 'DB_FETCH_FAILED',
   
 } as const; // 'as const' zapewnia, że wartości są traktowane jako literały

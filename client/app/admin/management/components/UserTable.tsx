@@ -23,10 +23,22 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
 
   const getActions = (user: User) => [
-    { label: 'Edytuj', onClick: () => setEditUserId(user.id.toString()), destructive: false },
-    { label: 'Edytuj uprawnienia', onClick: () => setPermissionsUserId(user.id.toString()), destructive: false },
-    { label: user.userBlock ? 'Odblokuj' : 'Zablokuj', onClick: () => setBlockUserId(user.id.toString()), destructive: false },
-    { label: 'Usuń', onClick: () => setDeleteUserId(user.id.toString()), destructive: true },
+    { label: 'Edytuj', onClick: () => {
+      console.log(`Otwieram dialog edycji dla userId: ${user.id}`);
+      setEditUserId(user.id.toString());
+    }, destructive: false },
+    { label: 'Edytuj uprawnienia', onClick: () => {
+      console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
+      setPermissionsUserId(user.id.toString());
+    }, destructive: false },
+    { label: user.userBlock ? 'Odblokuj' : 'Zablokuj', onClick: () => {
+      console.log(`Otwieram dialog blokady dla userId: ${user.id}`);
+      setBlockUserId(user.id.toString());
+    }, destructive: false },
+    { label: 'Usuń', onClick: () => {
+      console.log(`Otwieram dialog usuwania dla userId: ${user.id}`);
+      setDeleteUserId(user.id.toString());
+    }, destructive: true },
   ];
 
   return (
@@ -67,7 +79,10 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                             key={action.label}
                             variant="ghost"
                             className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
-                            onClick={action.onClick}
+                            onClick={() => {
+                              console.log(`Kliknięto akcję: ${action.label} dla userId: ${user.id}`);
+                              action.onClick();
+                            }}
                           >
                             {action.label}
                           </Button>
@@ -81,16 +96,27 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
           </Table>
         )}
       </CardContent>
-      {/* Render dialogów */}
-      <EditUserDialog userId={editUserId} onClose={() => setEditUserId(null)} />
-      <EditPermissionsDialog userId={permissionsUserId} onClose={() => setPermissionsUserId(null)} />
-      <BlockUserDialog userId={blockUserId} onClose={() => setBlockUserId(null)} />
-      <DeleteUserDialog userId={deleteUserId} onClose={() => setDeleteUserId(null)} />
+      {/* Renderowanie dialogów */}
+      <EditUserDialog userId={editUserId} onClose={() => {
+        console.log('Zamykam dialog edycji');
+        setEditUserId(null);
+      }} />
+      <EditPermissionsDialog userId={permissionsUserId} onClose={() => {
+        console.log('Zamykam dialog uprawnień');
+        setPermissionsUserId(null);
+      }} />
+      <BlockUserDialog userId={blockUserId} onClose={() => {
+        console.log('Zamykam dialog blokady');
+        setBlockUserId(null);
+      }} />
+      <DeleteUserDialog userId={deleteUserId} onClose={() => {
+        console.log('Zamykam dialog usuwania');
+        setDeleteUserId(null);
+      }} />
     </Card>
   );
 };
 
-// Import dialogów na dole, aby uniknąć cyklicznych zależności
 import { EditUserDialog } from './dialogs/EditUserDialog';
 import { EditPermissionsDialog } from './dialogs/EditPermissionsDialog';
 import { BlockUserDialog } from './dialogs/BlockUserDialog';
