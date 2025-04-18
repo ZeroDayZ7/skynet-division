@@ -1,17 +1,16 @@
-import { UserSearch } from './UserSearch';
-import { UserTable } from './UserTable';
-import { EditUserDialog } from './EditUserDialog';
+// app/user-management/page.tsx
+import { UserSearch } from './components/UserSearch';
+import { UserTable } from './components/UserTable';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { searchUsers } from './actions';
+import { searchUsers } from './actions/searchUsers';
 import { Suspense } from 'react';
-import { User } from './types';
+import { User } from './types/user';
 
 interface Props {
   searchParams: Promise<{ email?: string; id?: string; role?: string }>;
-  onOpenPermissionsDialog: (user: User) => void;  // Prop for opening the permissions dialog
 }
 
-export default async function UserManagementPage({ searchParams, onOpenPermissionsDialog }: Props) {
+export default async function UserManagementPage({ searchParams }: Props) {
   const { email = '', id = '', role = '' } = await searchParams;
   const hasSearchCriteria = email || id || role;
   const users = hasSearchCriteria ? await searchUsers({ email, id, role }) : [];
@@ -26,18 +25,9 @@ export default async function UserManagementPage({ searchParams, onOpenPermissio
           <Suspense fallback={<div>Ładowanie formularza...</div>}>
             <UserSearch searchCriteria={{ email, id, role }} />
           </Suspense>
-          {hasSearchCriteria && (
-            <UserTable
-              users={users}
-              noResults={users.length === 0}
-              onEditPermissions={onOpenPermissionsDialog}
-            />
-          )}
+          {hasSearchCriteria && <UserTable users={users} noResults={users.length === 0} />}
         </CardContent>
       </Card>
-      <Suspense fallback={null}>
-        <EditUserDialog />
-      </Suspense>
     </div>
   );
 }

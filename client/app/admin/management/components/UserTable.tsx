@@ -1,51 +1,39 @@
+// app/user-management/components/UserTable.tsx
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MoreVertical } from 'lucide-react';
-import { User } from './types';
+import { User } from '../types/user';
 import { Card, CardContent } from '@/components/ui/card';
-import { editUser, blockUser, deleteUser } from './actions';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface UserTableProps {
   users: User[];
   noResults: boolean;
-  onEditPermissions: (user: User) => void;
 }
 
-export const UserTable: React.FC<UserTableProps> = ({ users, noResults, onEditPermissions }) => {
+export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
   const router = useRouter();
-
-  const handleEdit = (user: User) => {
-    router.push(`?editUser=${user.id}`);
-  };
-
-  const handleBlock = async (user: User) => {
-    await blockUser(user.id.toString());
-    router.refresh();
-  };
-
-  const handleDelete = async (user: User) => {
-    await deleteUser(user.id.toString());
-    router.refresh();
-  };
+  const [editUserId, setEditUserId] = useState<string | null>(null);
+  const [permissionsUserId, setPermissionsUserId] = useState<string | null>(null);
+  const [blockUserId, setBlockUserId] = useState<string | null>(null);
+  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
 
   const getActions = (user: User) => [
-    { label: 'Edytuj', onClick: () => handleEdit(user), destructive: false },
-    { label: 'Edytuj uprawnienia', onClick: () => onEditPermissions(user), destructive: false },
-    { label: 'Zablokuj', onClick: () => handleBlock(user), destructive: false },
-    { label: 'Usuń', onClick: () => handleDelete(user), destructive: true },
+    { label: 'Edytuj', onClick: () => setEditUserId(user.id.toString()), destructive: false },
+    { label: 'Edytuj uprawnienia', onClick: () => setPermissionsUserId(user.id.toString()), destructive: false },
+    { label: user.userBlock ? 'Odblokuj' : 'Zablokuj', onClick: () => setBlockUserId(user.id.toString()), destructive: false },
+    { label: 'Usuń', onClick: () => setDeleteUserId(user.id.toString()), destructive: true },
   ];
 
   return (
     <Card>
       <CardContent>
         {noResults ? (
-          <div className="text-center py-4 text-muted-foreground">
-            Brak wyników wyszukiwania.
-          </div>
+          <div className="text-center py-4 text-muted-foreground">Brak wyników wyszukiwania.</div>
         ) : (
           <Table>
             <TableHeader>
@@ -93,6 +81,17 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults, onEditPe
           </Table>
         )}
       </CardContent>
+      {/* Render dialogów */}
+      <EditUserDialog userId={editUserId} onClose={() => setEditUserId(null)} />
+      <EditPermissionsDialog userId={permissionsUserId} onClose={() => setPermissionsUserId(null)} />
+      <BlockUserDialog userId={blockUserId} onClose={() => setBlockUserId(null)} />
+      <DeleteUserDialog userId={deleteUserId} onClose={() => setDeleteUserId(null)} />
     </Card>
   );
 };
+
+// Import dialogów na dole, aby uniknąć cyklicznych zależności
+import { EditUserDialog } from './dialogs/EditUserDialog';
+import { EditPermissionsDialog } from './dialogs/EditPermissionsDialog';
+import { BlockUserDialog } from './dialogs/BlockUserDialog';
+import { DeleteUserDialog } from './dialogs/DeleteUserDialog';

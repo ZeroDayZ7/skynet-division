@@ -2,7 +2,7 @@
 import { Request, Response } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
-import { searchUsers } from '../services/searchService';
+import { searchUsers } from '../services/search.service';
 
 /**
  * Kontroler do wyszukiwania użytkowników na podstawie kryteriów (email, id, role).

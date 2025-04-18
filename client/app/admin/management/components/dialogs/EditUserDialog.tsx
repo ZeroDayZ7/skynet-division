@@ -1,3 +1,4 @@
+// app/user-management/components/dialogs/EditUserDialog.tsx
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -5,15 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
-import { User } from './types';
+import { User } from '../../types/user';
 import { useState, useEffect } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { editUser } from './actions';
+import { useRouter } from 'next/navigation';
+import { editUser } from '../../actions/editUser';
+import { USER_ROLES } from '../../constants';
 
-export const EditUserDialog: React.FC = () => {
+interface EditUserDialogProps {
+  userId: string | null;
+  onClose: () => void;
+}
+
+export const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const userId = searchParams.get('editUser');
   const [open, setOpen] = useState(!!userId);
   const [formData, setFormData] = useState<User | null>(null);
 
@@ -39,10 +44,12 @@ export const EditUserDialog: React.FC = () => {
           userBlock: data.userBlock,
           lastLoginIp: data.lastLoginIp,
           permissions: data.permissions || {},
-          userData: data.userData ? {
-            first_name: data.userData.first_name,
-            last_name: data.userData.last_name,
-          } : undefined,
+          userData: data.userData
+            ? {
+                first_name: data.userData.first_name,
+                last_name: data.userData.last_name,
+              }
+            : undefined,
         }))
         .catch((err) => console.error('Błąd pobierania użytkownika:', err));
     }
@@ -51,19 +58,20 @@ export const EditUserDialog: React.FC = () => {
   const handleSave = async () => {
     if (formData) {
       await editUser(formData);
-      router.push('?');
+      router.refresh();
       setOpen(false);
+      onClose();
     }
   };
 
-  if (!formData) return null;
+  if (!formData || !userId) return null;
 
   return (
     <Dialog
       open={open}
       onOpenChange={(open) => {
         setOpen(open);
-        if (!open) router.push('?');
+        if (!open) onClose();
       }}
     >
       <DialogContent>
@@ -75,20 +83,24 @@ export const EditUserDialog: React.FC = () => {
             <Label>Imię</Label>
             <Input
               value={formData.userData?.first_name || ''}
-              onChange={(e) => setFormData({
-                ...formData,
-                userData: { ...formData.userData!, first_name: e.target.value },
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  userData: { ...formData.userData!, first_name: e.target.value },
+                })
+              }
             />
           </div>
           <div>
             <Label>Nazwisko</Label>
             <Input
               value={formData.userData?.last_name || ''}
-              onChange={(e) => setFormData({
-                ...formData,
-                userData: { ...formData.userData!, last_name: e.target.value },
-              })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  userData: { ...formData.userData!, last_name: e.target.value },
+                })
+              }
             />
           </div>
           <div>
@@ -108,9 +120,9 @@ export const EditUserDialog: React.FC = () => {
                 <SelectValue placeholder="Wybierz rolę" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="moderator">Moderator</SelectItem>
-                <SelectItem value="user">User</SelectItem>
+                <SelectItem value={USER_ROLES.ADMIN}>Admin</SelectItem>
+                <SelectItem value={USER_ROLES.MODERATOR}>Moderator</SelectItem>
+                <SelectItem value={USER_ROLES.USER}>User</SelectItem>
               </SelectContent>
             </Select>
           </div>
