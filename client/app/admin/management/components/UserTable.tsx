@@ -16,36 +16,73 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
-  const router = useRouter();
   const [editUserId, setEditUserId] = useState<string | null>(null);
   const [permissionsUserId, setPermissionsUserId] = useState<string | null>(null);
-  const [blockUserId, setBlockUserId] = useState<string | null>(null);
-  const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
+  const [blockUser, setBlockUser] = useState<{
+    id: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    userBlock: boolean;
+  } | null>(null);
+  const [deleteUser, setDeleteUser] = useState<{
+    id: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+  } | null>(null); // Zmieniono z deleteUserId na deleteUser
 
   const getActions = (user: User) => [
-    { label: 'Edytuj', onClick: () => {
-      console.log(`Otwieram dialog edycji dla userId: ${user.id}`);
-      setEditUserId(user.id.toString());
-    }, destructive: false },
-    { label: 'Edytuj uprawnienia', onClick: () => {
-      console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
-      setPermissionsUserId(user.id.toString());
-    }, destructive: false },
-    { label: user.userBlock ? 'Odblokuj' : 'Zablokuj', onClick: () => {
-      console.log(`Otwieram dialog blokady dla userId: ${user.id}`);
-      setBlockUserId(user.id.toString());
-    }, destructive: false },
-    { label: 'Usuń', onClick: () => {
-      console.log(`Otwieram dialog usuwania dla userId: ${user.id}`);
-      setDeleteUserId(user.id.toString());
-    }, destructive: true },
+    {
+      label: 'Edytuj',
+      onClick: () => {
+        console.log(`Otwieram dialog edycji dla userId: ${user.id}`);
+        setEditUserId(user.id.toString());
+      },
+      destructive: false,
+    },
+    {
+      label: 'Edytuj uprawnienia',
+      onClick: () => {
+        console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
+        setPermissionsUserId(user.id.toString());
+      },
+      destructive: false,
+    },
+    {
+      label: user.userBlock ? 'Odblokuj' : 'Zablokuj',
+      onClick: () => {
+        console.log(`Otwieram dialog ${user.userBlock ? 'odblokowania' : 'blokady'} dla userId: ${user.id}`);
+        setBlockUser({
+          id: user.id.toString(),
+          email: user.email,
+          first_name: user.userData?.first_name,
+          last_name: user.userData?.last_name,
+          userBlock: user.userBlock,
+        });
+      },
+      destructive: false,
+    },
+    {
+      label: 'Usuń',
+      onClick: () => {
+        console.log(`Otwieram dialog usuwania dla userId: ${user.id}`);
+        setDeleteUser({
+          id: user.id.toString(),
+          email: user.email,
+          first_name: user.userData?.first_name,
+          last_name: user.userData?.last_name,
+        });
+      },
+      destructive: true,
+    },
   ];
 
   return (
     <Card>
       <CardContent>
         {noResults ? (
-          <div className="text-center py-4 text-muted-foreground">Brak wyników wyszukiwania.</div>
+          <div className="text-muted-foreground py-4 text-center">Brak wyników wyszukiwania.</div>
         ) : (
           <Table>
             <TableHeader>
@@ -55,6 +92,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                 <TableHead>Imię</TableHead>
                 <TableHead>Nazwisko</TableHead>
                 <TableHead>Rola</TableHead>
+                <TableHead>Status blokady</TableHead>
                 <TableHead>Akcje</TableHead>
               </TableRow>
             </TableHeader>
@@ -66,6 +104,10 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                   <TableCell>{user.userData?.first_name || '-'}</TableCell>
                   <TableCell>{user.userData?.last_name || '-'}</TableCell>
                   <TableCell>{user.role}</TableCell>
+                  <TableCell>
+                    <span className={user.userBlock ? 'font-semibold text-red-500' : 'font-semibold text-green-500'}>{user.userBlock ? 'Zablokowany' : 'Aktywny'}</span>
+                  </TableCell>
+
                   <TableCell>
                     <Popover>
                       <PopoverTrigger asChild>
@@ -96,23 +138,34 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
           </Table>
         )}
       </CardContent>
-      {/* Renderowanie dialogów */}
-      <EditUserDialog userId={editUserId} onClose={() => {
-        console.log('Zamykam dialog edycji');
-        setEditUserId(null);
-      }} />
-      <EditPermissionsDialog userId={permissionsUserId} onClose={() => {
-        console.log('Zamykam dialog uprawnień');
-        setPermissionsUserId(null);
-      }} />
-      <BlockUserDialog userId={blockUserId} onClose={() => {
-        console.log('Zamykam dialog blokady');
-        setBlockUserId(null);
-      }} />
-      <DeleteUserDialog userId={deleteUserId} onClose={() => {
-        console.log('Zamykam dialog usuwania');
-        setDeleteUserId(null);
-      }} />
+      <EditUserDialog
+        userId={editUserId}
+        onClose={() => {
+          console.log('Zamykam dialog edycji');
+          setEditUserId(null);
+        }}
+      />
+      <EditPermissionsDialog
+        userId={permissionsUserId}
+        onClose={() => {
+          console.log('Zamykam dialog uprawnień');
+          setPermissionsUserId(null);
+        }}
+      />
+      <BlockUserDialog
+        user={blockUser}
+        onClose={() => {
+          console.log('Zamykam dialog blokady/odblokowania');
+          setBlockUser(null);
+        }}
+      />
+      <DeleteUserDialog
+        user={deleteUser}
+        onClose={() => {
+          console.log('Zamykam dialog usuwania');
+          setDeleteUser(null);
+        }}
+      />
     </Card>
   );
 };

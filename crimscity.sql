@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 15, 2025 at 11:35 AM
--- Wersja serwera: 5.7.24
--- Wersja PHP: 8.3.4
+-- Generation Time: Apr 18, 2025 at 06:32 PM
+-- Server version: 5.7.24
+-- PHP Version: 8.3.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,238 +24,211 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `citizen_projects`
+-- Table structure for table `citizen_projects`
 --
 
 CREATE TABLE `citizen_projects` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `description` text NOT NULL,
-  `budget` int(11) UNSIGNED NOT NULL DEFAULT '0',
-  `location` varchar(50) NOT NULL,
-  `category` varchar(50) NOT NULL,
-  `creator_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `budget` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `location` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `creator_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `upvotes` int(11) DEFAULT '0',
   `downvotes` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `citizen_projects`
---
-
-INSERT INTO `citizen_projects` (`id`, `title`, `description`, `budget`, `location`, `category`, `creator_id`, `created_at`, `updated_at`, `upvotes`, `downvotes`) VALUES
-(1, 'Nowy park miejski nad Wisłą', 'Stworzenie terenu rekreacyjnego z ławkami, ścieżkami i placem zabaw', 250000, 'Warszawa', 'Zdrowie', 77, '2025-03-30 16:51:52', '2025-03-30 17:27:01', 120, 15),
-(2, 'Remont chodników w dzielnicy Śródmieście', 'Wymiana zniszczonych płyt chodnikowych na bezpieczną nawierzchnię', 15000, 'Warszawa', 'Ekologia', 77, '2025-03-30 16:51:52', '2025-03-30 17:29:19', 85, 10),
-(3, 'Darmowe warsztaty programowania dla młodzieży', 'Cykl spotkań wprowadzających w świat IT dla uczniów szkół średnich', 200000, 'Warszawa', 'Ekologia', 77, '2025-03-30 16:51:52', '2025-03-30 17:26:37', 150, 8),
-(4, 'Stacja naprawy rowerów miejskich', 'Utworzenie samoobsługowego punktu z narzędziami do drobnych napraw', 55000, 'Opole', 'Ekologia', 77, '2025-03-30 16:51:52', '2025-03-30 17:27:07', 95, 12),
-(5, 'Nasadzenia drzew wzdłuż ul. Centralnej', 'Posadzenie 50 nowych drzew liściastych wzdłuż ruchliwej ulicy', 100000, 'Katowice', 'Infrastruktura', 77, '2025-03-30 16:51:52', '2025-03-30 17:26:52', 110, 9);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `citizen_project_comments`
+-- Table structure for table `citizen_project_comments`
 --
 
 CREATE TABLE `citizen_project_comments` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `project_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `project_id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `comment` text NOT NULL,
+  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `citizen_project_votes`
+-- Table structure for table `citizen_project_votes`
 --
 
 CREATE TABLE `citizen_project_votes` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
-  `project_id` int(11) UNSIGNED NOT NULL,
-  `vote_type` enum('up','down') NOT NULL,
+  `project_id` int(10) UNSIGNED NOT NULL,
+  `vote_type` enum('up','down') COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `contact`
+-- Table structure for table `contact`
 --
 
 CREATE TABLE `contact` (
   `id` int(11) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `subject` varchar(50) NOT NULL,
-  `message` text NOT NULL,
+  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `contact`
---
-
-INSERT INTO `contact` (`id`, `email`, `subject`, `message`, `created_at`) VALUES
-(1, 'matrix_neo@o2.pl', 'general_inquiry', '12', '2024-05-29 16:12:58');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `document_types`
+-- Table structure for table `document_types`
 --
 
 CREATE TABLE `document_types` (
   `id` tinyint(4) NOT NULL,
-  `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `job_postings`
+-- Table structure for table `job_postings`
 --
 
 CREATE TABLE `job_postings` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `company` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `category` varchar(255) NOT NULL,
-  `postal_code` varchar(20) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postal_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `salary_min` decimal(10,2) DEFAULT NULL,
   `salary_max` decimal(10,2) DEFAULT NULL,
-  `description` text NOT NULL,
-  `requirements` text NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirements` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `job_postings`
---
-
-INSERT INTO `job_postings` (`id`, `title`, `company`, `location`, `category`, `postal_code`, `salary_min`, `salary_max`, `description`, `requirements`, `user_id`, `created_at`) VALUES
-(30, 'Junior Frontend Developer', 'TechCorp', 'Warszawa', 'IT', '00-001', 5000.00, 8000.00, 'Development of user interfaces for web applications.', 'Knowledge of HTML, CSS, JavaScript, and React.', 77, '2025-03-31 00:00:27'),
-(31, 'Junior Frontend Developer', 'TechCorp', 'Warszawa', 'IT', '00-001', 5000.00, 8000.00, 'Development of user interfaces for web applications.', 'Knowledge of HTML, CSS, JavaScript, and React.', 77, '2025-03-31 00:00:39'),
-(32, 'Junior Frontend Developer', 'TechCorp', 'Warszawa', 'IT', '00-001', 5000.00, 8000.00, 'Development of user interfaces for web applications.', 'Knowledge of HTML, CSS, JavaScript, and React.', 77, '2025-03-31 00:01:05'),
-(33, 'Junior Frontend Developer', 'TechCorp', 'Warszawa', 'IT', '00-001', 5000.00, 8000.00, 'Development of user interfaces for web applications.', 'Knowledge of HTML, CSS, JavaScript, and React.', 77, '2025-03-31 00:03:23'),
-(34, 'Junior Frontend Developer', 'TechCorp', 'Warszawa', 'IT', '00-001', 5000.00, 8000.00, 'Development of user interfaces for web applications.', 'Knowledge of HTML, CSS, JavaScript, and React.', 77, '2025-03-31 06:48:24');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `notification_templates`
+-- Table structure for table `notification_templates`
 --
 
 CREATE TABLE `notification_templates` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `message` text NOT NULL,
-  `type` varchar(50) DEFAULT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `notification_templates`
 --
 
 INSERT INTO `notification_templates` (`id`, `title`, `message`, `type`, `created_at`) VALUES
-(1, 'Pierwsze logowanie', 'Gratulacje! Otrzymałeś 50 punktów na start.', 'bonus', '2025-04-03 16:07:07'),
-(2, 'Nowa funkcja', 'Sprawdź nową funkcję w aplikacji – powiadomienia na żywo!', 'info', '2025-04-03 16:07:07'),
-(3, 'Zmiana regulaminu', 'Regulamin został zaktualizowany, prosimy o zapoznanie się.', 'warning', '2025-04-03 16:07:07'),
-(4, 'Nowa oferta pracy', 'Dostępne nowe oferty pracy w Twojej okolicy.', 'job', '2025-04-03 16:07:07'),
-(5, 'Bezpieczeństwo konta', 'Zalecamy zmianę hasła co 90 dni dla większego bezpieczeństwa.', 'security', '2025-04-03 16:07:07'),
-(6, 'Nowa wiadomość', 'Otrzymałeś nową wiadomość od użytkownika.', 'message', '2025-04-03 16:07:07'),
-(7, 'Promocja', 'Zdobądź 10% rabatu na kolejne zakupy w naszym markecie.', 'promo', '2025-04-03 16:07:07'),
-(8, 'Systemowa aktualizacja', 'Aplikacja została zaktualizowana do najnowszej wersji.', 'update', '2025-04-03 16:07:07'),
-(9, 'Weryfikacja tożsamości', 'Twoja tożsamość została pomyślnie zweryfikowana.', 'verification', '2025-04-03 16:07:07'),
-(10, 'Powiadomienie o płatności', 'Twoja płatność za subskrypcję została przetworzona.', 'payment', '2025-04-03 16:07:07');
+(1, 'Nowe zamówienie', 'Otrzymałeś nowe zamówienie do realizacji.', 'info', '2025-04-16 10:14:25'),
+(2, 'Błąd płatności', 'Nie udało się przetworzyć płatności użytkownika.', 'error', '2025-04-16 10:14:25'),
+(3, 'Konto zaktualizowane', 'Twoje dane konta zostały pomyślnie zaktualizowane.', 'success', '2025-04-16 10:14:25'),
+(4, 'Ostrzeżenie o bezpieczeństwie', 'Wykryto nietypową aktywność na Twoim koncie.', 'warning', '2025-04-16 10:14:25'),
+(5, 'Nowa wiadomość', 'Masz nową wiadomość od administratora.', 'info', '2025-04-16 10:14:25');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `sequelize_meta`
+-- Table structure for table `sequelize_meta`
 --
 
 CREATE TABLE `sequelize_meta` (
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `sequelize_meta`
---
-
-INSERT INTO `sequelize_meta` (`name`) VALUES
-('20250408173313-add-timestamps-to-users.js');
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `sessions`
+-- Table structure for table `session`
+--
+
+CREATE TABLE `session` (
+  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiresAt` datetime(3) NOT NULL,
+  `sid` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
 --
 
 CREATE TABLE `sessions` (
-  `sid` varchar(36) NOT NULL,
+  `sid` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userId` int(11) UNSIGNED DEFAULT NULL,
   `expires` datetime DEFAULT NULL,
-  `data` text,
+  `data` text COLLATE utf8mb4_unicode_ci,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `sessions`
 --
 
-INSERT INTO `sessions` (`sid`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
-('-eDx9R1lCMRzeIAOMl4FY1khvDx2nWqn', '2025-04-15 21:10:13', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-15T14:02:19.467Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"csrfToken\":\"c8b99b4a-3522-4079-81d1-b42ea3769ac4\",\"points\":50,\"role\":\"admin\",\"notifications\":3}', '2025-04-14 13:02:19', '2025-04-14 20:10:13'),
-('SopakNEsvaKJlA7gobpRq9aNcqLuy5xF', '2025-04-16 12:32:34', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-16T12:32:34.281Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"},\"userId\":77,\"csrfToken\":\"48788ac6-a8cd-40e8-8257-4f1aa0c3107d\",\"points\":50,\"role\":\"admin\",\"notifications\":3}', '2025-04-15 11:32:34', '2025-04-15 11:32:34');
+INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
+('nsvCLtMCyi4y69xPJKSUYtoyO16TgBvg', NULL, '2025-04-19 19:30:16', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-19T19:30:15.504Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"points\":50,\"role\":\"admin\",\"notifications\":20}', '2025-04-18 18:28:53', '2025-04-18 18:30:16');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pass` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pin` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `points` int(11) UNSIGNED NOT NULL DEFAULT '0',
-  `activation_token` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `login_count` int(11) UNSIGNED DEFAULT '0',
-  `role` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pass` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pin` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `points` int(10) UNSIGNED NOT NULL DEFAULT '0',
+  `activation_token` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `permissions` json DEFAULT NULL,
+  `login_count` int(10) UNSIGNED DEFAULT '0',
+  `role` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `userBlock` tinyint(1) NOT NULL DEFAULT '0',
-  `loginAttempts` tinyint(11) NOT NULL DEFAULT '0',
+  `loginAttempts` tinyint(4) NOT NULL DEFAULT '0',
   `lastLoginAttempt` datetime DEFAULT NULL,
-  `lastLoginIp` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lastLoginIp` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `pass`, `pin`, `points`, `activation_token`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
-(1, 'unknown0@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjEsInJvbGUiOiJhZG1pbiIsInVzZXIiOiJBRE1JTjExIiwiZXhwIjoxNzE1MjU0MTMwLCJpYXQiOjE3MTUyNTA1MzB9.gqTPgr9lPFxFaR2mq4QUB5adI9vDYYY9DRZw_mlr0zk', 1037, 'admin', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(2, 'unknown1@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjIsInJvbGUiOiJhZG1pbjIiLCJ1c2VyIjoiQURNSU4xMTEiLCJleHAiOjE3MTUyMjAzOTUsImlhdCI6MTcxNTIxNjc5NX0.r1PzfBaJJSplfgoFyX4-YvAkFPqmovgUoA1cgv7CEfs', 18, 'admin2', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(4, 'unknown2@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 3, NULL, NULL, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(71, 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, 2, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(77, 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$6kVtZOtXnWhYJRjkdyDGFe3RZ9K0SHQ1.CA6KWp1gr5JO7iBiy5/G', 50, NULL, 1036, 'admin', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-15 11:32:34');
+INSERT INTO `users` (`id`, `email`, `pass`, `pin`, `points`, `activation_token`, `permissions`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
+(1, 'unknown0@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjEsInJvbGUiOiJhZG1pbiIsInVzZXIiOiJBRE1JTjExIiwiZXhwIjoxNzE1MjU0MTMwLCJpYXQiOjE3MTUyNTA1MzB9.gqTPgr9lPFxFaR2mq4QUB5adI9vDYYY9DRZw_mlr0zk', NULL, 1037, 'admin', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-18 17:15:47'),
+(2, 'unknown1@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjIsInJvbGUiOiJhZG1pbjIiLCJ1c2VyIjoiQURNSU4xMTEiLCJleHAiOjE3MTUyMjAzOTUsImlhdCI6MTcxNTIxNjc5NX0.r1PzfBaJJSplfgoFyX4-YvAkFPqmovgUoA1cgv7CEfs', NULL, 18, 'admin2', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-18 17:42:00'),
+(4, 'unknown2@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 3, NULL, NULL, NULL, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
+(71, 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 2, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
+(77, 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', NULL, 50, NULL, NULL, 1115, 'admin', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-18 18:30:16');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_data`
+-- Table structure for table `user_data`
 --
 
 CREATE TABLE `user_data` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `first_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `second_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -276,41 +249,34 @@ INSERT INTO `user_data` (`id`, `user_id`, `first_name`, `second_name`, `last_nam
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_details`
+-- Table structure for table `user_details`
 --
 
 CREATE TABLE `user_details` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
   `hire_date` date NOT NULL,
-  `contract_type` varchar(50) NOT NULL,
+  `contract_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `hourly_rate` decimal(10,2) DEFAULT NULL,
   `salary` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `isActive` tinyint(4) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `user_details`
---
-
-INSERT INTO `user_details` (`id`, `user_id`, `hire_date`, `contract_type`, `hourly_rate`, `salary`, `created_at`, `updated_at`, `isActive`) VALUES
-(1, 77, '2024-09-09', 'Full-time', 20.00, 4000.00, '2024-09-09 10:27:58', '2024-09-09 16:29:50', 0);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_eid_data`
+-- Table structure for table `user_eid_data`
 --
 
 CREATE TABLE `user_eid_data` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
-  `document_number` varchar(20) NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `document_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `issue_date` date NOT NULL,
   `expiration_date` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user_eid_data`
@@ -322,48 +288,64 @@ INSERT INTO `user_eid_data` (`id`, `user_id`, `document_number`, `issue_date`, `
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_notifications`
+-- Table structure for table `user_notifications`
 --
 
 CREATE TABLE `user_notifications` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
-  `notification_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `notification_id` int(10) UNSIGNED NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
-  `received_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user_notifications`
 --
 
-INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `received_at`) VALUES
-(1, 77, 1, 0, '2025-04-03 17:01:17'),
-(2, 77, 2, 0, '2025-04-03 17:01:17'),
-(3, 77, 3, 0, '2025-04-03 17:01:17'),
-(4, 77, 4, 1, '2025-04-03 17:01:17'),
-(5, 77, 5, 1, '2025-04-03 17:01:17'),
-(6, 77, 6, 1, '2025-04-03 17:01:17'),
-(7, 77, 7, 1, '2025-04-03 17:01:17'),
-(8, 77, 8, 1, '2025-04-03 17:01:17'),
-(9, 77, 9, 1, '2025-04-03 17:01:17');
+INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `created_at`) VALUES
+(1, 77, 1, 1, '2025-04-16 10:16:06'),
+(2, 77, 2, 1, '2025-04-16 10:16:06'),
+(3, 77, 3, 1, '2025-04-16 10:16:06'),
+(4, 77, 4, 1, '2025-04-16 10:16:06'),
+(5, 77, 5, 1, '2025-04-16 10:16:06'),
+(6, 77, 1, 0, '2025-04-16 10:16:06'),
+(7, 77, 2, 0, '2025-04-16 10:16:06'),
+(8, 77, 3, 0, '2025-04-16 10:16:06'),
+(9, 77, 2, 0, '2025-04-16 10:16:06'),
+(10, 77, 5, 0, '2025-04-16 10:16:06'),
+(11, 77, 1, 0, '2025-04-16 10:16:06'),
+(12, 77, 2, 0, '2025-04-16 10:16:06'),
+(13, 77, 3, 0, '2025-04-16 10:16:06'),
+(14, 77, 4, 0, '2025-04-16 10:16:06'),
+(15, 77, 5, 0, '2025-04-16 10:16:06'),
+(16, 77, 1, 0, '2025-04-16 10:16:06'),
+(17, 77, 1, 0, '2025-04-16 10:16:06'),
+(18, 77, 1, 0, '2025-04-16 10:16:06'),
+(19, 77, 1, 0, '2025-04-16 10:16:06'),
+(20, 77, 1, 0, '2025-04-16 10:16:06'),
+(21, 77, 1, 0, '2025-04-16 10:16:06'),
+(22, 77, 1, 0, '2025-04-16 10:16:06'),
+(23, 77, 1, 0, '2025-04-16 10:16:06'),
+(24, 77, 1, 0, '2025-04-16 10:16:06'),
+(25, 77, 1, 0, '2025-04-16 10:16:06');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_passport_data`
+-- Table structure for table `user_passport_data`
 --
 
 CREATE TABLE `user_passport_data` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
   `passport_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `issue_date` date NOT NULL,
   `expiration_date` date NOT NULL,
   `country_code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'POL',
   `passport_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'P',
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -376,20 +358,20 @@ INSERT INTO `user_passport_data` (`id`, `user_id`, `passport_number`, `issue_dat
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user_referrals`
+-- Table structure for table `user_referrals`
 --
 
 CREATE TABLE `user_referrals` (
   `id` int(10) UNSIGNED NOT NULL,
-  `referrer_id` int(10) UNSIGNED NOT NULL COMMENT 'ID osoby, która rejestruje',
-  `referred_user_id` int(10) UNSIGNED NOT NULL COMMENT 'ID osoby zarejestrowanej',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Data rejestracji'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Tabela przechowuje informacje o relacjach rejestracji użytko';
+  `referrer_id` int(10) UNSIGNED NOT NULL,
+  `referred_user_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `_prisma_migrations`
+-- Table structure for table `_prisma_migrations`
 --
 
 CREATE TABLE `_prisma_migrations` (
@@ -408,14 +390,15 @@ CREATE TABLE `_prisma_migrations` (
 --
 
 INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_name`, `logs`, `rolled_back_at`, `started_at`, `applied_steps_count`) VALUES
-('616f9fe5-49fd-4774-a595-1c9279864d19', '52ee04ff0f1b1adc2fad91f4870b604adbade4c6e543c4f6e5582825ab1025de', '2025-04-15 08:21:34.002', '0_init', '', NULL, '2025-04-15 08:21:34.002', 0);
+('98c068e3-f42a-4f46-8fcb-20c9b52a95b3', '3bd497373b74d3977f5b192bd217e4a7fa37a964ed5d80253b7f08236b887b7a', '2025-04-15 13:23:55.950', '20250415132353_add_expires_at_index', NULL, NULL, '2025-04-15 13:23:55.887', 1),
+('ca024804-632e-4789-8ba3-6ac542aba049', '4213d8e89a8a7e5bdf0ae9d1ee5e6fbb96943e057a93afc9a08c70870287dee1', '2025-04-15 13:18:38.287', '20250415131836_init', NULL, NULL, '2025-04-15 13:18:36.845', 1);
 
 --
--- Indeksy dla zrzutów tabel
+-- Indexes for dumped tables
 --
 
 --
--- Indeksy dla tabeli `citizen_projects`
+-- Indexes for table `citizen_projects`
 --
 ALTER TABLE `citizen_projects`
   ADD PRIMARY KEY (`id`),
@@ -423,7 +406,7 @@ ALTER TABLE `citizen_projects`
   ADD KEY `citizen_projects_ibfk_1` (`creator_id`);
 
 --
--- Indeksy dla tabeli `citizen_project_comments`
+-- Indexes for table `citizen_project_comments`
 --
 ALTER TABLE `citizen_project_comments`
   ADD PRIMARY KEY (`id`),
@@ -432,7 +415,7 @@ ALTER TABLE `citizen_project_comments`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeksy dla tabeli `citizen_project_votes`
+-- Indexes for table `citizen_project_votes`
 --
 ALTER TABLE `citizen_project_votes`
   ADD PRIMARY KEY (`id`),
@@ -441,62 +424,69 @@ ALTER TABLE `citizen_project_votes`
   ADD KEY `project_id` (`project_id`);
 
 --
--- Indeksy dla tabeli `contact`
+-- Indexes for table `contact`
 --
 ALTER TABLE `contact`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksy dla tabeli `document_types`
+-- Indexes for table `document_types`
 --
 ALTER TABLE `document_types`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indeksy dla tabeli `job_postings`
+-- Indexes for table `job_postings`
 --
 ALTER TABLE `job_postings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ibfk_1` (`user_id`);
 
 --
--- Indeksy dla tabeli `notification_templates`
+-- Indexes for table `notification_templates`
 --
 ALTER TABLE `notification_templates`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indeksy dla tabeli `sequelize_meta`
+-- Indexes for table `sequelize_meta`
 --
 ALTER TABLE `sequelize_meta`
   ADD PRIMARY KEY (`name`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indeksy dla tabeli `sessions`
+-- Indexes for table `session`
+--
+ALTER TABLE `session`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `session_sid_key` (`sid`);
+
+--
+-- Indexes for table `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indeksy dla tabeli `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_email` (`email`);
 
 --
--- Indeksy dla tabeli `user_data`
+-- Indexes for table `user_data`
 --
 ALTER TABLE `user_data`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_user_id` (`user_id`) USING BTREE,
-  ADD UNIQUE KEY `unique_pesel` (`pesel`) USING BTREE;
+  ADD UNIQUE KEY `unique_user_id` (`user_id`),
+  ADD UNIQUE KEY `unique_pesel` (`pesel`);
 
 --
--- Indeksy dla tabeli `user_details`
+-- Indexes for table `user_details`
 --
 ALTER TABLE `user_details`
   ADD PRIMARY KEY (`id`),
@@ -504,37 +494,37 @@ ALTER TABLE `user_details`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeksy dla tabeli `user_eid_data`
+-- Indexes for table `user_eid_data`
 --
 ALTER TABLE `user_eid_data`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_user_id` (`user_id`) USING BTREE,
-  ADD UNIQUE KEY `unique_document_number` (`document_number`) USING BTREE;
+  ADD UNIQUE KEY `unique_user_id` (`user_id`),
+  ADD UNIQUE KEY `unique_document_number` (`document_number`);
 
 --
--- Indeksy dla tabeli `user_notifications`
+-- Indexes for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `notification_id` (`notification_id`);
+  ADD KEY `notification_id` (`notification_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
--- Indeksy dla tabeli `user_passport_data`
+-- Indexes for table `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `unique_passport_number` (`passport_number`),
-  ADD UNIQUE KEY `unique_user_id` (`user_id`);
+  ADD UNIQUE KEY `unique_user_id` (`user_id`),
+  ADD UNIQUE KEY `unique_passport_number` (`passport_number`);
 
 --
--- Indeksy dla tabeli `user_referrals`
+-- Indexes for table `user_referrals`
 --
 ALTER TABLE `user_referrals`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksy dla tabeli `_prisma_migrations`
+-- Indexes for table `_prisma_migrations`
 --
 ALTER TABLE `_prisma_migrations`
   ADD PRIMARY KEY (`id`);
@@ -547,73 +537,73 @@ ALTER TABLE `_prisma_migrations`
 -- AUTO_INCREMENT for table `citizen_projects`
 --
 ALTER TABLE `citizen_projects`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `citizen_project_comments`
 --
 ALTER TABLE `citizen_project_comments`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `citizen_project_votes`
 --
 ALTER TABLE `citizen_project_votes`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `contact`
 --
 ALTER TABLE `contact`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `job_postings`
 --
 ALTER TABLE `job_postings`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notification_templates`
 --
 ALTER TABLE `notification_templates`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `user_data`
 --
 ALTER TABLE `user_data`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user_eid_data`
 --
 ALTER TABLE `user_eid_data`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_referrals`
@@ -653,7 +643,6 @@ ALTER TABLE `user_eid_data`
 -- Constraints for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  ADD CONSTRAINT `user_notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_notifications_ibfk_2` FOREIGN KEY (`notification_id`) REFERENCES `notification_templates` (`id`) ON DELETE CASCADE;
 
 --

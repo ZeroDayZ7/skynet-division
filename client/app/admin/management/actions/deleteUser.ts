@@ -2,7 +2,6 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { fetchClient } from '@/lib/fetchClient';
 
 export async function deleteUser(userId: string) {
   try {
@@ -13,17 +12,32 @@ export async function deleteUser(userId: string) {
       .map((c) => `${c.name}=${c.value}`)
       .join('; ');
 
-    const response = await fetchClient(`/api/admin/users/${userId}`, {
+    console.log(`[deleteUser] Wysłanie żądania z ciasteczkami: ${cookiesHeader}`);
+    const response = await fetch(`http://localhost:3001/api/admin/users/${userId}`, {
       method: 'DELETE',
-      cookies: cookiesHeader,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookiesHeader,
+      },
+      credentials: 'include', // Dla pewności, że ciasteczka są wysyłane
     });
 
+    console.log(`[deleteUser] Status odpowiedzi: ${response.status}, OK: ${response.ok}`);
     if (!response.ok) {
-      console.error(`[deleteUser] Błąd odpowiedzi serwera: ${response.status}`);
-      throw new Error('Błąd usuwania użytkownika');
+      const errorText = await response.text();
+      console.error(`[deleteUser] Błąd odpowiedzi serwera: ${response.status}, treść: ${errorText}`);
+      throw new Error(`Błąd usuwania użytkownika: ${response.status} ${errorText}`);
     }
-    console.log(`[deleteUser] Użytkownik usunięty: userId=${userId}`);
+
+    const contentType = response.headers.get('Content-Type');
+    if (!contentType?.includes('application/json')) {
+      console.error(`[deleteUser] Oczekiwano JSON, otrzymano Content-Type: ${contentType}`);
+      throw new Error('Nieprawidłowy format odpowiedzi serwera');
+    }
+
+    const result = await response.json();
+    console.log(`[deleteUser] Użytkownik usunięty: userId=${userId}, odpowiedź: ${JSON.stringify(result)}`);
+    return result; // Zwracamy odpowiedź, np. { message: 'Użytkownik został usunięty' }
   } catch (error) {
     console.error(`[deleteUser] Błąd podczas usuwania:`, error);
     throw error;

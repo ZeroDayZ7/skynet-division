@@ -5,17 +5,14 @@ export interface UserData {
 }
 
 export interface Permissions {
-  [key: string]: boolean; // np. { canEditContent: true, canDeleteUsers: false }
+  [key: string]: boolean;
 }
 
 export interface User {
   id: number;
   email: string;
-  points: number;
-  login_count: number;
   role: string;
   userBlock: boolean;
-  lastLoginIp?: string;
-  permissions: Permissions;
-  userData?: UserData;
+  permissions: Permissions | null;
+  userData: UserData | null;
 }

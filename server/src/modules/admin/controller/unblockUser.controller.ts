@@ -1,16 +1,16 @@
-// src/modules/user/controllers/deleteUserController.ts
+// src/modules/user/controllers/unblockUserController.ts
 import { Request, Response } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
-import { deleteUser } from '../services/delete.service';
+import { unblockUser } from '../services/block.service';
 
-export const deleteUserController = async (req: Request, res: Response): Promise<void> => {
+export const unblockUserController = async (req: Request, res: Response): Promise<void> => {
   try {
-    SystemLog.warn(`[deleteUserController.ts] User ID: ${req.session.userId}`);
+    SystemLog.warn(`[unblockUserController.ts] User ID: ${req.session.userId}`);
     const isAdmin = req.session.role;
     const userId = req.session.userId || req.user?.id;
     if (!userId || !isAdmin || isAdmin !== 'admin') {
-      SystemLog.error(`[deleteUserController.ts] Unauthorized access attempt by userId: ${userId}`);
+      SystemLog.error(`[unblockUserController.ts] Unauthorized access attempt by userId: ${userId}`);
       throw new AppError('UNAUTHORIZED', 401);
     }
 
@@ -19,10 +19,10 @@ export const deleteUserController = async (req: Request, res: Response): Promise
       throw new AppError('INVALID_USER_ID', 400);
     }
 
-    await deleteUser(parseInt(id));
-    SystemLog.info(`[deleteUserController.ts] User deleted: id=${id}`);
+    await unblockUser(parseInt(id));
+    SystemLog.info(`[unblockUserController.ts] User unblocked: id=${id}`);
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'Użytkownik został usunięty' });
+    res.status(200).json({ message: 'Użytkownik został odblokowany' });
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

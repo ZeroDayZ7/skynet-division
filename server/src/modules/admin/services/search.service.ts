@@ -38,11 +38,8 @@ export const searchUsers = async (criteria: SearchCriteria): Promise<Partial<Use
       attributes: [
         'id',
         'email',
-        'points',
-        'login_count',
         'role',
         'userBlock',
-        'lastLoginIp',
         'permissions', // ← tutaj też to dodaj
       ],
       include: [

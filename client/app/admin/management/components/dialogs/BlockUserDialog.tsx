@@ -5,35 +5,50 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { blockUser } from '../../actions/blockUser';
+import { unblockUser } from '../../actions/unblockUser';
 import { useState, useEffect } from 'react';
 
 interface BlockUserDialogProps {
-  userId: string | null;
+  user: { id: string; email: string; first_name?: string; last_name?: string; userBlock: boolean } | null;
   onClose: () => void;
 }
 
-export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ userId, onClose }) => {
+export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
 
-  // Synchronizuj stan open z userId
   useEffect(() => {
-    console.log(`BlockUserDialog: Aktualizacja userId=${userId}`);
-    setOpen(!!userId);
-  }, [userId]);
+    console.log(`BlockUserDialog: Aktualizacja user=${JSON.stringify(user)}`);
+    setOpen(!!user);
+    setMessage(null);
+  }, [user]);
 
   const handleConfirm = async () => {
-    if (userId) {
-      console.log(`Potwierdzono blokadę użytkownika: userId=${userId}`);
-      await blockUser(userId);
-      router.refresh();
-      setOpen(false);
-      onClose();
+    if (user?.id) {
+      console.log(`Potwierdzono ${user.userBlock ? 'odblokowanie' : 'blokadę'} użytkownika: userId=${user.id}`);
+      try {
+        const result = user.userBlock ? await unblockUser(user.id) : await blockUser(user.id);
+        console.log(`BlockUserDialog: ${user.userBlock ? 'Odblokowanie' : 'Blokada'} zakończona sukcesem, wynik:`, result);
+        setMessage(result.message || (user.userBlock ? 'Użytkownik został odblokowany' : 'Użytkownik został zablokowany'));
+        setTimeout(() => {
+          setOpen(false);
+          onClose();
+          router.refresh();
+        }, 1500);
+      } catch (err: any) {
+        console.error(`BlockUserDialog: Błąd podczas ${user.userBlock ? 'odblokowania' : 'blokady'}:`, err);
+        setMessage(err.message || `Nie udało się ${user.userBlock ? 'odblokować' : 'zablokować'} użytkownika`);
+        setTimeout(() => {
+          setOpen(false);
+          onClose();
+        }, 1500);
+      }
     }
   };
 
-  if (!userId) {
-    console.log('BlockUserDialog: Brak userId, nie renderuję dialogu');
+  if (!user) {
+    console.log('BlockUserDialog: Brak danych użytkownika, nie renderuję dialogu');
     return null;
   }
 
@@ -43,21 +58,41 @@ export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ userId, onClos
       onOpenChange={(open) => {
         console.log(`BlockUserDialog: Zmiana stanu open=${open}`);
         setOpen(open);
-        if (!open) onClose();
+        if (!open) {
+          setMessage(null);
+          onClose();
+        }
       }}
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Zablokuj użytkownika</DialogTitle>
-          <DialogDescription>
-            Czy na pewno chcesz zablokować użytkownika o ID {userId}? Ta akcja może zostać cofnięta.
+          <DialogTitle>{user.userBlock ? 'Odblokuj użytkownika' : 'Zablokuj użytkownika'}</DialogTitle>
+          <DialogDescription className="space-y-4 text-left">
+            <i className="font-semibold dark:text-red-500">Czy na pewno chcesz {user.userBlock ? 'odblokować' : 'zablokować'} użytkownika?</i>
+
+            <strong className="grid grid-cols-1 gap-x-4 gap-y-1 text-sm sm:grid-cols-2">
+              <strong className="font-semibold dark:text-green-500">ID:</strong>
+              <strong>{user.id}</strong>
+
+              <strong className="font-semibold dark:text-green-500">Email:</strong>
+              <strong>{user.email}</strong>
+
+              <strong className="font-semibold dark:text-green-500">Imię:</strong>
+              <strong>{user.first_name || '-'}</strong>
+
+              <strong className="font-semibold dark:text-green-500">Nazwisko:</strong>
+              <strong>{user.last_name || '-'}</strong>
+            </strong>
+
+            <strong className="text-muted-foreground text-sm">Ta akcja może zostać cofnięta.</strong>
           </DialogDescription>
         </DialogHeader>
+        {message && <div className={message.includes('Nie udało się') ? 'text-red-500' : 'text-green-500'}>{message}</div>}
         <div className="flex justify-end space-x-2">
           <Button
             variant="outline"
             onClick={() => {
-              console.log('Anulowano blokadę');
+              console.log(`Anulowano ${user.userBlock ? 'odblokowanie' : 'blokadę'}`);
               setOpen(false);
               onClose();
             }}
@@ -65,9 +100,10 @@ export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ userId, onClos
             Anuluj
           </Button>
           <Button variant="destructive" onClick={handleConfirm}>
-            Zablokuj
+            {user.userBlock ? 'Odblokuj' : 'Zablokuj'}
           </Button>
-        </div>
+        </div>{' '}
+        {/* Dodano zamykający tag </div> */}
       </DialogContent>
     </Dialog>
   );
