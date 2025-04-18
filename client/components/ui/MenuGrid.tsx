@@ -29,7 +29,6 @@ export default function MenuGrid({
   className = "",
   showAdmin = false, // Domyślnie wyłączone
 }: MenuGridProps) {
-  const { user } = useAuth();
   const router = useRouter();
   const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
 
@@ -37,7 +36,7 @@ export default function MenuGrid({
     let result = items.filter((item) => !item.hidden); // Ukrywamy elementy z hidden: true
 
     // Dodajemy panel admina tylko, jeśli showAdmin jest true i użytkownik jest adminem
-    if (showAdmin && user?.role === "admin") {
+    if (showAdmin) {
       result = [
         ...result,
         {
@@ -53,7 +52,7 @@ export default function MenuGrid({
     }
 
     return result;
-  }, [items, user, showAdmin]);
+  }, [items, showAdmin]);
 
   const handleNavigation = (link: string, index: number) => {
     setLoadingIndex(index);

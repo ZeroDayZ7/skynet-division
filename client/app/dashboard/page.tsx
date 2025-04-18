@@ -14,7 +14,9 @@ export default async function DashboardPage() {
         <PointsDisplay />
         <HeaderActions />
       </div>
-      <DashboardMenu showAdmin={showAdmin} />
+      <main className='flex-1'>
+      <DashboardMenu showAdmin={showAdmin}/>
+      </main>
     </div>
   );
 }
