@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { LoginSchema } from './useLoginForm';
+import { fetchClient } from '@/lib/fetchClient'; // zakładam, że tu umieścisz funkcję
+const LOGIN_ENDPOINT = '/api/auth/login';
 
 export function useLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Funkcja logowania
   const login = async (values: LoginSchema, token: string) => {
     if (!token) {
       setError('Brak tokenu CSRF');
+      console.error('Brak tokenu CSRF');
       return;
     }
 
@@ -16,26 +18,16 @@ export function useLogin() {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/login', {
+      const response = await fetchClient(LOGIN_ENDPOINT, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': token,  // Używamy przekazanego tokenu CSRF
+          'X-CSRF-Token': token,
         },
-        credentials: 'include',
         body: JSON.stringify(values),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        const errorMessage = data?.message || 'Błąd podczas logowania, Spróbuj później';
-        throw new Error(errorMessage);
-      }
-
-      console.log('Dane użytkownika po zalogowaniu:', data);
-      return data;  // Zwracamy dane użytkownika (np. token JWT, dane użytkownika)
-
+      console.log('Dane użytkownika po zalogowaniu:', response);
+      return response;
     } catch (error: any) {
       setError(error.message || 'Błąd podczas logowania');
       throw error;

@@ -53,6 +53,7 @@ export function useLoginForm() {
         if (isMounted) {
           setFormError('Nie udało się załadować formularza. Odśwież stronę.');
         }
+        
       })
       .finally(() => {
          if (isMounted) {
@@ -68,9 +69,11 @@ export function useLoginForm() {
   }, []);
 
   const handleFormSubmit = async (values: LoginSchema) => {
+    
     if (!csrfToken) {
       setFormError('Brak tokenu CSRF. Nie można wysłać formularza.');
       console.error('Próba wysłania formularza bez tokenu CSRF');
+      setIsLoading(false);
       return;
     }
     setIsLoading(true);
@@ -95,7 +98,7 @@ export function useLoginForm() {
 
   return {
     form,
-    isLoading: isLoading || !csrfToken,
+    isLoading: isLoading,
     isSubmitting: form.formState.isSubmitting,
     showPassword,
     toggleShowPassword,

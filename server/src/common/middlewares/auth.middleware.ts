@@ -17,7 +17,7 @@ const getJwtToken = (req: Request): string => {
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   // 1. Sprawdzenie sesji
   if (!req.session || !req.session.userId || !req.session.csrfToken) {
-    SystemLog.warn('Próba autoryzacji bez aktywnej sesji');
+    SystemLog.warn('[authMiddleware] Próba autoryzacji bez aktywnej sesji');
     throw new AppError('AUTHENTICATION_FAILED', 401, true, 'Błąd autoryzacji');
   }
 
@@ -35,11 +35,11 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction):
 
   // 4. Porównanie userId
   if (decoded.sub.id !== sessionUserId) {
-    SystemLog.warn('Niezgodność userId między JWT a sesją');
+    SystemLog.warn('[authMiddleware] Niezgodność userId między JWT a sesją');
     throw new AppError('AUTH_TOKEN_INVALID', 401, true);
   }
 
   req.user = { id: Number(decoded.sub.id) };
-  SystemLog.info('Użytkownik pomyślnie zweryfikowany [authMiddleware] ');
+  SystemLog.info('[authMiddleware] Użytkownik pomyślnie zweryfikowany');
   next();
 };

@@ -3,7 +3,7 @@ import express from 'express';
 // import loginEndpoint from '#ro/endpoints/v1/auth/login.js';
 import { loginController } from '#ro/modules/auth/controllers/loginController';
 import { logoutController } from '#ro/modules/auth/controllers/logoutController';
-import { checkSessionStatus } from '#ro/modules/auth/controllers/statusController.js';
+
 // import { checkEmailAvailabilityController } from '#ro/auth/controllers/registration/checkEmailAvailabilityController';
 
 // import { authMiddleware } from '#ro/middlewares/auth.js';
@@ -27,7 +27,7 @@ router.post('/logout', authMiddleware, logoutController);
 // router.post('/check-email', authMiddleware, checkEmailAvailabilityController);
 
 // Status
-router.get('/status', checkSessionStatus);
+
 
 // Rejestracja
 // router.post('/register', require('../endpoints/registrationEndpoint.js'));
