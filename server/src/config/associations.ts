@@ -21,6 +21,11 @@ export default function defineUserAssociations() {
   Passport.belongsTo(UserData, { foreignKey: 'user_id', as: 'user', targetKey: 'user_id' });
 
   // UserNotification.belongsTo(NotificationTemplate, { foreignKey: 'notification_id', as: 'template' });
+
+
+  Users.hasOne(UserData, { foreignKey: 'user_id', as: 'userData' });
+  UserData.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
+
 }
 
 

@@ -1,6 +1,8 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '#ro/config/sequelize.config';
 import { UserAttributes, UserCreationAttributes } from '#ro/modules/auth/types/UserAttributes';
+// import UserData  from '$ro/modules/auth/models/UserData';
+ 
 
 // Powiązanie modelu z interfejsem UserAttributes
 class Users extends Model<UserAttributes, UserCreationAttributes> {
@@ -13,6 +15,7 @@ class Users extends Model<UserAttributes, UserCreationAttributes> {
   public pin!: number | null;
   public points!: number;
   public activation_token!: string | null;
+  public permissions!: Record<string, boolean> | null;
   public login_count!: number;
   public role!: string;
   public userBlock!: boolean;
@@ -58,6 +61,11 @@ Users.init(
       allowNull: true,
       defaultValue: null,
     },
+    permissions: {
+      type: DataTypes.JSON, // Użyj JSON dla MySQL, JSONB tylko dla Postgresa
+      allowNull: true,
+      defaultValue: null, // ← domyślnie null jak chcesz
+    },
     login_count: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true,
@@ -94,5 +102,7 @@ Users.init(
     timestamps: true,
   }
 );
+
+// Users.hasOne(UserData, {foreignKey: 'user_id', as: 'userData',});
 
 export default Users;

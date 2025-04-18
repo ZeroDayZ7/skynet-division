@@ -1,6 +1,7 @@
 import express from 'express';
 import authRouter from '#ro/modules/auth/routes/authRouter';
 import usersRouter from '#ro/modules/user/routes/usersRouter';
+import adminRouter from '#ro/modules/admin/routes/admin.router';
 import { getCsrfToken } from '#ro/common/csrf/csrf.controller';
 import { checkSessionStatus } from '#ro/modules/auth/controllers/session.controller.js';
 
@@ -12,6 +13,7 @@ router.get('/session', checkSessionStatus);
 // Podłączanie podrouterów
 router.use('/auth', authRouter);
 router.use('/users', usersRouter);
+router.use('/admin', adminRouter);
 
 router.use((req, res) => {
   res.status(404).json({ error: 'Not Found' });

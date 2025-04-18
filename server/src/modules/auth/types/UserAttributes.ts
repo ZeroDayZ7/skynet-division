@@ -7,6 +7,7 @@ export interface UserAttributes {
   pin: string | null;
   points: number | null;
   activation_token: string | null;
+  permissions?: Record<string, boolean> | null; // Dodane pole
   login_count: number;
   role: string | null;
   userBlock: boolean;
