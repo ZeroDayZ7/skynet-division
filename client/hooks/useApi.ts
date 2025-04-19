@@ -7,10 +7,9 @@ import { ErrorType } from '@/types/errors';
 
 interface ApiResponse<T> {
   success: boolean;
-  message?: string;
+  message: string;
   data?: T;
   type?: string;
-  code?: string;
 }
 
 export const useApi = () => {
@@ -23,23 +22,20 @@ export const useApi = () => {
         const result = await apiFunction(...args);
 
         // Wyświetlanie komunikatu
-        if (result.message) {
-          setMessage(result.message, result.success ? 'success' : 'error');
-        }
+        setMessage(result.message, result.success ? 'success' : 'error');
 
         // Obsługa błędu UNAUTHORIZED
         if (!result.success && result.type === ErrorType.UNAUTHORIZED) {
-            router.replace('/login');
+            router.push('/login');
         }
 
         return result;
       } catch (error: any) {
-        const errorMessage = error.message || 'Wystąpił nieznany błąd.';
+        const errorMessage = 'Wystąpił nieznany błąd.';
         setMessage(errorMessage, 'error');
         return {
           success: false,
-          type: ErrorType.INTERNAL,
-          code: 'UNKNOWN_ERROR',
+          type: 'UNKNOWN',
           message: errorMessage,
         };
       }

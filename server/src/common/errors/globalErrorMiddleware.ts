@@ -1,16 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
-import AppError from './AppError';
+import AppError, { ErrorType } from './AppError';
 import SystemLog from '#ro/common/utils/SystemLog';
 import { handleLogout } from '#ro/common/utils/logoutHandler';
 
-/**
- * Globalny middleware do obsługi błędów w aplikacji.
- * 
- * @param error - Błąd, który został rzucony w aplikacji
- * @param req - Obiekt żądania Express
- * @param res - Obiekt odpowiedzi Express
- * @param next - Funkcja next (nie używana w error middleware)
- */
 export const globalErrorMiddleware = (
   error: any,
   req: Request,
@@ -21,11 +13,12 @@ export const globalErrorMiddleware = (
   if (error instanceof AppError) {
     SystemLog.error(`[AppError] ${error.message}`, {
       type: error.type,
-      statusCode: error.statusCode
+      statusCode: error.statusCode,
+      code: error.code,
     });
 
     // Specjalna obsługa błędów UNAUTHORIZED
-    if (error.type === 'UNAUTHORIZED') {
+    if (error.type === ErrorType.UNAUTHORIZED) {
       return handleLogout(req, res, error);
     }
 
@@ -38,25 +31,12 @@ export const globalErrorMiddleware = (
     message: error.message,
     stack: error.stack,
     path: req.path,
-    method: req.method
+    method: req.method,
   });
 
-  // Response dla środowisk deweloperskich
-  const devErrorResponse = {
-    message: 'Wewnętrzny błąd serwera',
-    error: error.message,
-    stack: error.stack,
-    path: req.path
-  };
-
-  // Response dla produkcji
-  const prodErrorResponse = {
-    message: 'Wewnętrzny błąd serwera'
-  };
-
-  res.status(500).json(
-    process.env.NODE_ENV !== 'production' 
-      ? devErrorResponse 
-      : prodErrorResponse
-  );
+  res.status(500).json({
+    success: false,
+    message: 'Wewnętrzny błąd serwera.',
+    type: ErrorType.INTERNAL,
+  });
 };

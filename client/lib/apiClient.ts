@@ -6,10 +6,9 @@ import { ErrorType } from '@/types/errors';
 
 interface ApiResponse<T> {
   success: boolean;
-  message?: string;
+  message: string;
   data?: T;
   type?: string;
-  code?: string;
 }
 
 interface ApiRequestOptions {
@@ -19,6 +18,15 @@ interface ApiRequestOptions {
   credentials?: RequestCredentials;
 }
 
+const FALLBACK_ERROR_MESSAGES: Record<ErrorType | 'NETWORK_ERROR' | 'UNKNOWN', string> = {
+  UNAUTHORIZED: 'Brak autoryzacji. Proszę zalogować się ponownie.',
+  VALIDATION: 'Nieprawidłowe dane w żądaniu.',
+  NOT_FOUND: 'Zasób nie został znaleziony.',
+  INTERNAL: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
+  NETWORK_ERROR: 'Brak połączenia z serwerem. Sprawdź swoje połączenie internetowe.',
+  UNKNOWN: 'Wystąpił nieznany błąd.',
+};
+
 export async function apiClient<T>(
   url: string,
   options: ApiRequestOptions = {}
@@ -27,7 +35,7 @@ export async function apiClient<T>(
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
     const csrfToken = await fetchCsrfToken(SESSION_KEY);
-    const cookiesSession = `SESSION_KEY=${SESSION_KEY}`;
+    // const cookiesSession = `SESSION_KEY=${SESSION_KEY}`;
     const cookiesHeader = cookieStore
       .getAll()
       .map((c) => `${c.name}=${c.value}`)
@@ -36,8 +44,7 @@ export async function apiClient<T>(
     const defaultHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-CSRF-Token': csrfToken,
-      Cookie: cookiesSession,
-      // Cookie: cookiesHeader,
+      Cookie: cookiesHeader,
     };
 
     const response = await fetch(`http://localhost:3001${url}`, {
@@ -52,34 +59,30 @@ export async function apiClient<T>(
 
     console.log(`[apiClient] Żądanie: ${url}, Status: ${response.status}, OK: ${response.ok}`);
 
-    // Mapowanie kodów HTTP na błędy
+    // Mapowanie błędów
     if (!response.ok) {
-      let type = ErrorType.INTERNAL;
-      let code = 'SERVER_ERROR';
-      let message = 'Błąd operacji.';
+      let type: ErrorType | 'UNKNOWN' = 'UNKNOWN';
+      let message = FALLBACK_ERROR_MESSAGES.UNKNOWN;
 
+      // Mapowanie kodów HTTP na typy błędów
       switch (response.status) {
         case 401:
           type = ErrorType.UNAUTHORIZED;
-          code = 'AUTH_UNAUTHORIZED';
-          message = 'Nieautoryzowany dostęp. Proszę zalogować się ponownie.';
+          message = FALLBACK_ERROR_MESSAGES.UNAUTHORIZED;
           cookieStore.delete('JWT_COOKIE');
           cookieStore.delete('SESSION_KEY');
           break;
         case 400:
           type = ErrorType.VALIDATION;
-          code = 'BAD_REQUEST';
-          message = 'Nieprawidłowe dane w żądaniu.';
+          message = FALLBACK_ERROR_MESSAGES.VALIDATION;
           break;
         case 404:
           type = ErrorType.NOT_FOUND;
-          code = 'NOT_FOUND';
-          message = 'Zasób nie został znaleziony.';
+          message = FALLBACK_ERROR_MESSAGES.NOT_FOUND;
           break;
         case 500:
           type = ErrorType.INTERNAL;
-          code = 'INTERNAL_SERVER_ERROR';
-          message = 'Wystąpił błąd serwera. Spróbuj ponownie później.';
+          message = FALLBACK_ERROR_MESSAGES.INTERNAL;
           break;
       }
 
@@ -87,13 +90,14 @@ export async function apiClient<T>(
       const contentType = response.headers.get('Content-Type');
       if (contentType?.includes('application/json')) {
         const errorData = await response.json();
-        message = errorData.message || message;
-        type = errorData.type || type;
-        code = errorData.code || code;
+        if (errorData.type && Object.values(ErrorType).includes(errorData.type)) {
+          type = errorData.type;
+          message = errorData.message || FALLBACK_ERROR_MESSAGES[type];
+        }
       }
 
-      console.error(`[apiClient] Błąd odpowiedzi serwera: ${response.status}, treść: ${message}`);
-      return { success: false, type, code, message };
+      console.error(`[apiClient] Błąd odpowiedzi serwera: ${response.status}, type: ${type}, message: ${message}`);
+      return { success: false, type, message };
     }
 
     // Sprawdzenie Content-Type
@@ -103,8 +107,7 @@ export async function apiClient<T>(
       return {
         success: false,
         type: ErrorType.INTERNAL,
-        code: 'INVALID_RESPONSE',
-        message: 'Nieprawidłowy format odpowiedzi serwera.',
+        message: FALLBACK_ERROR_MESSAGES.INTERNAL,
       };
     }
 
@@ -119,9 +122,8 @@ export async function apiClient<T>(
     console.error(`[apiClient] Błąd podczas żądania: ${url}`, error);
     return {
       success: false,
-      type: ErrorType.INTERNAL,
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Wystąpił błąd serwera. Spróbuj ponownie później.',
+      type: 'NETWORK_ERROR',
+      message: FALLBACK_ERROR_MESSAGES.NETWORK_ERROR,
     };
   }
 }

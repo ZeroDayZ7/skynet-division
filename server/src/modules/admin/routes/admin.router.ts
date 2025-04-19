@@ -19,7 +19,11 @@ router.patch('/users/:id/block',
     authMiddleware, 
     blockUserController
 );
-router.patch('/users/:id/unblock', unblockUserController);
+router.patch('/users/:id/unblock', 
+    csrfMiddleware, 
+    authMiddleware, 
+    unblockUserController
+);
 router.delete('/users/:id', deleteUserController);
 
 // // Obsługuje inne niezdefiniowane trasy (404)

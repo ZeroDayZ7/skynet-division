@@ -1,45 +1,45 @@
 import SystemLog from '#ro/common/utils/SystemLog';
 import { Response } from 'express';
-import { ERROR_MESSAGES } from './errorMessages';
 
 export enum ErrorType {
   UNAUTHORIZED = 'UNAUTHORIZED',
   VALIDATION = 'VALIDATION',
   NOT_FOUND = 'NOT_FOUND',
-  INTERNAL = 'INTERNAL'
+  INTERNAL = 'INTERNAL',
 }
+
+const ERROR_MESSAGES: Record<ErrorType, string> = {
+  UNAUTHORIZED: 'Brak autoryzacji.',
+  VALIDATION: 'Nieprawidłowe dane.',
+  NOT_FOUND: 'Zasób nie został znaleziony.',
+  INTERNAL: 'Wewnętrzny błąd serwera.',
+};
 
 class AppError extends Error {
   public readonly statusCode: number;
   public readonly isOperational: boolean;
-  public readonly code: keyof typeof ERROR_MESSAGES;
-  public readonly type: ErrorType; // Zmienione na ErrorType dla bezpieczeństwa typów
+  public readonly code: string;
+  public readonly type: ErrorType;
 
   constructor(
-    code: keyof typeof ERROR_MESSAGES,
+    code: string,
     statusCode: number,
     isOperational: boolean = true,
     message?: string,
-    type?: ErrorType // Zmienione na ErrorType
+    type: ErrorType = ErrorType.INTERNAL
   ) {
-    const fallbackMessage = ERROR_MESSAGES[code] || 'Wystąpił błąd serwera [AppError].';
-    super(message || fallbackMessage);
+    // Ustawianie komunikatu: przekazany message lub domyślny z ERROR_MESSAGES
+    const fallbackMessage = message || ERROR_MESSAGES[type];
+    super(fallbackMessage);
 
     this.name = this.constructor.name;
     this.statusCode = statusCode;
     this.isOperational = isOperational;
     this.code = code;
-    this.type = type || this.determineDefaultType(code); // Metoda do określania domyślnego typu
+    this.type = type;
 
     Error.captureStackTrace(this, this.constructor);
     this.logError();
-  }
-
-  private determineDefaultType(code: keyof typeof ERROR_MESSAGES): ErrorType {
-    // Przykładowa logika domyślnego przypisywania typu
-    if (code.toString().includes('AUTH')) return ErrorType.UNAUTHORIZED;
-    if (code.toString().includes('VALID')) return ErrorType.VALIDATION;
-    return ErrorType.INTERNAL;
   }
 
   private logError(): void {
@@ -48,18 +48,15 @@ class AppError extends Error {
       code: this.code,
       type: this.type,
       isOperational: this.isOperational,
-      stack: this.stack // Dodanie stack trace do logów
+      stack: this.stack,
     });
   }
 
   public sendErrorResponse(res: Response): void {
     res.status(this.statusCode).json({
       success: false,
+      type: this.type,
       message: this.message,
-      ...(process.env.NODE_ENV !== 'production' && {
-        type: this.type,
-        code: this.code
-      })
     });
   }
 

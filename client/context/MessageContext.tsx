@@ -68,7 +68,7 @@ export const MessageProvider = ({ children }: { children: React.ReactNode }) => 
             variant={'ghost'}
             onClick={clearMessage}
             aria-label="Zamknij powiadomienie"
-            className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition p-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+            className="absolute top-2 right-2 transition p-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
             title="Zamknij powiadomienie"
           >
             <X className="h-4 w-4" />

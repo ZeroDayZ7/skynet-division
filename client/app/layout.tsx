@@ -1,18 +1,15 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import { ClientWrapper } from '@/components/ClientWrapper';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const inter = Inter ({
   subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+  variable: '--font-inter',
+  display: 'swap',
+  preload: false,
+})
 
 export const metadata: Metadata = {
   title: 'Aplikacja Obywatelska',
@@ -33,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pl" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.className}  antialiased`}>
         <ClientWrapper>
           {children}
         </ClientWrapper>
