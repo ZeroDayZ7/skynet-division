@@ -44,6 +44,7 @@ const validIp = isIP(ip) ? ip : '';
     // setCSRFCookie(res, tokenCSRF);
 
     res.status(200).json({
+      success: true,
       isAuthenticated: true,
       user: {
         role: user.role,

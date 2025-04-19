@@ -22,7 +22,7 @@ export const deleteUserController = async (req: Request, res: Response): Promise
     await deleteUser(parseInt(id));
     SystemLog.info(`[deleteUserController.ts] User deleted: id=${id}`);
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'Użytkownik został usunięty' });
+    res.status(200).json({ success: true, message: 'Użytkownik został usunięty' });
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

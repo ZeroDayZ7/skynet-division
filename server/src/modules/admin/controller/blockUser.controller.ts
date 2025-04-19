@@ -32,7 +32,7 @@ export const blockUserController = async (req: Request, res: Response): Promise<
 
     SystemLog.info(`[blockUserController.ts] User blocked: id=${id}`);
 
-    res.status(200).json({ message: 'Użytkownik został zablokowany' });
+    res.status(200).json({ success: true, message: 'Użytkownik został zablokowany' });
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

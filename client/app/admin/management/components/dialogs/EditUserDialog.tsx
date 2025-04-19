@@ -1,4 +1,3 @@
-// app/user-management/components/dialogs/EditUserDialog.tsx
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -9,8 +8,10 @@ import { Label } from '@/components/ui/label';
 import { User } from '../../types/user';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useApi } from '@/hooks/useApi';
 import { editUser } from '../../actions/editUser';
 import { USER_ROLES } from '../../constants';
+import { apiClient } from '@/lib/apiClient';
 
 interface EditUserDialogProps {
   userId: string | null;
@@ -19,55 +20,44 @@ interface EditUserDialogProps {
 
 export const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
   const router = useRouter();
+  const { execute } = useApi();
   const [open, setOpen] = useState(!!userId);
   const [formData, setFormData] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (userId) {
       console.log(`EditUserDialog: Pobieram dane dla userId=${userId}`);
-      const cookieStore = document.cookie;
-      fetch(`http://localhost:3001/api/users/${userId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Cookie: cookieStore,
-        },
-      })
-        .then((res) => {
-          console.log(`EditUserDialog: Odpowiedź serwera: ${res.status}`);
-          if (!res.ok) throw new Error('Nie znaleziono użytkownika');
-          return res.json();
-        })
-        .then((data) => {
+      execute(async () => {
+        const result = await apiClient<User>(`/api/users/${userId}`, { method: 'GET' });
+        if (result.success && result.data) {
           setFormData({
-            id: Number(data.id),
-            email: data.email,
-            role: data.role,
-            userBlock: data.userBlock,
-            permissions: data.permissions || {},
-            userData: data.userData
+            id: Number(result.data.id),
+            email: result.data.email,
+            role: result.data.role,
+            userBlock: result.data.userBlock,
+            permissions: result.data.permissions || {},
+            userData: result.data.userData
               ? {
-                  first_name: data.userData.first_name,
-                  last_name: data.userData.last_name,
+                  first_name: result.data.userData.first_name,
+                  last_name: result.data.userData.last_name,
                 }
               : null,
           });
-          setError(null);
-        })
-        .catch((err) => {
-          console.error('EditUserDialog: Błąd pobierania użytkownika:', err);
-          setError('Nie udało się pobrać danych użytkownika');
-        });
+        }
+        return result;
+      });
     }
-  }, [userId]);
+  }, [userId, execute]);
 
   const handleSave = async () => {
     if (formData) {
       console.log(`EditUserDialog: Zapisuję dane dla userId=${userId}`);
-      await editUser(formData);
-      router.refresh();
-      setOpen(false);
-      onClose();
+      const result = await execute(editUser, formData);
+      if (result.success) {
+        setOpen(false);
+        onClose();
+        router.refresh();
+      }
     }
   };
 
@@ -89,9 +79,7 @@ export const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose 
         <DialogHeader>
           <DialogTitle>Edytuj użytkownika: {formData?.userData?.first_name || formData?.email || 'ID: ' + userId}</DialogTitle>
         </DialogHeader>
-        {error ? (
-          <div className="text-red-500">{error}</div>
-        ) : !formData ? (
+        {!formData ? (
           <div>Ładowanie danych...</div>
         ) : (
           <div className="space-y-4">

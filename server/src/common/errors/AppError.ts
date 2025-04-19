@@ -54,7 +54,7 @@ class AppError extends Error {
 
   public sendErrorResponse(res: Response): void {
     res.status(this.statusCode).json({
-      error: true,
+      success: false,
       message: this.message,
       ...(process.env.NODE_ENV !== 'production' && {
         type: this.type,

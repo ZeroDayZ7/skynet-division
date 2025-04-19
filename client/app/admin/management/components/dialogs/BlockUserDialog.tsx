@@ -3,9 +3,10 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { blockUser } from '../../actions/blockUser';
-import { unblockUser } from '../../actions/unblockUser';
 import { useState, useEffect } from 'react';
+import { useApi } from '@/hooks/useApi';
+import { blockUser } from '@/app/admin/management/actions/blockUser';
+import { unblockUser } from '@/app/admin/management/actions/unblockUser';
 
 interface BlockUserDialogProps {
   user: { id: string; email: string; first_name?: string; last_name?: string; userBlock: boolean } | null;
@@ -14,123 +15,78 @@ interface BlockUserDialogProps {
 
 export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
+  const { execute } = useApi();
   const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   useEffect(() => {
+    console.log(`BlockUserDialog: Aktualizacja user=${JSON.stringify(user)}`);
     setOpen(!!user);
-    setMessage(null);
-    setStatus('idle');
   }, [user]);
 
   const handleConfirm = async () => {
-    if (!user?.id) return;
+    if (user?.id) {
+      console.log(`Potwierdzono ${user.userBlock ? 'odblokowanie' : 'blokadę'} użytkownika: userId=${user.id}`);
+      const action = user.userBlock ? unblockUser : blockUser;
+      const result = await execute(action, user.id);
 
-    try {
-      const result = user.userBlock
-        ? await unblockUser(user.id)
-        : await blockUser(user.id);
-
-      setMessage(
-        result.message ||
-        (user.userBlock
-          ? 'Użytkownik został odblokowany'
-          : 'Użytkownik został zablokowany')
-      );
-      setStatus('success');
-    } catch (err: any) {
-      console.error('Błąd:', err);
-      setMessage(
-        err.message ||
-        `Nie udało się ${user.userBlock ? 'odblokować' : 'zablokować'} użytkownika`
-      );
-      setStatus('error');
+      // Zamknij dialog po operacji (komunikat jest obsługiwany przez MessageContext)
+      if (result.success) {
+        setOpen(false);
+        onClose();
+        router.refresh();
+      }
     }
   };
 
-  if (!user) return null;
+  if (!user) {
+    console.log('BlockUserDialog: Brak danych użytkownika, nie renderuję dialogu');
+    return null;
+  }
 
   return (
     <Dialog
       open={open}
       onOpenChange={(open) => {
+        console.log(`BlockUserDialog: Zmiana stanu open=${open}`);
         setOpen(open);
         if (!open) {
-          setMessage(null);
-          setStatus('idle');
           onClose();
         }
       }}
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>
-            {user.userBlock ? 'Odblokuj użytkownika' : 'Zablokuj użytkownika'}
-          </DialogTitle>
+          <DialogTitle>{user.userBlock ? 'Odblokuj użytkownika' : 'Zablokuj użytkownika'}</DialogTitle>
           <DialogDescription className="space-y-4 text-left">
-            <i className="font-semibold dark:text-red-500">
-              Czy na pewno chcesz {user.userBlock ? 'odblokować' : 'zablokować'} użytkownika?
-            </i>
-
+            <i className="font-semibold dark:text-red-500">Czy na pewno chcesz {user.userBlock ? 'odblokować' : 'zablokować'} użytkownika?</i>
             <strong className="grid grid-cols-1 gap-x-4 gap-y-1 text-sm sm:grid-cols-2">
-              <span className="font-semibold dark:text-green-500">ID:</span>
-              <span>{user.id}</span>
-
-              <span className="font-semibold dark:text-green-500">Email:</span>
-              <span>{user.email}</span>
-
-              <span className="font-semibold dark:text-green-500">Imię:</span>
-              <span>{user.first_name || '-'}</span>
-
-              <span className="font-semibold dark:text-green-500">Nazwisko:</span>
-              <span>{user.last_name || '-'}</span>
+              <strong className="font-semibold dark:text-green-500">ID:</strong>
+              <strong>{user.id}</strong>
+              <strong className="font-semibold dark:text-green-500">Email:</strong>
+              <strong>{user.email}</strong>
+              <strong className="font-semibold dark:text-green-500">Imię:</strong>
+              <strong>{user.first_name || '-'}</strong>
+              <strong className="font-semibold dark:text-green-500">Nazwisko:</strong>
+              <strong>{user.last_name || '-'}</strong>
             </strong>
-
-            <i className="text-muted-foreground text-sm">
-              Ta akcja może zostać cofnięta.
-            </i>
+            <strong className="text-muted-foreground text-sm">Ta akcja może zostać cofnięta.</strong>
           </DialogDescription>
         </DialogHeader>
-
-        {message && (
-          <div className={status === 'error' ? 'text-red-500' : 'text-green-500'}>
-            {message}
-          </div>
-        )}
-
-        {status === 'idle' && (
-          <div className="flex justify-end space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setOpen(false);
-                onClose();
-              }}
-            >
-              Anuluj
-            </Button>
-            <Button variant="destructive" onClick={handleConfirm}>
-              {user.userBlock ? 'Odblokuj' : 'Zablokuj'}
-            </Button>
-          </div>
-        )}
-
-        {status !== 'idle' && (
-          <div className="flex justify-end">
-            <Button
-              onClick={() => {
-                setOpen(false);
-                onClose();
-                if (status === 'success') router.refresh();
-                setMessage(null);
-                setStatus('idle');
-              }}
-            >
-              OK
-            </Button>
-          </div>
-        )}
+        <div className="flex justify-end space-x-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              console.log(`Anulowano ${user.userBlock ? 'odblokowanie' : 'blokadę'}`);
+              setOpen(false);
+              onClose();
+            }}
+          >
+            Anuluj
+          </Button>
+          <Button variant="destructive" onClick={handleConfirm}>
+            {user.userBlock ? 'Odblokuj' : 'Zablokuj'}
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -22,7 +22,7 @@ export const unblockUserController = async (req: Request, res: Response): Promis
     await unblockUser(parseInt(id));
     SystemLog.info(`[unblockUserController.ts] User unblocked: id=${id}`);
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({ message: 'Użytkownik został odblokowany' });
+    res.status(200).json({ success: false, message: 'Użytkownik został odblokowany' });
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

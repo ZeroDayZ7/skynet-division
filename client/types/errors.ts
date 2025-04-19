@@ -1,0 +1,6 @@
+export enum ErrorType {
+    UNAUTHORIZED = 'UNAUTHORIZED',
+    VALIDATION = 'VALIDATION',
+    NOT_FOUND = 'NOT_FOUND',
+    INTERNAL = 'INTERNAL',
+  }

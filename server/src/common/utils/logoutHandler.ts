@@ -22,7 +22,7 @@ export const handleLogout = (req: Request, res: Response, error: Error): void =>
 SystemLog.warn(`[logoutHandler]error.message : ${error.message}`);
   // Wysłanie odpowiedzi z błędem
   res.status(401).json({
-    error: true,
+    success: false,
     message: error.message,
   });
 };
