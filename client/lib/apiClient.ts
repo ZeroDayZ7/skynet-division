@@ -27,12 +27,16 @@ export async function apiClient<T>(
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
     const csrfToken = await fetchCsrfToken(SESSION_KEY);
-    const cookiesSession = `SESSION_KEY=${SESSION_KEY}`;
+    // const cookiesSession = `SESSION_KEY=${SESSION_KEY}`;
+    const cookiesHeader = cookieStore
+      .getAll()
+      .map((c) => `${c.name}=${c.value}`)
+      .join('; ');
 
     const defaultHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'X-CSRF-Token': csrfToken,
-      Cookie: cookiesSession,
+      Cookie: cookiesHeader,
     };
 
     const response = await fetch(`http://localhost:3001${url}`, {
