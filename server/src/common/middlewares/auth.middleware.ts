@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
-import AppError from '#ro/common/errors/AppError';
+import AppError, { ErrorType } from '#ro/common/errors/AppError';
 import { decodeJwtToken } from '#ro/common/utils/jwtToken.utils';
 
 const getJwtToken = (req: Request): string => {
@@ -11,7 +11,7 @@ const getJwtToken = (req: Request): string => {
   if (req.cookies?.[process.env.JWT_COOKIE_NAME || 'accessToken']) {
     return req.cookies[process.env.JWT_COOKIE_NAME || 'accessToken'];
   }
-  throw new AppError('AUTH_TOKEN_MISSING', 401, true);
+  throw new AppError('AUTH_TOKEN_MISSING', 401, true, undefined, ErrorType.UNAUTHORIZED);
 };
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {

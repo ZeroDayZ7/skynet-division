@@ -23,7 +23,7 @@ export interface UserDataEID {
   photo?: string | null;
 }
 // Pobieranie danych usżytkownika = PASSPORT
-export const useGetUserEIDData = async (): Promise<UserDataEID | null> => {
+export const getUserEIDData = async (): Promise<UserDataEID | null> => {
   const cookieStore = await cookies();
   const SESSION_KEY = cookieStore.get("SESSION_KEY")?.value || "";
 

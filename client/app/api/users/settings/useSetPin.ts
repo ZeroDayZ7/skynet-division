@@ -42,7 +42,7 @@ export function useSetPin(onSuccess: (message: string) => void): UseSetPinReturn
           confirmPin: data.confirmPin,
           password: data.password,
         }),
-        csrf: true,
+        // csrf: true,
       });
 
       console.log(`[${hookId}] set-pin response:`, response);

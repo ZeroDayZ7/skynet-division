@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';

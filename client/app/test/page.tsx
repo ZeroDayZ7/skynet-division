@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useTestSendMessage } from "@/app/api/test/test-send-message";
+import { useState } from "react";
+import { useTestSendMessage as testSendMessage } from "@/app/api/test/test-send-message";
 import { fetchCsrfToken } from "@/lib/csrf";
 
 export default function Test() {
@@ -21,7 +21,7 @@ export default function Test() {
 
   const sendMessage = async () => {
     try {
-      const response = await useTestSendMessage();
+      const response = await testSendMessage();
       setData(response);
       console.log("Odpowiedź z backendu:", response);
     } catch (error) {

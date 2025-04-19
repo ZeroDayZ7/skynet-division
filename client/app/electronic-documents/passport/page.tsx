@@ -1,10 +1,10 @@
-import { useGetUserPassportData } from "@/app/api/users/electronic-documents/useGetUserPassportData";
+import { getUserPassportData } from "@/app/api/users/electronic-documents/useGetUserPassportData";
 import PassportCard from "@/components/electronic-documents/PassportCard";
 
 export default async function PassportPage() {
   let passportData = null;
   try {
-    passportData = await useGetUserPassportData();
+    passportData = await getUserPassportData();
     console.log(`Pobrano dane paszportu`);
   } catch (error) {
     console.error("Błąd pobierania danych paszportu", error);

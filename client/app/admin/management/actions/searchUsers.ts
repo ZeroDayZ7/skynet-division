@@ -36,18 +36,15 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
     return users.map((u) => ({
       id: Number(u.id),
       email: u.email,
-      points: u.points,
-      login_count: u.login_count,
       role: u.role,
       userBlock: u.userBlock,
-      lastLoginIp: u.lastLoginIp,
       permissions: u.permissions ?? {},
       userData: u.userData
         ? {
             first_name: u.userData.first_name,
             last_name: u.userData.last_name,
           }
-        : undefined,
+        : null,
     }));
   } catch (error: any) {
     console.error('Błąd wyszukiwania użytkowników:', error);

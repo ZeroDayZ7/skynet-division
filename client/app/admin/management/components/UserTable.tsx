@@ -7,7 +7,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { MoreVertical } from 'lucide-react';
 import { User } from '../types/user';
 import { Card, CardContent } from '@/components/ui/card';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface UserTableProps {

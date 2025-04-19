@@ -6,7 +6,6 @@ import SystemLog from "#ro/common/utils/SystemLog";
 export const handleLogout = (req: Request, res: Response, error: Error): void => {
   // Czyszczenie ciasteczek
   clearAuthCookie(res);
-  clearCSRFCookie(res);
 
   // Czyszczenie sesji
   if (req.session) {
@@ -20,10 +19,10 @@ export const handleLogout = (req: Request, res: Response, error: Error): void =>
       }
     });
   }
-
+SystemLog.warn(`[logoutHandler]error.message : ${error.message}`);
   // Wysłanie odpowiedzi z błędem
   res.status(401).json({
-    success: false,
+    error: true,
     message: error.message,
   });
 };

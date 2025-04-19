@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/auth-context";
 import { FaSpinner, FaUserShield } from "react-icons/fa";
 import { IconType } from "react-icons";
 

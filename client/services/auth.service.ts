@@ -33,7 +33,7 @@ export const logoutUser = async (): Promise<void> => {
   await fetchClient("/api/auth/logout", {
     method: "POST",
     credentials: "include",
-    csrf: true,
+    // csrf: true,
   });
 };
 

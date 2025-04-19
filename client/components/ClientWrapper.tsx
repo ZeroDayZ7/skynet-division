@@ -4,6 +4,7 @@
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { AuthProvider } from '@/context/auth-context';
+import { ErrorProvider } from '@/context/ErrorContext';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactNode } from 'react';
 
@@ -20,15 +21,10 @@ import { ReactNode } from 'react';
 export function ClientWrapper({ children }: { children: ReactNode }) {
   return (
     <AuthProvider>
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         {/* <QueryClientProvider client={queryClient}> */}
-          {children}
-          <Toaster richColors position="top-center" />
+        <ErrorProvider>{children}</ErrorProvider>
+        <Toaster richColors position="top-center" />
         {/* </QueryClientProvider> */}
       </ThemeProvider>
     </AuthProvider>

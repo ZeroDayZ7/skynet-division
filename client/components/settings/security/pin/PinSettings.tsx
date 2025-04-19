@@ -8,7 +8,6 @@ import PinButton from './PinButton';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
 import { useRouter } from 'next/navigation';
-import { Suspense } from 'react';
 import { usePinStatus } from './hooks/usePinStatus';
 
 export default function PinSettings() {

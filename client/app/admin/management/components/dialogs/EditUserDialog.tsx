@@ -42,18 +42,15 @@ export const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose 
           setFormData({
             id: Number(data.id),
             email: data.email,
-            points: data.points,
-            login_count: data.login_count,
             role: data.role,
             userBlock: data.userBlock,
-            lastLoginIp: data.lastLoginIp,
             permissions: data.permissions || {},
             userData: data.userData
               ? {
                   first_name: data.userData.first_name,
                   last_name: data.userData.last_name,
                 }
-              : undefined,
+              : null,
           });
           setError(null);
         })

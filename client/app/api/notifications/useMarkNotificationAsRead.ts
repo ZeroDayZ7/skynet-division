@@ -14,7 +14,7 @@ export function useMarkNotificationsAsRead() {
         await fetchClient('/api/users/notifications/read', {
           method: 'PATCH',
           body: JSON.stringify({ ids }),
-          csrf: true,
+          // csrf: true,
         });
       } catch (err) {
         console.error('Błąd przy wysyłaniu powiadomień:', err);
@@ -32,5 +32,5 @@ export function useMarkNotificationsAsRead() {
     });
   };
 
-  return { handleNotificationClick, marked };
+  return { handleNotificationClick, notificationsToMark, marked };
 }

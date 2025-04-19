@@ -4,7 +4,6 @@ import { UserTable } from './components/UserTable';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { searchUsers } from './actions/searchUsers';
 import { Suspense } from 'react';
-import { User } from './types/user';
 
 interface Props {
   searchParams: Promise<{ email?: string; id?: string; role?: string }>;

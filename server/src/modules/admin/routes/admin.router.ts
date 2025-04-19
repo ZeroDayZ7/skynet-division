@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
+import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 import { searchUsersController } from '#ro/modules/admin/controller/searchUser.controller';
 import { blockUserController } from '#ro/modules/admin/controller/blockUser.controller';
 import { deleteUserController } from '#ro/modules/admin/controller/deleteUser.controller';
@@ -13,7 +14,11 @@ const router = express.Router();
 
 router.get('/search', searchUsersController);
 router.get('/users/:id', getUserByIdController); // Nowa trasa
-router.patch('/users/:id/block', blockUserController);
+router.patch('/users/:id/block', 
+    csrfMiddleware, 
+    authMiddleware, 
+    blockUserController
+);
 router.patch('/users/:id/unblock', unblockUserController);
 router.delete('/users/:id', deleteUserController);
 

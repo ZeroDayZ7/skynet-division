@@ -27,7 +27,7 @@ export const useGetNotifications = () => {
         {
           method: 'POST',
           body: JSON.stringify({ page, limit }),
-          csrf: true,
+          // csrf: true,
         }
       );
       // console.log(`notifications: ${JSON.stringify(data.notifications, null, 2)}`);

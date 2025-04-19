@@ -15,7 +15,7 @@ export const checkEmailAvailability = async (email: string): Promise<boolean> =>
       method: "POST",
       body: JSON.stringify({ email }),
       credentials: "include",
-      csrf: true,
+      // csrf: true,
     });
     return data.available;
   } catch (error) {
@@ -31,7 +31,7 @@ export const registerUser = async (email: string): Promise<RegisterResponse> => 
       method: "POST",
       body: JSON.stringify({ email }),
       credentials: "include",
-      csrf: true,
+      // csrf: true,
     });
 
     const data: RegisterResponse = await response.json();
@@ -57,6 +57,6 @@ export const registerUserV2 = async (userData: RegisterResponse): Promise<Regist
       method: "POST",
       body: JSON.stringify(userData),
       credentials: "include",
-      csrf: true,
+      // csrf: true,
     });
   };

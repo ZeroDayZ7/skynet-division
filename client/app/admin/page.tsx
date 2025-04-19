@@ -5,9 +5,8 @@ import MenuGrid from '@/components/ui/MenuGrid';
 
 const adminMenu = [
   { id: 1, name: 'Zarejestruj Użytkownika', icon: FaUserPlus, link: '/admin/register', enabled: true, hidden: false },
-  { id: 2, name: 'Zarządzanie Użytkownikami', icon: FaUsersCog, link: '/admin/user-management', enabled: true, hidden: false },
+  { id: 2, name: 'Zarządzanie Użytkownikami', icon: FaUsersCog, link: '/admin/management', enabled: true, hidden: false },
   { id: 3, name: 'Logi Systemowe', icon: FaClipboardList, link: '/admin/logs', enabled: false, hidden: true },
-  { id: 4, name: 'Zarządzanie Użytkownikami-2', icon: FaUsersCog, link: '/admin/management', enabled: true, hidden: false },
 ];
 
 const documentItems = adminMenu.map((doc) => ({
