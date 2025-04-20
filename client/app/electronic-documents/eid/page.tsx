@@ -1,5 +1,5 @@
 import { getUserEIDData } from "@/app/api/users/electronic-documents/useGetUserEIDData"; // ← Zmieniona nazwa!
-import EIDCard from "@/components/electronic-documents/EIDCard";
+import EIDCard from "../../../../components/electronic-documents/EIDCard";
 
 export default async function EIDPage() {
   let userData = null;

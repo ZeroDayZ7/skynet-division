@@ -1,5 +1,5 @@
-import { SettingsSection } from "@/components/settings/SettingsSection";
-import { SettingsCard } from "@/components/settings/SettingsCard";
+import { SettingsSection } from "../../../components/settings/SettingsSection";
+import { SettingsCard } from "../../../components/settings/SettingsCard";
 import { Shield, User, Bell, Lock } from "lucide-react";
 
 export default function SettingsPage() {

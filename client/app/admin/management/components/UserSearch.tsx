@@ -1,3 +1,4 @@
+// app/user-management/components/UserSearch.tsx
 'use client';
 
 import { Input } from '@/components/ui/input';
@@ -9,42 +10,39 @@ import { useState, useEffect } from 'react';
 
 interface SearchCriteria {
   email: string;
-  id: string | number;
+  id: string;
   role: string;
 }
 
 interface UserSearchProps {
-  searchCriteria: SearchCriteria;
+  initialCriteria: Partial<SearchCriteria>;
 }
 
-export const UserSearch: React.FC<UserSearchProps> = ({ searchCriteria }) => {
+export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
   const [criteria, setCriteria] = useState<SearchCriteria>({
-    email: searchCriteria.email,
-    id: searchCriteria.id,
-    role: searchCriteria.role,
+    email: initialCriteria.email ?? '',
+    id: initialCriteria.id ?? '',
+    role: initialCriteria.role ?? '',
   });
 
   useEffect(() => {
     setCriteria({
-      email: searchParams.get('email') || '',
-      id: searchParams.get('id') || '',
-      role: searchParams.get('role') || '',
+      email: searchParams.get('email') ?? '',
+      id: searchParams.get('id') ?? '',
+      role: searchParams.get('role') ?? '',
     });
   }, [searchParams]);
 
   const updateSearch = () => {
-    if (!criteria.email && !criteria.id && (!criteria.role || criteria.role === 'all')) {
-      return;
-    }
-
     const params = new URLSearchParams();
-    if (criteria.email) params.set('email', criteria.email);
-    if (criteria.id) params.set('id', criteria.id.toString());
+    if (criteria.email.trim()) params.set('email', criteria.email.trim());
+    if (criteria.id.trim()) params.set('id', criteria.id.trim());
     if (criteria.role && criteria.role !== 'all') params.set('role', criteria.role);
-    router.push(`?${params.toString()}`);
+    if (params.toString()) {
+      router.push(`?${params.toString()}`);
+    }
   };
 
   return (

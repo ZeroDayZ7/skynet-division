@@ -1,6 +1,6 @@
 'use client';
 
-import { NotificationsList } from '@/components/notification/NotificationsList';
+import { NotificationsList } from './NotificationsList';
 import { Notification } from './types/notification.types';
 
 export type NotificationContentProps = {
