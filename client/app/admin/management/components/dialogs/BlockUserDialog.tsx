@@ -16,6 +16,7 @@ interface BlockUserDialogProps {
 export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose }) => {
   const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
+  console.log(`EE`);
 
   useEffect(() => {
     if (user) {

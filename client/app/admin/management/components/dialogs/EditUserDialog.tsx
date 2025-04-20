@@ -24,6 +24,7 @@ interface UserData {
 }
 
 const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
+  console.log(`E5ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ67547457457E`);
   const router = useRouter();
   const { execute } = useApi();
   const { permissions } = usePermissions();

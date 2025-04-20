@@ -3,7 +3,7 @@
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Permission, Permissions } from '../types/user';
+import { Permissions } from '../types/user';
 
 interface PermissionCheckboxGroupProps {
   userPermissions: Permissions;

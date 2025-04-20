@@ -15,7 +15,7 @@ interface DeleteUserDialogProps {
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
   const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
-
+  console.log(`EEaaaaaaaaaa`);
   useEffect(() => {
     if (user) {
       const hasPermission = !!(permissions?.userDelete?.enabled && !permissions.userDelete.hidden);

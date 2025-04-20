@@ -10,10 +10,7 @@ interface UserInfoProps {
 
 export const UserInfo: React.FC<UserInfoProps> = ({ user, className }) => {
   return (
-    <div className={cn('space-y-2', className)}>
-      <strong className="font-semibold dark:text-green-500">
-        {user.email}
-      </strong>
+    <samp className={cn('space-y-2', className)}>
       <samp className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
         <samp className="font-semibold dark:text-green-500">ID</samp>
         <samp>{user.id}</samp>
@@ -24,6 +21,6 @@ export const UserInfo: React.FC<UserInfoProps> = ({ user, className }) => {
         <samp className="font-semibold dark:text-green-500">Nazwisko</samp>
         <samp>{user.last_name || '-'}</samp>
       </samp>
-    </div>
+    </samp>
   );
 };

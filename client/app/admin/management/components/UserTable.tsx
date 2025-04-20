@@ -1,21 +1,30 @@
-// app/user-management/components/UserTable.tsx
 'use client';
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MoreVertical } from 'lucide-react';
 import { User } from '../types/user';
 import { Card, CardContent } from '@/components/ui/card';
-import { useState } from 'react';
 import { useUserActions } from '../hooks/useUserActions';
 
-// Leniwe ładowanie dialogów
+// Lazy loaded dialogi
 const EditUserDialog = lazy(() => import('./dialogs/EditUserDialog'));
 const EditPermissionsDialog = lazy(() => import('./dialogs/EditPermissionsDialog'));
 const BlockUserDialog = lazy(() => import('./dialogs/BlockUserDialog'));
 const DeleteUserDialog = lazy(() => import('./dialogs/DeleteUserDialog'));
+
+// Typ dla wybranego użytkownika z akcją
+// [OPTIMIZATION] Zdefiniowano jeden typ zamiast oddzielnych interfejsów dla każdego dialogu
+type SelectedUser = {
+  id: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+  userBlock?: boolean; // Tylko dla akcji 'block'
+  action: 'edit' | 'permissions' | 'block' | 'delete';
+};
 
 interface UserTableProps {
   users: User[];
@@ -23,26 +32,16 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
-  const [editUserId, setEditUserId] = useState<string | null>(null);
-  const [permissionsUser, setPermissionsUser] = useState<{
-    id: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-  } | null>(null);
-  const [blockUser, setBlockUser] = useState<{
-    id: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-    userBlock: boolean;
-  } | null>(null);
-  const [deleteUser, setDeleteUser] = useState<{
-    id: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-  } | null>(null);
+  // [OPTIMIZATION] Zastąpiono cztery stany (editUserId, permissionsUser, blockUser, deleteUser) jednym stanem selectedUser
+  const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null);
+
+  // [OPTIMIZATION] Mapowanie akcji na komponenty dialogów dla bardziej generycznego renderowania
+  const dialogComponents: Record<SelectedUser['action'], React.ComponentType<any>> = {
+    edit: EditUserDialog,
+    permissions: EditPermissionsDialog,
+    block: BlockUserDialog,
+    delete: DeleteUserDialog,
+  };
 
   return (
     <Card>
@@ -64,16 +63,21 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
             </TableHeader>
             <TableBody>
               {users.map((user) => {
-                const actions = useUserActions(user, setEditUserId, setPermissionsUser, setBlockUser, setDeleteUser);
+                // [OPTIMIZATION] Przekazano tylko setSelectedUser zamiast czterech funkcji
+                const actions = useUserActions(user, setSelectedUser);
                 return (
                   <TableRow key={user.id}>
                     <TableCell>{user.id}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.userData?.first_name || '-'}</TableCell>
                     <TableCell>{user.userData?.last_name || '-'}</TableCell>
-                    <TableCell>{user.role}</TableCell>
+                    <TableCell>{user.role || '-'}</TableCell>
                     <TableCell>
-                      <span className={user.userBlock ? 'font-semibold text-red-500' : 'font-semibold text-green-500'}>
+                      <span
+                        className={
+                          user.userBlock ? 'font-semibold text-red-500' : 'font-semibold text-green-500'
+                        }
+                      >
                         {user.userBlock ? 'Zablokowany' : 'Aktywny'}
                       </span>
                     </TableCell>
@@ -89,7 +93,9 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                             <Button
                               key={action.label}
                               variant="ghost"
-                              className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
+                              className={`w-full justify-start ${
+                                action.destructive ? 'text-destructive' : ''
+                              }`}
                               onClick={action.onClick}
                               disabled={action.disabled}
                             >
@@ -106,44 +112,30 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
           </Table>
         )}
       </CardContent>
+
       <Suspense fallback={<div>Ładowanie dialogów...</div>}>
-        {editUserId && (
-          <EditUserDialog
-            userId={editUserId}
-            onClose={() => {
-              console.log('Zamykam dialog edycji');
-              setEditUserId(null);
-            }}
-          />
-        )}
-        {permissionsUser && (
-          <EditPermissionsDialog
-            user={permissionsUser}
-            onClose={() => {
-              console.log('Zamykam dialog uprawnień');
-              setPermissionsUser(null);
-            }}
-          />
-        )}
-        {blockUser && (
-          <BlockUserDialog
-            user={blockUser}
-            onClose={() => {
-              console.log('Zamykam dialog blokady/odblokowania');
-              setBlockUser(null);
-            }}
-          />
-        )}
-        {deleteUser && (
-          <DeleteUserDialog
-            user={deleteUser}
-            onClose={() => {
-              console.log('Zamykam dialog usuwania');
-              setDeleteUser(null);
-            }}
-          />
+        {/* [OPTIMIZATION] Generyczne renderowanie dialogów na podstawie selectedUser.action */}
+        {selectedUser && (
+          (() => {
+            const DialogComponent = dialogComponents[selectedUser.action];
+            return (
+              <DialogComponent
+                // Dla EditUserDialog przekazujemy tylko userId
+                {...(selectedUser.action === 'edit'
+                  ? { userId: selectedUser.id }
+                  : { user: selectedUser })}
+                onClose={() => {
+                  // [OPTIMIZATION] Ujednolicono logikę zamykania dialogów
+                  console.log(`Zamykam dialog akcji: ${selectedUser.action}`);
+                  setSelectedUser(null);
+                }}
+              />
+            );
+          })()
         )}
       </Suspense>
     </Card>
   );
 };
+
+export default UserTable;

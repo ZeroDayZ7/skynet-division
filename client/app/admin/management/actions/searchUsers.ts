@@ -32,7 +32,7 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
               first_name: u.userData.first_name,
               last_name: u.userData.last_name,
             }
-          : undefined,
+          : null,
       }));
     } else {
       console.error('Błąd przy pobieraniu użytkowników:', response.message);
