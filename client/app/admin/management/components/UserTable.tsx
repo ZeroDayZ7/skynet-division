@@ -20,7 +20,7 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
-  const { permissions, isLoaded } = usePermissions();
+  const { permissions } = usePermissions();
   const [editUserId, setEditUserId] = useState<string | null>(null);
   const [permissionsUserId, setPermissionsUserId] = useState<string | null>(null);
   const [blockUser, setBlockUser] = useState<{
@@ -134,7 +134,7 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                   <TableCell>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon" disabled={!isLoaded}>
+                        <Button variant="ghost" size="icon">
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>

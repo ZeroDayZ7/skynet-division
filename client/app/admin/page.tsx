@@ -3,7 +3,6 @@
 import { FaUserPlus, FaUsersCog, FaClipboardList } from 'react-icons/fa';
 import { usePermissions } from '@/context/PermissionsContext';
 import MenuGrid from '@/components/ui/MenuGrid';
-import { permission } from 'process';
 
 const adminMenu = [
   { id: 1, name: 'Zarejestruj Użytkownika', icon: FaUserPlus, link: '/admin/register', permissionKey: 'userCreate' },
@@ -13,7 +12,7 @@ const adminMenu = [
 
 export default function AdminPanelPage() {
   // Pobieranie uprawnień z kontekstu
-  const { permissions, isLoaded } = usePermissions();
+  const { permissions } = usePermissions();
 
   // Modyfikacja menu na podstawie uprawnień
   const documentItems = adminMenu.map((doc) => ({
@@ -25,10 +24,7 @@ export default function AdminPanelPage() {
   }));
 
   // Renderowanie menu po załadowaniu uprawnień
-  if (!isLoaded) {
-    return <div>Loading...</div>;
-  }
-
+ 
   return (
     <div className="mx-auto">
       <h1 className="text-2xl font-bold text-center mb-4 dark:text-green-500">

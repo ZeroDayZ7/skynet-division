@@ -8,11 +8,11 @@ import {
   ReactNode,
 } from 'react';
 import { getUserPermissions } from '@/context/permissions/getUserPermissions'; 
+import { FaSpinner } from 'react-icons/fa';
 
 type PermissionsContextType = {
   permissions: Record<string, { enabled: boolean, hidden: boolean }> | null; // Zmieniamy typ na obiekt
   role: string | null;
-  isLoaded: boolean;
 };
 
 const PermissionsContext = createContext<PermissionsContextType | undefined>(undefined);
@@ -41,8 +41,16 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
     fetchPermissions();
   }, []);
 
+  if (!isLoaded) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <FaSpinner className="animate-spin text-white text-4xl" />
+      </div>
+    );
+  }
+
   return (
-    <PermissionsContext.Provider value={{ permissions, role, isLoaded }}>
+    <PermissionsContext.Provider value={{ permissions, role }}>
       {children}
     </PermissionsContext.Provider>
   );
