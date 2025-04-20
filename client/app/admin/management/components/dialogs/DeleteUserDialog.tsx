@@ -55,18 +55,18 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClos
         <DialogHeader>
           <DialogTitle>Usuń użytkownika</DialogTitle>
           <DialogDescription className="space-y-4 text-left">
-            <i className="font-semibold dark:text-red-500">Czy na pewno chcesz usunąć użytkownika?</i>
-            <strong className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-              <strong className="font-semibold dark:text-green-500">ID:</strong>
-              <strong>{user.id}</strong>
-              <strong className="font-semibold dark:text-green-500">Email:</strong>
-              <strong>{user.email}</strong>
-              <strong className="font-semibold dark:text-green-500">Imię:</strong>
-              <strong>{user.first_name || '-'}</strong>
-              <strong className="font-semibold dark:text-green-500">Nazwisko:</strong>
-              <strong>{user.last_name || '-'}</strong>
-            </strong>
-            <strong className="text-muted-foreground text-sm">Tej akcji nie można cofnąć.</strong>
+            <strong className="font-semibold dark:text-red-500">Czy na pewno chcesz usunąć użytkownika?</strong>
+            <samp className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+              <samp className="font-semibold dark:text-green-500">ID</samp>
+              <samp>{user.id}</samp>
+              <samp className="font-semibold dark:text-green-500">Email</samp>
+              <samp>{user.email}</samp>
+              <samp className="font-semibold dark:text-green-500">Imię</samp>
+              <samp>{user.first_name || '-'}</samp>
+              <samp className="font-semibold dark:text-green-500">Nazwisko</samp>
+              <samp>{user.last_name || '-'}</samp>
+            </samp>
+            <samp className="text-muted-foreground text-sm">Tej akcji nie można cofnąć.</samp>
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end space-x-2">

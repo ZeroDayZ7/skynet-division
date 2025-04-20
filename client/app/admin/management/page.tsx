@@ -1,4 +1,5 @@
 // app/user-management/page.tsx
+// 'use client'
 import { UserSearch } from './components/UserSearch';
 import { UserTable } from './components/UserTable';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
