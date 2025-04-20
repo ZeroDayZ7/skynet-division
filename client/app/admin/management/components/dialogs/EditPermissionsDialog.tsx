@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useApi } from '@/hooks/useApi';
 import { useRouter } from 'next/navigation';
 import { usePermissions } from '@/context/PermissionsContext';
-import { getPermissions, editPermissions } from '../../actions/editPermissions'; // Poprawiony import
+import { getPermissions, editPermissions } from '../../actions/editPermissions';
 
 interface Permission {
   enabled: boolean;
@@ -20,49 +20,41 @@ interface Permissions {
   [key: string]: Permission;
 }
 
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string; // Zgodne z permissions.ts
-}
-
 interface EditPermissionsDialogProps {
-  userId: string | null;
+  user: { id: string; email: string; first_name?: string; last_name?: string } | null;
   onClose: () => void;
 }
 
-export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ userId, onClose }) => {
+export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
   const { execute } = useApi();
-  const { permissions: currentUserPermissions } = usePermissions();
+  const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
   const [userPermissions, setUserPermissions] = useState<Permissions | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sprawdź, czy użytkownik ma uprawnienie do edycji uprawnień
-  if (!userId || !currentUserPermissions || !currentUserPermissions.userEditPermissions || !currentUserPermissions.userEditPermissions.enabled || currentUserPermissions.userEditPermissions.hidden) {
-    console.log('EditPermissionsDialog: Brak danych użytkownika lub uprawnień do edycji uprawnień, nie renderuję dialogu');
-    return null;
-  }
+  // Sprawdź uprawnienia i dane użytkownika
+  const hasPermission = permissions && permissions.userEditPermissions ? permissions.userEditPermissions.enabled && !permissions.userEditPermissions.hidden : false;
 
-  // Pobierz uprawnienia użytkownika po otwarciu dialogu
   useEffect(() => {
-    if (userId) {
+    console.log(`EditPermissionsDialog: Aktualizacja user=${JSON.stringify(user)}, hasPermission=${hasPermission}`);
+    setOpen(!!user && hasPermission);
+
+    if (user && hasPermission) {
       const fetchPermissions = async () => {
         setLoading(true);
         setError(null);
-        console.log(`EditPermissionsDialog: Pobieranie uprawnień dla userId=${userId}`);
+        console.log(`EditPermissionsDialog: Pobieranie uprawnień dla userId=${user.id}`);
         try {
-          const response = await execute(getPermissions, userId);
+          const response = await execute(getPermissions, user.id);
           if (response.success && response.data) {
             console.log(`EditPermissionsDialog: Pobrano uprawnienia:`, response.data);
             setUserPermissions(response.data);
-            setOpen(true);
           } else {
             console.log('EditPermissionsDialog: Nie udało się pobrać uprawnień, response=', response);
-            setError(response.message || 'Nie udało się pobrać uprawnień użytkownika.');
-            setOpen(false);
+            setError(response.message);
+            // setOpen(false);
           }
         } catch (error) {
           console.error('EditPermissionsDialog: Błąd pobierania uprawnień:', error);
@@ -74,11 +66,11 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
       };
       fetchPermissions();
     } else {
-      console.log('EditPermissionsDialog: Brak userId, zamykam dialog');
+      console.log('EditPermissionsDialog: Brak user lub uprawnień, zamykam dialog');
       setUserPermissions(null);
       setOpen(false);
     }
-  }, [userId, execute]);
+  }, [user, hasPermission, execute]);
 
   const handlePermissionChange = (key: string, field: 'enabled' | 'hidden', value: boolean) => {
     console.log(`EditPermissionsDialog: Zmiana uprawnienia ${key}.${field} na ${value}`);
@@ -96,11 +88,11 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
   };
 
   const handleSave = async () => {
-    if (userId && userPermissions) {
-      console.log(`EditPermissionsDialog: Zapisywanie uprawnień dla userId=${userId}`, userPermissions);
+    if (user && userPermissions) {
+      console.log(`EditPermissionsDialog: Zapisywanie uprawnień dla userId=${user.id}`, userPermissions);
       setError(null);
       try {
-        const result = await execute(editPermissions, userId, userPermissions);
+        const result = await execute(editPermissions, user.id, userPermissions);
         if (result.success) {
           console.log('EditPermissionsDialog: Uprawnienia zapisano pomyślnie');
           setOpen(false);
@@ -108,7 +100,7 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
           router.refresh();
         } else {
           console.log('EditPermissionsDialog: Błąd zapisywania uprawnień, result=', result);
-          setError(result.message || 'Nie udało się zapisać uprawnień.');
+          setError(result.message);
         }
       } catch (error) {
         console.error('EditPermissionsDialog: Błąd zapisywania uprawnień:', error);
@@ -116,6 +108,11 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
       }
     }
   };
+
+  if (!user || !permissions || !permissions.userEditPermissions || !permissions.userEditPermissions.enabled || permissions.userEditPermissions.hidden) {
+    console.log('EditPermissionsDialog: Brak danych użytkownika lub uprawnień, nie renderuję dialogu');
+    return null;
+  }
 
   return (
     <Dialog
@@ -132,7 +129,17 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
         <DialogHeader>
           <DialogTitle>Edytuj uprawnienia użytkownika</DialogTitle>
           <DialogDescription className="space-y-4 text-left">
-            <strong className="font-semibold dark:text-green-500">Zarządzaj uprawnieniami dla użytkownika (ID: {userId})</strong>
+            <strong className="font-semibold dark:text-green-500">Zarządzaj uprawnieniami dla użytkownika: {user.email}</strong>
+            <samp className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+              <samp className="font-semibold dark:text-green-500">ID</samp>
+              <samp>{user.id}</samp>
+              <samp className="font-semibold dark:text-green-500">Email</samp>
+              <samp>{user.email}</samp>
+              <samp className="font-semibold dark:text-green-500">Imię</samp>
+              <samp>{user.first_name || '-'}</samp>
+              <samp className="font-semibold dark:text-green-500">Nazwisko</samp>
+              <samp>{user.last_name || '-'}</samp>
+            </samp>
             <samp className="text-muted-foreground text-sm">Zaznacz odpowiednie pola, aby włączyć lub ukryć uprawnienia.</samp>
           </DialogDescription>
         </DialogHeader>

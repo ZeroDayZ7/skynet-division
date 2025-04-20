@@ -2,7 +2,7 @@
 'use server';
 
 import { apiClient } from '@/lib/apiClient';
-import { User } from '../types/user';
+import { User, Permissions } from '../types/user';
 
 interface SearchCriteria {
   email?: string;
@@ -22,17 +22,17 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
 
     if (response.success && response.data) {
       return response.data.map((u) => ({
-        id: Number(u.id),
+        id: u.id, // Zachowujemy id jako string
         email: u.email,
         role: u.role,
         userBlock: u.userBlock,
-        permissions: u.permissions ?? {},
+        permissions: isValidPermissions(u.permissions) ? u.permissions : null,
         userData: u.userData
           ? {
               first_name: u.userData.first_name,
               last_name: u.userData.last_name,
             }
-          : null,
+          : undefined,
       }));
     } else {
       console.error('Błąd przy pobieraniu użytkowników:', response.message);
@@ -42,4 +42,12 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
     console.error('Błąd wyszukiwania użytkowników:', error);
     return [];
   }
+}
+
+// Funkcja pomocnicza do sprawdzania uprawnień
+function isValidPermissions(data: unknown): data is Permissions {
+  if (data === null || typeof data !== 'object') return false;
+  return Object.values(data).every(
+    (perm) => typeof perm === 'object' && 'enabled' in perm && 'hidden' in perm && typeof perm.enabled === 'boolean' && typeof perm.hidden === 'boolean'
+  );
 }

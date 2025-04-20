@@ -22,7 +22,12 @@ interface UserTableProps {
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
   const { permissions } = usePermissions();
   const [editUserId, setEditUserId] = useState<string | null>(null);
-  const [permissionsUserId, setPermissionsUserId] = useState<string | null>(null);
+  const [permissionsUser, setPermissionsUser] = useState<{
+    id: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+  } | null>(null);
   const [blockUser, setBlockUser] = useState<{
     id: string;
     email: string;
@@ -55,7 +60,12 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
         permissionKey: 'userEditPermissions',
         onClick: () => {
           console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
-          setPermissionsUserId(user.id.toString());
+          setPermissionsUser({
+            id: user.id.toString(),
+            email: user.email,
+            first_name: user.userData?.first_name,
+            last_name: user.userData?.last_name,
+          });
         },
         destructive: false,
         visible: permissions && permissions.userEditPermissions ? permissions.userEditPermissions.enabled && !permissions.userEditPermissions.hidden : false,
@@ -91,8 +101,8 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
           });
         },
         destructive: true,
-        visible: permissions && permissions.userDelete ? permissions.userDelete.enabled && !permissions.userDelete.hidden : false,
-        disabled: permissions && permissions.userDelete ? !permissions.userDelete.enabled : true,
+        visible: permissions && permissions.userDelete ? permissions.userDelete.enabled && !permissions.userEditPermissions.hidden : false,
+        disabled: permissions && permissions.userDelete ? !permissions.userEditPermissions.enabled : true,
       },
     ];
 
@@ -169,10 +179,10 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
         }}
       />
       <EditPermissionsDialog
-        userId={permissionsUserId}
+        user={permissionsUser}
         onClose={() => {
           console.log('Zamykam dialog uprawnień');
-          setPermissionsUserId(null);
+          setPermissionsUser(null);
         }}
       />
       <BlockUserDialog
