@@ -1,3 +1,4 @@
+// lib/apiClient.ts
 'use server';
 
 import { cookies } from 'next/headers';
@@ -35,7 +36,6 @@ export async function apiClient<T>(
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
     const csrfToken = await fetchCsrfToken(SESSION_KEY);
-    // const cookiesSession = `SESSION_KEY=${SESSION_KEY}`;
     const cookiesHeader = cookieStore
       .getAll()
       .map((c) => `${c.name}=${c.value}`)
@@ -47,7 +47,11 @@ export async function apiClient<T>(
       Cookie: cookiesHeader,
     };
 
-    const response = await fetch(`http://localhost:3001${url}`, {
+    // Poprawka: Usuń początkowy ukośnik z URL, aby uniknąć podwójnych ukośników
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    const apiUrl = `http://localhost:3001/${cleanUrl}`;
+
+    const response = await fetch(apiUrl, {
       method: options.method || 'GET',
       headers: {
         ...defaultHeaders,
@@ -55,9 +59,10 @@ export async function apiClient<T>(
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
       credentials: options.credentials || 'include',
+      cache: 'no-store', // Wyłącz cache dla świeżych danych
     });
 
-    console.log(`[apiClient] Żądanie: ${url}, Status: ${response.status}, OK: ${response.ok}`);
+    console.log(`[apiClient] Żądanie: ${apiUrl}, Status: ${response.status}, OK: ${response.ok}`);
 
     // Mapowanie błędów
     if (!response.ok) {
@@ -69,8 +74,6 @@ export async function apiClient<T>(
         case 401:
           type = ErrorType.UNAUTHORIZED;
           message = FALLBACK_ERROR_MESSAGES.UNAUTHORIZED;
-          cookieStore.delete('JWT_COOKIE');
-          cookieStore.delete('SESSION_KEY');
           break;
         case 400:
           type = ErrorType.VALIDATION;
@@ -112,7 +115,7 @@ export async function apiClient<T>(
     }
 
     const result = await response.json();
-    console.log(`[apiClient] Sukces: ${url}, odpowiedź: ${JSON.stringify(result)}`);
+    console.log(`[apiClient] Sukces: ${apiUrl}, odpowiedź: ${JSON.stringify(result)}`);
     return {
       success: true,
       message: result.message || 'Operacja zakończona sukcesem.',

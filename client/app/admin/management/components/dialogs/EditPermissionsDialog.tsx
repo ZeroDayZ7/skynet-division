@@ -1,15 +1,30 @@
 // app/user-management/components/dialogs/EditPermissionsDialog.tsx
 'use client';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useState, useEffect } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Permissions } from '../../types/user';
-import { useState, useEffect } from 'react';
+import { useApi } from '@/hooks/useApi';
 import { useRouter } from 'next/navigation';
-import { editPermissions } from '../../actions/editPermissions';
-import { AVAILABLE_PERMISSIONS } from '../../constants';
+import { usePermissions } from '@/context/PermissionsContext';
+import { getPermissions, editPermissions } from '../../actions/editPermissions'; // Poprawiony import
+
+interface Permission {
+  enabled: boolean;
+  hidden: boolean;
+}
+
+interface Permissions {
+  [key: string]: Permission;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+  message?: string; // Zgodne z permissions.ts
+}
 
 interface EditPermissionsDialogProps {
   userId: string | null;
@@ -18,50 +33,89 @@ interface EditPermissionsDialogProps {
 
 export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ userId, onClose }) => {
   const router = useRouter();
-  const [open, setOpen] = useState(!!userId);
-  const [permissions, setPermissions] = useState<Permissions>({});
+  const { execute } = useApi();
+  const { permissions: currentUserPermissions } = usePermissions();
+  const [open, setOpen] = useState(false);
+  const [userPermissions, setUserPermissions] = useState<Permissions | null>(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (userId) {
-      console.log(`EditPermissionsDialog: Pobieram uprawnienia dla userId=${userId}`);
-      const cookieStore = document.cookie;
-      fetch(`http://localhost:3001/api/users/${userId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Cookie: cookieStore,
-        },
-      })
-        .then((res) => {
-          console.log(`EditPermissionsDialog: Odpowiedź serwera: ${res.status}`);
-          if (!res.ok) throw new Error('Nie znaleziono użytkownika');
-          return res.json();
-        })
-        .then((data) => {
-          setPermissions(data.permissions || {});
-          setError(null);
-        })
-        .catch((err) => {
-          console.error('EditPermissionsDialog: Błąd pobierania uprawnień:', err);
-          setError('Nie udało się pobrać uprawnień użytkownika');
-        });
-    }
-  }, [userId]);
-
-  const handleSave = async () => {
-    if (userId) {
-      console.log(`EditPermissionsDialog: Zapisuję uprawnienia dla userId=${userId}`);
-      await editPermissions(userId, permissions);
-      router.refresh();
-      setOpen(false);
-      onClose();
-    }
-  };
-
-  if (!userId) {
-    console.log('EditPermissionsDialog: Brak userId, nie renderuję dialogu');
+  // Sprawdź, czy użytkownik ma uprawnienie do edycji uprawnień
+  if (!userId || !currentUserPermissions || !currentUserPermissions.userEditPermissions || !currentUserPermissions.userEditPermissions.enabled || currentUserPermissions.userEditPermissions.hidden) {
+    console.log('EditPermissionsDialog: Brak danych użytkownika lub uprawnień do edycji uprawnień, nie renderuję dialogu');
     return null;
   }
+
+  // Pobierz uprawnienia użytkownika po otwarciu dialogu
+  useEffect(() => {
+    if (userId) {
+      const fetchPermissions = async () => {
+        setLoading(true);
+        setError(null);
+        console.log(`EditPermissionsDialog: Pobieranie uprawnień dla userId=${userId}`);
+        try {
+          const response = await execute(getPermissions, userId);
+          if (response.success && response.data) {
+            console.log(`EditPermissionsDialog: Pobrano uprawnienia:`, response.data);
+            setUserPermissions(response.data);
+            setOpen(true);
+          } else {
+            console.log('EditPermissionsDialog: Nie udało się pobrać uprawnień, response=', response);
+            setError(response.message || 'Nie udało się pobrać uprawnień użytkownika.');
+            setOpen(false);
+          }
+        } catch (error) {
+          console.error('EditPermissionsDialog: Błąd pobierania uprawnień:', error);
+          setError('Wystąpił błąd podczas pobierania uprawnień.');
+          setOpen(false);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchPermissions();
+    } else {
+      console.log('EditPermissionsDialog: Brak userId, zamykam dialog');
+      setUserPermissions(null);
+      setOpen(false);
+    }
+  }, [userId, execute]);
+
+  const handlePermissionChange = (key: string, field: 'enabled' | 'hidden', value: boolean) => {
+    console.log(`EditPermissionsDialog: Zmiana uprawnienia ${key}.${field} na ${value}`);
+    setUserPermissions((prev) =>
+      prev
+        ? {
+            ...prev,
+            [key]: {
+              ...prev[key],
+              [field]: value,
+            },
+          }
+        : prev
+    );
+  };
+
+  const handleSave = async () => {
+    if (userId && userPermissions) {
+      console.log(`EditPermissionsDialog: Zapisywanie uprawnień dla userId=${userId}`, userPermissions);
+      setError(null);
+      try {
+        const result = await execute(editPermissions, userId, userPermissions);
+        if (result.success) {
+          console.log('EditPermissionsDialog: Uprawnienia zapisano pomyślnie');
+          setOpen(false);
+          onClose();
+          router.refresh();
+        } else {
+          console.log('EditPermissionsDialog: Błąd zapisywania uprawnień, result=', result);
+          setError(result.message || 'Nie udało się zapisać uprawnień.');
+        }
+      } catch (error) {
+        console.error('EditPermissionsDialog: Błąd zapisywania uprawnień:', error);
+        setError('Wystąpił błąd podczas zapisywania uprawnień.');
+      }
+    }
+  };
 
   return (
     <Dialog
@@ -69,31 +123,65 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
       onOpenChange={(open) => {
         console.log(`EditPermissionsDialog: Zmiana stanu open=${open}`);
         setOpen(open);
-        if (!open) onClose();
+        if (!open) {
+          onClose();
+        }
       }}
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edytuj uprawnienia użytkownika (ID: {userId})</DialogTitle>
+          <DialogTitle>Edytuj uprawnienia użytkownika</DialogTitle>
+          <DialogDescription className="space-y-4 text-left">
+            <strong className="font-semibold dark:text-green-500">Zarządzaj uprawnieniami dla użytkownika (ID: {userId})</strong>
+            <samp className="text-muted-foreground text-sm">Zaznacz odpowiednie pola, aby włączyć lub ukryć uprawnienia.</samp>
+          </DialogDescription>
         </DialogHeader>
-        {error ? (
-          <div className="text-red-500">{error}</div>
-        ) : (
+        {loading ? (
+          <div className="text-center text-muted-foreground">Ładowanie uprawnień...</div>
+        ) : error ? (
+          <div className="text-center text-destructive">{error}</div>
+        ) : userPermissions ? (
           <div className="space-y-4">
-            {AVAILABLE_PERMISSIONS.map((perm) => (
-              <div key={perm.key} className="flex items-center space-x-2">
-                <Checkbox
-                  id={perm.key}
-                  checked={permissions[perm.key] || false}
-                  onCheckedChange={(checked) =>
-                    setPermissions({ ...permissions, [perm.key]: checked as boolean })
-                  }
-                />
-                <Label htmlFor={perm.key}>{perm.label}</Label>
+            {Object.entries(userPermissions).map(([key, perm]) => (
+              <div key={key} className="flex flex-col gap-2 border-b pb-2">
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id={`${key}-enabled`}
+                    checked={perm.enabled}
+                    onCheckedChange={(checked) => handlePermissionChange(key, 'enabled', !!checked)}
+                  />
+                  <Label htmlFor={`${key}-enabled`} className="capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()} - Włączone
+                  </Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id={`${key}-hidden`}
+                    checked={perm.hidden}
+                    onCheckedChange={(checked) => handlePermissionChange(key, 'hidden', !!checked)}
+                  />
+                  <Label htmlFor={`${key}-hidden`} className="capitalize">
+                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()} - Ukryte
+                  </Label>
+                </div>
               </div>
             ))}
-            <Button onClick={handleSave}>Zapisz</Button>
+            <div className="flex justify-end gap-2">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  console.log('EditPermissionsDialog: Anulowano edycję uprawnień');
+                  setOpen(false);
+                  onClose();
+                }}
+              >
+                Anuluj
+              </Button>
+              <Button onClick={handleSave}>Zapisz</Button>
+            </div>
           </div>
+        ) : (
+          <div className="text-center text-destructive">Brak danych uprawnień.</div>
         )}
       </DialogContent>
     </Dialog>

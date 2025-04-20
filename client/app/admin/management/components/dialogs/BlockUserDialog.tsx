@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { useApi } from '@/hooks/useApi';
 import { blockUser } from '@/app/admin/management/actions/blockUser';
 import { unblockUser } from '@/app/admin/management/actions/unblockUser';
+import { usePermissions } from '@/context/PermissionsContext';
 
 interface BlockUserDialogProps {
   user: { id: string; email: string; first_name?: string; last_name?: string; userBlock: boolean } | null;
@@ -16,12 +17,14 @@ interface BlockUserDialogProps {
 export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
   const { execute } = useApi();
+  const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     console.log(`BlockUserDialog: Aktualizacja user=${JSON.stringify(user)}`);
-    setOpen(!!user);
-  }, [user]);
+    const hasPermission = permissions && permissions.userBlock ? permissions.userBlock.enabled && !permissions.userBlock.hidden : false;
+    setOpen(!!user && hasPermission);
+  }, [user, permissions]);
 
   const handleConfirm = async () => {
     if (user?.id) {
@@ -29,7 +32,6 @@ export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose 
       const action = user.userBlock ? unblockUser : blockUser;
       const result = await execute(action, user.id);
 
-      // Zamknij dialog po operacji (komunikat jest obsługiwany przez MessageContext)
       if (result.success) {
         setOpen(false);
         onClose();
@@ -38,8 +40,8 @@ export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose 
     }
   };
 
-  if (!user) {
-    console.log('BlockUserDialog: Brak danych użytkownika, nie renderuję dialogu');
+  if (!user || !permissions || !permissions.userBlock || !permissions.userBlock.enabled || permissions.userBlock.hidden) {
+    console.log('BlockUserDialog: Brak danych użytkownika lub uprawnień, nie renderuję dialogu');
     return null;
   }
 

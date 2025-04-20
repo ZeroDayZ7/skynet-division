@@ -1,4 +1,3 @@
-// src/modules/user/controllers/searchUsersController.ts
 import { Request, Response } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
@@ -10,15 +9,6 @@ import { searchUsers } from '../services/search.service';
  */
 export const searchUsersController = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Sprawdzenie, czy użytkownik jest uwierzytelniony (np. admin)
-    SystemLog.warn(`[searchUser.controller.ts] User ID: ${req.session.userId}`);
-    const isAdmin = req.session.role;
-    const userId = req.session.userId || req.user?.id;
-    if (!userId || !isAdmin || isAdmin !== 'admin') {
-      SystemLog.error(`[searchUser.controller.ts] Unauthorized access attempt by userId: ${userId}`);
-      throw new AppError('UNAUTHORIZED', 401);
-    }
-
     // Pobranie parametrów zapytania
     const { email = '', id = '', role = '' } = req.query;
 

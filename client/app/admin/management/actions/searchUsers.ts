@@ -1,52 +1,44 @@
-// app/user-management/actions/searchUsers.ts
+// lib/searchUsers.ts
 'use server';
 
-import { cookies } from 'next/headers';
-import { fetchClient } from '@/lib/fetchClient';
+import { apiClient } from '@/lib/apiClient';
 import { User } from '../types/user';
 
 interface SearchCriteria {
-  email: string;
-  id: string | number;
-  role: string;
+  email?: string;
+  id?: string | number;
+  role?: string;
 }
 
 export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
   try {
-    const cookieStore = await cookies();
-    const cookiesHeader = cookieStore
-      .getAll()
-      .map((c) => `${c.name}=${c.value}`)
-      .join('; ');
-
     const query = new URLSearchParams();
     if (criteria.email) query.set('email', criteria.email);
     if (criteria.id) query.set('id', criteria.id.toString());
     if (criteria.role && criteria.role !== 'all') query.set('role', criteria.role);
 
-    const users = await fetchClient<User[]>(
-      `/api/admin/search?${query.toString()}`,
-      {
-        method: 'GET',
-        cookies: cookiesHeader,
-        headers: { 'Content-Type': 'application/json' },
-      }
-    );
+    const url = `api/admin/search?${query.toString()}`;
+    const response = await apiClient<User[]>(url, { method: 'GET' });
 
-    return users.map((u) => ({
-      id: Number(u.id),
-      email: u.email,
-      role: u.role,
-      userBlock: u.userBlock,
-      permissions: u.permissions ?? {},
-      userData: u.userData
-        ? {
-            first_name: u.userData.first_name,
-            last_name: u.userData.last_name,
-          }
-        : null,
-    }));
-  } catch (error: any) {
+    if (response.success && response.data) {
+      return response.data.map((u) => ({
+        id: Number(u.id),
+        email: u.email,
+        role: u.role,
+        userBlock: u.userBlock,
+        permissions: u.permissions ?? {},
+        userData: u.userData
+          ? {
+              first_name: u.userData.first_name,
+              last_name: u.userData.last_name,
+            }
+          : null,
+      }));
+    } else {
+      console.error('Błąd przy pobieraniu użytkowników:', response.message);
+      return [];
+    }
+  } catch (error) {
     console.error('Błąd wyszukiwania użytkowników:', error);
     return [];
   }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { logoutUser } from "@/services/auth.service";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { FaSignOutAlt } from "react-icons/fa";

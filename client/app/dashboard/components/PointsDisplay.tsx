@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { FaCoins } from "react-icons/fa";
-import { useAuth } from "@/context/auth-context";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PointsDisplay() {
   const { user } = useAuth();

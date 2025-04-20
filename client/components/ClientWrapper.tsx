@@ -3,10 +3,11 @@
 
 // import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { AuthProvider } from '@/context/auth-context';
+import { AuthProvider } from '@/context/AuthContext';
 import { MessageProvider } from '@/context/MessageContext';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactNode } from 'react';
+import { PermissionsProvider } from '@/context/PermissionsContext';
 
 // const queryClient = new QueryClient({
 //   defaultOptions: {
@@ -21,6 +22,7 @@ import { ReactNode } from 'react';
 export function ClientWrapper({ children }: { children: ReactNode }) {
   return (
     <AuthProvider>
+      <PermissionsProvider>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         {/* <QueryClientProvider client={queryClient}> */}
         <MessageProvider>
@@ -29,6 +31,7 @@ export function ClientWrapper({ children }: { children: ReactNode }) {
         <Toaster richColors position="top-center" />
         {/* </QueryClientProvider> */}
       </ThemeProvider>
+      </PermissionsProvider>
     </AuthProvider>
   );
 }

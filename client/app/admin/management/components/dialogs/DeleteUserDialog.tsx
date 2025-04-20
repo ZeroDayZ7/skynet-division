@@ -1,3 +1,4 @@
+// app/user-management/components/dialogs/DeleteUserDialog.tsx
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -6,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useApi } from '@/hooks/useApi';
 import { deleteUser } from '../../actions/deleteUser';
+import { usePermissions } from '@/context/PermissionsContext';
 
 interface DeleteUserDialogProps {
   user: { id: string; email: string; first_name?: string; last_name?: string } | null;
@@ -15,12 +17,14 @@ interface DeleteUserDialogProps {
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
   const { execute } = useApi();
+  const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     console.log(`DeleteUserDialog: Aktualizacja user=${JSON.stringify(user)}`);
-    setOpen(!!user);
-  }, [user]);
+    const hasPermission = permissions && permissions.userDelete ? permissions.userDelete.enabled && !permissions.userDelete.hidden : false;
+    setOpen(!!user && hasPermission);
+  }, [user, permissions]);
 
   const handleConfirm = async () => {
     if (user?.id) {
@@ -35,8 +39,8 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClos
     }
   };
 
-  if (!user) {
-    console.log('DeleteUserDialog: Brak danych użytkownika, nie renderuję dialogu');
+  if (!user || !permissions || !permissions.userDelete || !permissions.userDelete.enabled || permissions.userDelete.hidden) {
+    console.log('DeleteUserDialog: Brak danych użytkownika lub uprawnień, nie renderuję dialogu');
     return null;
   }
 

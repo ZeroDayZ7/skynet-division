@@ -1,0 +1,40 @@
+const ROLES = {
+  superadmin: 100,
+  headadmin: 90,
+  admin: 80,
+  moderator: 60,
+  manager: 50,
+  premium: 30,
+  user: 20,
+  guest: 10,
+  banned: 0,
+};
+
+Hierarchia ról (od najwyższej):
+🟣 superadmin
+– pełna kontrola nad systemem, zarządzanie administratorami, konfiguracja globalna, dostęp do wszystkiego
+
+🔵 headadmin
+– główny administrator operacyjny, może zarządzać adminami, ale nie ma dostępu do wszystkiego co superadmin
+
+🟠 admin
+– zarządzanie użytkownikami, danymi, ograniczony dostęp do ustawień
+
+🟡 moderator
+– moderacja treści, ograniczony dostęp do paneli
+
+🟢 user
+– zwykły użytkownik
+
+⚪ guest
+– niezalogowany użytkownik
+
+{
+  "userManagement": { "hidden": false, "enabled": true },
+  "viewLogs": { "hidden": false, "enabled": true },
+  "userCreate": { "hidden": false, "enabled": true },
+  "userDelete": { "hidden": false, "enabled": true },
+  "userBlock": { "hidden": false, "enabled": true },
+  "userEdit": { "hidden": false, "enabled": true },
+  "userEditPermissions": { "hidden": false, "enabled": true }
+}

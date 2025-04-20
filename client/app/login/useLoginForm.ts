@@ -7,9 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { fetchCsrfToken } from '@/lib/csrf'; // Załóżmy, że ta funkcja istnieje
 import { useLogin } from './useLogin'; // Twój hook do API
-import { useAuth } from '@/context/auth-context'; // Zaimportuj useAuth
+import { useAuth } from '@/context/AuthContext'; // Zaimportuj useAuth
 import { useRouter } from 'next/navigation'; // Importuj useRouter tutaj
-import type { User } from '@/context/auth-context';
+import type { User } from '@/context/AuthContext';
 
 
 // Definicja schematu i typu (można też trzymać w osobnym pliku np. schemas.ts)

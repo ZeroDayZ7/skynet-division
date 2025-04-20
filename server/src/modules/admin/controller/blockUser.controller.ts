@@ -12,12 +12,6 @@ export const blockUserController = async (req: Request, res: Response): Promise<
   try {
     // Sprawdzenie, czy użytkownik jest uwierzytelniony i ma uprawnienia admina
     SystemLog.warn(`[blockUserController.ts] User ID: ${req.session.userId}`);
-    const isAdmin = req.session.role;
-    const userId = req.session.userId || req.user?.id;
-    if (!userId || !isAdmin || isAdmin !== 'admin') {
-      SystemLog.error(`[blockUserController.ts] Unauthorized access attempt by userId: ${userId}`);
-      throw new AppError('UNAUTHORIZED', 401);
-    }
 
     // Pobranie ID użytkownika z parametrów URL
     const { id } = req.params;

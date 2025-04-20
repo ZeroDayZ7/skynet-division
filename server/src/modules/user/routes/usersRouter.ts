@@ -30,7 +30,7 @@ router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, 
 router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchema), authMiddleware, getUserNotifications);
 router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
 
-router.get('/permissions', getUserPermissionsController);
+router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionsController);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
 

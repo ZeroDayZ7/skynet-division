@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react';
 import { fetchClient } from '@/lib/fetchClient';
-import { useAuth } from '@/context/auth-context';
+import { useAuth } from '@/context/AuthContext';
 import { Notification } from '@/components/notification/types/notification.types';
 
 interface NotificationsResponse {

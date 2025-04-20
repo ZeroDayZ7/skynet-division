@@ -1,9 +1,9 @@
 'use client';
 
-import DashboardMenu from '@/components/dashboard/DashboardMenu';
-import PointsDisplay from '@/components/dashboard/PointsDisplay';
-import HeaderActions from '@/components/dashboard/HeaderActions';
-import AdminPanelButton from '@/components/dashboard/AdminPanelButton';
+import DashboardMenu from '@/app/dashboard/components/DashboardMenu';
+import PointsDisplay from '@/app/dashboard/components/PointsDisplay';
+import HeaderActions from '@/app/dashboard/components/HeaderActions';
+
 
 
 export default function DashboardPage() {
@@ -15,7 +15,6 @@ export default function DashboardPage() {
       </div>
       <main className='flex-1'>
         <DashboardMenu />
-        <AdminPanelButton />
       </main>
     </div>
   );

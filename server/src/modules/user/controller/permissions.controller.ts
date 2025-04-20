@@ -10,6 +10,8 @@ import SystemLog from '#ro/common/utils/SystemLog';
 export const getUserPermissionsController = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req.session.userId || req.user?.id;
+    SystemLog.warn(`req.session.userId: ${req.session.userId}`);
+    SystemLog.warn(`req.user.id: ${req.user?.id}`);
 
     if (!userId) {
       throw new AppError('UNAUTHORIZED', 401);
@@ -17,7 +19,7 @@ export const getUserPermissionsController = async (req: Request, res: Response):
 
     const result = await getUserPermissionsAndRole(userId);
 
-    SystemLog.info(`Fetched permissions for user ID ${userId}`);
+    SystemLog.info(`RESULT: ${JSON.stringify(result, null, 2)}`);
 
     res.status(200).json({
       success: true,

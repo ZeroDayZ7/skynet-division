@@ -7,12 +7,6 @@ import { deleteUser } from '../services/delete.service';
 export const deleteUserController = async (req: Request, res: Response): Promise<void> => {
   try {
     SystemLog.warn(`[deleteUserController.ts] User ID: ${req.session.userId}`);
-    const isAdmin = req.session.role;
-    const userId = req.session.userId || req.user?.id;
-    if (!userId || !isAdmin || isAdmin !== 'admin') {
-      SystemLog.error(`[deleteUserController.ts] Unauthorized access attempt by userId: ${userId}`);
-      throw new AppError('UNAUTHORIZED', 401);
-    }
 
     const { id } = req.params;
     if (!id || isNaN(parseInt(id))) {

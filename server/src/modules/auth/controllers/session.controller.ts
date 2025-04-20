@@ -10,7 +10,7 @@ interface SessionStatusResponse {
 export const checkSessionStatus = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   // Logowanie sesji dla debugowania
   
-  SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
+  // SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     res.status(200).json({ 

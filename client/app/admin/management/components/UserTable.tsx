@@ -8,6 +8,11 @@ import { MoreVertical } from 'lucide-react';
 import { User } from '../types/user';
 import { Card, CardContent } from '@/components/ui/card';
 import { useState } from 'react';
+import { usePermissions } from '@/context/PermissionsContext';
+import { EditUserDialog } from './dialogs/EditUserDialog';
+import { EditPermissionsDialog } from './dialogs/EditPermissionsDialog';
+import { BlockUserDialog } from './dialogs/BlockUserDialog';
+import { DeleteUserDialog } from './dialogs/DeleteUserDialog';
 
 interface UserTableProps {
   users: User[];
@@ -15,6 +20,7 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
+  const { permissions, isLoaded } = usePermissions();
   const [editUserId, setEditUserId] = useState<string | null>(null);
   const [permissionsUserId, setPermissionsUserId] = useState<string | null>(null);
   const [blockUser, setBlockUser] = useState<{
@@ -29,53 +35,70 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
     email: string;
     first_name?: string;
     last_name?: string;
-  } | null>(null); // Zmieniono z deleteUserId na deleteUser
+  } | null>(null);
 
-  const getActions = (user: User) => [
-    {
-      label: 'Edytuj',
-      onClick: () => {
-        console.log(`Otwieram dialog edycji dla userId: ${user.id}`);
-        setEditUserId(user.id.toString());
+  const getActions = (user: User) => {
+    const actions = [
+      {
+        label: 'Edytuj',
+        permissionKey: 'userEdit',
+        onClick: () => {
+          console.log(`Otwieram dialog edycji dla userId: ${user.id}`);
+          setEditUserId(user.id.toString());
+        },
+        destructive: false,
+        visible: permissions && permissions.userEdit ? permissions.userEdit.enabled && !permissions.userEdit.hidden : false,
+        disabled: permissions && permissions.userEdit ? !permissions.userEdit.enabled : true,
       },
-      destructive: false,
-    },
-    {
-      label: 'Edytuj uprawnienia',
-      onClick: () => {
-        console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
-        setPermissionsUserId(user.id.toString());
+      {
+        label: 'Edytuj uprawnienia',
+        permissionKey: 'userEditPermissions',
+        onClick: () => {
+          console.log(`Otwieram dialog uprawnień dla userId: ${user.id}`);
+          setPermissionsUserId(user.id.toString());
+        },
+        destructive: false,
+        visible: permissions && permissions.userEditPermissions ? permissions.userEditPermissions.enabled && !permissions.userEditPermissions.hidden : false,
+        disabled: permissions && permissions.userEditPermissions ? !permissions.userEditPermissions.enabled : true,
       },
-      destructive: false,
-    },
-    {
-      label: user.userBlock ? 'Odblokuj' : 'Zablokuj',
-      onClick: () => {
-        console.log(`Otwieram dialog ${user.userBlock ? 'odblokowania' : 'blokady'} dla userId: ${user.id}`);
-        setBlockUser({
-          id: user.id.toString(),
-          email: user.email,
-          first_name: user.userData?.first_name,
-          last_name: user.userData?.last_name,
-          userBlock: user.userBlock,
-        });
+      {
+        label: user.userBlock ? 'Odblokuj' : 'Zablokuj',
+        permissionKey: 'userBlock',
+        onClick: () => {
+          console.log(`Otwieram dialog ${user.userBlock ? 'odblokowania' : 'blokady'} dla userId: ${user.id}`);
+          setBlockUser({
+            id: user.id.toString(),
+            email: user.email,
+            first_name: user.userData?.first_name,
+            last_name: user.userData?.last_name,
+            userBlock: user.userBlock,
+          });
+        },
+        destructive: false,
+        visible: permissions && permissions.userBlock ? permissions.userBlock.enabled && !permissions.userBlock.hidden : false,
+        disabled: permissions && permissions.userBlock ? !permissions.userBlock.enabled : true,
       },
-      destructive: false,
-    },
-    {
-      label: 'Usuń',
-      onClick: () => {
-        console.log(`Otwieram dialog usuwania dla userId: ${user.id}`);
-        setDeleteUser({
-          id: user.id.toString(),
-          email: user.email,
-          first_name: user.userData?.first_name,
-          last_name: user.userData?.last_name,
-        });
+      {
+        label: 'Usuń',
+        permissionKey: 'userDelete',
+        onClick: () => {
+          console.log(`Otwieram dialog usuwania dla userId: ${user.id}`);
+          setDeleteUser({
+            id: user.id.toString(),
+            email: user.email,
+            first_name: user.userData?.first_name,
+            last_name: user.userData?.last_name,
+          });
+        },
+        destructive: true,
+        visible: permissions && permissions.userDelete ? permissions.userDelete.enabled && !permissions.userDelete.hidden : false,
+        disabled: permissions && permissions.userDelete ? !permissions.userDelete.enabled : true,
       },
-      destructive: true,
-    },
-  ];
+    ];
+
+    console.log(`Akcje dla użytkownika ${user.id}:`, actions);
+    return actions;
+  };
 
   return (
     <Card>
@@ -104,30 +127,31 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                   <TableCell>{user.userData?.last_name || '-'}</TableCell>
                   <TableCell>{user.role}</TableCell>
                   <TableCell>
-                    <span className={user.userBlock ? 'font-semibold text-red-500' : 'font-semibold text-green-500'}>{user.userBlock ? 'Zablokowany' : 'Aktywny'}</span>
+                    <span className={user.userBlock ? 'font-semibold text-red-500' : 'font-semibold text-green-500'}>
+                      {user.userBlock ? 'Zablokowany' : 'Aktywny'}
+                    </span>
                   </TableCell>
-
                   <TableCell>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" disabled={!isLoaded}>
                           <MoreVertical className="h-4 w-4" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-48">
-                        {getActions(user).map((action) => (
-                          <Button
-                            key={action.label}
-                            variant="ghost"
-                            className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
-                            onClick={() => {
-                              console.log(`Kliknięto akcję: ${action.label} dla userId: ${user.id}`);
-                              action.onClick();
-                            }}
-                          >
-                            {action.label}
-                          </Button>
-                        ))}
+                        {getActions(user)
+                          .filter((action) => action.visible)
+                          .map((action) => (
+                            <Button
+                              key={action.label}
+                              variant="ghost"
+                              className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
+                              onClick={action.onClick}
+                              disabled={action.disabled}
+                            >
+                              {action.label}
+                            </Button>
+                          ))}
                       </PopoverContent>
                     </Popover>
                   </TableCell>
@@ -168,8 +192,3 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
     </Card>
   );
 };
-
-import { EditUserDialog } from './dialogs/EditUserDialog';
-import { EditPermissionsDialog } from './dialogs/EditPermissionsDialog';
-import { BlockUserDialog } from './dialogs/BlockUserDialog';
-import { DeleteUserDialog } from './dialogs/DeleteUserDialog';

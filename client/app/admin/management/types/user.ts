@@ -1,18 +1,21 @@
 // app/user-management/types/user.ts
-export interface UserData {
-  first_name?: string;
-  last_name?: string;
+export interface Permission {
+  enabled: boolean;
+  hidden: boolean;
 }
 
 export interface Permissions {
-  [key: string]: boolean;
+  [key: string]: Permission;
 }
 
 export interface User {
-  id: number;
+  id: string;
   email: string;
   role: string;
   userBlock: boolean;
   permissions: Permissions | null;
-  userData: UserData | null;
+  userData?: {
+    first_name?: string;
+    last_name?: string;
+  };
 }

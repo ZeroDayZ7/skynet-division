@@ -1,7 +1,7 @@
 'use client';
 
 import { memo, useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/context/auth-context';
+import { useAuth } from '@/context/AuthContext';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { useGetNotifications } from '@/app/api/notifications/useGetNotifications';
 import NotificationButton from './NotificationButton';
