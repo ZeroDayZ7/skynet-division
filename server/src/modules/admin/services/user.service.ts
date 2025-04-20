@@ -1,8 +1,8 @@
 // src/modules/user/services/userService.ts
-import Users from '#ro/modules/auth/models/Users';
+import Users from '#ro/models/Users';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
-import UserData from '#ro/modules/auth/models/UserData';
+import UserData from '#ro/models/UserData';
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes';
 
 // ... istniejący kod searchUsers ...

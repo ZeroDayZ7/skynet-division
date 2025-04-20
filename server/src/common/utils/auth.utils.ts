@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import Users from '#ro/modules/auth/models/Users';
+import Users from '#ro/models/Users';
 import AppError, { ErrorType } from '#errors/AppError';
 import { ERROR_CODES } from '#errors/errorCodes';
 

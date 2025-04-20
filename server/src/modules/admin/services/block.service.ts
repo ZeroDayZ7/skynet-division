@@ -1,6 +1,6 @@
 // src/modules/user/services/blockService.ts
-import Users from '#ro/modules/auth/models/Users';
-import Sessions from '#ro/modules/auth/models/Session.model'; // Poprawny import
+import Users from '#ro/models/Users';
+import Sessions from '#ro/models/Session.model'; // Poprawny import
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
 import { Sequelize } from 'sequelize';

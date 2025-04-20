@@ -1,10 +1,10 @@
 // src/modules/user/services/userService.ts
 import { Op } from 'sequelize';
-import Users from '#ro/modules/auth/models/Users';
+import Users from '#ro/models/Users';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes';
-import UserData from '#ro/modules/auth/models/UserData';
+import UserData from '#ro/models/UserData';
 
 interface SearchCriteria {
   email: string;

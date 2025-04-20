@@ -13,6 +13,9 @@
     ],
     "#errors/*": [
       "./src/common/errors/*"
+    ],
+    "#models/*": [
+      "./src/models/*"
     ]
   },
   "version": "1.0.0",

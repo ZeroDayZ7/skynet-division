@@ -1,5 +1,5 @@
 // pin.services.ts
-import Users from '#ro/modules/auth/models/Users';
+import Users from '#ro/models/Users';
 import AppError from '#errors/AppError'; // Importujemy AppError
 import { ERROR_CODES } from '#errors/errorCodes'; // Importujemy kody błędów
 

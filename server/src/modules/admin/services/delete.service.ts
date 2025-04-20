@@ -1,5 +1,5 @@
 // src/modules/user/services/deleteService.ts
-import Users from '#ro/modules/auth/models/Users';
+import Users from '#ro/models/Users';
 import SystemLog from '#ro/common/utils/SystemLog';
 import AppError from '#errors/AppError';
 

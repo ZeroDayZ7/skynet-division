@@ -1,4 +1,4 @@
-import UserNotification from "#ro/modules/auth/models/UserNotification";
+import UserNotification from "#ro/models/UserNotification";
 import SystemLog from "#ro/common/utils/SystemLog";
 
 // Typowanie funkcji, zakładając, że userId jest stringiem lub numerem

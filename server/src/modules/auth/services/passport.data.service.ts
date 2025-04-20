@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
-import Passport from '../models/UserPassportData';
-import UserData from '#ro/modules/auth/models/UserData';
+import Passport from '../../../models/UserPassportData';
+import UserData from '#ro/models/UserData';
 import SystemLog from '#ro/common/utils/SystemLog.js';
 
 const PHOTO_UPLOAD_DIR = path.join(process.cwd(), 'private_uploads/users');

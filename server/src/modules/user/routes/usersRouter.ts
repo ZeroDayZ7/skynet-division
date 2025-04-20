@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { authMiddleware } from '../../../common/middlewares/auth.middleware';
 import { validateRequest } from '#ro/middlewares/validate.middleware';
 import { pinSchema, PinPayload } from '../validators/pin.validation';
@@ -13,7 +14,9 @@ import { getUserPassportData } from '../controller/usersData/userPassportControl
 import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
 import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
 import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
-import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
+
+import { getUserPermissionsController } from '../controller/permissions.controller';
+
 
 const router = express.Router();
 
@@ -26,6 +29,8 @@ router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, 
 
 router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchema), authMiddleware, getUserNotifications);
 router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
+
+router.get('/permissions', getUserPermissionsController);
 // router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
 

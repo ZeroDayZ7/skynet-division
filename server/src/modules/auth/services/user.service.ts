@@ -1,5 +1,5 @@
 import sequelize from '#ro/config/sequelize.config'; // Import instancji Sequelize
-import User from '#ro/modules/auth/models/Users'; // Import modelu User z typem UserAttributes
+import User from '#ro/models/Users'; // Import modelu User z typem UserAttributes
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes'; 
 import { Op } from 'sequelize'; // Przydatne do porównań dat
 

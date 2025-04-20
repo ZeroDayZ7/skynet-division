@@ -1,6 +1,6 @@
 import sequelize from '#ro/config/sequelize.config'; // Import instancji Sequelize
-import User from '#ro/modules/auth/models/Users';
-import UserData from '#ro/modules/auth/models/UserData'; // Zakładając, że masz model UserData
+import User from '#ro/models/Users';
+import UserData from '#ro/models/UserData'; // Zakładając, że masz model UserData
 import { hashValue } from '#ro/common/utils/auth.utils'; // Funkcja haszująca hasło
 
 export const createNewUser = async (email: string, password: string, first_name: string, second_name: string, idNumber: string): Promise<void> => {

@@ -11,6 +11,7 @@
           "#services/*": ["./src/services/*"],
           "#photo/*": ["./private_uploads/users/*"],
           "#errors/*": ["./src/common/errors/*"],
+          "#models/*": ["./src/models/*"]
         },                                   
                                  
     "outDir": "./.dist",                                   /* Specify an output folder for all emitted files. */
