@@ -2,7 +2,6 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { GenericDialog } from './GenericDialog';
 import { UserInfo } from '../UserInfo';
 import { SelectedUser } from '../../types/actions';
@@ -14,7 +13,6 @@ interface DeleteUserDialogProps {
 }
 
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
-  const router = useRouter();
 
   const handleDelete = useCallback(async () => {
     return await deleteUser(user.id);

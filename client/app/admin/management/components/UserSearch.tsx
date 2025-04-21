@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 interface SearchCriteria {
@@ -18,7 +18,6 @@ interface UserSearchProps {
 }
 
 export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [criteria, setCriteria] = useState<SearchCriteria>({
     email: initialCriteria.email ?? '',
