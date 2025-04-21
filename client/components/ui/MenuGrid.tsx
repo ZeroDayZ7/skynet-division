@@ -11,7 +11,7 @@ interface MenuItem {
   link: string;
   label: string;
   enabled: boolean;
-  hidden?: boolean;
+   visible?: boolean;
 }
 
 interface MenuGridProps {

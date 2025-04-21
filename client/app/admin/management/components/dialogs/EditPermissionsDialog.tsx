@@ -16,7 +16,7 @@ interface EditPermissionsDialogProps {
 export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ user, onClose }) => {
   console.log(`EE35436346346`);
   const { permissions } = usePermissions();
-  const hasPermission = !!(permissions?.userEditPermissions?.enabled && !permissions.userEditPermissions.hidden);
+  const hasPermission = !!(permissions?.userEditPermissions?.enabled && !permissions.userEditPermissions. visible);
   const { open, setOpen, userPermissions, loading, error, handlePermissionChange, handleSave } =
     usePermissionsDialog({ user, hasPermission, onClose });
 

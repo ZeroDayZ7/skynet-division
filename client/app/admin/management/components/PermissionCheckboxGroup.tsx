@@ -7,7 +7,7 @@ import { Permissions } from '../types/user';
 
 interface PermissionCheckboxGroupProps {
   userPermissions: Permissions;
-  onPermissionChange: (key: string, field: 'enabled' | 'hidden', value: boolean) => void;
+  onPermissionChange: (key: string, field: 'enabled' | ' visible', value: boolean) => void;
 }
 
 export const PermissionCheckboxGroup: React.FC<PermissionCheckboxGroupProps> = ({
@@ -31,11 +31,11 @@ export const PermissionCheckboxGroup: React.FC<PermissionCheckboxGroupProps> = (
             </div>
             <div className="flex items-center gap-2">
               <Checkbox
-                id={`${key}-hidden`}
-                checked={perm.hidden}
-                onCheckedChange={(checked) => onPermissionChange(key, 'hidden', !!checked)}
+                id={`${key}- visible`}
+                checked={perm. visible}
+                onCheckedChange={(checked) => onPermissionChange(key, ' visible', !!checked)}
               />
-              <Label htmlFor={`${key}-hidden`} className="capitalize">
+              <Label htmlFor={`${key}- visible`} className="capitalize">
                 {key.replace(/([A-Z])/g, ' $1').toLowerCase()} - Ukryte
               </Label>
             </div>

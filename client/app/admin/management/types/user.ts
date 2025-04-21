@@ -8,14 +8,7 @@ export interface User {
   userData: { first_name?: string; last_name?: string } | null;
 }
 
-export interface Permission {
-  enabled: boolean;
-  hidden: boolean;
-}
 
-export interface Permissions {
-  [key: string]: Permission;
-}
 
 export interface ApiResponse<T> {
   success: boolean;

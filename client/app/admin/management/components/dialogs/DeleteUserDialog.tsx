@@ -18,12 +18,12 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClos
   console.log(`EEaaaaaaaaaa`);
   useEffect(() => {
     if (user) {
-      const hasPermission = !!(permissions?.userDelete?.enabled && !permissions.userDelete.hidden);
+      const hasPermission = !!(permissions?.userDelete?.enabled && !permissions.userDelete. visible);
       setOpen(!!user && hasPermission);
     }
   }, [user, permissions]);
 
-  if (!user || !permissions?.userDelete?.enabled || permissions.userDelete.hidden) {
+  if (!user || !permissions?.userDelete?.enabled || permissions.userDelete.visible) {
     return null;
   }
 

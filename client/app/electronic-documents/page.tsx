@@ -22,7 +22,7 @@ const documentItems = documents.map((doc) => ({
   link: doc.link,
   label: doc.name, // Zamieniamy `name` na `label`
   enabled: doc.enabled,
-  hidden: false, // Domyślnie widoczne, można zmienić dla konkretnych
+   visible: false, // Domyślnie widoczne, można zmienić dla konkretnych
 }));
 
 export default function Documents() {

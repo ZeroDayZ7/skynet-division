@@ -33,7 +33,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const hasPermission = !!(permissions?.userEdit?.enabled && !permissions.userEdit.hidden);
+  const hasPermission = !!(permissions?.userEdit?.enabled && !permissions.userEdit. visible);
 
   useEffect(() => {
     if (!userId || !hasPermission) {

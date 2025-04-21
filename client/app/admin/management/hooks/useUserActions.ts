@@ -60,7 +60,7 @@ export const useUserActions = (user: User, setSelectedUser: SetSelectedUser) => 
 
   const actions: UserAction[] = actionConfig.map((config) => {
     const label = typeof config.label === 'function' ? config.label(user) : config.label;
-    const hasPermission = !!(permissions?.[config.permissionKey]?.enabled && !permissions[config.permissionKey].hidden);
+    const hasPermission = !!(permissions?.[config.permissionKey]?.enabled && !permissions[config.permissionKey]. visible);
 
     return {
       label,

@@ -20,12 +20,12 @@ export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose 
 
   useEffect(() => {
     if (user) {
-      const hasPermission = !!(permissions?.userBlock?.enabled && !permissions.userBlock.hidden);
+      const hasPermission = !!(permissions?.userBlock?.enabled && !permissions.userBlock. visible);
       setOpen(!!user && hasPermission);
     }
   }, [user, permissions]);
 
-  if (!user || !permissions?.userBlock?.enabled || permissions.userBlock.hidden) {
+  if (!user || !permissions?.userBlock?.enabled || permissions.userBlock.visible) {
     return null;
   }
 

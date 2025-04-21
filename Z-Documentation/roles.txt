@@ -30,11 +30,11 @@ Hierarchia ról (od najwyższej):
 – niezalogowany użytkownik
 
 {
-  "userManagement": { "hidden": false, "enabled": true },
-  "viewLogs": { "hidden": false, "enabled": true },
-  "userCreate": { "hidden": false, "enabled": true },
-  "userDelete": { "hidden": false, "enabled": true },
-  "userBlock": { "hidden": false, "enabled": true },
-  "userEdit": { "hidden": false, "enabled": true },
-  "userEditPermissions": { "hidden": false, "enabled": true }
+  "userManagement": { " visible": false, "enabled": true },
+  "viewLogs": { " visible": false, "enabled": true },
+  "userCreate": { " visible": false, "enabled": true },
+  "userDelete": { " visible": false, "enabled": true },
+  "userBlock": { " visible": false, "enabled": true },
+  "userEdit": { " visible": false, "enabled": true },
+  "userEditPermissions": { " visible": false, "enabled": true }
 }

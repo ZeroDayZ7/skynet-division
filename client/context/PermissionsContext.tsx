@@ -4,11 +4,19 @@
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { getUserPermissions } from '@/context/permissions/getUserPermissions';
-import { Permission } from '@/app/admin/management/types/user';
 
+export interface Permission {
+  enabled: boolean;
+  visible: boolean;
+}
+
+
+export interface Permissions {
+  [key: string]: Permission;
+}
 interface PermissionsContextType {
   permissions: Record<string, Permission> | null;
-  role: string | null;
+  role?: string | null;
 }
 
 const PermissionsContext = createContext<PermissionsContextType | undefined>(undefined);
@@ -19,10 +27,13 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    console.log("== Permission Context START ==");
     const fetchPermissions = async () => {
       try {
         const data = await getUserPermissions();
+        console.log(`== Permission Context DATA ==`, data);
         if (data) {
+          
           setPermissions(data.permissions);
           setRole(data.role);
         }

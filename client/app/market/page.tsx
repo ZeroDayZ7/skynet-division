@@ -313,7 +313,7 @@ const CitizenMarketplace = () => {
       <div className="space-y-4">
         {sortedListings.length > 0 ? (
           sortedListings.map(item => (
-            <div key={item.id} className="bg-white rounded-lg overflow-hidden shadow">
+            <div key={item.id} className="bg-white rounded-lg overflow- visible shadow">
               <div className="relative">
                 <Image src={item.image} alt={item.title} className="w-full h-48 object-cover" width={200} height={200} />
                 <button

@@ -4,7 +4,7 @@ import { fetchCsrfToken } from '@/lib/csrf';
 
 export interface UserPermissions {
   role: string;
-  permissions: Record<string, { enabled: boolean, hidden: boolean }>; // Zmieniamy na obiekt
+  permissions: Record<string, { enabled: boolean,  visible: boolean }>; // Zmieniamy na obiekt
 }
 
 export async function getUserPermissions(): Promise<UserPermissions | null> {

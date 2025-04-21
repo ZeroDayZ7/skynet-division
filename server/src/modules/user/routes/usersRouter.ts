@@ -15,7 +15,7 @@ import { getUserNotifications } from '../controller/usersData/notification/notif
 import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
 import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
 
-import { getUserPermissionsController } from '../controller/permissions.controller';
+import { getUserPermissionsController } from '#ro/modules/user/controller/getUserPermissions.controller';
 
 
 const router = express.Router();
@@ -31,7 +31,6 @@ router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchem
 router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
 
 router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionsController);
-// router.get('/notifications/unread-count', getUnreadNotificationsCount);
 
 
 // // Obsługuje inne niezdefiniowane trasy (404)

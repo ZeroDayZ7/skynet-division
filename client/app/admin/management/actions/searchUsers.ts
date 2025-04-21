@@ -48,6 +48,6 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
 function isValidPermissions(data: unknown): data is Permissions {
   if (data === null || typeof data !== 'object') return false;
   return Object.values(data).every(
-    (perm) => typeof perm === 'object' && 'enabled' in perm && 'hidden' in perm && typeof perm.enabled === 'boolean' && typeof perm.hidden === 'boolean'
+    (perm) => typeof perm === 'object' && 'enabled' in perm && ' visible' in perm && typeof perm.enabled === 'boolean' && typeof perm. visible === 'boolean'
   );
 }

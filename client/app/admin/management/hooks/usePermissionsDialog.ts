@@ -19,7 +19,7 @@ interface UsePermissionsDialogReturn {
   userPermissions: Permissions;
   loading: boolean;
   error: string | null;
-  handlePermissionChange: (key: string, field: 'enabled' | 'hidden', value: boolean) => void;
+  handlePermissionChange: (key: string, field: 'enabled' | ' visible', value: boolean) => void;
   handleSave: () => Promise<void>;
 }
 
@@ -52,7 +52,7 @@ export const usePermissionsDialog = ({
           if (response.success) {
             const filteredPermissions: Permissions = {};
             for (const [key, value] of Object.entries(response.data || {})) {
-              filteredPermissions[key] = value ?? { enabled: false, hidden: false };
+              filteredPermissions[key] = value ?? { enabled: false,  visible: false };
             }
             setUserPermissions(filteredPermissions);
           } else {
@@ -72,12 +72,12 @@ export const usePermissionsDialog = ({
   }, [user, hasPermission, execute]);
 
   const handlePermissionChange = useCallback(
-    (key: string, field: 'enabled' | 'hidden', value: boolean) => {
+    (key: string, field: 'enabled' | ' visible', value: boolean) => {
       setUserPermissions((prev) => ({
         ...prev,
         [key]: {
           enabled: field === 'enabled' ? value : prev[key]?.enabled ?? false,
-          hidden: field === 'hidden' ? value : prev[key]?.hidden ?? false,
+           visible: field === ' visible' ? value : prev[key]?. visible ?? false,
         },
       }));
     },

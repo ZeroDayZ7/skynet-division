@@ -8,35 +8,35 @@ export default function AdminPanelButton() {
     {
       name: 'adminPanel',
       enabled: false,
-      hidden: false,
+       visible: false,
     },
     {
       name: 'userSearch',
       enabled: true,
-      hidden: false,
+       visible: false,
     },
     {
       name: 'userCreate',
       enabled: false,
-      hidden: true,
+       visible: true,
     },
     {
       name: 'userDelete',
       enabled: false,
-      hidden: true,
+       visible: true,
     },
     {
       name: 'viewLogs',
       enabled: true,
-      hidden: false,
+       visible: false,
     },
   ];
 
   const adminPanel = permissions.find((permission) => permission.name === 'adminPanel');
   const isAdminPanelEnabled = adminPanel?.enabled;
-  const isAdminPanelHidden = adminPanel?.hidden;
+  const isAdminPanel visible = adminPanel?. visible;
 
-  if (!isAdminPanelHidden) return null;
+  if (!isAdminPanel visible) return null;
 
   const router = useRouter();
   const handleRedirect = () => {
