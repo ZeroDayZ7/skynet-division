@@ -12,20 +12,22 @@ const adminMenu = [
 ];
 
 export default function AdminPanelPage() {
-  const { permissions } = usePermissions();
+  const { permissions, hasPermissionEnabled, hasPermissionVisible } = usePermissions();
   console.debug('== AdminPanelPage ==', permissions);
 
   if (!permissions) {
     return <div className="text-center text-red-500">Brak uprawnień</div>;
   }
 
-  const documentItems = adminMenu.map((doc) => ({
-    icon: doc.icon,
-    link: doc.link,
-    label: doc.name,
-    enabled: permissions[doc.permissionKey]?.enabled ?? false,
-    visible: permissions[doc.permissionKey]?.visible ?? false,
-  }));
+  const documentItems = adminMenu
+    .map((doc) => ({
+      icon: doc.icon,
+      link: doc.link,
+      label: doc.name,
+      enabled: hasPermissionEnabled(doc.permissionKey), // Używamy hasPermissionEnabled
+      visible: hasPermissionVisible(doc.permissionKey), // Używamy hasPermissionVisible
+    }))
+    .filter((item) => item.visible); // Filtrujemy menu, pokazując tylko te, które mają visible === true
 
   return (
     <div className="mx-auto">
@@ -33,5 +35,4 @@ export default function AdminPanelPage() {
       <MenuGrid items={documentItems} />
     </div>
   );
-
-};
+}

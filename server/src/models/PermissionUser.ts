@@ -1,3 +1,4 @@
+// models/PermissionUser.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '#ro/config/sequelize.config';
 import PermissionTemplate from '#ro/models/PermissionTemplate';
@@ -17,7 +18,7 @@ class PermissionUser extends Model<PermissionUserAttributes> implements Permissi
   public is_visible!: boolean;
   public is_enabled!: boolean;
 
-  public readonly template?: PermissionTemplate;
+  public readonly template_permission?: PermissionTemplate;
 }
 
 PermissionUser.init(
@@ -32,8 +33,8 @@ PermissionUser.init(
       allowNull: false,
       references: {
         model: 'permission_templates',
-        key: 'id'
-      }
+        key: 'id',
+      },
     },
     user_id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -57,6 +58,5 @@ PermissionUser.init(
     timestamps: false,
   }
 );
-
 
 export default PermissionUser;

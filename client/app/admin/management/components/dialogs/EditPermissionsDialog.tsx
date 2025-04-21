@@ -1,4 +1,3 @@
-// app/user-management/components/dialogs/EditPermissionsDialog.tsx
 'use client';
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -6,21 +5,26 @@ import { Button } from '@/components/ui/button';
 import { usePermissions } from '@/context/PermissionsContext';
 import { usePermissionsDialog } from '../../hooks/usePermissionsDialog';
 import { PermissionCheckboxGroup } from '../PermissionCheckboxGroup';
-import { UserInfo } from '../UserInfo'; // Nowy komponent, patrz pytanie 3
+import { UserInfo } from '../UserInfo';
+import { Permissions } from '@/context/permissions/types';
 
 interface EditPermissionsDialogProps {
+  isOpen: boolean;
+  userId: number | null;
   user: { id: string; email: string; first_name?: string; last_name?: string } | null;
   onClose: () => void;
 }
 
-export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ user, onClose }) => {
-  console.log(`EE35436346346`);
-  const { permissions } = usePermissions();
-  const hasPermission = !!(permissions?.userEditPermissions?.enabled && !permissions.userEditPermissions. visible);
-  const { open, setOpen, userPermissions, loading, error, handlePermissionChange, handleSave } =
-    usePermissionsDialog({ user, hasPermission, onClose });
+export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ isOpen, userId, user, onClose }) => {
+  const { hasPermissionEnabled, hasPermissionVisible } = usePermissions();
+  const hasEditPermission = hasPermissionEnabled('userEditPermissions') && hasPermissionVisible('userEditPermissions');
+  const { open, setOpen, userPermissions, loading, error, handlePermissionChange, handleSave } = usePermissionsDialog({
+    user,
+    hasPermission: hasEditPermission,
+    onClose,
+  });
 
-  if (!user || !hasPermission) {
+  if (!user || !hasEditPermission) {
     return null;
   }
 

@@ -28,15 +28,7 @@ export default function defineUserAssociations() {
   Users.hasOne(UserData, { foreignKey: 'user_id', as: 'userData' });
   UserData.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
 
-  PermissionTemplate.hasMany(PermissionTemplate, {
-    foreignKey: 'parent_id',
-    as: 'children',
-  });
-  
-  PermissionTemplate.belongsTo(PermissionTemplate, {
-    foreignKey: 'parent_id',
-    as: 'parent',
-  });
+
   
   PermissionTemplate.hasMany(PermissionUser, {
     foreignKey: 'permission_id',

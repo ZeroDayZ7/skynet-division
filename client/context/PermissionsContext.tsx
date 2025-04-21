@@ -2,16 +2,8 @@
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { FaSpinner } from 'react-icons/fa';
-import { getUserPermissions } from '@/context/permissions/getUserPermissions';
-
-export interface Permission {
-  enabled: boolean;
-  visible: boolean;
-}
-
-export interface Permissions {
-  [key: string]: Permission;
-}
+import { getUserPermissions } from './permissions/getUserPermissions';
+import { Permissions, UserPermissions } from './permissions/types';
 
 interface PermissionsContextType {
   permissions: Permissions | null;
@@ -29,7 +21,7 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
     const fetchPermissions = async () => {
       setIsLoaded(false);
       try {
-        const response = await getUserPermissions();
+        const response: UserPermissions | null = await getUserPermissions();
         if (!response?.permissions) {
           throw new Error('Brak danych uprawnień');
         }
@@ -45,8 +37,8 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
     fetchPermissions();
   }, []);
 
-  const hasPermissionEnabled = (key: string): boolean => permissions?.[key]?.enabled ?? false;
-  const hasPermissionVisible = (key: string): boolean => permissions?.[key]?.visible ?? false;
+  const hasPermissionEnabled = (key: string): boolean => permissions?.[key]?.is_enabled ?? false;
+  const hasPermissionVisible = (key: string): boolean => permissions?.[key]?.is_visible ?? false;
 
   if (!isLoaded) {
     return (

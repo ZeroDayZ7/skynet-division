@@ -4,24 +4,22 @@ import SystemLog from '#ro/common/utils/SystemLog';
 
 export const getUserPermissionstToLoginController = async (req: Request, res: Response) => {
   try {
-    SystemLog.warn(`start getUserPermissionstToLoginController`);
-    SystemLog.warn(`userId: ${req.session.userId}`);
     const userId = req.session.userId;
     if (!userId) {
       throw new Error('Użytkownik nie znaleziony');
     }
 
     const permissions = await getUserPermissionsToLogin(userId);
-    SystemLog.warn(`permissions: ${JSON.stringify(permissions, null, 2)}`);
-    
-    // Sprawdzamy, czy uprawnienia są puste
-    // Zwracamy dane w formacie oczekiwanym przez frontend
-    res.json({
-      success: true,
-      data: { permissions },
-    });
 
-    SystemLog.debug(`Zwracanie uprawnień dla użytkownika ${userId}`);
+    const response = {
+      success: true,
+      permissions,
+    };
+
+    // Logowanie pełnej odpowiedzi w konsoli
+    SystemLog.warn(`Odpowiedź użytkownikowi: ${JSON.stringify(response, null, 2)}`);
+
+    res.status(200).json(response);
 
   } catch (error: any) {
     const status = error.message === 'Użytkownik nie znaleziony' ? 404 : 500;

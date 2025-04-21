@@ -2,9 +2,9 @@
 
 import { cookies } from 'next/headers';
 import { fetchCsrfToken } from '@/lib/csrf';
-import { UserPermissions } from './types';
+import { Permissions } from '@/context/permissions/types';
 
-export async function getUserPermissions(): Promise<UserPermissions | null> {
+export async function fetchUserPermissions(userId: string): Promise<Permissions | null> {
   try {
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
@@ -15,12 +15,13 @@ export async function getUserPermissions(): Promise<UserPermissions | null> {
       .join('; ');
 
     const response = await fetch(`${process.env.EXPRESS_API_URL}/api/users/permissions`, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRF-Token': csrfToken,
         Cookie: cookiesHeader,
       },
+      body: JSON.stringify({ userId }),
       cache: 'no-store',
     });
 
@@ -31,9 +32,7 @@ export async function getUserPermissions(): Promise<UserPermissions | null> {
       return null;
     }
 
-    return {
-      permissions: data.permissions,
-    } as UserPermissions;
+    return data.permissions as Permissions;
   } catch (error) {
     console.error('Błąd podczas pobierania uprawnień użytkownika:', error);
     return null;

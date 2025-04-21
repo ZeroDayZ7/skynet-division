@@ -1,20 +1,19 @@
+// models/PermissionTemplate.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '#ro/config/sequelize.config';
-import PermissionUser from '#ro/models/PermissionUser';
+import PermissionUser from './PermissionUser';
 
 interface PermissionTemplateAttributes {
   id: number;
-  name: string;
-  parent_id: number | null;
+  key: string;
+  description: string;
 }
 
 class PermissionTemplate extends Model<PermissionTemplateAttributes> implements PermissionTemplateAttributes {
   public id!: number;
-  public name!: string;
-  public parent_id!: number | null;
+  public key!: string;
+  public description!: string;
 
-  public readonly parent?: PermissionTemplate;
-  public readonly children?: PermissionTemplate[];
   public readonly userPermissions?: PermissionUser[];
 }
 
@@ -25,18 +24,14 @@ PermissionTemplate.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    key: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true
+      unique: true,
     },
-    parent_id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true,
-      references: {
-        model: 'permission_templates',
-        key: 'id'
-      }
+    description: {
+      type: DataTypes.STRING(255),
+      allowNull: false,
     },
   },
   {
