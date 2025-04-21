@@ -8,6 +8,7 @@ const adminMenu = [
   { id: 1, name: 'Zarejestruj Użytkownika', icon: FaUserPlus, link: '/admin/register', permissionKey: 'userCreate' },
   { id: 2, name: 'Zarządzanie Użytkownikami', icon: FaUsersCog, link: '/admin/management', permissionKey: 'userManagement' },
   { id: 3, name: 'Logi Systemowe', icon: FaClipboardList, link: '/admin/logs', permissionKey: 'viewLogs' },
+  { id: 4, name: 'Zarządzanie Użytkownikami2', icon: FaUsersCog, link: '/admin/management2', permissionKey: 'userManagement' },
 ];
 
 export default function AdminPanelPage() {

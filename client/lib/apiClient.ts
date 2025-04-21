@@ -36,10 +36,12 @@ export async function apiClient<T>(
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
     const csrfToken = await fetchCsrfToken(SESSION_KEY);
+    console.log(`[apiClient] CSRF Token: ${csrfToken}`);
     const cookiesHeader = cookieStore
       .getAll()
       .map((c) => `${c.name}=${c.value}`)
       .join('; ');
+      console.log(`[apiClient] Cookies: ${cookiesHeader}`);
 
     const defaultHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
