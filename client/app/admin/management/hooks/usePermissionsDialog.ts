@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchUserPermissions, editPermissions } from '@/app/admin/management/actions';
+import { getPermissions, editPermissions } from '@/app/admin/management/actions';
 import { Permissions } from '@/context/permissions/types';
 
 interface UsePermissionsDialogProps {
@@ -54,7 +54,7 @@ export const usePermissionsDialog = ({
         setLoading(true);
         setError(null);
         try {
-          const permissions = await fetchUserPermissions(user.id);
+          const permissions = await getPermissions(user.id);
           console.log(`Pobrano uprawnienia dla użytkownika ${user.id}:`, permissions);
           if (permissions) {
             setUserPermissions(permissions);

@@ -5,7 +5,7 @@ import { Permissions } from '@/context/permissions/types'; // Używamy typu z co
 
 interface ApiResponse<T> {
   success: boolean;
-  message: string;
+  message?: string;
   data?: T;
   type?: string;
 }
