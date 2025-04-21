@@ -8,15 +8,20 @@ export const getUserPermissionsController = async (req: Request, res: Response) 
     if (!userId) {
       throw new Error('Użytkownik nie znaleziony');
     }
-    SystemLog.warn(`getUserPermissionsController: ${userId}`);
-    const permissions = await getUserPermissions(userId);
-    SystemLog.warn(`Permissions: ${JSON.stringify(permissions, null, 2)}`);
-    SystemLog.warn(`Permissions dla użytkownika ${userId}: ${JSON.stringify(permissions, null, 2)}`);
 
+    const permissions = await getUserPermissions(userId);
     
-    res.json({ success: true, data: permissions });
+    // Zwracamy dane w formacie oczekiwanym przez frontend
+    res.json({
+      success: true,
+      data: { permissions },
+    });
+
+    SystemLog.debug(`Zwracanie uprawnień dla użytkownika ${userId}`);
+
   } catch (error: any) {
     const status = error.message === 'Użytkownik nie znaleziony' ? 404 : 500;
+    SystemLog.error(`Błąd w getUserPermissionsController: ${error.message}`);
     res.status(status).json({ success: false, message: error.message });
   }
 };

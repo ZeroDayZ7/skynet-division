@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useApi } from '@/hooks/useApi';
 import { useRouter } from 'next/navigation';
 import { getPermissions, editPermissions } from '../actions/editPermissions';
-import { Permissions } from '../types/user';
+import { Permissions } from '@/context/PermissionsContext';
 
 interface UsePermissionsDialogProps {
   user: { id: string; email: string; first_name?: string; last_name?: string } | null;

@@ -1,4 +1,3 @@
-// app/user-management/contexts/PermissionsContext.tsx
 'use client';
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
@@ -10,35 +9,32 @@ export interface Permission {
   visible: boolean;
 }
 
-
 export interface Permissions {
   [key: string]: Permission;
 }
+
 interface PermissionsContextType {
   permissions: Record<string, Permission> | null;
-  role?: string | null;
 }
 
 const PermissionsContext = createContext<PermissionsContextType | undefined>(undefined);
 
 export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
   const [permissions, setPermissions] = useState<Record<string, Permission> | null>(null);
-  const [role, setRole] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    console.log("== Permission Context START ==");
     const fetchPermissions = async () => {
       try {
-        const data = await getUserPermissions();
-        console.log(`== Permission Context DATA ==`, data);
-        if (data) {
-          
-          setPermissions(data.permissions);
-          setRole(data.role);
+        const response = await getUserPermissions();
+        console.debug('== Permission Context DATA ==', response);
+        if (!response) {
+          throw new Error('Nie można pobrać uprawnień użytkownika');
         }
+        setPermissions(response.permissions);
       } catch (error) {
-        console.error('Błąd pobierania uprawnień:', error);
+        console.error(error);
+        setPermissions(null);
       } finally {
         setIsLoaded(true);
       }
@@ -56,7 +52,7 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <PermissionsContext.Provider value={{ permissions, role }}>
+    <PermissionsContext.Provider value={{ permissions }}>
       {children}
     </PermissionsContext.Provider>
   );
@@ -68,4 +64,5 @@ export const usePermissions = (): PermissionsContextType => {
     throw new Error('usePermissions musi być używane w PermissionsProvider');
   }
   return context;
+
 };

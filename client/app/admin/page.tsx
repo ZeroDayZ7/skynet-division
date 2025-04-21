@@ -5,28 +5,26 @@ import { usePermissions } from '@/context/PermissionsContext';
 import MenuGrid from '@/components/ui/MenuGrid';
 
 const adminMenu = [
-  { id: 1, name: 'Zarejestruj Użytkownika', 
-    icon: FaUserPlus, link: '/admin/register', permissionKey: 'userCreate' },
-  { id: 2, name: 'Zarządzanie Użytkownikami', 
-    icon: FaUsersCog, link: '/admin/management', permissionKey: 'userManagement' },
-  { id: 3, name: 'Logi Systemowe', 
-    icon: FaClipboardList, link: '/admin/logs', permissionKey: 'viewLogs' },
+  { id: 1, name: 'Zarejestruj Użytkownika', icon: FaUserPlus, link: '/admin/register', permissionKey: 'userCreate' },
+  { id: 2, name: 'Zarządzanie Użytkownikami', icon: FaUsersCog, link: '/admin/management', permissionKey: 'userManagement' },
+  { id: 3, name: 'Logi Systemowe', icon: FaClipboardList, link: '/admin/logs', permissionKey: 'viewLogs' },
 ];
 
 export default function AdminPanelPage() {
-  // Pobieranie uprawnień z kontekstu
   const { permissions } = usePermissions();
+  console.debug('== AdminPanelPage ==', permissions);
 
-  // Modyfikacja menu na podstawie uprawnień
+  if (!permissions) {
+    return <div className="text-center text-red-500">Brak uprawnień</div>;
+  }
+
   const documentItems = adminMenu.map((doc) => ({
     icon: doc.icon,
     link: doc.link,
     label: doc.name,
-    enabled: permissions?.[doc.permissionKey]?.enabled ?? false, // Sprawdzamy, czy uprawnienie jest włączone
-    visible: !permissions?.[doc.permissionKey]?.visible,
+    enabled: permissions[doc.permissionKey]?.enabled ?? false,
+    visible: permissions[doc.permissionKey]?.visible ?? false,
   }));
-
-  // Renderowanie menu po załadowaniu uprawnień
 
   return (
     <div className="mx-auto">
@@ -34,4 +32,5 @@ export default function AdminPanelPage() {
       <MenuGrid items={documentItems} />
     </div>
   );
-}
+
+};
