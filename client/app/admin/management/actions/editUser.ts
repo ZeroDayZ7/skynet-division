@@ -1,4 +1,4 @@
-export const getUser = async (userId: string) => {
+export const getUser = async (userId: number) => {
   // Przykład implementacji
   try {
     // Pobierz dane z API
@@ -8,7 +8,7 @@ export const getUser = async (userId: string) => {
   }
 };
 
-export const editUser = async (userId: string, data: { email: string; first_name?: string; last_name?: string }) => {
+export const editUser = async (userId: number, data: { email: string; first_name?: string; last_name?: string }) => {
   try {
     // Zapisz dane w API
     return { success: true, message: 'Dane zapisano' };

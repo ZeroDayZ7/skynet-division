@@ -1,11 +1,10 @@
-// app/user-management/components/dialogs/DeleteUserDialog.tsx
 'use client';
 
 import { useCallback } from 'react';
 import { GenericDialog } from './GenericDialog';
 import { UserInfo } from '../UserInfo';
 import { SelectedUser } from '../../types/actions';
-import { deleteUser } from '../../actions/deleteUser'; // Assume this exists
+import { deleteUser } from '../../actions/deleteUser';
 
 interface DeleteUserDialogProps {
   user: SelectedUser;
@@ -13,9 +12,8 @@ interface DeleteUserDialogProps {
 }
 
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
-
   const handleDelete = useCallback(async () => {
-    return await deleteUser(user.id);
+    return await deleteUser(user.id); // Konwersja number na string
   }, [user.id]);
 
   return (
@@ -25,7 +23,7 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClos
       title="Usuń użytkownika"
       description={
         <>
-          <samp>Czy na pewno chcesz usunąć tego użytkownika?</samp>
+          <span>Czy na pewno chcesz usunąć tego użytkownika?</span>
           <UserInfo user={user} className="mt-4" />
         </>
       }

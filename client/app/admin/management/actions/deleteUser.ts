@@ -2,7 +2,7 @@
 
 import { apiClient } from '@/lib/apiClient';
 
-export async function deleteUser(userId: string) {
+export async function deleteUser(userId: number) {
   console.log(`[deleteUser] Usuwanie użytkownika: ${userId}`);
   return apiClient(`/api/admin/users/${userId}`, { method: 'DELETE' });
 }

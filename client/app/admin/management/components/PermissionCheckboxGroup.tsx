@@ -2,7 +2,7 @@
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
-import { Permissions } from '@/context/permissions/types';
+import { Permissions } from '@/context/permissions/types'; // Używamy poprawnego typu Permissions
 
 interface PermissionCheckboxGroupProps {
   userPermissions: Permissions;

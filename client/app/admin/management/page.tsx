@@ -80,12 +80,12 @@ export const UserManagementPage = () => {
               onChange={(e) => setUserId(e.target.value)}
               className="max-w-xs"
             />
-            <Select value={role || ''} onValueChange={(value) => setRole(value || null)}>
+            <Select value={role || 'all'} onValueChange={(value) => setRole(value || null)}>
               <SelectTrigger className="max-w-xs">
                 <SelectValue placeholder="Wybierz rolę" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Wszystkie role</SelectItem>
+                <SelectItem value="all">Wszystkie role</SelectItem>
                 {roles.map((role) => (
                   <SelectItem key={role} value={role}>
                     {role.charAt(0).toUpperCase() + role.slice(1)}

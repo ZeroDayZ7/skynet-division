@@ -1,8 +1,8 @@
-// lib/searchUsers.ts
 'use server';
 
 import { apiClient } from '@/lib/apiClient';
-import { User, Permissions } from '../types/user';
+import { User } from '../types/user';
+import { Permissions } from '@/context/permissions/types';
 
 interface SearchCriteria {
   email?: string;
@@ -22,7 +22,7 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
 
     if (response.success && response.data) {
       return response.data.map((u) => ({
-        id: u.id, // Zachowujemy id jako string
+        id: u.id,
         email: u.email,
         role: u.role,
         userBlock: u.userBlock,
@@ -44,10 +44,9 @@ export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
   }
 }
 
-// Funkcja pomocnicza do sprawdzania uprawnień
 function isValidPermissions(data: unknown): data is Permissions {
   if (data === null || typeof data !== 'object') return false;
   return Object.values(data).every(
-    (perm) => typeof perm === 'object' && 'enabled' in perm && ' visible' in perm && typeof perm.enabled === 'boolean' && typeof perm. visible === 'boolean'
+    (perm) => typeof perm === 'object' && 'is_enabled' in perm && 'is_visible' in perm && typeof perm.is_enabled === 'boolean' && typeof perm.is_visible === 'boolean'
   );
 }

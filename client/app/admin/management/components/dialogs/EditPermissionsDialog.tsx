@@ -11,7 +11,7 @@ import { Permissions } from '@/context/permissions/types';
 interface EditPermissionsDialogProps {
   isOpen: boolean;
   userId: number | null;
-  user: { id: string; email: string; first_name?: string; last_name?: string } | null;
+  user: { id: number; email: string; first_name?: string; last_name?: string } | null;
   onClose: () => void;
 }
 

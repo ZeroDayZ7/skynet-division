@@ -10,7 +10,7 @@ export interface UserAction {
 }
 
 export interface SelectedUser {
-  id: string;
+  id: number;
   email: string;
   first_name?: string;
   last_name?: string;

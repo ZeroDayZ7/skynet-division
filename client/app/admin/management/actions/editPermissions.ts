@@ -1,8 +1,7 @@
-// app/user-management/actions/permissions.ts
 'use server';
 
 import { apiClient } from '@/lib/apiClient';
-import { Permissions } from '../types/user';
+import { Permissions } from '@/context/permissions/types'; // Używamy typu z context/permissions
 
 interface ApiResponse<T> {
   success: boolean;
@@ -11,11 +10,15 @@ interface ApiResponse<T> {
   type?: string;
 }
 
-export async function getPermissions(userId: string): Promise<ApiResponse<Permissions | null>> {
-  return apiClient<Permissions | null>(`/api/admin/users/${userId}/permissions`, { method: 'GET' });
+export async function getPermissions(userId: number): Promise<ApiResponse<Permissions | null>> {
+  return apiClient<Permissions | null>(`/api/admin/users/${userId}/permissions`, {
+    method: 'POST', // Zmieniamy na POST dla bezpieczeństwa
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId }),
+  });
 }
 
-export async function editPermissions(userId: string, permissions: Permissions): Promise<ApiResponse<any>> {
+export async function editPermissions(userId: number, permissions: Permissions): Promise<ApiResponse<any>> {
   return apiClient(`/api/admin/users/${userId}/permissions`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

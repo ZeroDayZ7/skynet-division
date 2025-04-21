@@ -4,12 +4,11 @@ import PermissionUser from '#ro/models/PermissionUser';
 import PermissionTemplate from '#ro/models/PermissionTemplate';
 
 interface PermissionEntry {
-  key: string;
   is_visible: boolean;
   is_enabled: boolean;
 }
 
-export const getUserPermissions = async (userId: number): Promise<Record<string, PermissionEntry>> => {
+export const getUserPermissionsAdmin = async (userId: number): Promise<Record<string, PermissionEntry>> => {
   // Pobierz wszystkie uprawnienia użytkownika z szablonami
   const userPermissions = await PermissionUser.findAll({
     where: { user_id: userId },
@@ -36,12 +35,10 @@ export const getUserPermissions = async (userId: number): Promise<Record<string,
     }
 
     grouped[permissionKey] = {
-      key: permissionKey,
       is_visible: up.is_visible,
       is_enabled: up.is_enabled,
     };
   });
 
-  SystemLog.debug(`Uprawnienia użytkownika ${userId}:`, grouped);
   return grouped;
 };

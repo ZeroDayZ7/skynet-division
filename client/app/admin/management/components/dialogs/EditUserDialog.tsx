@@ -10,11 +10,12 @@ import { editUser, getUser } from '../../actions/editUser';
 import { UserInfo } from '../UserInfo';
 
 interface EditUserDialogProps {
-  userId: string | null;
+  userId: number | null;
   onClose: () => void;
 }
 
 interface UserData {
+  id: number; // Dodajemy id
   email: string;
   first_name?: string;
   last_name?: string;
@@ -42,7 +43,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
       try {
         const response = await getUser(userId);
         if (response.success && response.data) {
-          setUserData(response.data);
+          setUserData({ id: userId, ...response.data }); // Dodajemy id do userData
         } else {
           setStatus('error');
           setMessage(response.message || 'Nie udało się pobrać danych użytkownika.');
@@ -99,7 +100,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
           <DialogDescription className="space-y-4 text-left">
             {status === 'idle' && userData && <UserInfo user={userData} />}
             {status === 'idle' && (
-              <samp className="text-muted-foreground text-sm">Wprowadź nowe dane użytkownika.</samp>
+              <span className="text-muted-foreground text-sm">Wprowadź nowe dane użytkownika.</span>
             )}
             {status !== 'idle' && message}
           </DialogDescription>

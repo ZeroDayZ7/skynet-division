@@ -29,7 +29,7 @@ export const useUserActions = (user: User, setSelectedUser: (user: SelectedUser 
           console.log(`Otwieram dialog akcji: ${config.action} dla userId: ${user.id}`);
         }
         setSelectedUser({
-          id: user.id.toString(),
+          id: user.id,
           email: user.email,
           first_name: user.userData?.first_name,
           last_name: user.userData?.last_name,
