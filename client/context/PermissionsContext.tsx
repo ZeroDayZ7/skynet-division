@@ -14,26 +14,28 @@ export interface Permissions {
 }
 
 interface PermissionsContextType {
-  permissions: Record<string, Permission> | null;
+  permissions: Permissions | null;
+  hasPermissionEnabled: (key: string) => boolean;
+  hasPermissionVisible: (key: string) => boolean;
 }
 
 const PermissionsContext = createContext<PermissionsContextType | undefined>(undefined);
 
 export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
-  const [permissions, setPermissions] = useState<Record<string, Permission> | null>(null);
+  const [permissions, setPermissions] = useState<Permissions | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchPermissions = async () => {
+      setIsLoaded(false);
       try {
         const response = await getUserPermissions();
-        console.debug('== Permission Context DATA ==', response);
-        if (!response) {
-          throw new Error('Nie można pobrać uprawnień użytkownika');
+        if (!response?.permissions) {
+          throw new Error('Brak danych uprawnień');
         }
         setPermissions(response.permissions);
       } catch (error) {
-        console.error(error);
+        console.error('Błąd pobierania uprawnień:', error);
         setPermissions(null);
       } finally {
         setIsLoaded(true);
@@ -42,6 +44,9 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
 
     fetchPermissions();
   }, []);
+
+  const hasPermissionEnabled = (key: string): boolean => permissions?.[key]?.enabled ?? false;
+  const hasPermissionVisible = (key: string): boolean => permissions?.[key]?.visible ?? false;
 
   if (!isLoaded) {
     return (
@@ -52,7 +57,7 @@ export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <PermissionsContext.Provider value={{ permissions }}>
+    <PermissionsContext.Provider value={{ permissions, hasPermissionEnabled, hasPermissionVisible }}>
       {children}
     </PermissionsContext.Provider>
   );
@@ -64,5 +69,4 @@ export const usePermissions = (): PermissionsContextType => {
     throw new Error('usePermissions musi być używane w PermissionsProvider');
   }
   return context;
-
 };

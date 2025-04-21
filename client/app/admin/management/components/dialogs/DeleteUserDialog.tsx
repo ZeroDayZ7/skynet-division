@@ -1,50 +1,40 @@
 // app/user-management/components/dialogs/DeleteUserDialog.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-import { usePermissions } from '@/context/PermissionsContext';
-import { deleteUser } from '../../actions/deleteUser';
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { GenericDialog } from './GenericDialog';
 import { UserInfo } from '../UserInfo';
+import { SelectedUser } from '../../types/actions';
+import { deleteUser } from '../../actions/deleteUser'; // Assume this exists
 
 interface DeleteUserDialogProps {
-  user: { id: string; email: string; first_name?: string; last_name?: string } | null;
+  user: SelectedUser;
   onClose: () => void;
 }
 
 export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
-  const { permissions } = usePermissions();
-  const [open, setOpen] = useState(false);
-  console.log(`EEaaaaaaaaaa`);
-  useEffect(() => {
-    if (user) {
-      const hasPermission = !!(permissions?.userDelete?.enabled && !permissions.userDelete. visible);
-      setOpen(!!user && hasPermission);
-    }
-  }, [user, permissions]);
+  const router = useRouter();
 
-  if (!user || !permissions?.userDelete?.enabled || permissions.userDelete.visible) {
-    return null;
-  }
-
-  const description = (
-    <>
-      <strong className="font-semibold dark:text-red-500">Czy na pewno chcesz usunąć użytkownika?</strong>
-      <UserInfo user={user} />
-      <samp className="text-muted-foreground text-sm">Tej akcji nie można cofnąć.</samp>
-    </>
-  );
+  const handleDelete = useCallback(async () => {
+    return await deleteUser(user.id);
+  }, [user.id]);
 
   return (
     <GenericDialog
-      open={open}
+      open={!!user}
       onClose={onClose}
       title="Usuń użytkownika"
-      description={description}
+      description={
+        <>
+          <samp>Czy na pewno chcesz usunąć tego użytkownika?</samp>
+          <UserInfo user={user} className="mt-4" />
+        </>
+      }
       actionLabel="Usuń"
-      action={deleteUser}
-      actionArgs={[user.id]}
-      destructive
+      action={handleDelete}
+      actionArgs={[]}
+      destructive={true}
     />
   );
 };

@@ -1,4 +1,3 @@
-// app/user-management/components/dialogs/EditUserDialog.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,10 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useApi } from '@/hooks/useApi';
 import { useRouter } from 'next/navigation';
-import { usePermissions } from '@/context/PermissionsContext';
-import { editUser } from '../../actions/editUser';
+import { editUser, getUser } from '../../actions/editUser';
 import { UserInfo } from '../UserInfo';
 
 interface EditUserDialogProps {
@@ -24,102 +21,92 @@ interface UserData {
 }
 
 const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
-  console.log(`E5ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ67547457457E`);
   const router = useRouter();
-  const { execute } = useApi();
-  const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const hasPermission = !!(permissions?.userEdit?.enabled && !permissions.userEdit. visible);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId || !hasPermission) {
-      console.log('EditUserDialog: Brak userId lub uprawnień, zamykam dialog');
+    if (!userId) {
       setOpen(false);
       return;
     }
 
-    console.log(`EditUserDialog: Aktualizacja userId=${userId}, hasPermission=${hasPermission}`);
     setOpen(true);
 
     const fetchUser = async () => {
       setLoading(true);
-      setError(null);
-      console.log(`EditUserDialog: Pobieranie danych dla userId=${userId}`);
+      setMessage(null);
       try {
-        const response = await execute(userId);
-        console.log(`EditUserDialog: Odpowiedź z getUser:`, JSON.stringify(response));
+        const response = await getUser(userId);
         if (response.success && response.data) {
           setUserData(response.data);
         } else {
-          setError(response.message || 'Nie udało się pobrać danych użytkownika.');
+          setStatus('error');
+          setMessage(response.message || 'Nie udało się pobrać danych użytkownika.');
         }
       } catch (error) {
-        console.error('EditUserDialog: Błąd pobierania danych:', error);
-        setError('Wystąpił błąd podczas pobierania danych.');
+        setStatus('error');
+        setMessage('Wystąpił błąd podczas pobierania danych.');
       } finally {
         setLoading(false);
       }
     };
     fetchUser();
-  }, [userId, hasPermission, execute]);
+  }, [userId]);
 
   const handleSave = async () => {
     if (!userId || !userData) {
-      setError('Brak danych do zapisania.');
+      setStatus('error');
+      setMessage('Brak danych do zapisania.');
       return;
     }
 
-    console.log(`EditUserDialog: Zapisywanie danych dla userId=${userId}`, userData);
-    setError(null);
+    setStatus('idle');
+    setMessage(null);
     try {
-      const result = await execute(editUser, userId, userData);
-      console.log(`EditUserDialog: Odpowiedź z editUser:`, JSON.stringify(result));
+      const result = await editUser(userId, userData);
       if (result.success) {
-        console.log('EditUserDialog: Dane zapisano pomyślnie');
-        setOpen(false);
-        onClose();
+        setStatus('success');
+        setMessage('Dane użytkownika zapisano pomyślnie.');
         router.refresh();
       } else {
-        setError(result.message || 'Nie udało się zapisać danych.');
+        setStatus('error');
+        setMessage(result.message || 'Nie udało się zapisać danych.');
       }
     } catch (error) {
-      console.error('EditUserDialog: Błąd zapisywania danych:', error);
-      setError('Wystąpił błąd podczas zapisywania danych.');
+      setStatus('error');
+      setMessage('Wystąpił błąd podczas zapisywania danych.');
     }
   };
 
-  if (!userId || !hasPermission) {
-    return null;
-  }
+  const handleClose = () => {
+    setStatus('idle');
+    setMessage(null);
+    setOpen(false);
+    onClose();
+  };
+
+  if (!userId) return null;
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(open) => {
-        console.log(`EditUserDialog: Zmiana stanu open=${open}`);
-        setOpen(open);
-        if (!open) {
-          onClose();
-        }
-      }}
-    >
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edytuj użytkownika</DialogTitle>
           <DialogDescription className="space-y-4 text-left">
-            {userData && <UserInfo user={userData} />}
-            <samp className="text-muted-foreground text-sm">Wprowadź nowe dane użytkownika.</samp>
+            {status === 'idle' && userData && <UserInfo user={userData} />}
+            {status === 'idle' && (
+              <samp className="text-muted-foreground text-sm">Wprowadź nowe dane użytkownika.</samp>
+            )}
+            {status !== 'idle' && message}
           </DialogDescription>
         </DialogHeader>
         {loading ? (
           <div className="text-center text-muted-foreground">Ładowanie danych...</div>
-        ) : error ? (
-          <div className="text-center text-destructive">{error}</div>
-        ) : userData ? (
+        ) : status === 'idle' && userData ? (
           <div className="space-y-4">
             <div>
               <Label htmlFor="email">Email</Label>
@@ -146,21 +133,16 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
               />
             </div>
             <div className="flex justify-end gap-2">
-              <Button
-                variant="outline"
-                onClick={() => {
-                  console.log('EditUserDialog: Anulowano edycję');
-                  setOpen(false);
-                  onClose();
-                }}
-              >
+              <Button variant="outline" onClick={handleClose}>
                 Anuluj
               </Button>
               <Button onClick={handleSave}>Zapisz</Button>
             </div>
           </div>
         ) : (
-          <div className="text-center text-muted-foreground">Brak danych użytkownika.</div>
+          <div className="flex justify-end">
+            <Button onClick={handleClose}>OK</Button>
+          </div>
         )}
       </DialogContent>
     </Dialog>

@@ -1,11 +1,10 @@
-// app/user-management/hooks/usePermissionsDialog.ts
+// app/hooks/usePermissionsDialog.ts
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useApi } from '@/hooks/useApi';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { getPermissions, editPermissions } from '../actions/editPermissions';
-import { Permissions } from '@/context/PermissionsContext';
+import { Permissions, Permission } from '../types/permissions';
 
 interface UsePermissionsDialogProps {
   user: { id: string; email: string; first_name?: string; last_name?: string } | null;
@@ -19,7 +18,7 @@ interface UsePermissionsDialogReturn {
   userPermissions: Permissions;
   loading: boolean;
   error: string | null;
-  handlePermissionChange: (key: string, field: 'enabled' | ' visible', value: boolean) => void;
+  handlePermissionChange: (key: string, field: 'enabled' | 'visible', value: boolean) => void;
   handleSave: () => Promise<void>;
 }
 
@@ -29,15 +28,18 @@ export const usePermissionsDialog = ({
   onClose,
 }: UsePermissionsDialogProps): UsePermissionsDialogReturn => {
   const router = useRouter();
-  const { execute } = useApi();
   const [open, setOpen] = useState(false);
   const [userPermissions, setUserPermissions] = useState<Permissions>({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Cache permissions to avoid refetching
+  const permissionsCache = useMemo(() => new Map<string, Permissions>(), []);
+
   useEffect(() => {
     if (!user) {
       setOpen(false);
+      setUserPermissions({});
       return;
     }
 
@@ -45,16 +47,24 @@ export const usePermissionsDialog = ({
 
     if (user && hasPermission) {
       const fetchPermissions = async () => {
+        // Check cache first
+        if (permissionsCache.has(user.id)) {
+          setUserPermissions(permissionsCache.get(user.id)!);
+          setLoading(false);
+          return;
+        }
+
         setLoading(true);
         setError(null);
         try {
-          const response = await execute(getPermissions, user.id);
+          const response = await getPermissions(user.id);
           if (response.success) {
             const filteredPermissions: Permissions = {};
             for (const [key, value] of Object.entries(response.data || {})) {
-              filteredPermissions[key] = value ?? { enabled: false,  visible: false };
+              filteredPermissions[key] = (value as Permission) ?? { enabled: false, visible: false };
             }
             setUserPermissions(filteredPermissions);
+            permissionsCache.set(user.id, filteredPermissions);
           } else {
             setError(response.message || 'Nie udało się pobrać uprawnień.');
           }
@@ -65,19 +75,16 @@ export const usePermissionsDialog = ({
         }
       };
       fetchPermissions();
-    } else {
-      setUserPermissions({});
-      setOpen(false);
     }
-  }, [user, hasPermission, execute]);
+  }, [user, hasPermission, permissionsCache]);
 
   const handlePermissionChange = useCallback(
-    (key: string, field: 'enabled' | ' visible', value: boolean) => {
+    (key: string, field: 'enabled' | 'visible', value: boolean) => {
       setUserPermissions((prev) => ({
         ...prev,
         [key]: {
           enabled: field === 'enabled' ? value : prev[key]?.enabled ?? false,
-           visible: field === ' visible' ? value : prev[key]?. visible ?? false,
+          visible: field === 'visible' ? value : prev[key]?.visible ?? false,
         },
       }));
     },
@@ -92,8 +99,9 @@ export const usePermissionsDialog = ({
 
     setError(null);
     try {
-      const result = await execute(editPermissions, user.id, userPermissions);
+      const result = await editPermissions(user.id, userPermissions);
       if (result.success) {
+        permissionsCache.set(user.id, userPermissions); // Update cache
         setOpen(false);
         onClose();
         router.refresh();
@@ -103,7 +111,7 @@ export const usePermissionsDialog = ({
     } catch (error) {
       setError('Wystąpił błąd podczas zapisywania uprawnień.');
     }
-  }, [user, userPermissions, execute, onClose, router]);
+  }, [user, userPermissions, onClose, router, permissionsCache]);
 
   return {
     open,

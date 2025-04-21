@@ -1,11 +1,9 @@
-// app/user-management/components/dialogs/GenericDialog.tsx
 'use client';
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useApi } from '@/hooks/useApi';
 
 interface GenericDialogProps {
   open: boolean;
@@ -13,7 +11,7 @@ interface GenericDialogProps {
   title: string;
   description: React.ReactNode;
   actionLabel: string;
-  action: (...args: any[]) => Promise<any>;
+  action: (...args: any[]) => Promise<{ success: boolean; message?: string }>;
   actionArgs: any[];
   destructive?: boolean;
   children?: React.ReactNode;
@@ -31,42 +29,61 @@ export const GenericDialog: React.FC<GenericDialogProps> = ({
   children,
 }) => {
   const router = useRouter();
-  const { execute } = useApi();
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState<string | null>(null);
 
   const handleConfirm = async () => {
-    setError(null);
+    setStatus('idle');
+    setMessage(null);
     try {
-      const result = await execute(action, ...actionArgs);
+      const result = await action(...actionArgs);
       if (result.success) {
-        onClose();
+        setStatus('success');
+        setMessage(result.message || `${actionLabel} wykonano pomyślnie.`);
         router.refresh();
       } else {
-        setError(result.message || 'Wystąpił błąd.');
+        setStatus('error');
+        setMessage(result.message || 'Wystąpił błąd podczas wykonywania akcji.');
       }
     } catch (error) {
-      console.error(`Błąd podczas akcji ${title}:`, error);
-      setError('Wystąpił błąd podczas wykonywania akcji.');
+      setStatus('error');
+      setMessage('Wystąpił błąd podczas wykonywania akcji.');
     }
   };
 
+  const handleClose = () => {
+    setStatus('idle');
+    setMessage(null);
+    onClose();
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="space-y-4 text-left">{description}</DialogDescription>
+          <DialogDescription className="space-y-4 text-left">
+            {status === 'idle' ? description : message}
+          </DialogDescription>
         </DialogHeader>
-        {error && <div className="text-center text-destructive">{error}</div>}
         {children}
-        <div className="flex justify-end space-x-2">
-          <Button variant="outline" onClick={onClose}>
-            Anuluj
-          </Button>
-          <Button variant={destructive ? 'destructive' : 'default'} onClick={handleConfirm}>
-            {actionLabel}
-          </Button>
-        </div>
+        {status === 'idle' ? (
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={handleClose}>
+              Anuluj
+            </Button>
+            <Button
+              variant={destructive ? 'destructive' : 'default'}
+              onClick={handleConfirm}
+            >
+              {actionLabel}
+            </Button>
+          </div>
+        ) : (
+          <div className="flex justify-end">
+            <Button onClick={handleClose}>OK</Button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,3 @@
-// app/user-management/components/UserSearch.tsx
 'use client';
 
 import { Input } from '@/components/ui/input';
@@ -35,16 +34,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
     });
   }, [searchParams]);
 
-  const updateSearch = () => {
-    const params = new URLSearchParams();
-    if (criteria.email.trim()) params.set('email', criteria.email.trim());
-    if (criteria.id.trim()) params.set('id', criteria.id.trim());
-    if (criteria.role && criteria.role !== 'all') params.set('role', criteria.role);
-    if (params.toString()) {
-      router.push(`?${params.toString()}`);
-    }
-  };
-
   return (
     <div className="flex flex-wrap gap-4 mb-6">
       <Input
@@ -73,7 +62,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
           <SelectItem value="user">User</SelectItem>
         </SelectContent>
       </Select>
-      <Button onClick={updateSearch} className="w-full sm:w-auto">
+      <Button className="w-full sm:w-auto">
         <Search className="h-4 w-4 mr-2" />
         Szukaj
       </Button>

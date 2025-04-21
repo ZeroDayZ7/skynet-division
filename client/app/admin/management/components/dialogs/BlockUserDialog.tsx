@@ -1,8 +1,6 @@
-// app/user-management/components/dialogs/BlockUserDialog.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePermissions } from '@/context/PermissionsContext';
 import { blockUser } from '../../actions/blockUser';
 import { unblockUser } from '../../actions/unblockUser';
 import { GenericDialog } from './GenericDialog';
@@ -14,20 +12,13 @@ interface BlockUserDialogProps {
 }
 
 export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose }) => {
-  const { permissions } = usePermissions();
   const [open, setOpen] = useState(false);
-  console.log(`EE`);
 
   useEffect(() => {
-    if (user) {
-      const hasPermission = !!(permissions?.userBlock?.enabled && !permissions.userBlock. visible);
-      setOpen(!!user && hasPermission);
-    }
-  }, [user, permissions]);
+    setOpen(!!user);
+  }, [user]);
 
-  if (!user || !permissions?.userBlock?.enabled || permissions.userBlock.visible) {
-    return null;
-  }
+  if (!user) return null;
 
   const description = (
     <>

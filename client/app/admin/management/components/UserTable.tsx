@@ -8,23 +8,12 @@ import { MoreVertical } from 'lucide-react';
 import { User } from '../types/user';
 import { Card, CardContent } from '@/components/ui/card';
 import { useUserActions } from '../hooks/useUserActions';
+import { SelectedUser } from '../types/actions';
 
-// Lazy loaded dialogi
 const EditUserDialog = lazy(() => import('./dialogs/EditUserDialog'));
 const EditPermissionsDialog = lazy(() => import('./dialogs/EditPermissionsDialog'));
 const BlockUserDialog = lazy(() => import('./dialogs/BlockUserDialog'));
 const DeleteUserDialog = lazy(() => import('./dialogs/DeleteUserDialog'));
-
-// Typ dla wybranego użytkownika z akcją
-// [OPTIMIZATION] Zdefiniowano jeden typ zamiast oddzielnych interfejsów dla każdego dialogu
-type SelectedUser = {
-  id: string;
-  email: string;
-  first_name?: string;
-  last_name?: string;
-  userBlock?: boolean; // Tylko dla akcji 'block'
-  action: 'edit' | 'permissions' | 'block' | 'delete';
-};
 
 interface UserTableProps {
   users: User[];
@@ -32,10 +21,12 @@ interface UserTableProps {
 }
 
 export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
-  // [OPTIMIZATION] Zastąpiono cztery stany (editUserId, permissionsUser, blockUser, deleteUser) jednym stanem selectedUser
   const [selectedUser, setSelectedUser] = useState<SelectedUser | null>(null);
 
-  // [OPTIMIZATION] Mapowanie akcji na komponenty dialogów dla bardziej generycznego renderowania
+  if (process.env.NODE_ENV !== 'production') {
+    console.log('UserTable render, selectedUser:', selectedUser);
+  }
+
   const dialogComponents: Record<SelectedUser['action'], React.ComponentType<any>> = {
     edit: EditUserDialog,
     permissions: EditPermissionsDialog,
@@ -63,7 +54,6 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
             </TableHeader>
             <TableBody>
               {users.map((user) => {
-                // [OPTIMIZATION] Przekazano tylko setSelectedUser zamiast czterech funkcji
                 const actions = useUserActions(user, setSelectedUser);
                 return (
                   <TableRow key={user.id}>
@@ -89,19 +79,28 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-48">
-                          {actions.map((action) => (
-                            <Button
-                              key={action.label}
-                              variant="ghost"
-                              className={`w-full justify-start ${
-                                action.destructive ? 'text-destructive' : ''
-                              }`}
-                              onClick={action.onClick}
-                              disabled={action.disabled}
-                            >
-                              {action.label}
-                            </Button>
-                          ))}
+                          {actions.length > 0 ? (
+                            actions.map((action) => (
+                              <Button
+                                key={action.label}
+                                variant="ghost"
+                                className={`w-full justify-start ${
+                                  action.destructive ? 'text-destructive' : ''
+                                }`}
+                                onClick={() => {
+                                  if (process.env.NODE_ENV !== 'production') {
+                                    console.log(`Kliknięto akcję: ${action.label} dla userId: ${user.id}`);
+                                  }
+                                  action.onClick();
+                                }}
+                                disabled={action.disabled}
+                              >
+                                {action.label}
+                              </Button>
+                            ))
+                          ) : (
+                            <div className="text-center text-muted-foreground">Brak dostępnych akcji</div>
+                          )}
                         </PopoverContent>
                       </Popover>
                     </TableCell>
@@ -114,21 +113,15 @@ export const UserTable: React.FC<UserTableProps> = ({ users, noResults }) => {
       </CardContent>
 
       <Suspense fallback={<div>Ładowanie dialogów...</div>}>
-        {/* [OPTIMIZATION] Generyczne renderowanie dialogów na podstawie selectedUser.action */}
         {selectedUser && (
           (() => {
             const DialogComponent = dialogComponents[selectedUser.action];
             return (
               <DialogComponent
-                // Dla EditUserDialog przekazujemy tylko userId
                 {...(selectedUser.action === 'edit'
                   ? { userId: selectedUser.id }
                   : { user: selectedUser })}
-                onClose={() => {
-                  // [OPTIMIZATION] Ujednolicono logikę zamykania dialogów
-                  console.log(`Zamykam dialog akcji: ${selectedUser.action}`);
-                  setSelectedUser(null);
-                }}
+                onClose={() => setSelectedUser(null)}
               />
             );
           })()
