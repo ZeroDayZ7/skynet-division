@@ -1,0 +1,38 @@
+{
+  "userManagement": {
+    "name": "userManagement",
+    "description": "Zarządzanie użytkownikami",
+    "children": [
+      {
+        "name": "userCreate",
+        "description": "Tworzenie nowych użytkowników",
+        "is_visible": true,
+        "is_enabled": false
+      },
+      {
+        "name": "userDelete",
+        "description": "Usuwanie użytkowników",
+        "is_visible": true,
+        "is_enabled": true
+      },
+      {
+        "name": "userBlock",
+        "description": "Blokowanie lub odblokowanie użytkowników",
+        "is_visible": true,
+        "is_enabled": true
+      },
+      {
+        "name": "userEdit",
+        "description": "Edycja danych użytkownika",
+        "is_visible": true,
+        "is_enabled": false
+      }
+    ]
+  },
+  "userEditPermissions": {
+    "name": "userEditPermissions",
+    "description": "Edycja uprawnień użytkownika",
+    "is_visible": true,
+    "is_enabled": true
+  }
+}

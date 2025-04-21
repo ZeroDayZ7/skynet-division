@@ -4,6 +4,8 @@ import UserEIDData from '#ro/models/UserEIDData';
 import Passport from '#ro/models/UserPassportData';
 import UserNotification from '#ro/models/UserNotification';
 import NotificationTemplate from '#ro/modules/user/models/notification.template.model';
+import PermissionTemplate from '#ro/models/PermissionTemplate';
+import PermissionUser from '#ro/models/PermissionUser';
 
 export default function defineUserAssociations() {
   // Relacja Users <-> UserData
@@ -25,6 +27,27 @@ export default function defineUserAssociations() {
 
   Users.hasOne(UserData, { foreignKey: 'user_id', as: 'userData' });
   UserData.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
+
+  PermissionTemplate.hasMany(PermissionTemplate, {
+    foreignKey: 'parent_id',
+    as: 'children',
+  });
+  
+  PermissionTemplate.belongsTo(PermissionTemplate, {
+    foreignKey: 'parent_id',
+    as: 'parent',
+  });
+  
+  PermissionTemplate.hasMany(PermissionUser, {
+    foreignKey: 'permission_id',
+    as: 'userPermissions',
+  });
+  
+  PermissionUser.belongsTo(PermissionTemplate, {
+    foreignKey: 'permission_id',
+    as: 'template_permission',
+  });
+  
 
 }
 

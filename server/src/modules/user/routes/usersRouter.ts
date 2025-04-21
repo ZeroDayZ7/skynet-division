@@ -15,7 +15,7 @@ import { getUserNotifications } from '../controller/usersData/notification/notif
 import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
 import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
 
-import { getUserPermissionsController } from '#ro/modules/user/controller/getUserPermissions.controller';
+import { getUserPermissionstToLoginController } from '#ro/modules/user/controller/getUserPermissions.controller';
 
 
 const router = express.Router();
@@ -30,7 +30,7 @@ router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, 
 router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchema), authMiddleware, getUserNotifications);
 router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
 
-router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionsController);
+router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionstToLoginController);
 
 
 // // Obsługuje inne niezdefiniowane trasy (404)

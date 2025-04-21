@@ -1,16 +1,20 @@
 import { Request, Response } from 'express';
-import { getUserPermissions } from '#ro/modules/admin/services/getUserPermissions';
+import { getUserPermissionsToLogin } from '../services/permissions.service';
 import SystemLog from '#ro/common/utils/SystemLog';
 
-export const getUserPermissionsController = async (req: Request, res: Response) => {
+export const getUserPermissionstToLoginController = async (req: Request, res: Response) => {
   try {
+    SystemLog.warn(`start getUserPermissionstToLoginController`);
+    SystemLog.warn(`userId: ${req.session.userId}`);
     const userId = req.session.userId;
     if (!userId) {
       throw new Error('Użytkownik nie znaleziony');
     }
 
-    const permissions = await getUserPermissions(userId);
+    const permissions = await getUserPermissionsToLogin(userId);
+    SystemLog.warn(`permissions: ${JSON.stringify(permissions, null, 2)}`);
     
+    // Sprawdzamy, czy uprawnienia są puste
     // Zwracamy dane w formacie oczekiwanym przez frontend
     res.json({
       success: true,
@@ -21,7 +25,7 @@ export const getUserPermissionsController = async (req: Request, res: Response) 
 
   } catch (error: any) {
     const status = error.message === 'Użytkownik nie znaleziony' ? 404 : 500;
-    SystemLog.error(`Błąd w getUserPermissionsController: ${error.message}`);
+    SystemLog.error(`Błąd w getUserPermissionsToLogin: ${error.message}`);
     res.status(status).json({ success: false, message: error.message });
   }
 };
