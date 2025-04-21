@@ -26,7 +26,7 @@ export function useLogin() {
         body: JSON.stringify(values),
       });
 
-      console.log('Dane użytkownika po zalogowaniu:', response);
+      // console.log('Dane użytkownika po zalogowaniu:', response);
       return response;
     } catch (error: any) {
       setError(error.message || 'Błąd podczas logowania');

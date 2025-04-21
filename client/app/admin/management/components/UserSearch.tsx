@@ -1,11 +1,12 @@
+// app/user-management/components/UserSearch.tsx
 'use client';
 
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
 
 interface SearchCriteria {
   email: string;
@@ -18,6 +19,7 @@ interface UserSearchProps {
 }
 
 export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [criteria, setCriteria] = useState<SearchCriteria>({
     email: initialCriteria.email ?? '',
@@ -32,6 +34,18 @@ export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
       role: searchParams.get('role') ?? '',
     });
   }, [searchParams]);
+
+  // Funkcja do aktualizacji parametrów URL
+  const updateSearch = useCallback(() => {
+    const params = new URLSearchParams();
+    if (criteria.email.trim()) params.set('email', criteria.email.trim());
+    if (criteria.id.trim()) params.set('id', criteria.id.trim());
+    if (criteria.role && criteria.role !== 'all') params.set('role', criteria.role);
+
+    // Aktualizacja URL
+    const queryString = params.toString();
+    router.push(queryString ? `?${queryString}` : '/user-management');
+  }, [criteria, router]);
 
   return (
     <div className="flex flex-wrap gap-4 mb-6">
@@ -61,7 +75,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
           <SelectItem value="user">User</SelectItem>
         </SelectContent>
       </Select>
-      <Button className="w-full sm:w-auto">
+      <Button onClick={updateSearch} className="w-full sm:w-auto">
         <Search className="h-4 w-4 mr-2" />
         Szukaj
       </Button>

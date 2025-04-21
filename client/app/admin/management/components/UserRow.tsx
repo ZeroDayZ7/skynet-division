@@ -1,5 +1,5 @@
 // app/user-management/components/UserRow.tsx
-'use client';
+// 'use client';
 
 import { useMemo } from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
