@@ -11,7 +11,7 @@ import { editUserPermissionsController } from '#ro/modules/admin/controller/edit
 
 const router = express.Router();
 
-router.get('/search', searchUsersController);
+router.post('/search', searchUsersController);
 router.get('/users/:id', getUserByIdController);
 router.patch('/users/:id/block', blockUserController);
 router.patch('/users/:id/unblock', unblockUserController);

@@ -17,9 +17,6 @@ export async function getPermissions(userId: number): Promise<ApiResponse<Permis
     method: 'POST',
     body: userId,
   });
-  if(!response.success) {
-    throw new Error(response.message);
-  }
 }
 
 // Edycja uprawnień

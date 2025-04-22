@@ -40,7 +40,6 @@ export const searchUsers = async (criteria: SearchCriteria): Promise<Partial<Use
         'email',
         'role',
         'userBlock',
-        'permissions', // ← tutaj też to dodaj
       ],
       include: [
         {

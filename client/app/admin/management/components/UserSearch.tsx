@@ -1,12 +1,12 @@
-// app/user-management/components/UserSearch.tsx
 'use client';
 
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
+import { searchUsers } from '../actions';
+import { User } from '../types/user';
 
 interface SearchCriteria {
   email: string;
@@ -15,37 +15,29 @@ interface SearchCriteria {
 }
 
 interface UserSearchProps {
-  initialCriteria: Partial<SearchCriteria>;
+  onSearchResults?: (results: User[]) => void; // Callback opcjonalny
 }
 
-export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export const UserSearch: React.FC<UserSearchProps> = ({ onSearchResults }) => {
   const [criteria, setCriteria] = useState<SearchCriteria>({
-    email: initialCriteria.email ?? '',
-    id: initialCriteria.id ?? '',
-    role: initialCriteria.role ?? '',
+    email: '',
+    id: '',
+    role: '',
   });
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setCriteria({
-      email: searchParams.get('email') ?? '',
-      id: searchParams.get('id') ?? '',
-      role: searchParams.get('role') ?? '',
-    });
-  }, [searchParams]);
-
-  // Funkcja do aktualizacji parametrów URL
-  const updateSearch = useCallback(() => {
-    const params = new URLSearchParams();
-    if (criteria.email.trim()) params.set('email', criteria.email.trim());
-    if (criteria.id.trim()) params.set('id', criteria.id.trim());
-    if (criteria.role && criteria.role !== 'all') params.set('role', criteria.role);
-
-    // Aktualizacja URL
-    const queryString = params.toString();
-    router.push(queryString ? `?${queryString}` : '/user-management');
-  }, [criteria, router]);
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const results = await searchUsers(criteria);
+      onSearchResults?.(results.data ?? []); // Przekazujemy wyniki do komponentu nadrzędnego
+    } catch (error) {
+      console.error('Błąd wyszukiwania użytkowników:', error);
+      onSearchResults?.([]); // W przypadku błędu, przekazujemy pustą tablicę
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-wrap gap-4 mb-6">
@@ -75,9 +67,9 @@ export const UserSearch: React.FC<UserSearchProps> = ({ initialCriteria }) => {
           <SelectItem value="user">User</SelectItem>
         </SelectContent>
       </Select>
-      <Button onClick={updateSearch} className="w-full sm:w-auto">
+      <Button onClick={handleSearch} disabled={loading} className="w-full sm:w-auto">
         <Search className="h-4 w-4 mr-2" />
-        Szukaj
+        {loading ? 'Wyszukiwanie...' : 'Szukaj'}
       </Button>
     </div>
   );

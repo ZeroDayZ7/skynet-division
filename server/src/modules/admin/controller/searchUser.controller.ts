@@ -10,7 +10,8 @@ import { searchUsers } from '../services/search.service';
 export const searchUsersController = async (req: Request, res: Response): Promise<void> => {
   try {
     // Pobranie parametrów zapytania
-    const { email = '', id = '', role = '' } = req.query;
+    const { email = '', id = '', role = '' } = req.body;
+    SystemLog.debug(`EEE`);
 
     // Walidacja parametrów
     if (typeof email !== 'string' || typeof id !== 'string' || typeof role !== 'string') {
@@ -20,8 +21,8 @@ export const searchUsersController = async (req: Request, res: Response): Promis
     // Wyszukiwanie użytkowników
     const users = await searchUsers({ email, id, role });
 
-    SystemLog.info(`Searched users by criteria: email=${email}, id=${id}, role=${role} - Found: ${users.length}`);
-    SystemLog.info(`[search.controller.ts] ${JSON.stringify(users, null, 2)}`);
+    // SystemLog.info(`Searched users by criteria: email=${email}, id=${id}, role=${role} - Found: ${users.length}`);
+    // SystemLog.info(`[search.controller.ts] ${JSON.stringify(users, null, 2)}`);
 
     res.status(200).json(users);
   } catch (error: any) {
