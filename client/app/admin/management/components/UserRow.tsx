@@ -1,16 +1,24 @@
+'use client';
+
 import { TableRow, TableCell } from '@/components/ui/table';
 import { User } from '../types/user';
-import { SelectedUser } from '../types/actions';
-import { UserActionsMenu } from './UserActionsMenu';
 
 interface UserRowProps {
   user: User;
-  setSelectedUser: (user: SelectedUser | null) => void;
+  isSelected: boolean;
+  toggleSelection: (userId: number) => void;
 }
 
-export const UserRow: React.FC<UserRowProps> = ({ user, setSelectedUser }) => {
+export const UserRow: React.FC<UserRowProps> = ({ user, isSelected, toggleSelection }) => {
   return (
     <TableRow>
+      <TableCell>
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={() => toggleSelection(user.id)}
+        />
+      </TableCell>
       <TableCell>{user.id}</TableCell>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.userData?.first_name || '-'}</TableCell>
@@ -22,9 +30,6 @@ export const UserRow: React.FC<UserRowProps> = ({ user, setSelectedUser }) => {
         >
           {user.userBlock ? 'Zablokowany' : 'Aktywny'}
         </span>
-      </TableCell>
-      <TableCell>
-        <UserActionsMenu user={user} setSelectedUser={setSelectedUser} />
       </TableCell>
     </TableRow>
   );

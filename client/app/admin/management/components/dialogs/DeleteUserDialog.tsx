@@ -2,29 +2,43 @@
 
 import { useCallback } from 'react';
 import { GenericDialog } from './GenericDialog';
-import { UserInfo } from '../UserInfo';
-import { SelectedUser } from '../../types/actions';
+import { User } from '../../types/user';
 import { deleteUser } from '../../actions/deleteUser';
 
 interface DeleteUserDialogProps {
-  user: SelectedUser;
+  users: User[];
   onClose: () => void;
 }
 
-export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ user, onClose }) => {
+export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({ users, onClose }) => {
   const handleDelete = useCallback(async () => {
-    return await deleteUser(user.id); // Konwersja number na string
-  }, [user.id]);
+    const results = await Promise.all(
+      users.map((user) => deleteUser(user.id))
+    );
+    const success = results.every((result) => result.success);
+    return {
+      success,
+      message: success
+        ? 'Użytkownicy zostali usunięci.'
+        : 'Nie udało się usunąć niektórych użytkowników.',
+    };
+  }, [users]);
 
   return (
     <GenericDialog
-      open={!!user}
+      open={!!users.length}
       onClose={onClose}
-      title="Usuń użytkownika"
+      title="Usuń użytkowników"
       description={
         <>
-          <span>Czy na pewno chcesz usunąć tego użytkownika?</span>
-          <UserInfo user={user} className="mt-4" />
+          <span>Czy na pewno chcesz usunąć zaznaczonych użytkowników?</span>
+          <ul className="mt-4 space-y-2">
+            {users.map((user) => (
+              <li key={user.id}>
+                {user.email} ({user.userData?.first_name || '-'} {user.userData?.last_name || '-'})
+              </li>
+            ))}
+          </ul>
         </>
       }
       actionLabel="Usuń"

@@ -1,63 +1,103 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table';
 import { User } from '../types/user';
 import { usePermissions } from '@/context/PermissionsContext';
 import { UserTableHeader } from './UserTableHeader';
+import { UserRow } from './UserRow';
+import { UserActionsManager } from './UserActionsManager';
+import { actionConfig } from '../hooks/actionConfig';
 
 export const UserSearchResults: React.FC<{ users: User[] }> = ({ users }) => {
   const { hasPermissionEnabled } = usePermissions();
-  const canEditPermissions = hasPermissionEnabled('userManagement');
-  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedUserIds, setSelectedUserIds] = useState<number[]>([]);
+  const [selectedAction, setSelectedAction] = useState<string | null>(null);
 
-  const handleEditUser = (user: User) => {
-    setSelectedUser(user);
-    setEditDialogOpen(true);
+  // Funkcja do przełączania zaznaczenia użytkownika
+  const toggleSelection = (userId: number) => {
+    setSelectedUserIds((prev) =>
+      prev.includes(userId)
+        ? prev.filter((id) => id !== userId)
+        : [...prev, userId]
+    );
+  };
+
+  // Wybierz akcje na podstawie uprawnień i stanu użytkowników
+  const selectedUsers = users.filter((user) => selectedUserIds.includes(user.id));
+  const actions = useMemo(() => {
+    const areAllBlocked = selectedUsers.every((user) => user.userBlock);
+    return actionConfig
+      .filter((config) => hasPermissionEnabled(config.permissionKey))
+      .map((config) => ({
+        ...config,
+        label:
+          config.action === 'block' && areAllBlocked
+            ? 'Odblokuj'
+            : typeof config.label === 'function'
+            ? config.label(selectedUsers[0])
+            : config.label,
+      }));
+  }, [selectedUsers, hasPermissionEnabled]);
+
+  // Funkcja do obsługi kliknięcia akcji
+  const handleAction = (action: string) => {
+    setSelectedAction(action);
+  };
+
+  // Zamknij dialog
+  const closeDialog = () => {
+    setSelectedAction(null);
+    setSelectedUserIds([]); // Opcjonalnie: wyczyść zaznaczenie po akcji
   };
 
   return (
     <>
+      {selectedUserIds.length > 0 && (
+        <div className="flex gap-2 mb-4">
+          {actions.map((action) => (
+            <Button
+              key={action.action}
+              onClick={() => handleAction(action.action)}
+              variant={action.destructive ? 'destructive' : 'outline'}
+            >
+              {action.label}
+            </Button>
+          ))}
+        </div>
+      )}
+
       <Table>
         <UserTableHeader />
         <TableBody>
           {users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="text-center">
+              <TableCell colSpan={8} className="text-center">
                 Brak wyników
               </TableCell>
             </TableRow>
           ) : (
             users.map((user) => (
-              <TableRow key={user.id} className='text-center'>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>{user.userData.first_name}</TableCell>
-                <TableCell>{user.userData.last_name}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell
-                  className={user.userBlock ? 'text-red-500' : 'text-green-500'}
-                >
-                  {user.userBlock ? 'Zablokowany' : 'Aktywny'}
-                </TableCell>
-                <TableCell>
-                  {canEditPermissions && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditUser(user)}
-                    >
-                      Edytuj uprawnienia
-                    </Button>
-                  )}
-                </TableCell>
-              </TableRow>
+              <UserRow
+                key={user.id}
+                user={user}
+                isSelected={selectedUserIds.includes(user.id)}
+                toggleSelection={toggleSelection}
+              />
             ))
           )}
         </TableBody>
       </Table>
+
+      {/* Zarządzanie dialogami akcji */}
+      {selectedAction && (
+        <UserActionsManager
+          selectedUsers={selectedUsers}
+          action={selectedAction}
+          onClose={closeDialog}
+        />
+      )}
     </>
   );
 };
