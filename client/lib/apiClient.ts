@@ -3,7 +3,6 @@
 
 import { cookies } from 'next/headers';
 import { fetchCsrfToken } from '@/lib/csrf';
-import { ErrorType } from '@/types/errors';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -27,6 +26,13 @@ const FALLBACK_ERROR_MESSAGES: Record<ErrorType | 'NETWORK_ERROR' | 'UNKNOWN', s
   NETWORK_ERROR: 'Brak połączenia z serwerem. Sprawdź swoje połączenie internetowe.',
   UNKNOWN: 'Wystąpił nieznany błąd.',
 };
+
+ enum ErrorType {
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  VALIDATION = 'VALIDATION',
+  NOT_FOUND = 'NOT_FOUND',
+  INTERNAL = 'INTERNAL',
+}
 
 export async function apiClient<T>(
   url: string,

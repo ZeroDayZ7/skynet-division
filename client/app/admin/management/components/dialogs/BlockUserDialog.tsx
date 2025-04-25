@@ -1,51 +1,46 @@
+// components/user-management/dialogs/BlockUserDialog.tsx
 'use client';
 
 import { useCallback } from 'react';
 import { GenericDialog } from './GenericDialog';
 import { User } from '../../types/user';
-import { blockUser} from '../../actions/blockUser'; // Załóżmy, że mamy takie akcje
-import { unblockUser } from '../../actions/unblockUser'; // Załóżmy, że mamy takie akcje
+import { blockUser } from '@/app/admin/management/actions/blockUser'; // Poprawny import
+import { unblockUser } from '@/app/admin/management/actions/unblockUser'; // Poprawny import
 
 interface BlockUserDialogProps {
-  users: User[];
+  user: User;
   onClose: () => void;
   isBlockAction: 'block' | 'unblock';
 }
 
-export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ users, onClose, isBlockAction }) => {
+export const BlockUserDialog: React.FC<BlockUserDialogProps> = ({ user, onClose, isBlockAction }) => {
   const handleBlock = useCallback(async () => {
     const action = isBlockAction === 'block' ? blockUser : unblockUser;
-    const results = await Promise.all(
-      users.map((user) => action(user.id))
-    );
-    const success = results.every((result) => result.success);
+    const result = await action(isBlockAction === 'block' ? user.id : user.id); // unblockUser wymaga string
+
     return {
-      success,
-      message: success
+      success: result.success,
+      message: result.success
         ? isBlockAction === 'block'
-          ? 'Użytkownicy zostali zablokowani.'
-          : 'Użytkownicy zostali odblokowani.'
-        : 'Nie udało się wykonać akcji dla niektórych użytkowników.',
+          ? 'Użytkownik został zablokowany.'
+          : 'Użytkownik został odblokowany.'
+        : result.message || 'Nie udało się wykonać akcji.',
     };
-  }, [users, isBlockAction]);
+  }, [user, isBlockAction]);
 
   return (
     <GenericDialog
-      open={!!users.length}
+      open={!!user}
       onClose={onClose}
-      title={isBlockAction === 'block' ? 'Zablokuj użytkowników' : 'Odblokuj użytkowników'}
+      title={isBlockAction === 'block' ? 'Zablokuj użytkownika' : 'Odblokuj użytkownika'}
       description={
         <>
           <span>
-            Czy na pewno chcesz {isBlockAction === 'block' ? 'zablokować' : 'odblokować'} zaznaczonych użytkowników?
+            Czy na pewno chcesz {isBlockAction === 'block' ? 'zablokować' : 'odblokować'} tego użytkownika?
           </span>
-          <ul className="mt-4 space-y-2">
-            {users.map((user) => (
-              <li key={user.id}>
-                {user.email} ({user.userData?.first_name || '-'} {user.userData?.last_name || '-'})
-              </li>
-            ))}
-          </ul>
+          <span className="mt-4 block">
+            {user.email} ({user.userData?.first_name || '-'} {user.userData?.last_name || '-'})
+          </span>
         </>
       }
       actionLabel={isBlockAction === 'block' ? 'Zablokuj' : 'Odblokuj'}

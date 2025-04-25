@@ -6,30 +6,38 @@ import { User } from '../types/user';
 const EditPermissionsDialog = lazy(() => import('./dialogs/EditPermissionsDialog'));
 const BlockUserDialog = lazy(() => import('./dialogs/BlockUserDialog'));
 const DeleteUserDialog = lazy(() => import('./dialogs/DeleteUserDialog'));
+const EditUserDialog = lazy(() => import('./dialogs/EditUserDialog'));
 
 interface UserActionsManagerProps {
-  selectedUsers: User[];
-  action: string;
+  selectedUser: {
+    user: User;
+    action: string;
+  } | null;
   onClose: () => void;
 }
 
-export const UserActionsManager: React.FC<UserActionsManagerProps> = ({ selectedUsers, action, onClose }) => {
+export const UserActionsManager: React.FC<UserActionsManagerProps> = ({ selectedUser, onClose }) => {
+  if (!selectedUser) return null;
+
+  const { user, action } = selectedUser;
+
   const dialogComponents: Record<string, React.ComponentType<any>> = {
     permissions: EditPermissionsDialog,
     block: BlockUserDialog,
     delete: DeleteUserDialog,
+    edit: EditUserDialog,
   };
 
   const DialogComponent = dialogComponents[action];
 
-  if (!DialogComponent || selectedUsers.length === 0) return null;
+  if (!DialogComponent) return null;
 
   return (
     <Suspense fallback={<div>Ładowanie dialogu...</div>}>
       <DialogComponent
-        users={selectedUsers}
+        user={user}
         onClose={onClose}
-        isBlockAction={action === 'block' && selectedUsers.every((user) => user.userBlock) ? 'unblock' : action}
+        isBlockAction={action === 'block' && user.userBlock ? 'unblock' : action}
       />
     </Suspense>
   );

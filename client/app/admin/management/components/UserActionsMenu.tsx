@@ -1,96 +1,74 @@
-// app/user-management/components/UserActionsMenu.tsx
 'use client';
 
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { MoreVertical } from 'lucide-react';
 import { User } from '../types/user';
-import { SelectedUser } from '../types/actions';
-
-interface MenuAction {
-  label: string;
-  action: SelectedUser['action'];
-  destructive?: boolean;
-  disabled?: boolean;
-  icon?: React.ReactNode;
-}
+import { useUserActions } from '@/context/UserActionsContext';
+import { actionConfig } from '../hooks/actionConfig';
+import { usePermissions } from '@/context/PermissionsContext';
 
 interface Props {
   user: User;
-  setSelectedUser: (user: SelectedUser | null) => void;
-  customActions?: MenuAction[];
 }
 
-export const UserActionsMenu: React.FC<Props> = ({ user, setSelectedUser, customActions = [] }) => {
-  // Podstawowe akcje
-  const baseActions: MenuAction[] = [
-    {
-      label: 'Edytuj użytkownika',
-      action: 'edit',
-      icon: <PencilIcon className="mr-2 h-4 w-4" />,
-    },
-    {
-      label: 'Edytuj uprawnienia',
-      action: 'permissions',
-      icon: <ShieldIcon className="mr-2 h-4 w-4" />,
-    },
-    {
-      label: user.userBlock ? 'Odblokuj użytkownika' : 'Zablokuj użytkownika',
-      action: 'block',
-      icon: user.userBlock ? (
-        <UnlockIcon className="mr-2 h-4 w-4" />
-      ) : (
-        <LockIcon className="mr-2 h-4 w-4" />
-      ),
-    },
-    {
-      label: 'Usuń użytkownika',
-      action: 'delete',
-      destructive: true,
-      icon: <TrashIcon className="mr-2 h-4 w-4" />,
-    },
-  ];
+export const UserActionsMenu: React.FC<Props> = ({ user }) => {
+  const { setSelectedUser } = useUserActions();
+  const { hasPermissionEnabled, hasPermissionVisible } = usePermissions();
 
-  // Połącz podstawowe akcje z niestandardowymi
-  const allActions = [...baseActions, ...customActions];
+  const [open, setOpen] = useState(false);
+  const [actions, setActions] = useState<
+    {
+      label: string;
+      action: string;
+      destructive?: boolean;
+      disabled: boolean;
+      onClick: () => void;
+    }[]
+  >([]);
 
-  const actionButtons = useMemo(() => {
-    return allActions.length > 0 ? (
-      allActions.map((action) => (
-        <Button
-          key={`${action.action}-${user.id}`}
-          variant="ghost"
-          className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
-          onClick={() => setSelectedUser({ id: user.id, action: action.action })}
-          disabled={action.disabled}
-        >
-          {action.icon}
-          {action.label}
-        </Button>
-      ))
-    ) : (
-      <div className="text-center text-muted-foreground">Brak dostępnych akcji</div>
-    );
-  }, [allActions, user.id, setSelectedUser]);
+  useEffect(() => {
+    if (!open) return;
+
+    const availableActions = actionConfig
+      .filter((config) => hasPermissionVisible(config.permissionKey))
+      .map((config) => ({
+        label: typeof config.label === 'function' ? config.label(user) : config.label,
+        action: config.action,
+        destructive: config.destructive,
+        disabled: !hasPermissionEnabled(config.permissionKey),
+        onClick: () =>
+          setSelectedUser({ user, action: config.action }),
+      }));
+
+    setActions(availableActions);
+  }, [open, user, hasPermissionVisible, hasPermissionEnabled, setSelectedUser]);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon">
           <MoreVertical className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-56 p-1" align="end">
-        {actionButtons}
+        {actions.length > 0 ? (
+          actions.map((action) => (
+            <Button
+              key={`${action.action}-${user.id}`}
+              variant="ghost"
+              disabled={action.disabled}
+              className={`w-full justify-start ${action.destructive ? 'text-destructive' : ''}`}
+              onClick={action.onClick}
+            >
+              {action.label}
+            </Button>
+          ))
+        ) : (
+          <div className="text-center text-muted-foreground">Brak dostępnych akcji</div>
+        )}
       </PopoverContent>
     </Popover>
   );
 };
-
-// Proste ikony (możesz zastąpić prawdziwymi komponentami z lucide-react)
-const PencilIcon = () => <svg />;
-const ShieldIcon = () => <svg />;
-const LockIcon = () => <svg />;
-const UnlockIcon = () => <svg />;
-const TrashIcon = () => <svg />;

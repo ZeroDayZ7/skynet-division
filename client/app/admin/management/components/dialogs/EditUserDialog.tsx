@@ -1,3 +1,4 @@
+// components/user-management/dialogs/EditUserDialog.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,44 +7,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
-import { editUser, getUser } from '../../actions/editUser';
-import { UserInfo } from '../UserInfo';
+import { editUser, getUser } from '@/app/admin/management/actions/editUser'; // Poprawny import
+import { User } from '../../types/user';
 
 interface EditUserDialogProps {
-  userId: number | null;
+  user: User;
   onClose: () => void;
 }
 
 interface UserData {
-  id: number; // Dodajemy id
+  id: number;
   email: string;
   first_name?: string;
   last_name?: string;
 }
 
-const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
+export const EditUserDialog: React.FC<EditUserDialogProps> = ({ user, onClose }) => {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [open, setOpen] = useState(true);
+  const [userData, setUserData] = useState<UserData>({
+    id: user.id,
+    email: user.email,
+    first_name: user.userData?.first_name || '',
+    last_name: user.userData?.last_name || '',
+  });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!userId) {
-      setOpen(false);
-      return;
-    }
-
-    setOpen(true);
-
     const fetchUser = async () => {
       setLoading(true);
       setMessage(null);
       try {
-        const response = await getUser(userId);
+        const response = await getUser(user.id);
         if (response.success && response.data) {
-          setUserData({ id: userId, ...response.data }); // Dodajemy id do userData
+          setUserData({ id: user.id, ...response.data });
         } else {
           setStatus('error');
           setMessage(response.message || 'Nie udało się pobrać danych użytkownika.');
@@ -56,10 +55,10 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
       }
     };
     fetchUser();
-  }, [userId]);
+  }, [user.id]);
 
   const handleSave = async () => {
-    if (!userId || !userData) {
+    if (!userData) {
       setStatus('error');
       setMessage('Brak danych do zapisania.');
       return;
@@ -68,7 +67,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
     setStatus('idle');
     setMessage(null);
     try {
-      const result = await editUser(userId, userData);
+      const result = await editUser(user.id, userData);
       if (result.success) {
         setStatus('success');
         setMessage('Dane użytkownika zapisano pomyślnie.');
@@ -90,16 +89,13 @@ const EditUserDialog: React.FC<EditUserDialogProps> = ({ userId, onClose }) => {
     onClose();
   };
 
-  if (!userId) return null;
-
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edytuj użytkownika</DialogTitle>
           <DialogDescription className="space-y-4 text-left">
-            {status === 'idle' && userData && <UserInfo user={userData} />}
-            {status === 'idle' && (
+            {status === 'idle' && userData && (
               <span className="text-muted-foreground text-sm">Wprowadź nowe dane użytkownika.</span>
             )}
             {status !== 'idle' && message}

@@ -10,32 +10,27 @@ interface SearchCriteria {
   role?: string;
 }
 
-export async function searchUsers(criteria: SearchCriteria) {
-  try {
-    if (!criteria.email && !criteria.id && !criteria.role) {
-      return {
-        success: false,
-        message: 'Brak kryteriów wyszukiwania',
-      };
-    }
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data?: T;
+}
 
-    const response = await apiClient<User[]>('/api/admin/search', {
-      method: 'POST',
-      body: criteria,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
 
-    if (!response.success) {
-      return response;
-    }
-    
-    return response.data ? { success: true, data: response.data } : { success: false, message: 'Brak danych' };
-  } catch (error) {
-    return {
-      success: false,
-      message: 'Wystąpił błąd podczas wyszukiwania użytkowników.',
-    };
+
+export async function searchUsers(criteria: SearchCriteria): Promise<User[]> {
+  if (!criteria.email && !criteria.id && !criteria.role) {
+    throw new Error('Brak kryteriów wyszukiwania');
   }
+
+  const response = await apiClient<User[]>('/api/admin/search', {
+    method: 'POST',
+    body: criteria,
+  });
+
+  if (!response.success || !response.data) {
+    throw new Error(response.message);
+  }
+
+  return response.data;
 }

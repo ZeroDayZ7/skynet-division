@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 import { searchUsers } from '../actions';
-import { User } from '../types/user';
+import { useUserActions } from '@/context/UserActionsContext';
 
 interface SearchCriteria {
   email: string;
@@ -14,11 +14,9 @@ interface SearchCriteria {
   role: string;
 }
 
-interface UserSearchProps {
-  onSearchResults?: (results: User[]) => void; // Callback opcjonalny
-}
+export const UserSearch: React.FC = () => {
+  const { setUsers } = useUserActions();
 
-export const UserSearch: React.FC<UserSearchProps> = ({ onSearchResults }) => {
   const [criteria, setCriteria] = useState<SearchCriteria>({
     email: '',
     id: '',
@@ -30,10 +28,11 @@ export const UserSearch: React.FC<UserSearchProps> = ({ onSearchResults }) => {
     setLoading(true);
     try {
       const results = await searchUsers(criteria);
-      onSearchResults?.(results.data ?? []); // Przekazujemy wyniki do komponentu nadrzędnego
+      console.log('[UserSearch] Wyniki wyszukiwania:', results);
+      setUsers(results); // Ustawiamy wyniki w kontekście
     } catch (error) {
       console.error('Błąd wyszukiwania użytkowników:', error);
-      onSearchResults?.([]); // W przypadku błędu, przekazujemy pustą tablicę
+      setUsers([]); // Wyczyść wyniki w przypadku błędu
     } finally {
       setLoading(false);
     }

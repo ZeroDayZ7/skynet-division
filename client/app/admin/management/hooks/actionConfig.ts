@@ -1,18 +1,34 @@
+// hooks/actionConfig.ts
 import { User } from '../types/user';
 
 interface ActionConfig {
   label: string | ((user: User) => string);
-  permissionKey: string;
   action: string;
+  permissionKey: string;
   destructive?: boolean;
 }
 
 export const actionConfig: ActionConfig[] = [
-  { label: 'Edytuj uprawnienia', permissionKey: 'userEditPermissions', action: 'permissions' },
   {
     label: (user: User) => (user.userBlock ? 'Odblokuj' : 'Zablokuj'),
-    permissionKey: 'userBlock',
     action: 'block',
+    permissionKey: 'userBlock',
   },
-  { label: 'Usuń', permissionKey: 'userDelete', action: 'delete', destructive: true },
+  {
+    label: 'Edytuj dane',
+    action: 'edit',
+    permissionKey: 'userEdit',
+  },
+  {
+    label: 'Edytuj uprawnienia',
+    action: 'permissions',
+    permissionKey: 'userEditPermissions',
+    destructive: false,
+  },
+  {
+    label: 'Usuń',
+    action: 'delete',
+    permissionKey: 'userDelete',
+    destructive: true,
+  },
 ];
