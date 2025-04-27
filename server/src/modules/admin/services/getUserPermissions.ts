@@ -1,4 +1,3 @@
-// services/permissions.service.ts
 import SystemLog from '#ro/common/utils/SystemLog';
 import PermissionUser from '#ro/models/PermissionUser';
 import PermissionTemplate from '#ro/models/PermissionTemplate';
@@ -6,6 +5,7 @@ import PermissionTemplate from '#ro/models/PermissionTemplate';
 interface PermissionEntry {
   is_visible: boolean;
   is_enabled: boolean;
+  description: string; // Dodajemy description
 }
 
 export const getUserPermissionsAdmin = async (userId: number): Promise<Record<string, PermissionEntry>> => {
@@ -17,28 +17,37 @@ export const getUserPermissionsAdmin = async (userId: number): Promise<Record<st
         model: PermissionTemplate,
         as: 'template_permission',
         required: true,
+        attributes: ['key', 'description'], // Wyraźnie pobieramy key i description
       },
     ],
   });
 
   // Logujemy surowe dane z bazy
-  SystemLog.debug(`Surowe dane z bazy dla userId ${userId}:`, JSON.stringify(userPermissions, null, 2));
+  SystemLog.info(`[getUserPermissionsAdmin] Surowe dane dla userId ${userId}: ${JSON.stringify(userPermissions, null, 2)}`);
 
   const grouped: Record<string, PermissionEntry> = {};
 
-  // Przetwarzamy wszystkie uprawnienia – bez hierarchii
+  // Przetwarzamy wszystkie uprawnienia
   userPermissions.forEach((up: any) => {
     const permissionKey = up.template_permission?.key;
-    if (!permissionKey) {
-      SystemLog.error(`Brak klucza uprawnienia dla up.template_permission:`, up.template_permission);
+    const permissionDescription = up.template_permission?.description;
+
+    if (!permissionKey || !permissionDescription) {
+      SystemLog.error(
+        `Brak klucza lub opisu uprawnienia dla up.template_permission:`,
+        up.template_permission
+      );
       return;
     }
 
     grouped[permissionKey] = {
       is_visible: up.is_visible,
       is_enabled: up.is_enabled,
+      description: permissionDescription, // Dodajemy description
     };
   });
+
+  SystemLog.warn(`[getUserPermissionsAdmin] Wynik: ${JSON.stringify(grouped, null, 2)}`);
 
   return grouped;
 };

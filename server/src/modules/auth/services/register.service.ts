@@ -1,37 +1,39 @@
-import sequelize from '#ro/config/sequelize.config'; // Import instancji Sequelize
-import User from '#ro/models/Users';
-import UserData from '#ro/models/UserData'; // Zakładając, że masz model UserData
-import { hashValue } from '#ro/common/utils/auth.utils'; // Funkcja haszująca hasło
+import Users from '#ro/models/Users';
+import { generateActivationToken } from '#ro/common/utils/auth.utils';
+import AppError from '#ro/common/errors/AppError';
+import { hashValue } from '#ro/common/utils/auth.utils';
 
-export const createNewUser = async (email: string, password: string, first_name: string, second_name: string, idNumber: string): Promise<void> => {
-  const hashedPassword = await hashValue(password);  // Hashowanie hasła
+/**
+ * Sprawdza, czy email jest wolny.
+ */
+export const checkEmailAvailability = async (email: string): Promise<boolean> => {
+  const existingUser = await Users.findOne({ where: { email } });
+  return !existingUser;
+};
 
-  // Rozpoczynamy transakcję
-  const transaction = await sequelize.transaction();
-
-  try {
-    // Tworzenie użytkownika w tabeli Users
-    const newUser = await User.create({
-      email,
-      pass: hashedPassword,
-      role: 'user',
-      userBlock: false,
-      points: 0,
-      login_count: 0,
-    }, { transaction });
-
-    // Tworzenie danych użytkownika w tabeli UserData
-    await UserData.create({
-      user_id: newUser.id,  // Powiązanie z nowym użytkownikiem
-      first_name,
-      second_name,
-    }, { transaction });
-
-    // Zatwierdzamy transakcję
-    await transaction.commit();
-  } catch (error) {
-    // Jeśli wystąpił błąd, wycofujemy transakcję
-    await transaction.rollback();
-    throw error;
+/**
+ * Tworzy nowego użytkownika.
+ */
+export const createUser = async (email: string, password: string): Promise<Users> => {
+  const emailFree = await checkEmailAvailability(email);
+  
+  if (!emailFree) {
+    throw new AppError('EMAIL_ALREADY_TAKEN', 409, false, 'Ten e-mail jest już zajęty.');
   }
+
+  const hashedPassword = await hashValue(password);
+  const activationToken = generateActivationToken();
+
+  const newUser = await Users.create({
+    email,
+    pass: hashedPassword,
+    points: 0,
+    role: 'user',
+    userBlock: false,
+    loginAttempts: 0,
+    login_count: 0,
+    activation_token: activationToken
+  });
+
+  return newUser;
 };

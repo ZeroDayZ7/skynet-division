@@ -5,6 +5,10 @@ import { ERROR_CODES } from '#errors/errorCodes';
 
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || '10', 10);
 
+export const generateActivationToken = (): string => {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // losowy 6-cyfrowy kod
+};
+
 export const hashValue = async (value: string): Promise<string> => {
   return bcrypt.hash(value, SALT_ROUNDS);
 };

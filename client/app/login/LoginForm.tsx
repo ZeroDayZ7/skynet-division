@@ -44,7 +44,7 @@ export function LoginForm({
         {formError && (
           <Alert variant="destructive">
             <Terminal className="h-4 w-4" />
-            <AlertTitle>Błąd Logowania</AlertTitle>
+            {/* <AlertTitle>Błąd Logowania</AlertTitle> */}
             <AlertDescription>{formError}</AlertDescription>
           </Alert>
         )}

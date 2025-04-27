@@ -1,29 +1,51 @@
+// app/admin/management/actions/permissions.ts
 'use server';
 
 import { apiClient } from '@/lib/apiClient';
-import { Permissions } from '@/context/permissions/types';
 
-interface ApiResponse<T> {
-  success: boolean;
-  permissions?: Permissions;
-  message: string;
-  data?: T;
-  type?: string;
+interface PermissionEntry {
+  is_visible: boolean;
+  is_enabled: boolean;
+  description: string;
 }
 
-// Pobieranie uprawnień (alternatywa, jeśli nadal potrzebna)
-export async function getPermissions(userId: number): Promise<ApiResponse<Permissions | null>> {
-  return apiClient<Permissions | null>(`/api/admin/users/${userId}/permissions`, {
-    method: 'POST',
-    body: userId,
-  });
+interface Permissions {
+  [key: string]: PermissionEntry;
 }
 
-// Edycja uprawnień
-export async function editPermissions(userId: number, permissions: Permissions): Promise<ApiResponse<any>> {
-  return apiClient(`/api/admin/users/${userId}/permissions`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: permissions,
-  });
+export async function getPermissions(userId: number): Promise<Permissions | null> {
+  const response = await apiClient<{ success: boolean; permissions: Permissions }>(
+    `/api/admin/users/get/permissions`,
+    {
+      method: 'POST',
+      body: { userId },
+    }
+  );
+
+  console.log(`[getPermissions] Odpowiedź: ${JSON.stringify(response)}`);
+
+  if (response.success && response.permissions) {
+    return response.permissions;
+  }
+
+  return null;
+}
+
+export async function editPermissions(userId: number, permissions: Permissions): Promise<boolean> {
+  try {
+    const response = await apiClient<{ success: boolean }>(
+      `/api/admin/users/set/permissions`,
+      {
+        method: 'PUT',
+        body: { userId, permissions },
+      }
+    );
+
+    console.log(`[editPermissions] Odpowiedź: ${JSON.stringify(response)}`);
+
+    return response.success;
+  } catch (error) {
+    console.error(`[editPermissions] Błąd podczas wysyłania uprawnień dla userId ${userId}: ${error}`);
+    return false;
+  }
 }

@@ -17,7 +17,7 @@ router.patch('/users/:id/block', blockUserController);
 router.patch('/users/:id/unblock', unblockUserController);
 router.delete('/users/:id', deleteUserController);
 
-router.post('/users/:id/permissions', getUserPermissionsAdminController);
+router.post('/users/get/permissions', getUserPermissionsAdminController);
 router.put('/users/:id/permissions', editUserPermissionsController);
 
 router.post('/permissions', getUserPermissionsAdminController);

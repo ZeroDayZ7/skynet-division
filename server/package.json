@@ -16,6 +16,9 @@
     ],
     "#models/*": [
       "./src/models/*"
+    ],
+    "#modules/*": [
+      "./src/modules/*"
     ]
   },
   "version": "1.0.0",

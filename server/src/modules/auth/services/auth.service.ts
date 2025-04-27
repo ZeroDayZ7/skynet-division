@@ -1,7 +1,7 @@
 // auth/services/auth.services.ts
 import userService from '#ro/modules/auth/services/user.service';
 import SystemLog from '#ro/common/utils/SystemLog';
-import AppError from '#errors/AppError';
+import AppError, { ErrorType } from '#errors/AppError';
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes';
 import { verifyUserPassword } from '#ro/common/utils/auth.utils';
 
@@ -25,11 +25,11 @@ export const validateUser = async (
   }
 
   if (user.userBlock === true) {
-    throw new AppError('USER_BLOCKED', 403);
+    throw new AppError('USER_BLOCKED', 403, false, 'Użytkownik zablokowany');
   }
 
   if (user.activation_token !== null) {
-    throw new AppError('ACCOUNT_NOT_ACTIVE', 400);
+    throw new AppError('ACCOUNT_NOT_ACTIVE', 400, false, 'Konto nie zostało aktywowane');
   }
 
   const isPasswordValid = await verifyUserPassword(user.id, password);

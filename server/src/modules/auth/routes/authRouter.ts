@@ -1,8 +1,8 @@
 import express from 'express';
 
 // import loginEndpoint from '#ro/endpoints/v1/auth/login.js';
-import { loginController } from '#ro/modules/auth/controllers/loginController';
-import { logoutController } from '#ro/modules/auth/controllers/logoutController';
+import { loginController } from '#ro/modules/auth/controllers/login.controller';
+import { logoutController } from '#ro/modules/auth/controllers/logout.controller';
 
 // import { checkEmailAvailabilityController } from '#ro/auth/controllers/registration/checkEmailAvailabilityController';
 
@@ -11,6 +11,10 @@ import { validateRequest } from '#ro/common/middlewares/validateRequest';
 import { loginSchema, LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
+import { RegisterSchema, RegisterPayload } from '../validators/register.validator';
+import { registerController } from '../controllers/register.controller';
+import { ActivationTokenPayload, activationTokenSchema } from '../validators/activate.validator';
+import { activateController } from '#ro/modules/auth/controllers/activate.controller'
 
 const router = express.Router();
 
@@ -30,7 +34,15 @@ router.post('/logout', authMiddleware, logoutController);
 
 
 // Rejestracja
-// router.post('/register', require('../endpoints/registrationEndpoint.js'));
+router.post('/register', 
+    csrfMiddleware, 
+    validateRequest<RegisterPayload>(RegisterSchema), 
+    registerController);
+
+router.post('/activate', 
+    csrfMiddleware,
+    validateRequest<ActivationTokenPayload>(activationTokenSchema), 
+    activateController);
 
 // Odświeżanie tokena
 // router.post('/refresh-token', require('../endpoints/auth/refreshToken.js'));

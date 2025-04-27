@@ -1,13 +1,10 @@
 // validators/register.validators.ts
 import { z } from 'zod';
-import { validators } from '#ro/validators/config.validator';
+import { emailSchema, passwordSchema } from '#ro/validators/config.validator';
 
 export const RegisterSchema = z.object({
-  firstName: validators.username,
-  lastName: validators.surname,
-  email: validators.email,
-  password: validators.email,
-  idNumber: validators.document,
+  email: emailSchema,
+  password: passwordSchema,
 });
 
-export type RegisterValidator = z.infer<typeof RegisterSchema>;
+export type RegisterPayload = z.infer<typeof RegisterSchema>;

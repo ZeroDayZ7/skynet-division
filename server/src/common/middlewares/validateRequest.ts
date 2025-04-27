@@ -2,6 +2,7 @@
 import { ZodSchema, ZodError } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import AppError from '#ro/common/errors/AppError';
+import SystemLog from '../utils/SystemLog';
 
 /**
  * Middleware walidujący dane wejściowe za pomocą schematu Zod.
@@ -13,6 +14,7 @@ import AppError from '#ro/common/errors/AppError';
 export const validateRequest = <T>(schema: ZodSchema<T>) =>
   (req: Request, res: Response, next: NextFunction): void => {
     try {
+      SystemLog.warn(`Body przed walidacją: ${JSON.stringify(req.body, null, 2)}`); // Dodaj logowanie
       req._validatedData = schema.parse(req.body);  // Walidacja i przypisanie danych
       next();
     } catch (error) {

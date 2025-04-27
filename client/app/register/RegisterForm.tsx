@@ -5,26 +5,22 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
+import Captcha from '@/components/Captcha/Captcha';
 
-// Schema Zod
-const registerSchema = z
-  .object({
-    firstName: z.string().min(2, { message: 'Imię musi mieć co najmniej 2 znaki' }),
-    lastName: z.string().min(2, { message: 'Nazwisko musi mieć co najmniej 2 znaki' }),
-    email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
-    password: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
-    confirmPassword: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
-    idNumber: z.string().min(9, { message: 'Numer dowodu musi mieć co najmniej 9 znaków' }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Hasła nie są identyczne',
-    path: ['confirmPassword'],
-  });
+// Schemat walidacji Zod
+const registerSchema = z.object({
+  email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
+  password: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
+  confirmPassword: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: 'Hasła nie są identyczne',
+  path: ['confirmPassword'],
+});
 
 type RegisterSchema = z.infer<typeof registerSchema>;
 
@@ -36,25 +32,23 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [captchaPassed, setCaptchaPassed] = useState(false);
+  const router = useRouter();
 
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      firstName: process.env.NODE_ENV === 'development' ? 'Jan' : '',
-      lastName: process.env.NODE_ENV === 'development' ? 'Kowalski' : '',
-      email: process.env.NODE_ENV === 'development' ? 'jan@example.com' : '',
-      password: process.env.NODE_ENV === 'development' ? 'Zaq1@wsx' : '',
-      confirmPassword: process.env.NODE_ENV === 'development' ? 'Zaq1@wsx' : '',
-      idNumber: process.env.NODE_ENV === 'development' ? 'ABC123456' : '',
+      email: process.env.NODE_ENV === 'development' ? '' : '',
+      password: process.env.NODE_ENV === 'development' ? '' : '',
+      confirmPassword: process.env.NODE_ENV === 'development' ? '' : '',
     },
   });
 
   const onSubmit = async (values: RegisterSchema) => {
     if (isLoading || !csrfToken) return;
     setIsLoading(true);
-    console.log(`csrfToken: ${csrfToken}`);
     try {
-      const response = await fetch('http://localhost:3000/api/register', {
+      const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -62,11 +56,8 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
         },
         credentials: 'include',
         body: JSON.stringify({
-          firstName: values.firstName,
-          lastName: values.lastName,
           email: values.email,
           password: values.password,
-          idNumber: values.idNumber,
         }),
       });
 
@@ -75,10 +66,9 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
         throw new Error(errorData.message || 'Błąd podczas rejestracji');
       }
 
-      toast.success('Wniosek o rejestrację złożony. Oczekuj na weryfikację.', {
-        duration: 5000,
-      });
+      toast.success('Wniosek o rejestrację złożony. Sprawdź E-mail.', { duration: 5000 });
       form.reset();
+      router.push('/activate');
     } catch (err: unknown) {
       const error = err as Error;
       toast.error(error.message || 'Wystąpił problem z rejestracją');
@@ -90,42 +80,8 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="firstName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="firstName">Imię</FormLabel>
-              <FormControl>
-                <Input
-                  id="firstName"
-                  placeholder="Wprowadź imię"
-                  disabled={isLoading || !csrfToken}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="lastName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="lastName">Nazwisko</FormLabel>
-              <FormControl>
-                <Input
-                  id="lastName"
-                  placeholder="Wprowadź nazwisko"
-                  disabled={isLoading || !csrfToken}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -146,6 +102,8 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
             </FormItem>
           )}
         />
+
+        {/* Hasło */}
         <FormField
           control={form.control}
           name="password"
@@ -177,6 +135,8 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
             </FormItem>
           )}
         />
+
+        {/* Potwierdzenie hasła */}
         <FormField
           control={form.control}
           name="confirmPassword"
@@ -208,25 +168,16 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="idNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="idNumber">Numer dowodu osobistego</FormLabel>
-              <FormControl>
-                <Input
-                  id="idNumber"
-                  placeholder="Wprowadź numer dowodu"
-                  disabled={isLoading || !csrfToken}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" disabled={isLoading || !csrfToken}>
+
+        {/* Własny Captcha - tymczasowo placeholder */}
+        <div className="text-sm text-gray-600">
+          {/* TODO: Tutaj wstawimy nasz własny CAPTCHA np. przesuń suwak, prosty quiz lub obrazek do przeciągnięcia */}
+          {/* (Tu będzie nasz własny captcha 🚀) */}
+          <Captcha onSuccess={() => setCaptchaPassed(true)} />
+        </div>
+
+        {/* Przycisk */}
+        <Button type="submit" className="w-full" disabled={isLoading || !csrfToken || !captchaPassed}>
           {isLoading ? (
             <>
               <FaSpinner className="mr-2 animate-spin" />
