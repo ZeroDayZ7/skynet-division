@@ -15,6 +15,11 @@ export const registerController = async (req: Request, res: Response): Promise<v
 
     await createUser(email, password);
 
+        // ZAPISUJEMY EMAIL DO SESJI
+    req.session.email = email;
+    await new Promise((resolve, reject) => req.session.save(err => (err ? reject(err) : resolve(null))));
+    
+
     res.status(201).json({
       success: true,
       message: 'Użytkownik został pomyślnie utworzony.',

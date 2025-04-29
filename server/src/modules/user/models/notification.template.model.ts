@@ -19,7 +19,7 @@ class NotificationTemplateModel extends Model<
   public title!: string;
   public message!: string;
   public type?: string;
-  public created_at?: Date;
+  public createdAt?: Date;
 }
 
 NotificationTemplateModel.init(
@@ -41,17 +41,13 @@ NotificationTemplateModel.init(
       type: DataTypes.STRING(50),
       allowNull: true,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     sequelize,
     modelName: 'template',
     tableName: 'notification_templates',
     timestamps: false,
+    createdAt: true
   }
 );
 

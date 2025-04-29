@@ -18,7 +18,7 @@ class NotificationModel extends Model<NotificationAttributes, NotificationCreati
   public readonly user_id!: number;
   public notification_id!: number;
   public is_read!: boolean;
-  public created_at?: Date;
+  public createdAt?: Date;
 }
 
 NotificationModel.init(
@@ -41,16 +41,12 @@ NotificationModel.init(
       allowNull: false,
       defaultValue: false,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     sequelize,
     tableName: 'user_notifications',
     timestamps: false,
+    createdAt: true
   }
 );
 

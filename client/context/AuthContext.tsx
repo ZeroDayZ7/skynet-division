@@ -1,15 +1,8 @@
-"use client";
+'use client';
 
-import {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useEffect,
-} from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { FaSpinner } from "react-icons/fa";
-import { checkSession } from "@/services/auth.service";
+import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { FaSpinner } from 'react-icons/fa';
+import { checkSession } from '@/services/auth.service';
 
 export type User = {
   role: string;
@@ -20,80 +13,82 @@ export type User = {
 type AuthContextType = {
   user: User | null;
   isAuthenticated: boolean | null;
+  isLoading: boolean;
   login: (user: User) => void;
   logout: () => void;
-  updateNotificationsContext: (count: number) => void; // 👈 nowa funkcja
+  updateNotificationsContext: (count: number | ((prev: number) => number)) => void; // Obsługuje zarówno liczbę, jak i funkcję
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Komponent dostarczający kontekst autoryzacji
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const router = useRouter();
-  // const pathname = usePathname();
 
+  // Inicjalizacja autoryzacji
   useEffect(() => {
-    
-
     const initializeAuth = async () => {
-      console.log("== AuthProvider ==");
-  
-      const localUser = localStorage.getItem("user");
+      console.log('Inicjalizacja AuthProvider');
+
+      // Sprawdź użytkownika w localStorage
+      const localUser = localStorage.getItem('user');
       if (localUser) {
         try {
           const parsedUser = JSON.parse(localUser);
           setUser(parsedUser);
           setIsAuthenticated(true);
-          console.log("Załadowano użytkownika z localStorage:", parsedUser);
+          console.log('Załadowano użytkownika z localStorage:', parsedUser);
         } catch (err) {
-          console.error("Błąd parsowania użytkownika z localStorage", err);
-          localStorage.removeItem("user"); // Czyszczenie na wszelki wypadek
-        } finally {
-          setIsLoading(false);
+          console.error('Błąd parsowania localStorage:', err);
+          localStorage.removeItem('user');
         }
       }
-  
-      // // Sprawdzamy aktualną sesję na serwerze
-      // try {
-      //   const sessionData = await checkSession();
-      //   console.log(`SESSION: ${JSON.stringify(sessionData)}`);
-  
-      //   if (!sessionData.isAuthenticated) {
-      //     logout(); // Wyloguj jeśli sesja wygasła po stronie serwera
-      //   }
-      // } catch (error) {
-      //   console.error("Błąd sprawdzania sesji:", error);
-      // }
-    };
-    setIsLoading(false);
-    initializeAuth();
-  }, []);
-  
 
+      // Włącz w razie potrzeby sprawdzanie sesji na serwerze
+      /*
+      try {
+        const sessionData = await checkSession();
+        if (!sessionData.isAuthenticated) {
+          logout();
+        }
+      } catch (error) {
+        console.error('Błąd sprawdzania sesji:', error);
+      }
+      */
+
+      setIsLoading(false);
+    };
+
+    initializeAuth();
+  }, []); // Pusty array zależności, aby wywołać tylko raz
+
+  // Logowanie użytkownika
   const login = (user: User) => {
     setUser(user);
     setIsAuthenticated(true);
-    localStorage.setItem("user", JSON.stringify(user));
-    // if (pathname === "/login") router.push("/dashboard");
+    localStorage.setItem('user', JSON.stringify(user));
   };
 
+  // Wylogowanie użytkownika
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem("user");
-    // router.replace("/login");
+    localStorage.removeItem('user');
   };
 
-  const updateNotificationsContext = (count: number) => {
+  // Aktualizacja licznika powiadomień
+  const updateNotificationsContext = (count: number | ((prev: number) => number)) => {
     if (!user) return;
-    const updatedUser = { ...user, notifications: count };
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-  };
-  
 
+    const newCount = typeof count === 'function' ? count(user.notifications) : count;
+    const updatedUser = { ...user, notifications: Math.max(0, newCount) };
+    setUser(updatedUser);
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+  };
+
+  // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -104,22 +99,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ 
-        user, 
-        isAuthenticated, 
-        login, 
-        logout, 
-        updateNotificationsContext }}
+      value={{
+        user,
+        isAuthenticated,
+        isLoading,
+        login,
+        logout,
+        updateNotificationsContext,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
+// Hook do używania kontekstu
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth musi być używany wewnątrz AuthProvider');
   }
   return context;
 };

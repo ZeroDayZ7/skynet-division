@@ -53,14 +53,6 @@ export const dateSchema = z
 
 // Schemat walidacji paginacji
 export const paginationSchema = z.object({
-  page: z
-    .number({
-      required_error: 'Parametr "page" jest wymagany',
-      invalid_type_error: '"page" musi być liczbą',
-    })
-    .int()
-    .min(1, '"page" musi być większe niż 0'),
-
   limit: z
     .number({
       required_error: 'Parametr "limit" jest wymagany',

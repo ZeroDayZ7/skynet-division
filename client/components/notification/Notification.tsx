@@ -1,36 +1,43 @@
 'use client';
 
-import { memo, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { useGetNotifications } from '@/app/api/notifications/useGetNotifications';
 import NotificationButton from './NotificationButton';
 import NotificationContent from './NotificationContent';
-import debounce from 'lodash.debounce';
+import { useGetNotifications } from '@/app/api/notifications/useGetNotifications';
 
 const Notifications = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
-  const { notifications, total, loading, error, fetchNotifications } = useGetNotifications();
-  const [page, setPage] = useState(1);
-  const limit = 5;
+  const [showRead, setShowRead] = useState(false);
+  const { notifications, total, loading, error, fetchNotifications, resetNotifications } = useGetNotifications();
 
-  const count = user?.notifications ?? 0;
+  const LIMIT = 5;
+  const count = total.unread;
 
+  // Funkcja do ponownego załadowania powiadomień w przypadku błędu
+  const handleRetry = useCallback(() => {
+    resetNotifications();
+    fetchNotifications({ limit: LIMIT, type: showRead ? 'read' : 'unread', reset: true });
+  }, [fetchNotifications, resetNotifications, showRead]);
+
+  // Po otwarciu panelu: pobierz pierwszą paczkę powiadomień
   useEffect(() => {
-    if (open) fetchNotifications({ page, limit });
-  }, [open, limit, fetchNotifications]);
+    if (!open) return;
+    resetNotifications();
+    fetchNotifications({ limit: LIMIT, type: showRead ? 'read' : 'unread', reset: true });
+  }, [open, showRead, resetNotifications]);
 
-  const debouncedLoadMore = useCallback(
-    debounce(() => {
-      const nextPage = page + 1;
-      setPage(nextPage);
-      fetchNotifications({ page: nextPage, limit });
-    }, 300),
-    [page, limit, fetchNotifications],
-  );
+  // Pokaż więcej
+  const handleLoadMore = useCallback(() => {
+    fetchNotifications({ limit: LIMIT, type: showRead ? 'read' : 'unread' });
+  }, [fetchNotifications, showRead]);
 
-  const hasMore = notifications.length < total;
+  // Przełącz tryb
+  const toggleShowRead = useCallback(() => {
+    setShowRead((prev) => !prev);
+  }, []);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -39,15 +46,27 @@ const Notifications = () => {
           <NotificationButton count={count} />
         </div>
       </SheetTrigger>
-      <SheetContent side="right" className="max-h-screen w-full overflow-y-auto sm:w-96">
+      <SheetContent side="right" className="w-full sm:w-96 max-h-screen overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Powiadomienia</SheetTitle>
-          <SheetDescription>Oto Twoje najnowsze powiadomienia.</SheetDescription>
+          <SheetTitle>{showRead ? 'Przeczytane powiadomienia' : 'Powiadomienia'}</SheetTitle>
+          <SheetDescription>
+            {showRead ? 'Twoje przeczytane powiadomienia.' : 'Twoje nieprzeczytane powiadomienia.'}
+          </SheetDescription>
         </SheetHeader>
-        <NotificationContent notifications={notifications} loading={loading} error={error} onLoadMore={debouncedLoadMore} hasMore={hasMore} />
+        <NotificationContent
+          notifications={notifications}
+          loading={loading}
+          onRetry={handleRetry}
+          error={error}
+          onLoadMore={handleLoadMore}
+          showRead={showRead}
+          onToggleShowRead={toggleShowRead}
+          limit={LIMIT}
+          total={showRead ? total.read : total.unread}
+        />
       </SheetContent>
     </Sheet>
   );
 };
 
-export default memo(Notifications);
+export default Notifications;

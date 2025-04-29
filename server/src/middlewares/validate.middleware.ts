@@ -1,3 +1,4 @@
+// src/middleware/validateRequest.ts
 import { ZodSchema, ZodError } from 'zod';
 import { Request, Response, NextFunction } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
@@ -10,21 +11,21 @@ export const validateRequest = <T>(
 ) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     const data = req[source];
+    SystemLog.info(`[validateRequest] źródło: ${source}, dane: ${JSON.stringify(data)}`);
 
     try {
-    SystemLog.info(`[validateRequest Middleware Start]`);
       const result = schema.parse(data);
-      // Dodaj sparsowane dane do requesta (np. req.validatedData)
       (req as any)._validatedData = result;
-      SystemLog.info(`[RESULT: ] ${JSON.stringify(result)}`);
-      next();
+      SystemLog.info(`[validateRequest] wynik: ${JSON.stringify(result)}`);
+      next(); // Poprawne wywołanie next() bez zwracania wartości
     } catch (err) {
       if (err instanceof ZodError) {
-        return;
+        const messages = err.errors.map(e => e.message).join('; ');
+        SystemLog.warn(`[validateRequest] błędy walidacji: ${messages}`);
+        res.status(400).json({ success: false, message: messages }); // Nie zwracamy wartości, tylko wysyłamy odpowiedź
+        return; // Przerywamy wykonanie middleware
       }
-
-      next(err);
+      next(err); // Przekazujemy inne błędy dalej
     }
   };
 };
- 

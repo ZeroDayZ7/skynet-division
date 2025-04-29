@@ -1,23 +1,12 @@
-import {
-  Model,
-  DataTypes
-} from "sequelize";
+import { Model, DataTypes } from "sequelize";
 import sequelize from "#ro/config/sequelize.config";
-import NotificationTemplate from "#ro/modules/user/models/notification.template.model";
-import {
-  UserNotificationAttributes,
-  UserNotificationCreationAttributes
-} from "#ro/modules/auth/types/UserNotificationAttributes.js";
 
-class UserNotification extends Model<
-  UserNotificationAttributes,
-  UserNotificationCreationAttributes
-> implements UserNotificationAttributes {
+class UserNotification extends Model {
   public id!: number;
   public user_id!: number;
   public notification_id!: number;
   public is_read!: boolean;
-  public received_at!: Date;
+  public createdAt!: Date;  // Dodajemy pole createdAt
 }
 
 UserNotification.init(
@@ -40,17 +29,14 @@ UserNotification.init(
       allowNull: false,
       defaultValue: 0,
     },
-    received_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     sequelize,
     modelName: "UserNotification",
     tableName: "user_notifications",
-    timestamps: false,
+    // timestamps: true,       // Ustawiamy na true, aby Sequelize zarządzał createdAt
+    createdAt: true,
+    updatedAt: false        // Wyłączamy zarządzanie updatedAt
   }
 );
 

@@ -6,6 +6,7 @@ export enum ErrorType {
   VALIDATION = 'VALIDATION',
   NOT_FOUND = 'NOT_FOUND',
   INTERNAL = 'INTERNAL',
+  BAD_REQUEST = 'BAD_REQUEST',
 }
 
 const ERROR_MESSAGES: Record<ErrorType, string> = {
@@ -13,6 +14,7 @@ const ERROR_MESSAGES: Record<ErrorType, string> = {
   VALIDATION: 'Nieprawidłowe dane.',
   NOT_FOUND: 'Zasób nie został znaleziony.',
   INTERNAL: 'Wewnętrzny błąd serwera.',
+  BAD_REQUEST: 'Błedne żądanie'
 };
 
 class AppError extends Error {

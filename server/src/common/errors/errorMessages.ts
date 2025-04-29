@@ -2,6 +2,7 @@
 export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: 'Nieprawidłowy e-mail lub hasło',
   USER_BLOCKED: 'Twoje konto zostało zablokowane.',
+  USER_BLOCKED_TOO_MANY_ATTEMPS: 'Za dużo nieudanych prób logowania. To konto zostało zablokowane.',
   ACCOUNT_NOT_ACTIVE: 'Twoje konto nie zostało jeszcze aktywowane.',
   INVALID_PASSWORD: 'Podane hasło jest nieprawidłowe.',
   SERVER_ERROR: 'Wystąpił błąd serwera. Spróbuj ponownie później.',

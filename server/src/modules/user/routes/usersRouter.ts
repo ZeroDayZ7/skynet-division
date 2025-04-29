@@ -11,11 +11,12 @@ import { setPinController } from '#ro/modules/user/controller/setPinController';
 import { getUserEIDData } from '../controller/usersData/userEIDController';
 import { getUserPassportData } from '../controller/usersData/userPassportController';
 
-import { getUserNotifications } from '../controller/usersData/notification/notification.controller';
-import { markNotificationsAsRead } from '../controller/usersData/notification/notificationsAsRead.controller';
-import { PaginationSchema, PaginationPayload } from '../validators/pagination.validation';
+import { unreadNotificationController } from '../controller/notification/unread.controller';
+import { readNotificationController } from '../controller/notification/read.controller';
+import { markNotificationsAsRead } from '../controller/notification/notificationsAsRead.controller';
 
 import { getUserPermissionstToLoginController } from '#ro/modules/user/controller/getUserPermissions.controller';
+import { notificationQuerySchema } from '../validators/notificationQuery.schema';
 
 
 const router = express.Router();
@@ -27,8 +28,23 @@ router.post('/user-passport', csrfMiddleware, authMiddleware, getUserPassportDat
 router.get('/pin-status', authMiddleware, checkPinController);
 router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);
 
-router.post('/notifications', validateRequest<PaginationPayload>(PaginationSchema), authMiddleware, getUserNotifications);
-router.patch('/notifications/read', authMiddleware, markNotificationsAsRead);
+// pobieranie powidomień usera
+router.get('/notifications/unread', 
+    authMiddleware, 
+    validateRequest(notificationQuerySchema, 'query'),
+    unreadNotificationController
+);
+
+router.get('/notifications/read', 
+    authMiddleware, 
+    validateRequest(notificationQuerySchema, 'query'),
+    readNotificationController
+);
+
+router.patch('/notifications/read', 
+    authMiddleware, 
+    markNotificationsAsRead
+);
 
 router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionstToLoginController);
 

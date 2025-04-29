@@ -1,36 +1,30 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import debounce from 'lodash.debounce';
 import { fetchClient } from '@/lib/fetchClient';
+import { useAuth } from '@/context/AuthContext';
 
+// Hook do oznaczania powiadomień
 export function useMarkNotificationsAsRead() {
-  const [notificationsToMark, setNotificationsToMark] = useState<Set<number>>(new Set());
-  const [marked, setMarked] = useState<Set<number>>(new Set()); // do animacji
+  const [marked, setMarked] = useState<Set<number>>(new Set());
+  const { updateNotificationsContext } = useAuth();
 
-  const sendBatch = useCallback(
-    debounce(async (ids: number[]) => {
+  const handleNotificationClick = useCallback(
+    async (notificationId: number) => {
       try {
         await fetchClient('/api/users/notifications/read', {
           method: 'PATCH',
-          body: JSON.stringify({ ids }),
-          // csrf: true,
+          body: JSON.stringify({ ids: [notificationId] }),
+          credentials: 'include',
         });
+        setMarked((prev) => new Set(prev).add(notificationId));
+        updateNotificationsContext((prev) => Math.max(0, prev - 1));
       } catch (err) {
-        console.error('Błąd przy wysyłaniu powiadomień:', err);
+        console.error('Błąd przy oznaczaniu powiadomienia:', err);
       }
-    }, 2000),
-    []
+    },
+    [updateNotificationsContext]
   );
 
-  const handleNotificationClick = (notificationId: number) => {
-    setMarked(prev => new Set(prev).add(notificationId));
-    setNotificationsToMark(prev => {
-      const next = new Set(prev).add(notificationId);
-      sendBatch(Array.from(next));
-      return next;
-    });
-  };
-
-  return { handleNotificationClick, notificationsToMark, marked };
+  return { handleNotificationClick, marked };
 }

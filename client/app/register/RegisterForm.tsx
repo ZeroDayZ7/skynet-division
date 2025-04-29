@@ -1,6 +1,7 @@
+// src/components/auth/RegisterForm.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -12,13 +13,18 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Captcha from '@/components/Captcha/Captcha';
 
-// Schemat walidacji Zod
+const SPECIAL_CHARS = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/;
+
 const registerSchema = z.object({
   email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
-  password: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
-  confirmPassword: z.string().min(8, { message: 'Hasło musi mieć co najmniej 8 znaków' }),
+  password: z.string()
+    .min(8, { message: 'Hasło musi mieć co najmniej 8 znaków.' })
+    .regex(/\d/, { message: 'Hasło musi zawierać co najmniej jedną cyfrę.' })
+    .regex(/[A-Z]/, { message: 'Hasło musi zawierać co najmniej jedną dużą literę.' })
+    .regex(SPECIAL_CHARS, { message: 'Hasło musi zawierać co najmniej jeden znak specjalny.' }),
+  confirmPassword: z.string().min(8),
 }).refine((data) => data.password === data.confirmPassword, {
-  message: 'Hasła nie są identyczne',
+  message: 'Hasła nie są identyczne.',
   path: ['confirmPassword'],
 });
 
@@ -26,9 +32,20 @@ type RegisterSchema = z.infer<typeof registerSchema>;
 
 interface RegisterFormProps {
   csrfToken: string | null;
+  isLoadingCsrf?: boolean;
+  csrfError?: string | null;
+  className?: string;
 }
 
-export default function RegisterForm({ csrfToken }: RegisterFormProps) {
+const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const REGISTER_URL = `${BACKEND_BASE_URL}/api/auth/register`;
+
+export default function RegisterForm({ 
+  csrfToken, 
+  isLoadingCsrf = false, 
+  csrfError = null,
+  className = ''
+}: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -38,156 +55,187 @@ export default function RegisterForm({ csrfToken }: RegisterFormProps) {
   const form = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      email: process.env.NODE_ENV === 'development' ? '' : '',
-      password: process.env.NODE_ENV === 'development' ? '' : '',
-      confirmPassword: process.env.NODE_ENV === 'development' ? '' : '',
+      email: 'michal@mich.',
+      password: 'Zaq1@wsx',
+      confirmPassword: 'Zaq1@wsx',
     },
+    mode: 'onTouched',
   });
 
-  const onSubmit = async (values: RegisterSchema) => {
-    if (isLoading || !csrfToken) return;
+  const isFormDisabled = isLoading || isLoadingCsrf || !csrfToken || !!csrfError;
+
+  const onSubmit = useCallback(async (values: RegisterSchema) => {
+    if (isFormDisabled || !captchaPassed) {
+      if (!csrfToken || csrfError) {
+        toast.error('Błąd zabezpieczeń formularza. Odśwież stronę.');
+      } else if (!captchaPassed) {
+        toast.warning('Proszę rozwiązać CAPTCHA.');
+      }
+      return;
+    }
+
     setIsLoading(true);
+
     try {
-      const response = await fetch('http://localhost:3001/api/auth/register', {
+      const response = await fetch(REGISTER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-Token': csrfToken,
         },
         credentials: 'include',
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password,
-        }),
+        body: JSON.stringify({ email: values.email, password: values.password }),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Błąd podczas rejestracji');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Rejestracja nie powiodła się.');
       }
-
-      toast.success('Wniosek o rejestrację złożony. Sprawdź E-mail.', { duration: 5000 });
+      toast.success('Wniosek o rejestrację złożony pomyślnie', {
+        description: 'Sprawdź e-mail.',
+        // duration: 5000,
+        // richColors: true,
+        icon: '✔',
+      });
       form.reset();
       router.push('/activate');
-    } catch (err: unknown) {
-      const error = err as Error;
-      toast.error(error.message || 'Wystąpił problem z rejestracją');
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error('Wystąpił nieoczekiwany błąd.');
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isFormDisabled, captchaPassed, csrfToken, csrfError, form, router]);
+
+  const togglePasswordVisibility = useCallback((field: 'password' | 'confirmPassword') => {
+    if (field === 'password') {
+      setShowPassword(prev => !prev);
+    } else {
+      setShowConfirmPassword(prev => !prev);
+    }
+  }, []);
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <div className={className}>
+      <Form {...form}>
+        {isLoadingCsrf && (
+          <div className="text-center text-sm text-muted-foreground mb-4">
+            Ładowanie zabezpieczeń...
+          </div>
+        )}
+        
+        {csrfError && (
+          <div className="text-center text-sm text-destructive mb-4">
+            Błąd zabezpieczeń: {csrfError}
+          </div>
+        )}
 
-        {/* Email */}
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="email">E-mail</FormLabel>
-              <FormControl>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Wprowadź e-mail"
-                  autoComplete="username"
-                  disabled={isLoading || !csrfToken}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Hasło */}
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormLabel htmlFor="password">Hasło</FormLabel>
-              <FormControl>
-                <div className="relative">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='email'>Adres E-mail</FormLabel>
+                <FormControl>
                   <Input
-                    id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Wprowadź hasło"
-                    autoComplete="new-password"
-                    disabled={isLoading || !csrfToken}
                     {...field}
+                    id='email'
+                    type="email"
+                    placeholder="Wprowadź adres e-mail"
+                    autoComplete="username"
+                    maxLength={100}
+                    disabled={isFormDisabled}
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    disabled={isLoading || !csrfToken}
-                    aria-label={showPassword ? 'Ukryj hasło' : 'Pokaż hasło'}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Potwierdzenie hasła */}
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem className="relative">
-              <FormLabel htmlFor="confirmPassword">Potwierdź hasło</FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    id="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Potwierdź hasło"
-                    autoComplete="new-password"
-                    disabled={isLoading || !csrfToken}
-                    {...field}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                    disabled={isLoading || !csrfToken}
-                    aria-label={showConfirmPassword ? 'Ukryj hasło' : 'Pokaż hasło'}
-                  >
-                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='password'>Hasło</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      id='password'
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Wprowadź hasło"
+                      autoComplete="new-password"
+                      disabled={isFormDisabled}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('password')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      disabled={isFormDisabled}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Własny Captcha - tymczasowo placeholder */}
-        <div className="text-sm text-gray-600">
-          {/* TODO: Tutaj wstawimy nasz własny CAPTCHA np. przesuń suwak, prosty quiz lub obrazek do przeciągnięcia */}
-          {/* (Tu będzie nasz własny captcha 🚀) */}
-          <Captcha onSuccess={() => setCaptchaPassed(true)} />
-        </div>
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor='confirmPassword'>Potwierdź hasło</FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      {...field}
+                      id="confirmPassword"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Potwierdź hasło"
+                      autoComplete="new-password"
+                      disabled={isFormDisabled}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => togglePasswordVisibility('confirmPassword')}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                      disabled={isFormDisabled}
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Przycisk */}
-        <Button type="submit" className="w-full" disabled={isLoading || !csrfToken || !captchaPassed}>
-          {isLoading ? (
-            <>
-              <FaSpinner className="mr-2 animate-spin" />
-              Wysyłanie wniosku...
-            </>
-          ) : (
-            'Złóż wniosek o rejestrację'
-          )}
-        </Button>
-      </form>
-    </Form>
+          <Captcha 
+            onSuccess={() => setCaptchaPassed(true)} 
+            disabled={isFormDisabled}
+          />
+
+          <Button
+            type="submit"
+            disabled={isFormDisabled || !captchaPassed || !form.formState.isValid}
+            className="w-full"
+          >
+            {isLoading ? (
+              <>
+                <FaSpinner className="mr-2 animate-spin" />
+                Wysyłanie...
+              </>
+            ) : (
+              'Zarejestruj się'
+            )}
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

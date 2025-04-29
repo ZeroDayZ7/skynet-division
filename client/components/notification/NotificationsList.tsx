@@ -23,16 +23,17 @@ const BG_COLORS: Record<NotificationType | 'default', string> = {
 
 const getBgColor = (type: NotificationType | string) => BG_COLORS[type as NotificationType] || BG_COLORS.default;
 
+// Lista powiadomień
 export const NotificationsList = ({
   notifications,
-  onLoadMore,
   hasMore,
   loading,
+  onLoadMore,
 }: {
   notifications: Notification[];
-  onLoadMore: () => void;
   hasMore: boolean;
   loading: boolean;
+  onLoadMore: () => void;
 }) => {
   const { handleNotificationClick, marked } = useMarkNotificationsAsRead();
 
@@ -40,36 +41,39 @@ export const NotificationsList = ({
 
   return (
     <>
-      <ul className="space-y-2">
+      <ul className="space-y-2" aria-live="polite">
         <AnimatePresence>
           {notifications.map((notif) => {
             const Icon = ICONS[notif.template.type] || FaInfoCircle;
             const isMarked = marked.has(notif.id);
 
-            return !isMarked && (
+            if (isMarked) return null;
+
+            return (
               <motion.li
                 key={notif.id}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                 layout
-                className={`flex items-start gap-2 p-3 rounded-md border ${getBgColor(notif.template.type)}`}
+                className={`relative flex items-start gap-3 p-4 rounded-md border ${getBgColor(notif.template.type)}`}
               >
-                <Icon className="mt-1" />
-                <div className="flex-1">
-                  {notif.template.title && <p className="font-semibold">{notif.template.title}</p>}
-                  <p>{notif.template.message}</p>
-                  {notif.created_at && (
-                    <p className="text-xs text-black dark:text-white mt-1">
-                      {new Date(notif.created_at).toLocaleString()}
+                <Icon className="mt-1 flex-shrink-0" />
+                <div className="flex-1 space-y-1">
+                  {notif.template.title && (
+                    <p className="font-semibold leading-snug">{notif.template.title}</p>
+                  )}
+                  <p className="text-sm leading-relaxed">{notif.template.message}</p>
+                  {notif.createdAt && (
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(notif.createdAt).toLocaleString('pl-PL')}
                     </p>
                   )}
                 </div>
-
                 {!notif.is_read && (
                   <Badge
                     variant="outline"
-                    className="cursor-pointer whitespace-nowrap"
+                    className="absolute top-2 right-2 px-2 py-0.5 text-xs cursor-pointer"
                     onClick={() => handleNotificationClick(notif.id)}
                     aria-label={`Oznacz powiadomienie ${notif.id} jako przeczytane`}
                   >
@@ -81,20 +85,17 @@ export const NotificationsList = ({
           })}
         </AnimatePresence>
       </ul>
-
-      {hasMore && !loading && (
+      {hasMore && (
         <div className="text-center mt-4">
           <button
             onClick={onLoadMore}
-            className="text-sm px-4 py-2 bg-muted rounded hover:bg-muted-foreground"
+            className="text-sm px-4 py-2 bg-muted rounded hover:bg-muted-foreground disabled:opacity-50"
+            disabled={loading}
+            aria-label="Załaduj więcej powiadomień"
           >
-            Pokaż więcej
+            {loading ? 'Ładowanie...' : 'Pokaż więcej'}
           </button>
         </div>
-      )}
-
-      {loading && (
-        <p className="text-center text-gray-500 mt-4">Ładowanie...</p>
       )}
     </>
   );

@@ -16,7 +16,7 @@ const getJwtToken = (req: Request): string => {
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   // 1. Sprawdzenie sesji
-  if (!req.session || !req.session.userId || !req.session.csrfToken) {
+  if (!req.session || !req.session.userId) {
     SystemLog.warn('[authMiddleware] Próba autoryzacji bez aktywnej sesji');
     throw new AppError('AUTHENTICATION_FAILED', 401, true, 'Błąd autoryzacji');
   }

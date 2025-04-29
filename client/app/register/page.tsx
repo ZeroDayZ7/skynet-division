@@ -48,7 +48,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 flex justify-center">
+    <div className="min-h-screen flex flex-col items-center justify-center space-y-2 px-4 py-4">
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Złóż wniosek o rejestrację</CardTitle>
@@ -77,9 +77,9 @@ export default function RegisterPage() {
           )}
         </CardContent>
         <CardContent>
-          <p className="text-center text-sm text-gray-600">
+          <p className="text-center text-sm text-gray-500">
             Masz już konto?{' '}
-            <Link href="/login" className="text-blue-600 hover:underline">
+            <Link href="/login" className="text-green-500 hover:underline">
               Zaloguj się
             </Link>
           </p>

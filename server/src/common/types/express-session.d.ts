@@ -8,6 +8,7 @@ declare module 'express-session' {
     role?: string;
     points: number;
     notifications?: number | null;
+    email?: string | null;
     
   }
 }
