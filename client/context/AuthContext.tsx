@@ -4,6 +4,8 @@ import { createContext, useState, useContext, ReactNode, useEffect } from 'react
 import { FaSpinner } from 'react-icons/fa';
 import { checkSession } from '@/services/auth.service';
 
+
+
 export type User = {
   role: string;
   points: number;

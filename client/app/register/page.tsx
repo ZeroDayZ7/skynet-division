@@ -1,88 +1,71 @@
+/**
+ * Komponent strony rejestracji z formularzem i brandingiem.
+ * @module components/auth/RegisterPage
+ */
+
 'use client';
 
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { FaSpinner } from 'react-icons/fa';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRegisterForm } from './useRegisterForm';
+import { AppBrand } from '@/components/auth/AppBrand';
 import Link from 'next/link';
-import { toast } from 'sonner';
-import { fetchCsrfToken } from '@/lib/csrf';
 
-// Dynamiczne ładowanie RegisterForm
-const RegisterForm = dynamic(() => import('@/app/register/RegisterForm'), {
-  ssr: false, // Wyłącz SSR dla formularza
-  loading: () => (
-    <div className="flex justify-center">
-      <FaSpinner className="animate-spin text-2xl text-gray-500" />
-    </div>
-  ),
+// Dynamiczny import formularza rejestracji dla optymalizacji wydajności
+const RegisterForm = dynamic(() => import('./RegisterForm'), {
+  ssr: false,
+  loading: () => <div className="flex justify-center"><span className="animate-pulse">Ładowanie...</span></div>,
 });
 
+/**
+ * Renderuje stronę rejestracji z formularzem i linkami nawigacyjnymi.
+ * @returns Element JSX.
+ */
 export default function RegisterPage() {
-  const [showForm, setShowForm] = useState(false);
-  const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleShowForm = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    
-    try {
-      const token = await fetchCsrfToken();
-      console.log(`Token CSRF: ${token}`);
-      setCsrfToken(token);
-      setShowForm(true);
-    } catch (error) {
-      console.error('[RegisterPage] Błąd pobierania CSRF:', error);
-      toast.error('Nie udało się załadować formularza. Spróbuj ponownie.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const {
+    form,
+    isLoading,
+    isSubmitting,
+    showPassword,
+    showConfirmPassword,
+    togglePasswordVisibility,
+    onSubmit,
+    csrfTokenReady,
+    captchaPassed,
+    setCaptchaPassed,
+  } = useRegisterForm();
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center space-y-2 px-4 py-4">
       <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Złóż wniosek o rejestrację</CardTitle>
-          <CardDescription>
-            Wypełnij formularz, aby złożyć wniosek o konto. Oczekuj weryfikacji.
-          </CardDescription>
+        <CardHeader className="flex flex-col items-center space-y-2">
+          <AppBrand />
+          <div className="mt-4">
+            <CardTitle>Złóż wniosek o rejestrację</CardTitle>
+            <CardDescription>
+              Wypełnij formularz, aby złożyć wniosek o konto. Oczekuj weryfikacji.
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
-          {showForm ? (
-            <RegisterForm csrfToken={csrfToken} />
-          ) : (
-            <Button
-              className="w-full"
-              onClick={handleShowForm}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <FaSpinner className="mr-2 animate-spin" />
-                  Ładowanie...
-                </>
-              ) : (
-                'Złóż wniosek o rejestrację'
-              )}
-            </Button>
-          )}
-        </CardContent>
-        <CardContent>
-          <p className="text-center text-sm text-gray-500">
+          <RegisterForm
+            form={form}
+            isLoading={isLoading}
+            isSubmitting={isSubmitting}
+            showPassword={showPassword}
+            showConfirmPassword={showConfirmPassword}
+            togglePasswordVisibility={togglePasswordVisibility}
+            onSubmit={onSubmit}
+            csrfTokenReady={csrfTokenReady}
+            captchaPassed={captchaPassed}
+            setCaptchaPassed={setCaptchaPassed}
+          />
+          <div className="mt-4 text-center text-sm text-gray-500">
             Masz już konto?{' '}
             <Link href="/login" className="text-green-500 hover:underline">
               Zaloguj się
             </Link>
-          </p>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -6,10 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { LoginSchema } from './useLoginForm'; // Importuj typ z hooka
-// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert" // Przykład komponentu do błędów
-import { Terminal } from 'lucide-react'; // Ikona do alertu
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'; // Przykład komponentu do błędów
+import { LoginSchema } from '@/lib/schemas/auth';
 
 interface LoginFormProps {
   form: UseFormReturn<LoginSchema>; // Przyjmij całą instancję form
@@ -18,7 +15,6 @@ interface LoginFormProps {
   showPassword?: boolean; // Opcjonalne, jeśli logika jest w hooku
   toggleShowPassword?: () => void; // Opcjonalne
   onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>; // Handler z hooka
-  formError: string | null; // Błąd do wyświetlenia
   csrfTokenReady: boolean; // Informacja o gotowości tokenu
 }
 
@@ -29,7 +25,6 @@ export function LoginForm({
   showPassword,
   toggleShowPassword,
   onSubmit,
-  formError,
   csrfTokenReady
 }: LoginFormProps) {
   // isLoading teraz obejmuje też czas ładowania CSRF
@@ -40,15 +35,6 @@ export function LoginForm({
       {' '}
       {/* Rozpakuj całą instancję form */}
       <form onSubmit={onSubmit} className="space-y-4">
-        {/* Wyświetl błąd ogólny formularza */}
-        {formError && (
-          <Alert variant="destructive">
-            <Terminal className="h-4 w-4" />
-            {/* <AlertTitle>Błąd Logowania</AlertTitle> */}
-            <AlertDescription>{formError}</AlertDescription>
-          </Alert>
-        )}
-
         {/* Pole Email */}
         <FormField
           control={form.control}

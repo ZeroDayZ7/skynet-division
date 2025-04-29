@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 18, 2025 at 06:32 PM
+-- Generation Time: Apr 29, 2025 at 05:52 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.4
 
@@ -126,19 +126,45 @@ CREATE TABLE `notification_templates` (
   `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `notification_templates`
 --
 
-INSERT INTO `notification_templates` (`id`, `title`, `message`, `type`, `created_at`) VALUES
-(1, 'Nowe zamówienie', 'Otrzymałeś nowe zamówienie do realizacji.', 'info', '2025-04-16 10:14:25'),
+INSERT INTO `notification_templates` (`id`, `title`, `message`, `type`, `createdAt`) VALUES
+(1, 'Witaj w Dark Army!', 'Dziękujemy za rejestrację – otrzymujesz 50 pkt na start. Wymieniaj je na nagrody.', 'info', '2025-04-16 10:14:25'),
 (2, 'Błąd płatności', 'Nie udało się przetworzyć płatności użytkownika.', 'error', '2025-04-16 10:14:25'),
 (3, 'Konto zaktualizowane', 'Twoje dane konta zostały pomyślnie zaktualizowane.', 'success', '2025-04-16 10:14:25'),
 (4, 'Ostrzeżenie o bezpieczeństwie', 'Wykryto nietypową aktywność na Twoim koncie.', 'warning', '2025-04-16 10:14:25'),
 (5, 'Nowa wiadomość', 'Masz nową wiadomość od administratora.', 'info', '2025-04-16 10:14:25');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `permission_templates`
+--
+
+CREATE TABLE `permission_templates` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `key` varchar(100) NOT NULL,
+  `description` text,
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `permission_templates`
+--
+
+INSERT INTO `permission_templates` (`id`, `key`, `description`, `createdAt`) VALUES
+(1, 'userManagement', 'Zarządzanie użytkownikami', '2025-04-21 14:36:16'),
+(2, 'viewLogs', 'Podgląd logów systemowych', '2025-04-21 14:36:16'),
+(3, 'userCreate', 'Tworzenie nowych użytkowników', '2025-04-21 14:36:16'),
+(4, 'userDelete', 'Usuwanie użytkowników', '2025-04-21 14:36:16'),
+(5, 'userBlock', 'Blokowanie lub odblokowanie użytkowników', '2025-04-21 14:36:16'),
+(6, 'userEdit', 'Edycja danych użytkownika', '2025-04-21 14:36:16'),
+(7, 'userEditPermissions', 'Edycja uprawnień użytkownika', '2025-04-21 14:36:16');
 
 -- --------------------------------------------------------
 
@@ -183,7 +209,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
-('nsvCLtMCyi4y69xPJKSUYtoyO16TgBvg', NULL, '2025-04-19 19:30:16', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-19T19:30:15.504Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"points\":50,\"role\":\"admin\",\"notifications\":20}', '2025-04-18 18:28:53', '2025-04-18 18:30:16');
+('8XRy7fevklY9S3GUWFt1Xj9ERE7fOAq0', NULL, '2025-04-30 18:51:36', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-30T18:51:36.683Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"csrfToken\":\"1f520410-b325-49f9-b0f9-d3a047cb2d4f\"}', '2025-04-29 17:51:02', '2025-04-29 17:51:36');
 
 -- --------------------------------------------------------
 
@@ -214,11 +240,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `pass`, `pin`, `points`, `activation_token`, `permissions`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
-(1, 'unknown0@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 1, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjEsInJvbGUiOiJhZG1pbiIsInVzZXIiOiJBRE1JTjExIiwiZXhwIjoxNzE1MjU0MTMwLCJpYXQiOjE3MTUyNTA1MzB9.gqTPgr9lPFxFaR2mq4QUB5adI9vDYYY9DRZw_mlr0zk', NULL, 1037, 'admin', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-18 17:15:47'),
-(2, 'unknown1@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 2, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZHMiOjIsInJvbGUiOiJhZG1pbjIiLCJ1c2VyIjoiQURNSU4xMTEiLCJleHAiOjE3MTUyMjAzOTUsImlhdCI6MTcxNTIxNjc5NX0.r1PzfBaJJSplfgoFyX4-YvAkFPqmovgUoA1cgv7CEfs', NULL, 18, 'admin2', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-18 17:42:00'),
-(4, 'unknown2@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 3, NULL, NULL, NULL, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(71, 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 2, 'user', 0, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-08 17:58:25'),
-(77, 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', NULL, 50, NULL, NULL, 1115, 'admin', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-18 18:30:16');
+(4, 'unknown2@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 3, NULL, NULL, NULL, 'user', 1, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-27 07:10:57'),
+(71, 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
+(77, 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', NULL, 50, NULL, '{\"userEdit\": {\"hidden\": false, \"enabled\": true}, \"viewLogs\": {\"hidden\": false, \"enabled\": false}, \"userBlock\": {\"hidden\": false, \"enabled\": true}, \"userCreate\": {\"hidden\": false, \"enabled\": true}, \"userDelete\": {\"hidden\": false, \"enabled\": true}, \"userManagement\": {\"hidden\": false, \"enabled\": true}, \"userEditPermissions\": {\"hidden\": false, \"enabled\": true}}', 1194, 'superadmin', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-29 17:50:08');
 
 -- --------------------------------------------------------
 
@@ -296,39 +320,41 @@ CREATE TABLE `user_notifications` (
   `user_id` int(10) UNSIGNED NOT NULL,
   `notification_id` int(10) UNSIGNED NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `user_notifications`
 --
 
-INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `created_at`) VALUES
+INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `createdAt`) VALUES
 (1, 77, 1, 1, '2025-04-16 10:16:06'),
 (2, 77, 2, 1, '2025-04-16 10:16:06'),
 (3, 77, 3, 1, '2025-04-16 10:16:06'),
 (4, 77, 4, 1, '2025-04-16 10:16:06'),
 (5, 77, 5, 1, '2025-04-16 10:16:06'),
-(6, 77, 1, 0, '2025-04-16 10:16:06'),
-(7, 77, 2, 0, '2025-04-16 10:16:06'),
-(8, 77, 3, 0, '2025-04-16 10:16:06'),
-(9, 77, 2, 0, '2025-04-16 10:16:06'),
-(10, 77, 5, 0, '2025-04-16 10:16:06'),
-(11, 77, 1, 0, '2025-04-16 10:16:06'),
-(12, 77, 2, 0, '2025-04-16 10:16:06'),
-(13, 77, 3, 0, '2025-04-16 10:16:06'),
-(14, 77, 4, 0, '2025-04-16 10:16:06'),
-(15, 77, 5, 0, '2025-04-16 10:16:06'),
-(16, 77, 1, 0, '2025-04-16 10:16:06'),
-(17, 77, 1, 0, '2025-04-16 10:16:06'),
-(18, 77, 1, 0, '2025-04-16 10:16:06'),
-(19, 77, 1, 0, '2025-04-16 10:16:06'),
-(20, 77, 1, 0, '2025-04-16 10:16:06'),
-(21, 77, 1, 0, '2025-04-16 10:16:06'),
-(22, 77, 1, 0, '2025-04-16 10:16:06'),
-(23, 77, 1, 0, '2025-04-16 10:16:06'),
-(24, 77, 1, 0, '2025-04-16 10:16:06'),
-(25, 77, 1, 0, '2025-04-16 10:16:06');
+(26, 90, 1, 1, '2025-04-28 09:58:35'),
+(27, 90, 1, 1, '2025-04-28 09:58:35'),
+(28, 90, 1, 1, '2025-04-28 09:58:35'),
+(29, 90, 1, 1, '2025-04-28 09:58:35'),
+(30, 90, 1, 1, '2025-04-28 09:58:35'),
+(31, 90, 1, 1, '2025-04-28 09:58:35'),
+(32, 90, 1, 1, '2025-04-28 09:58:35'),
+(33, 90, 1, 1, '2025-04-28 09:58:35'),
+(34, 90, 1, 1, '2025-04-28 09:58:35'),
+(35, 90, 1, 1, '2025-04-28 09:58:35'),
+(36, 90, 1, 1, '2025-04-28 09:58:35'),
+(37, 90, 1, 1, '2025-04-28 09:58:35'),
+(38, 90, 1, 1, '2025-04-28 09:58:35'),
+(39, 90, 1, 1, '2025-04-28 09:58:35'),
+(40, 90, 1, 1, '2025-04-28 09:58:35'),
+(41, 90, 1, 1, '2025-04-28 09:58:35'),
+(42, 90, 1, 1, '2025-04-28 09:58:35'),
+(43, 90, 1, 1, '2025-04-28 09:58:35'),
+(44, 90, 1, 1, '2025-04-28 09:58:35'),
+(45, 90, 1, 1, '2025-04-28 09:58:35'),
+(46, 90, 1, 1, '2025-04-28 09:58:35'),
+(47, 90, 1, 1, '2025-04-28 09:58:35');
 
 -- --------------------------------------------------------
 
@@ -354,6 +380,33 @@ CREATE TABLE `user_passport_data` (
 
 INSERT INTO `user_passport_data` (`id`, `user_id`, `passport_number`, `issue_date`, `expiration_date`, `country_code`, `passport_type`, `createdAt`, `updatedAt`) VALUES
 (1, 77, 'XA1234567', '2020-05-10', '2030-05-09', 'POL', 'P', '2025-04-05 12:36:51', '2025-04-05 12:36:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_permission`
+--
+
+CREATE TABLE `user_permission` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `permission_id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `is_visible` tinyint(1) DEFAULT '0',
+  `is_enabled` tinyint(1) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `user_permission`
+--
+
+INSERT INTO `user_permission` (`id`, `permission_id`, `user_id`, `is_visible`, `is_enabled`) VALUES
+(4, 1, 77, 1, 1),
+(5, 2, 77, 1, 1),
+(6, 3, 77, 1, 1),
+(7, 4, 77, 1, 0),
+(8, 5, 77, 1, 1),
+(9, 6, 77, 1, 1),
+(10, 7, 77, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -451,6 +504,13 @@ ALTER TABLE `notification_templates`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `permission_templates`
+--
+ALTER TABLE `permission_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
 -- Indexes for table `sequelize_meta`
 --
 ALTER TABLE `sequelize_meta`
@@ -518,6 +578,14 @@ ALTER TABLE `user_passport_data`
   ADD UNIQUE KEY `unique_passport_number` (`passport_number`);
 
 --
+-- Indexes for table `user_permission`
+--
+ALTER TABLE `user_permission`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `index` (`user_id`),
+  ADD KEY `permission_id` (`permission_id`);
+
+--
 -- Indexes for table `user_referrals`
 --
 ALTER TABLE `user_referrals`
@@ -570,10 +638,16 @@ ALTER TABLE `notification_templates`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT for table `permission_templates`
+--
+ALTER TABLE `permission_templates`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `user_data`
@@ -597,13 +671,19 @@ ALTER TABLE `user_eid_data`
 -- AUTO_INCREMENT for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `user_permission`
+--
+ALTER TABLE `user_permission`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_referrals`
@@ -650,6 +730,12 @@ ALTER TABLE `user_notifications`
 --
 ALTER TABLE `user_passport_data`
   ADD CONSTRAINT `cfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_data` (`user_id`);
+
+--
+-- Constraints for table `user_permission`
+--
+ALTER TABLE `user_permission`
+  ADD CONSTRAINT `FK_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission_templates` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

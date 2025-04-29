@@ -1,38 +1,55 @@
-// hooks/useCsrfToken.ts
-'use client';
+/**
+ * Custom hook for managing CSRF token state and retrieval.
+ * @module hooks/useCsrfToken
+ */
 
-import { useState, useEffect } from 'react';
-import { fetchCsrfToken } from '@/lib/csrf'; // Importujemy funkcję z zrefaktoryzowanego pliku lib
+import { useState, useEffect, useCallback } from 'react';
+import { fetchCsrfToken } from '@/lib/csrf';
 
-// Hook do pobierania tokenu CSRF i zarządzania jego stanem.
-// Zwraca token, stan ładowania oraz ewentualny błąd.
-export function useCsrfToken() {
+interface CsrfTokenState {
+  csrfToken: string | null;
+  isLoading: boolean;
+  error: string | null;
+  refreshToken: () => Promise<void>;
+}
+
+/**
+ * Manages CSRF token fetching with loading and error states.
+ * @param autoFetch - Whether to fetch the token automatically on mount (default: true).
+ * @returns Object containing token, loading state, error, and refresh function.
+ */
+export function useCsrfToken({ autoFetch = true } = {}): CsrfTokenState {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Dodano stan ładowania
-  const [error, setError] = useState<string | null>(null); // Dodano stan błędu
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadToken = async () => {
-      setIsLoading(true); // Ustaw ładowanie na true przed rozpoczęciem
-      setError(null); // Wyczyść poprzednie błędy
+  const loadToken = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        const token = await fetchCsrfToken();
-        setCsrfToken(token);
-      } catch (err: any) {
-        console.error("useCsrfToken napotkał błąd:", err); // Loguj błąd
-        setError(err.message || 'Nieznany błąd podczas ładowania tokenu zabezpieczającego.'); // Ustaw komunikat błędu
-        setCsrfToken(null); // Upewnij się, że token jest null w przypadku błędu
-      } finally {
-        setIsLoading(false); // Zawsze ustaw ładowanie na false
-      }
-    };
-
-    loadToken(); // Wywołaj funkcję pobierającą token
-
-    // Pusta tablica zależności oznacza, że efekt uruchomi się tylko raz po pierwszym renderowaniu komponentu.
+    try {
+      const token = await fetchCsrfToken();
+      console.log(`[useCsrfToken]: ${token}`);
+      setCsrfToken(token);
+    } catch (err: any) {
+      setError(err.message);
+      setCsrfToken(null);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  // Zwracamy obiekt zawierający wszystkie stany
-  return { csrfToken, isLoading, error };
+  useEffect(() => {
+    if (autoFetch) {
+      loadToken();
+    } else {
+      setIsLoading(false); // Prevent indefinite loading if not fetching
+    }
+  }, [loadToken, autoFetch]);
+
+  const refreshToken = useCallback(async () => {
+    await loadToken();
+  }, [loadToken]);
+
+  return { csrfToken, isLoading, error, refreshToken };
 }

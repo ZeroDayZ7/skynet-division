@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/card';
 import { LoginForm } from './LoginForm';
 import { useLoginForm } from './useLoginForm';
-import Image from 'next/image';
 import { AppBrand } from '@/components/auth/AppBrand';
 import Link from 'next/link';
 
@@ -21,7 +20,6 @@ export default function LoginPage() {
     showPassword,
     toggleShowPassword,
     onSubmit,
-    formError,
     csrfTokenReady,
   } = useLoginForm();
 
@@ -45,7 +43,6 @@ export default function LoginPage() {
             showPassword={showPassword}
             toggleShowPassword={toggleShowPassword}
             onSubmit={onSubmit}
-            formError={formError}
             csrfTokenReady={csrfTokenReady}
           />
           <div className="mt-4 text-center text-sm text-gray-500">

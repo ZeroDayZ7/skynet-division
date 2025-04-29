@@ -1,37 +1,39 @@
-// useLoginForm.ts
-'use client'; // Jeśli używasz Next.js App Router
+/**
+ * Hook for managing login form state and submission.
+ * @module hooks/useLoginForm
+ */
 
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { fetchCsrfToken } from '@/lib/csrf'; // Załóżmy, że ta funkcja istnieje
-import { useLogin } from './useLogin'; // Twój hook do API
-import { useAuth } from '@/context/AuthContext'; // Zaimportuj useAuth
-import { useRouter } from 'next/navigation'; // Importuj useRouter tutaj
-import type { User } from '@/context/AuthContext';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { useCsrfToken } from '@/hooks/useCsrfToken';
+import { useLogin } from './useLogin';
+import { useAuth } from '@/context/AuthContext';
+import { loginSchema, LoginSchema } from '@/lib/schemas/auth/loginSchema';
+import type { User } from '@/types/auth';
 
+interface LoginFormState {
+  form: ReturnType<typeof useForm<LoginSchema>>;
+  isSubmitting: boolean;
+  isLoading: boolean;
+  showPassword: boolean;
+  toggleShowPassword: () => void;
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  csrfTokenReady: boolean;
+}
 
-// Definicja schematu i typu (można też trzymać w osobnym pliku np. schemas.ts)
-const loginSchema = z.object({
-  email: z.string().email({ message: 'Nieprawidłowy adres e-mail.' }),
-  password: z.string().min(6, { message: 'Hasło musi mieć co najmniej 6 znaków.' }),
-});
-export type LoginSchema = z.infer<typeof loginSchema>;
-
-export function useLoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
-  const { csrfToken, isLoading: isCsrfLoading, error: csrfError } = useCsrfToken();
-
-  // const [csrfToken, setCsrfToken] = useState<string>('');
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [formError, setFormError] = useState<string | null>(null); // Stan do przechowywania błędów logowania
-
-  const { login: loginApiCall } = useLogin(); // Zmień nazwę, aby uniknąć konfliktu
-  const { login: loginContext } = useAuth(); 
+/**
+ * Manages login form with validation, CSRF, and API integration.
+ * @returns Form state and handlers.
+ */
+export function useLoginForm(): LoginFormState {
+  const { csrfToken, isLoading: isCsrfLoading, error: csrfError, refreshToken } = useCsrfToken();
+  const { login: loginApi } = useLogin();
+  const { login: loginContext } = useAuth();
   const router = useRouter();
-
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -41,46 +43,39 @@ export function useLoginForm() {
     },
   });
 
+  useEffect(() => {
+    if (csrfError) {
+      toast.error(`Błąd bezpieczeństwa: ${csrfError}. Odśwież stronę.`);
+    }
+  }, [csrfError]);
+
   const toggleShowPassword = useCallback(() => {
     setShowPassword((prev) => !prev);
   }, []);
 
-  const handleFormSubmit = async (values: LoginSchema) => {
-    
+  const onSubmit = async (data: LoginSchema) => {
     if (!csrfToken || csrfError) {
-      setFormError('Brak tokenu CSRF. Nie można wysłać formularza.');
-      console.error('Próba wysłania formularza bez tokenu CSRF');
-      setIsLoading(false);
+      toast.error('Brak tokenu CSRF lub błąd bezpieczeństwa. Odśwież stronę.');
       return;
     }
-    setIsLoading(true);
-    setFormError(null);
-    try {
-        console.log(values); // Logowanie wartości formularza
-        console.log('Token CSRF:', csrfToken); // Logowanie tokenu CSRF
-      // Wywołaj funkcję logowania API
-      const userData = await loginApiCall(values, csrfToken); // Wywołaj funkcję logowania API
-      console.log('Dane użytkownika po zalogowaniu:', userData);
 
-      // Załóżmy, że odpowiedź z API zawiera dane użytkownika w formacie User
-      loginContext(userData.user as User); // Zapisz dane użytkownika do AuthContext
-      router.replace('/dashboard'); // Przekieruj na dashboard
-    } catch (error: any) {
-      console.error('Błąd podczas logowania w hooku formularza:', error);
-      setFormError(error.message || 'Wystąpił błąd podczas logowania.');
-    } finally {
-      setIsLoading(false);
+    try {
+      const { user } = await loginApi(data, csrfToken);
+      loginContext(user);
+      toast.success('Zalogowano pomyślnie');
+      router.replace('/dashboard');
+    } catch (err: any) {
+      toast.error(err.message || 'Logowanie nie powiodło się. Spróbuj ponownie.');
     }
   };
 
   return {
     form,
-    isLoading: isLoading,
-    isSubmitting: form.formState.isSubmitting,
+    isSubmitting: form.formState.isSubmitting || isCsrfLoading,
+    isLoading: isCsrfLoading,
     showPassword,
     toggleShowPassword,
-    onSubmit: form.handleSubmit(handleFormSubmit),
-    csrfTokenReady: !!csrfToken,
-    formError,
+    onSubmit: form.handleSubmit(onSubmit),
+    csrfTokenReady: !!csrfToken && !csrfError,
   };
 }
