@@ -11,8 +11,7 @@ import { toast } from 'sonner';
 import { useCsrfToken } from '@/hooks/useCsrfToken';
 import { useLogin } from './useLogin';
 import { useAuth } from '@/context/AuthContext';
-import { loginSchema, LoginSchema } from '@/lib/schemas/auth/loginSchema';
-import type { User } from '@/types/auth';
+import { loginSchema, LoginSchema } from '@/lib/schemas/auth';
 
 interface LoginFormState {
   form: ReturnType<typeof useForm<LoginSchema>>;

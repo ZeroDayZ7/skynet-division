@@ -14,7 +14,8 @@ import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { RegisterSchema, RegisterPayload } from '../validators/register.validator';
 import { registerController } from '../controllers/register.controller';
 import { ActivationTokenPayload, activationTokenSchema } from '../validators/activate.validator';
-import { activateController } from '#ro/modules/auth/controllers/activate.controller'
+import { activateController } from '#ro/modules/auth/controllers/activate.controller';
+import { resendActivationController } from '../controllers/resend-activation.controller';
 
 const router = express.Router();
 
@@ -43,6 +44,12 @@ router.post('/activate',
     csrfMiddleware,
     validateRequest<ActivationTokenPayload>(activationTokenSchema), 
     activateController);
+
+// Endpoint do ponownego wysyłania kodu aktywacyjnego
+router.post('/resend-activation', 
+    csrfMiddleware,
+    resendActivationController
+);
 
 // Odświeżanie tokena
 // router.post('/refresh-token', require('../endpoints/auth/refreshToken.js'));
