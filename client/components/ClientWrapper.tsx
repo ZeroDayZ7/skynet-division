@@ -28,7 +28,7 @@ export function ClientWrapper({ children }: { children: ReactNode }) {
         <MessageProvider>
           {children}
         </MessageProvider>
-        <Toaster richColors position="top-center" />
+        <Toaster richColors />
         {/* </QueryClientProvider> */}
       </ThemeProvider>
      

@@ -73,9 +73,10 @@ export async function activateAccount(activationToken: string, csrfToken: string
  * @param email - Adres e-mail użytkownika.
  * @throws Error w przypadku niepowodzenia ponownego wysyłania.
  */
-export async function resendActivationCode(email: string): Promise<void> {
+export async function resendActivationCode(email: string, csrfToken: string): Promise<void> {
   await fetchClient(RESEND_ENDPOINT, {
     method: 'POST',
+    headers: { 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ email }),
   });
 }

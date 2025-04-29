@@ -1,21 +1,20 @@
 import express from 'express';
 
-// import loginEndpoint from '#ro/endpoints/v1/auth/login.js';
 import { loginController } from '#ro/modules/auth/controllers/login.controller';
 import { logoutController } from '#ro/modules/auth/controllers/logout.controller';
-
-// import { checkEmailAvailabilityController } from '#ro/auth/controllers/registration/checkEmailAvailabilityController';
-
-// import { authMiddleware } from '#ro/middlewares/auth.js';
-import { validateRequest } from '#ro/common/middlewares/validateRequest';
-import { loginSchema, LoginPayload } from '#ro/modules/auth/validators/login.validator';
-import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
-import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
-import { RegisterSchema, RegisterPayload } from '../validators/register.validator';
 import { registerController } from '../controllers/register.controller';
-import { ActivationTokenPayload, activationTokenSchema } from '../validators/activate.validator';
 import { activateController } from '#ro/modules/auth/controllers/activate.controller';
 import { resendActivationController } from '../controllers/resend-activation.controller';
+
+import { validateRequest } from '#ro/common/middlewares/validateRequest';
+
+import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
+import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
+
+import { loginSchema, LoginPayload } from '#ro/modules/auth/validators/login.validator';
+import { RegisterSchema, RegisterPayload } from '../validators/register.validator';
+import { ActivationTokenPayload, ActivationTokenSchema } from '../validators/activate.validator';
+import { ResendPayload, ResendActivateToken,  } from '../validators/resendActivateToken';
 
 const router = express.Router();
 
@@ -42,12 +41,13 @@ router.post('/register',
 
 router.post('/activate', 
     csrfMiddleware,
-    validateRequest<ActivationTokenPayload>(activationTokenSchema), 
+    validateRequest<ActivationTokenPayload>(ActivationTokenSchema), 
     activateController);
 
 // Endpoint do ponownego wysyłania kodu aktywacyjnego
 router.post('/resend-activation', 
     csrfMiddleware,
+    validateRequest<ResendPayload>(ResendActivateToken), 
     resendActivationController
 );
 

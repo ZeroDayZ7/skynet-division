@@ -9,7 +9,7 @@ import { ActivateSchema, ResendActivationSchema } from '@/lib/schemas/auth';
 
 interface ActivateState {
   activate: (data: ActivateSchema, csrfToken: string) => Promise<void>;
-  resendCode: (data: ResendActivationSchema) => Promise<void>;
+  resendCode: (data: ResendActivationSchema, csrfToken: string) => Promise<void>;
   isActivating: boolean;
   isResending: boolean;
   error: string | null;
@@ -38,12 +38,12 @@ export function useActivate(): ActivateState {
     }
   };
 
-  const resendCode = async (data: ResendActivationSchema) => {
+  const resendCode = async (data: ResendActivationSchema, csrfToken: string) => {
     setIsResending(true);
     setError(null);
 
     try {
-      await resendActivationCode(data.email);
+      await resendActivationCode(data.email, csrfToken);
     } catch (err: any) {
       setError(err.message);
       throw err;

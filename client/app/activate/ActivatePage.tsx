@@ -1,8 +1,3 @@
-/**
- * Strona aktywacji konta z formularzem i brandingiem.
- * @module components/auth/ActivatePage
- */
-
 'use client';
 
 import dynamic from 'next/dynamic';
@@ -10,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AppBrand } from '@/components/auth/AppBrand';
 import { useActivateForm } from './useActivateForm';
 
-// Dynamiczny import formularza aktywacji dla optymalizacji wydajności
 const ActivateForm = dynamic(() => import('./ActivateForm'), {
   ssr: false,
   loading: () => <div className="flex justify-center"><span className="animate-pulse">Ładowanie...</span></div>,
@@ -32,7 +26,6 @@ export default function ActivatePage() {
     onSubmit,
     onResendSubmit,
     refreshCsrfToken,
-    inputRef,
   } = useActivateForm();
 
   return (
@@ -56,8 +49,7 @@ export default function ActivatePage() {
             isResendDisabled={isResendDisabled}
             onSubmit={onSubmit}
             onResendSubmit={onResendSubmit}
-            refreshCsrfToken={refreshCsrfToken}
-            inputRef={inputRef}
+            // refreshCsrfToken={refreshCsrfToken}
           />
         </CardContent>
       </Card>

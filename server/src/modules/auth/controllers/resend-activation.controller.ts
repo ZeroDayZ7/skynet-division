@@ -5,9 +5,14 @@ import AppError from '#ro/common/errors/AppError';
 export const resendActivationController = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body; // email użytkownika przekazany w ciele żądania
+    const emailSession = req.session.email;
 
     if (!email) {
       throw new AppError('EMAIL_REQUIRED', 400, false, 'Proszę podać adres e-mail.');
+    }
+
+    if(email !== emailSession){
+      throw new AppError('EMAIL_REQUIRED', 400, false, 'E-mail nie zgadza się z sesją.');
     }
 
     await resendActivationToken(email); // Wywołanie logiki ponownego generowania tokena
