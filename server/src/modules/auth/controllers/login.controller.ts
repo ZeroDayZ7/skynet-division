@@ -46,6 +46,7 @@ const validIp = isIP(ip) ? ip : '';
       user: {
         role: user.role,
         points: user.points,
+        hasDocumentsEnabled: user.documents!==null
       },
       // tokenCSRF,
     });

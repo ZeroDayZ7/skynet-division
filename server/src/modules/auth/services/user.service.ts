@@ -7,7 +7,7 @@ import { Op } from 'sequelize'; // Przydatne do porównań dat
 export const getUserDetailsForValidation = async (email: string): Promise<UserAttributes | null> => {
   const user = await User.findOne({
     where: { email },
-    attributes: ['id', 'pass', 'activation_token', 'userBlock', 'points', 'role', 'loginAttempts', 'lastLoginAttempt'],
+    attributes: ['id', 'pass', 'activation_token', 'userBlock', 'points', 'role', 'loginAttempts', 'lastLoginAttempt', 'documents'],
   });
 
   return user ? user.get({ plain: true }) : null;
