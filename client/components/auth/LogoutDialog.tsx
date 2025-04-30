@@ -39,7 +39,7 @@ export default function LogoutDialog() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="ghost" size="icon" className="hover:text-red-500">
+        <Button variant="ghost" size="icon" className="hover:text-red-500" title="Wylogować?">
           <FaSignOutAlt />
         </Button>
       </AlertDialogTrigger>

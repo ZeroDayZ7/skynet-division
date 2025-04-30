@@ -1,10 +1,10 @@
-import { SettingsSection } from "../../../components/settings/SettingsSection";
-import { SettingsCard } from "../../../components/settings/SettingsCard";
+import { SettingsSection } from "@/components/settings/SettingsSection";
+import { SettingsCard } from "@/components/settings/SettingsCard";
 import { Shield, User, Bell, Lock } from "lucide-react";
 
 export default function SettingsPage() {
   return (
-    <div className="container mx-auto p-4 dark:text-green-500">
+    <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-8">Ustawienia</h1>
       
       <SettingsSection title="Konto">

@@ -13,9 +13,19 @@ export default function DashboardMenu() {
     { 
       icon: FaIdCard, link: '/electronic-documents', 
       label: 'eDokumenty', 
-      enabled: user?.hasDocumentsEnabled ?? false },
-    { icon: FaBriefcase, link: '/test', label: 'TEST', enabled: true },
-    { icon: FaTools, link: '/settings', label: 'Ustawienia', enabled: true },
+      enabled: user?.hasDocumentsEnabled ?? false 
+    },
+    { 
+      icon: FaBriefcase, link: '/test', 
+      label: 'TEST',
+      enabled: true 
+    },
+    { 
+      icon: FaTools, 
+      link: '/settings', 
+      label: 'Ustawienia', 
+      enabled: true 
+    },
     ...(user?.role === 'admin' || user?.role === 'superadmin'
       ? [{ icon: FaUserShield, link: '/admin', label: 'Administracja', enabled: true }]
       : []),

@@ -16,7 +16,7 @@ const DynamicNotificationContent = dynamic<NotificationContentProps>(
   {
     ssr: false,
     loading: () => (
-      <div className="flex flex-col h-full p-6 justify-center items-center text-gray-500">
+      <div className="flex flex-col h-full p-6 justify-center items-center">
         <span className="animate-spin mr-2">⏳</span> Ładowanie powiadomień...
       </div>
     ),
