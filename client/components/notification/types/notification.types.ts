@@ -1,4 +1,3 @@
-// @/types/notification.ts
 export type NotificationType = 'success' | 'warning' | 'error' | 'info';
 
 export interface Notification {
@@ -8,6 +7,11 @@ export interface Notification {
     title?: string;
     message: string;
   };
-  is_read?: boolean;
+  is_read: 0 | 1;
   createdAt?: string;
+}
+
+export interface NotificationsListResponse {
+  notifications: Notification[];
+  total: number;
 }

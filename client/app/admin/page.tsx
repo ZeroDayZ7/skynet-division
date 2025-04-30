@@ -31,7 +31,7 @@ export default function AdminPanelPage() {
 
   return (
     <div className="mx-auto">
-      <h1 className="mb-4 text-center text-2xl font-bold dark:text-green-500">Panel Administracyjny</h1>
+      <h1 className="mb-4 text-center text-2xl font-bold">Panel Administracyjny</h1>
       <MenuGrid items={documentItems} />
     </div>
   );

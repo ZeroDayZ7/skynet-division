@@ -2,77 +2,50 @@
 
 import { Button } from '@/components/ui/button';
 import { NotificationsList } from './NotificationsList';
-import { Notification } from './types/notification.types';
+import { useNotificationList, useMarkNotificationMutation } from '@/hooks/useNotificationQueries';
+import { useCallback } from 'react';
 
 export type NotificationContentProps = {
-  notifications: Notification[];
-  total: number;
-  limit: number;
-  loading: boolean;
-  error: string | null;
-  onLoadMore: () => void;
-  onRetry: () => void;
   showRead: boolean;
   onToggleShowRead: () => void;
 };
 
-const NotificationContent = ({
-  notifications,
-  total,
-  limit,
-  loading,
-  error,
-  onLoadMore,
-  onRetry,
-  showRead,
-  onToggleShowRead,
-}: NotificationContentProps) => {
-  const validNotifications = Array.isArray(notifications) ? notifications : [];
-  const hasMore = validNotifications.length >= limit; // Jeśli zwrócono mniej niż limit, zakładamy, że nie ma więcej powiadomień
+const NotificationContent = ({ showRead, onToggleShowRead }: NotificationContentProps) => {
+  // Ładujemy tylko jedną listę w zależności od showRead
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isFetchingNextPage,
+  } = useNotificationList(showRead ? 'read' : 'unread', 10);
+
+  // Mapujemy dane na listę powiadomień
+  const notifications = data?.pages.flatMap((page) => page.notifications) || [];
+
+  const { mutate: markAsRead, isPending, variables } = useMarkNotificationMutation();
+
+  const handleMarkAsRead = useCallback(
+    (id: number) => {
+      markAsRead(id);
+    },
+    [markAsRead]
+  );
 
   return (
-    <div className="flex flex-col h-full p-6">
-      {loading && validNotifications.length === 0 ? (
-        <p className="text-center text-gray-500">Ładowanie...</p>
-      ) : error ? (
-        <div className="text-center">
-          <p className="text-red-500">Błąd: {error}</p>
-          <Button variant="outline" onClick={onRetry} className="mt-2">
-            Spróbuj ponownie
-          </Button>
-        </div>
-      ) : validNotifications.length === 0 ? (
-        <div className="mt-4 text-center">
-          <p className="text-muted-foreground text-sm">
-            {showRead ? 'Brak przeczytanych powiadomień.' : 'Brak nowych powiadomień. Jesteś na bieżąco!'}
-          </p>
-          <Button
-            variant="link"
-            onClick={onToggleShowRead}
-            className="mt-2 text-sm"
-            aria-label={showRead ? 'Pokaż nieprzeczytane powiadomienia' : 'Pokaż przeczytane powiadomienia'}
-          >
-            {showRead ? 'Pokaż nieprzeczytane powiadomienia' : 'Pokaż przeczytane powiadomienia'}
-          </Button>
-        </div>
-      ) : (
-        <div className="flex flex-col gap-4">
-          <NotificationsList
-            notifications={validNotifications}
-            hasMore={hasMore}
-            loading={loading}
-            onLoadMore={onLoadMore}
-          />
-          <Button
-            variant="link"
-            onClick={onToggleShowRead}
-            className="text-sm self-center"
-            aria-label={showRead ? 'Pokaż nieprzeczytane powiadomienia' : 'Pokaż przeczytane powiadomienia'}
-          >
-            {showRead ? 'Pokaż nieprzeczytane powiadomienia' : 'Pokaż przeczytane powiadomienia'}
-          </Button>
-        </div>
-      )}
+    <div className="p-4 flex-1 flex flex-col gap-4">
+      <Button variant="outline" onClick={onToggleShowRead}>
+        {showRead ? 'Pokaż nieprzeczytane' : 'Pokaż przeczytane'}
+      </Button>
+      <NotificationsList
+        notifications={notifications}
+        hasMore={hasNextPage}
+        isLoading={isLoading}
+        isFetchingNextPage={isFetchingNextPage}
+        onLoadMore={fetchNextPage}
+        onMarkAsRead={handleMarkAsRead}
+        markingId={isPending ? variables : null}
+      />
     </div>
   );
 };

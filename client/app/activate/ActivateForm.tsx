@@ -92,6 +92,7 @@ export default function ActivateForm({
                       inputMode="numeric"
                       pattern="[0-9]{6}" // Upewniamy się, że input przyjmuje tylko cyfry
                       autoComplete="one-time-code" // Sugestia przeglądarki do kodów SMS/email
+                      autoFocus={true}
                     />
                   </FormControl>
                   <FormMessage />

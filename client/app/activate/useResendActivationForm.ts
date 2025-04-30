@@ -23,7 +23,7 @@ export function useResendActivationForm(csrfToken: string | null, onSuccess?: ()
   const form = useForm<ResendActivationSchema>({
     resolver: zodResolver(resendActivationSchema),
     defaultValues: { email: '' }, // Domyślna wartość email może być pusta lub pre-uzupełniona jeśli dostępna (np. z URL lub contextu)
-    mode: 'onChange',
+    mode: 'onSubmit',
   });
 
   /**

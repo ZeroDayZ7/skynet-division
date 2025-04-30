@@ -47,19 +47,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           localStorage.removeItem('user');
         }
       }
-
-      // Włącz w razie potrzeby sprawdzanie sesji na serwerze
-      /*
-      try {
-        const sessionData = await checkSession();
-        if (!sessionData.isAuthenticated) {
-          logout();
-        }
-      } catch (error) {
-        console.error('Błąd sprawdzania sesji:', error);
-      }
-      */
-
       setIsLoading(false);
     };
 

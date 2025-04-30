@@ -25,7 +25,6 @@ export default function PinButton({ isPinSet, loading, onClick }: PinButtonProps
       <Button
         variant="outline"
         disabled
-        className="dark:hover:text-green-500"
         aria-label="Błąd ładowania PIN-u"
       >
         Błąd ładowania
@@ -37,7 +36,6 @@ export default function PinButton({ isPinSet, loading, onClick }: PinButtonProps
     <Button
       variant="outline"
       onClick={onClick}
-      className="dark:hover:text-green-500"
       aria-label={isPinSet ? 'Zmień kod PIN' : 'Ustaw kod PIN'}
     >
       {isPinSet ? 'Zmień PIN' : 'Ustaw PIN'}

@@ -83,6 +83,7 @@ export default function ResendActivationDialog({
                       autoComplete="email"
                       // Używamy stanu wyłączenia z hooka
                       disabled={isDisabled}
+                      autoFocus={true}
                     />
                   </FormControl>
                   <FormMessage />

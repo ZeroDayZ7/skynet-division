@@ -40,8 +40,8 @@ export default function MenuGrid({
           key={index}
           onClick={() => enabled && handleNavigation(link, index)}
           className={`flex flex-col items-center justify-center p-4 rounded shadow-md
-            bg-card border dark:text-green-500  dark:hover:text-green-300 transition-colors duration-200 dark:hover:bg-muted/80
-            ${enabled ? '' : 'opacity-50 cursor-not-allowed disabled:dark:hover:text-green-500'}`}
+            bg-card border transition-colors duration-200
+            ${enabled ? '' : 'opacity-50 cursor-not-allowed'}`}
           disabled={!enabled || loadingIndex === index}
         >
           {loadingIndex === index ? (

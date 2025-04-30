@@ -8,7 +8,7 @@ import { LoginHistory } from '../../../../components/settings/security/LoginHist
 
 export default function SecuritySettings() {
   return (
-    <div className="container mx-auto px-4 py-8 dark:text-green-500">
+    <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8">Bezpieczeństwo</h1>
 
       <div className="space-y-6">

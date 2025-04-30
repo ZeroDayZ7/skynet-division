@@ -17,6 +17,7 @@ import { markNotificationsAsRead } from '../controller/notification/notification
 
 import { getUserPermissionstToLoginController } from '#ro/modules/user/controller/getUserPermissions.controller';
 import { notificationQuerySchema } from '../validators/notificationQuery.schema';
+import { countNotificationsController } from '../controller/notification/count.controller';
 
 
 const router = express.Router();
@@ -39,6 +40,11 @@ router.get('/notifications/read',
     authMiddleware, 
     validateRequest(notificationQuerySchema, 'query'),
     readNotificationController
+);
+
+router.get('/notifications/count', 
+    authMiddleware, 
+    countNotificationsController
 );
 
 router.patch('/notifications/read', 

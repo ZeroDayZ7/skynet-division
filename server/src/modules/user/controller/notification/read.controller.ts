@@ -1,4 +1,3 @@
-// src/modules/user/controllers/readNotification.controller.ts
 import { Request, Response, NextFunction } from 'express';
 import AppError, { ErrorType } from '#ro/common/errors/AppError';
 import { fetchUserNotifications } from '../../services/notification.service';
@@ -10,15 +9,19 @@ export const readNotificationController = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    SystemLog.warn(`[readNotificationController] START`);
+    SystemLog.info(`[readNotificationController] START`);
     const userId = req.session.userId;
-    if (!userId) throw new AppError('UNAUTHORIZED', 401, true, 'Brak autoryzacji', ErrorType.UNAUTHORIZED);
+    if (!userId) {
+      throw new AppError('UNAUTHORIZED', 401, true, 'Brak autoryzacji', ErrorType.UNAUTHORIZED);
+    }
 
-    const { limit, afterId } = (req as any)._validatedData as { limit: number; afterId?: number };
-    SystemLog.warn(`limit: ${limit}, afterId: ${afterId}`);
+    const limit = parseInt(req.query.limit as string, 10) || 10;
+    const afterId = req.query.afterId ? parseInt(req.query.afterId as string, 10) : undefined;
+
+    SystemLog.info(`limit: ${limit}, afterId: ${afterId}`);
     const { notifications, total } = await fetchUserNotifications(userId, limit, afterId, true);
 
-    res.json({ success: true, notifications, total });
+    res.json({ success: true, data: { notifications, total } });
   } catch (err: any) {
     next(err);
   }

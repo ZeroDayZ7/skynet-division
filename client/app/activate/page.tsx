@@ -2,7 +2,6 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AppBrand } from '@/components/auth/AppBrand'; // Zakładając, że to Twój komponent brandu
 // Importujemy hook do zarządzania tokenem CSRF
 import { useCsrfToken } from '@/hooks/useCsrfToken';
 // Importujemy komponent formularza aktywacji (nie dynamicznie tutaj)
@@ -38,8 +37,6 @@ export default function ActivatePage() {
     <div className="min-h-screen flex flex-col items-center justify-center px-4 py-4">
       <Card className="w-[350px]">
         <CardHeader className="flex flex-col items-center space-y-2">
-          {/* Komponent brandu aplikacji */}
-          <AppBrand />
           <div className="mt-4 text-center">
             <CardTitle>Aktywuj konto</CardTitle>
             <CardDescription>Wpisz 6-cyfrowy kod wysłany na Twój e-mail.</CardDescription>

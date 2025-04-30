@@ -6,7 +6,6 @@ import SystemLog from '#ro/common/utils/SystemLog';
 import { generateCsrfToken } from '#ro/common/csrf/csrf.utils';
 import { LoginPayload } from '#ro/modules/auth/validators/login.validator';
 import { setJwtCookie, setCSRFCookie } from '#ro/common/utils/cookie.utils';
-import { getUnreadNotificationsCount } from '#ro/modules/user/controller/notification/getUnreadNotificationsCount.controller';
 import AppError from '#ro/common/errors/AppError';
 import { isIP } from 'is-ip';
 import { getValidatedData } from '#ro/utils/request';
@@ -28,11 +27,9 @@ const validIp = isIP(ip) ? ip : '';
     const token = generateJwtToken({ id: user.id });
     // const tokenCSRF = generateCsrfToken();
 
-    const unread = await getUnreadNotificationsCount(user.id);
     req.session.userId = user.id;
     req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
-    req.session.notifications = unread;
     delete req.session.csrfToken; // Usuń csrfToken z sesji, jeśli istnieje
 
     const saveSession = promisify(req.session.save.bind(req.session));
@@ -49,7 +46,6 @@ const validIp = isIP(ip) ? ip : '';
       user: {
         role: user.role,
         points: user.points,
-        notifications: unread,
       },
       // tokenCSRF,
     });

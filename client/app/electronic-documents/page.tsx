@@ -28,7 +28,7 @@ const documentItems = documents.map((doc) => ({
 export default function Documents() {
   return (
     <div className="mx-auto">
-      <h1 className="text-2xl font-bold my-4 dark:text-green-500">Twoje dokumenty</h1>
+      <h1 className="text-2xl font-bold my-4">Twoje dokumenty</h1>
       <MenuGrid items={documentItems} />
     </div>
   );

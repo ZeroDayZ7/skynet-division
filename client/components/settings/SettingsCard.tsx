@@ -15,7 +15,7 @@ export function SettingsCard({
   return (
     <Link href={href}>
       <div className="border rounded p-6 bg-card 
-       transition-colors dark:hover:text-green-300 dark:hover:bg-muted/80 shadow">
+       transition-colors dark:hover:bg-muted/80 shadow">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-full">
             {icon}
