@@ -5,13 +5,15 @@ import { useState } from 'react';
 import { IconType } from 'react-icons';
 import { FaSpinner } from 'react-icons/fa';
 
+import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils'; // jeśli używasz `cn` z shadcn/ui
 
 interface MenuItem {
   icon: IconType;
   link: string;
   label: string;
   enabled: boolean;
-   visible?: boolean;
+  visible?: boolean;
 }
 
 interface MenuGridProps {
@@ -34,26 +36,28 @@ export default function MenuGrid({
   };
 
   return (
-    <div className={`grid gap-4 p-2 ${gridCols} ${className}`}>
-      {items.map(({ icon: Icon, link, label, enabled }, index) => (
-        <button
-          key={index}
-          onClick={() => enabled && handleNavigation(link, index)}
-          className={`flex flex-col items-center justify-center p-4 rounded shadow-md
-            bg-card border transition-colors duration-200
-            ${enabled ? '' : 'opacity-50 cursor-not-allowed'}`}
-          disabled={!enabled || loadingIndex === index}
-        >
-          {loadingIndex === index ? (
-            <FaSpinner className="text-4xl mb-2 animate-spin" />
-          ) : (
-            <Icon className="text-4xl mb-2" />
-          )}
-          <span className="text-sm">{label}</span>
-        </button>
-      ))}
-
-      
+    <div className={cn('grid gap-4 p-2', gridCols, className)}>
+      {items
+        .filter((item) => item.visible !== false)
+        .map(({ icon: Icon, link, label, enabled }, index) => (
+          <Card
+            key={index}
+            onClick={() => enabled && handleNavigation(link, index)}
+            className={cn(
+              'transition-colors border shadow-md',
+              enabled ? 'hover:bg-accent' : 'opacity-50 pointer-events-none'
+            )}
+          >
+            <CardContent className="flex flex-col items-center justify-center p-2">
+              {loadingIndex === index ? (
+                <FaSpinner className="text-4xl mb-2 animate-spin" />
+              ) : (
+                <Icon className="text-4xl mb-2" />
+              )}
+              <span className="text-sm text-center">{label}</span>
+            </CardContent>
+          </Card>
+        ))}
     </div>
   );
 }
