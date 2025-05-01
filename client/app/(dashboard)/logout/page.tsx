@@ -25,7 +25,7 @@ export default function LogoutPage() {
   };
 
   return (
-    <div className="flex w-full h-screen flex-col items-center justify-center gap-8">
+    <div className="flex w-full flex-col items-center justify-center gap-8">
       <div className="max-w-md space-y-4 text-center">
         <LogOut className="mx-auto h-12 w-12" />
         <h1 className="text-2xl font-bold">Wylogować się?</h1>

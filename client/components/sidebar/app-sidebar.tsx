@@ -1,6 +1,7 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
+import Link from 'next/link'
 import {
   BookOpen,
   Bot,
@@ -12,12 +13,12 @@ import {
   Send,
   Settings2,
   SquareTerminal,
-} from "lucide-react"
+} from 'lucide-react'
 
-import { NavMain } from "@/components/sidebar/nav-main"
-import { NavProjects } from "@/components/sidebar/nav-projects"
-import { NavSecondary } from "@/components/sidebar/nav-secondary"
-import { NavUser } from "@/components/sidebar/nav-user"
+import { NavMain } from '@/components/sidebar/nav-main'
+import { NavProjects } from '@/components/sidebar/nav-projects'
+import { NavSecondary } from '@/components/sidebar/nav-secondary'
+import { NavUser } from '@/components/sidebar/nav-user'
 import {
   Sidebar,
   SidebarContent,
@@ -26,139 +27,83 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import { memo } from "react";
+} from '@/components/ui/sidebar'
+import { useTranslations } from 'next-intl'
+import { memo } from 'react'
 
-const data = {
-  navMain: [
-    {
-      title: "Strona główna",
-      url: "/dashboard",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "/dashboard/settings",
-      icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
-    },
-    {
-      title: "Feedback",
-      url: "#",
-      icon: Send,
-    },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
+function useSidebarData() {
+  const t = useTranslations('Sidebar')
+
+  return {
+    navMain: [
+      {
+        title: t('main.home'),
+        url: '/dashboard',
+        icon: SquareTerminal,
+        isActive: true,
+        items: [
+          { title: t('main.history'), url: '#' },
+          { title: t('main.starred'), url: '#' },
+          { title: t('main.settings'), url: '#' },
+        ],
+      },
+      {
+        title: t('main.documents'),
+        url: '/dashboard/documents',
+        icon: Bot,
+        items: [
+          { title: t('documents.eid'), url: '#' },
+          { title: t('documents.passport'), url: '#' },
+        ],
+      },
+      {
+        title: t('main.docs'),
+        url: '#',
+        icon: BookOpen,
+        items: [
+          { title: t('docs.intro'), url: '#' },
+          { title: t('docs.start'), url: '#' },
+          { title: t('docs.tutorials'), url: '#' },
+          { title: t('docs.changelog'), url: '#' },
+        ],
+      },
+      {
+        title: t('main.settings'),
+        url: '/dashboard/settings',
+        icon: Settings2,
+        items: [
+          { title: t('settings.general'), url: '#' },
+          { title: t('settings.team'), url: '#' },
+          { title: t('settings.billing'), url: '#' },
+          { title: t('settings.limits'), url: '#' },
+        ],
+      },
+    ],
+    navSecondary: [
+      { title: t('secondary.support'), url: '/dashboard/support', icon: LifeBuoy },
+      { title: t('secondary.feedback'), url: '#', icon: Send },
+    ],
+    projects: [
+      { name: t('projects.design'), url: '#', icon: Frame },
+      { name: t('projects.sales'), url: '#', icon: PieChart },
+      { name: t('projects.travel'), url: '#', icon: Map },
+    ],
+  }
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const data = useSidebarData()
+
   return (
     <Sidebar
-    className="top-[var(--header-height)] h-[calc(100svh-var(--header-height))]"
-    {...props}
-  >
+      className="top-[var(--header-height)] h-[calc(100svh-var(--header-height))]"
+      {...props}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
+              <Link href="/dashboard">
                 <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                   <Command className="size-4" />
                 </div>
@@ -166,7 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   <span className="truncate font-medium"> Inc</span>
                   <span className="truncate text-xs">Enterprise</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -183,4 +128,4 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   )
 }
 
-export default memo(AppSidebar);
+export default memo(AppSidebar)

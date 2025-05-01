@@ -46,5 +46,90 @@
       "green": "zielony",
       "yellow": "żółty"
     }
+  },
+  "SupportPage": {
+    "title": "Wsparcie techniczne",
+    "description": "Masz pytania lub problemy? Wypełnij formularz, a nasz zespół pomoże Ci tak szybko, jak to możliwe.",
+    "form": {
+      "nameLabel": "Twoja nazwa użytkownika",
+      "namePlaceholder": "Nazwa użytkownika",
+      "emailLabel": "Twój e-mail",
+      "emailPlaceholder": "Adres e-mail",
+      "messageLabel": "Wiadomość",
+      "messagePlaceholder": "Opisz szczegółowo swój problem lub pytanie...",
+      "submit": "Wyślij zgłoszenie",
+      "submitting": "Wysyłanie..."
+    },
+    "successMessage": "Twoje zgłoszenie zostało wysłane! Otrzymasz odpowiedź wkrótce.",
+    "errors": {
+      "emptyMessage": "Wiadomość nie może być pusta",
+      "genericError": "Wystąpił błąd podczas wysyłania zgłoszenia"
+    }
+  },
+  "Sidebar": {
+    "main": {
+      "home": "Strona główna",
+      "history": "Historia",
+      "starred": "Ulubione",
+      "settings": "Ustawienia",
+      "documents": "Dokumenty",
+      "docs": "Dokumentacja"
+    },
+    "documents": {
+      "eid": "E-Dowód",
+      "passport": "E-Passport"
+    },
+    "docs": {
+      "intro": "Wprowadzenie",
+      "start": "Zacznij tutaj",
+      "tutorials": "Samouczki",
+      "changelog": "Lista zmian"
+    },
+    "settings": {
+      "general": "Ogólne",
+      "team": "Zespół",
+      "billing": "Płatności",
+      "limits": "Limity"
+    },
+    "secondary": {
+      "support": "Pomoc techniczna",
+      "feedback": "Opinie"
+    },
+    "projects": {
+      "design": "Projektowanie",
+      "sales": "Sprzedaż i marketing",
+      "travel": "Podróże"
+    }
+  },
+  "EDocuments": {
+    "title": "Dokumenty elektroniczne",
+    "description": "Złóż nowy wniosek lub zarządzaj aktualnymi dokumentami.",
+    "requests": {
+      "title": "Złóż wniosek",
+      "newApplication": "Nowy wniosek",
+      "updateId": "Wniosek o nowy dowód osobisty",
+      "updatePassport": "Wniosek o nowy paszport"
+    },
+    "documents": {
+      "title": "Twoje dokumenty",
+      "idCard": "Dowód osobisty",
+      "passport": "Paszport",
+      "open": "Otwórz"
+    }
+  },
+  "NavUser": {
+    "greeting": "Witaj",
+    "role": "Rola",
+    "upgrade": "Ulepsz do wersji Pro",
+    "account": "Konto",
+    "billing": "Płatności",
+    "notifications": "Powiadomienia",
+    "logout": "Wyloguj się"
+  },
+  "Dashboard": {
+    "welcome": "Centrum Dowodzenia",
+    "slogan": "Wolność nie jest darem, wolność jest prawem!",
+    "description": "Przyszłość należy do tych, którzy walczą o nią teraz!",
+    "cta": "Rozpocznij Misję"
   }
 }

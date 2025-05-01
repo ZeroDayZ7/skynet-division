@@ -46,5 +46,91 @@
       "green": "green",
       "yellow": "yellow"
     }
+  },
+  "SupportPage": {
+    "title": "Support Center",
+    "description": "Have questions or issues? Fill out the form and our team will help you as soon as possible.",
+    "form": {
+      "nameLabel": "Your username",
+      "namePlaceholder": "Username",
+      "emailLabel": "Your email",
+      "emailPlaceholder": "Email address",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Please describe your issue or question in detail...",
+      "submit": "Submit request",
+      "submitting": "Submitting..."
+    },
+    "successMessage": "Your request has been submitted! You'll receive a response soon.",
+    "errors": {
+      "emptyMessage": "Message cannot be empty",
+      "genericError": "An error occurred while submitting your request"
+    }
+  },
+  "Sidebar": {
+    "main": {
+      "home": "Home",
+      "history": "History",
+      "starred": "Starred",
+      "settings": "Settings",
+      "documents": "Documents",
+      "docs": "Documentation"
+    },
+    "documents": {
+      "eid": "E-Dowód",
+      "passport": "E-Passport"
+    },
+    "docs": {
+      "intro": "Introduction",
+      "start": "Get Started",
+      "tutorials": "Tutorials",
+      "changelog": "Changelog"
+    },
+    "settings": {
+      "general": "General",
+      "team": "Team",
+      "billing": "Billing",
+      "limits": "Limits"
+    },
+    "secondary": {
+      "support": "Support",
+      "feedback": "Feedback"
+    },
+    "projects": {
+      "design": "Design Engineering",
+      "sales": "Sales & Marketing",
+      "travel": "Travel"
+    }
+  },
+  "EDocuments": {
+    "title": "Electronic Documents",
+    "description": "Submit a new application or manage your current documents.",
+    "requests": {
+      "title": "Submit Request",
+      "newApplication": "New Application",
+      "updateId": "Apply for New ID Card",
+      "updatePassport": "Apply for New Passport"
+    },
+    "documents": {
+      "title": "Your Documents",
+      "idCard": "ID Card",
+      "passport": "Passport",
+      "open": "Open"
+    }
+  },
+  "NavUser": {
+    "greeting": "Welcome",
+    "role": "Role",
+    "upgrade": "Upgrade to Pro",
+    "account": "Account",
+    "billing": "Billing",
+    "notifications": "Notifications",
+    "logout": "Log out"
+  },
+  "Dashboard": {
+    "welcome": "Welcome to Command Center",
+    "to": "to",
+    "slogan": "Where darkness meets precision",
+    "description": "Your operational hub for network management. Monitor, control and make strategic decisions from the advanced Dark Army admin panel.",
+    "cta": "Begin Mission"
   }
 }
