@@ -2,6 +2,7 @@
 
 export interface UserAttributes {
   id: number;
+  nick: string;
   email: string | null;
   pass: string;
   pin: string | null;

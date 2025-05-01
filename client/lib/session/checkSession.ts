@@ -1,6 +1,17 @@
 // lib/auth.ts
-import { Session } from "@/lib/session/types/session.types";
+// import { Session } from "@/lib/session/types/session.types";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
+
+export type Session = {
+  isAuthenticated: boolean;
+  user: {
+    id: string;
+    role: "user" | "admin";
+    // inne pola...
+  } | null;
+};
+
 
 /**
  * Sprawdza sesję użytkownika, walidując ciasteczko i pobierając dane użytkownika.

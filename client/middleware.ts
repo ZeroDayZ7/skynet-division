@@ -1,4 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import createMiddleware from 'next-intl/middleware';
+
+export default createMiddleware({
+  locales: ['pl', 'en'],
+  defaultLocale: 'pl'
+})
+
 import { checkSession } from '@/lib/session/checkSession';
 import { cookies } from 'next/headers';
 import { logMiddlewareRequest, logMiddlewareResponse } from './lib/middleware/logger-middleware';
@@ -23,44 +30,44 @@ export async function middleware(request: NextRequest) {
   //   await logMiddlewareRequest(request, start);
   // }
 
-  const { pathname } = request.nextUrl;
+  // const { pathname } = request.nextUrl;
 
-  if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
-    const response = NextResponse.next();
-    // if (process.env.NODE_ENV === "development") {
-    //   logMiddlewareResponse(response, start);
-    // }
-    return response;
-  }
+  // if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
+  //   const response = NextResponse.next();
+  //   // if (process.env.NODE_ENV === "development") {
+  //   //   logMiddlewareResponse(response, start);
+  //   // }
+  //   return response;
+  // }
 
-  const cookieStore = await cookies();
-  const cookieName = process.env.SESSION_COOKIE_NAME?.toString() || 'SESSION_KEY';
-  const getSessionCookie = cookieStore.get(cookieName);
-  const sessionKey = getSessionCookie ? `${getSessionCookie.value}` : '';
+  // const cookieStore = await cookies();
+  // const cookieName = process.env.SESSION_COOKIE_NAME?.toString() || 'SESSION_KEY';
+  // const getSessionCookie = cookieStore.get(cookieName);
+  // const sessionKey = getSessionCookie ? `${getSessionCookie.value}` : '';
 
-  try {
-    const session = await checkSession(sessionKey);
+  // try {
+  //   const session = await checkSession(sessionKey);
 
-    if (!session.isAuthenticated || !session.user) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  //   if (!session.isAuthenticated || !session.user) {
+  //     const loginUrl = new URL('/login', request.url);
+  //     loginUrl.searchParams.set('redirect', pathname);
+  //     return NextResponse.redirect(loginUrl);
+  //   }
 
-    const response = NextResponse.next();
-    response.headers.set('x-user-role', session.user.role);
+  //   const response = NextResponse.next();
+  //   response.headers.set('x-user-role', session.user.role);
 
-    // if (process.env.NODE_ENV === 'development') {
-    //   logMiddlewareResponse(response, start);
-    // }
+  //   // if (process.env.NODE_ENV === 'development') {
+  //   //   logMiddlewareResponse(response, start);
+  //   // }
 
-    return response;
-  } catch (error) {
-    console.error('Błąd w middleware:', error);
-    const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname);
-    return NextResponse.redirect(loginUrl);
-  }
+  //   return response;
+  // } catch (error) {
+  //   console.error('Błąd w middleware:', error);
+  //   const loginUrl = new URL('/login', request.url);
+  //   loginUrl.searchParams.set('redirect', pathname);
+  //   return NextResponse.redirect(loginUrl);
+  // }
 }
 
 export const config = {

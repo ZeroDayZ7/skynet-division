@@ -5,7 +5,7 @@
 
 import { fetchClient } from '../fetchClient';
 import { LoginSchema, RegisterSchema } from '@/lib/schemas/auth';
-import type { User } from '@/types/auth';
+import type { User } from '@/context/AuthContext';
 
 const LOGIN_ENDPOINT = '/api/auth/login';
 const REGISTER_ENDPOINT = '/api/auth/register';

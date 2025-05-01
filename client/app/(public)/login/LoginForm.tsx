@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import { LoginSchema } from '@/lib/schemas/auth';
+import { useTranslations } from 'next-intl';
 
 interface LoginFormProps {
   form: UseFormReturn<LoginSchema>; // Przyjmij całą instancję form
@@ -27,76 +28,78 @@ export function LoginForm({
   onSubmit,
   csrfTokenReady
 }: LoginFormProps) {
-  // isLoading teraz obejmuje też czas ładowania CSRF
+
+const t = useTranslations('LoginPage');
+
   const isDisabled = isSubmitting;
 
   return (
     <Form {...form}>
       {' '}
-      {/* Rozpakuj całą instancję form */}
+      {/* Unpack the full form instance */}
       <form onSubmit={onSubmit} className="space-y-4">
-        {/* Pole Email */}
+        {/* Email Field */}
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="email">E-mail</FormLabel>
+              <FormLabel htmlFor="email">{t('email')}</FormLabel>
               <FormControl>
                 <Input {...field} id="email" disabled={isDisabled} autoComplete="username" placeholder="email@example.com" />
               </FormControl>
-              <FormMessage /> {/* Błędy walidacji dla pola */}
+              <FormMessage /> {/* Validation errors for this field */}
             </FormItem>
           )}
         />
 
-        {/* Pole Hasło */}
+        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor="password">Hasło</FormLabel>
+              <FormLabel htmlFor="password">{t('password')}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input {...field} id="password" type={showPassword ? 'text' : 'password'} disabled={isDisabled} autoComplete="current-password" placeholder="******" />
-                  {/* Przycisk do pokazywania hasła */}
+                  {/* Password toggle button */}
                   {toggleShowPassword && (
                     <button
                       type="button"
                       onClick={toggleShowPassword}
                       className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:cursor-not-allowed"
                       disabled={isDisabled}
-                      aria-label={showPassword ? 'Ukryj hasło' : 'Pokaż hasło'}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <FaEyeSlash /> : <FaEye />}
                     </button>
                   )}
                 </div>
               </FormControl>
-              <FormMessage /> {/* Błędy walidacji dla pola */}
+              <FormMessage /> {/* Validation errors for this field */}
             </FormItem>
           )}
         />
 
-        {/* Przycisk Submit */}
+        {/* Submit Button */}
         <Button type="submit" className="w-full" disabled={isDisabled || !csrfTokenReady}>
           {isSubmitting ? (
             <>
               <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
-              Logowanie...
+              {t('loggingIn')}...
             </>
           ) : csrfTokenReady ? (
-            'Zaloguj się'
+            t('login')
           ) : (
             <>
               <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
-              Ładowanie...
+              {t('loading')}...
             </>
           )}
         </Button>
-        {/* Informacja o braku tokenu, jeśli przycisk jest wyłączony z tego powodu */}
-        {!csrfTokenReady && !isLoading && <p className="text-muted-foreground text-center text-xs">Formularz nie jest gotowy (brak tokenu CSRF).</p>}
+        {/* CSRF token not ready message */}
+        {!csrfTokenReady && !isLoading && <p className="text-muted-foreground text-center text-xs">{t('LoginPage.csrfError')}</p>}
       </form>
     </Form>
   );

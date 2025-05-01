@@ -60,6 +60,7 @@ export function useLoginForm(): LoginFormState {
 
     try {
       const { user } = await loginApi(data, csrfToken);
+      console.log(`user: ${JSON.stringify(user)}`);
       loginContext(user);
       toast.success('Zalogowano pomyślnie');
       router.replace('/dashboard');

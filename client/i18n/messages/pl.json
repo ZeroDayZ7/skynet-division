@@ -1,0 +1,50 @@
+{
+  "LoginPage": {
+    "welcome": "Witaj w Dark Army!",
+    "loginTitle": "Zaloguj się",
+    "loginDescription": "Wpisz swoje dane, aby uzyskać dostęp do konta.",
+    "homePage": "Strona główna",
+    "register": "Rejestracja",
+    "email": "E-mail",
+    "password": "Hasło",
+    "login": "Zaloguj się",
+    "loading": "Ładowanie",
+    "loggingIn": "Logowanie...",
+    "csrfError": "Formularz nie jest gotowy (brak tokenu CSRF)."
+  },
+  "RegisterPage": {
+    "title": "Rejestracja",
+    "formDescription": "Wypełnij formularz, aby złożyć wniosek o konto. Oczekuj weryfikacji.",
+    "initialDescription": "Aby rozpocząć proces rejestracji, kliknij przycisk poniżej.",
+    "startButton": "Złóż wniosek o rejestrację",
+    "alreadyHaveAccount": "Masz już konto?",
+    "login": "Zaloguj się"
+  },
+  "RegisterForm": {
+    "loadingSecurity": "Ładowanie zabezpieczeń...",
+    "csrfError": "Błąd zabezpieczeń: Brak tokenu CSRF.",
+    "emailLabel": "Adres E-mail",
+    "emailPlaceholder": "Wprowadź adres e-mail",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "Wprowadź hasło",
+    "confirmPasswordLabel": "Potwierdź hasło",
+    "confirmPasswordPlaceholder": "Potwierdź hasło",
+    "captchaHint": "Proszę rozwiązać CAPTCHA, aby odblokować formularz.",
+    "submitting": "Wysyłanie...",
+    "submit": "Zarejestruj się"
+  },
+  "Captcha": {
+    "instructionPrefix": "Kliknij wszystkie",
+    "instructionSuffix": "kwadraty",
+    "label": "Nie jestem robotem",
+    "title": "Weryfikacja CAPTCHA",
+    "check": "Zweryfikuj",
+    "incorrect": "Niepoprawne! Spróbuj ponownie.",
+    "colors": {
+      "blue": "niebieski",
+      "red": "czerwony",
+      "green": "zielony",
+      "yellow": "żółty"
+    }
+  }
+}

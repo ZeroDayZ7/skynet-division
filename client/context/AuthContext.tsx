@@ -3,15 +3,19 @@
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { FaSpinner } from 'react-icons/fa';
 import { checkSession } from '@/services/auth.service';
+import { getUserSession } from '@/lib/session/getUserSession';
 
 
-
+// types/user.ts
 export type User = {
-  role: string;
-  points: number;
+  id: string;
+  nick: string;
+  role: 'user' | 'admin' | "superadmin";
+  points?: number;
   notifications: number;
-  hasDocumentsEnabled: boolean;
+  hasDocumentsEnabled?: boolean; // opcjonalnie, jeśli nie zawsze występuje
 };
+
 
 type AuthContextType = {
   user: User | null;
@@ -30,42 +34,45 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Inicjalizacja autoryzacji
+
   useEffect(() => {
     const initializeAuth = async () => {
-      console.log('Inicjalizacja AuthProvider');
+      console.log('[AuthProvider] initializeAuth');
 
-      // Sprawdź użytkownika w localStorage
-      const localUser = localStorage.getItem('user');
-      if (localUser) {
-        try {
-          const parsedUser = JSON.parse(localUser);
-          setUser(parsedUser);
+      try {
+        const session = await getUserSession(); // ważne: sesja musi być dostępna w ciasteczkach
+        if (session) {
+          console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
+          setUser(session.user as User);
           setIsAuthenticated(true);
-          console.log('Załadowano użytkownika z localStorage:', parsedUser);
-        } catch (err) {
-          console.error('Błąd parsowania localStorage:', err);
-          localStorage.removeItem('user');
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
         }
+      } catch (err) {
+        console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
+        setUser(null);
+        setIsAuthenticated(false);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initializeAuth();
-  }, []); // Pusty array zależności, aby wywołać tylko raz
+  }, []);
 
   // Logowanie użytkownika
   const login = (user: User) => {
     setUser(user);
     setIsAuthenticated(true);
-    localStorage.setItem('user', JSON.stringify(user));
+    // localStorage.setItem('user', JSON.stringify(user));
   };
 
   // Wylogowanie użytkownika
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
-    localStorage.removeItem('user');
+    // localStorage.removeItem('user');
   };
 
   // Aktualizacja licznika powiadomień
@@ -75,8 +82,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const newCount = typeof count === 'function' ? count(user.notifications) : count;
     const updatedUser = { ...user, notifications: Math.max(0, newCount) };
     setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    // localStorage.setItem('user', JSON.stringify(updatedUser));
   };
+
+  console.log('[AuthProvider] render', { user, isLoading });
 
   // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {

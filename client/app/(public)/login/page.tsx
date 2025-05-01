@@ -12,6 +12,8 @@ import { useLoginForm } from './useLoginForm';
 import { AppBrand } from '@/components/auth/AppBrand';
 import Link from 'next/link';
 
+import { useTranslations } from 'next-intl';
+
 export default function LoginPage() {
   const {
     form,
@@ -23,15 +25,19 @@ export default function LoginPage() {
     csrfTokenReady,
   } = useLoginForm();
 
+  const t = useTranslations('LoginPage'); // Użyj tłumaczeń z namespace 'LoginPage'
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center space-y-2 px-4 py-4">
       <Card className="w-[330px]">
         <CardHeader className="flex flex-col items-center space-y-2">
           <AppBrand />
           <div className="mt-4">
-            <CardTitle>Zaloguj się</CardTitle>
+            {/* Tłumaczenie tytułu */}
+            <CardTitle>{t('loginTitle')}</CardTitle>
             <CardDescription>
-              Wpisz swoje dane, aby uzyskać dostęp do konta.
+              {/* Tłumaczenie opisu */}
+              {t('loginDescription')}
             </CardDescription>
           </div>
         </CardHeader>
@@ -47,11 +53,11 @@ export default function LoginPage() {
           />
           <div className="mt-4 text-center text-sm text-gray-500">
             <Link href="/" className="hover:underline">
-              Strona główna
+              {t('homePage')}
             </Link>{' '}
             |
             <Link href="/register" className="ml-2 hover:underline">
-              Rejestracja
+              {t('register')}
             </Link>
           </div>
         </CardContent>

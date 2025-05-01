@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/ui/sidebar/app-sidebar";
-import { SiteHeader } from "@/components/ui/sidebar/site-header";
+import { AppSidebar } from "@/components/sidebar/app-sidebar";
+import { SiteHeader } from "@/components/sidebar/site-header";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();

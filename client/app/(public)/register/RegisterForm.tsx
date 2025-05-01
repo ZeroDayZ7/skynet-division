@@ -1,17 +1,20 @@
-/**
- * Komponent formularza rejestracji z walidacją, CSRF i wsparciem dla CAPTCHA.
- * @module components/auth/RegisterForm
- */
-
 'use client';
 
 import { UseFormReturn } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Captcha from '@/components/Captcha/Captcha';
 import { RegisterSchema } from '@/lib/schemas/auth';
+import { useTranslations } from 'next-intl';
 
 interface RegisterFormProps {
   form: UseFormReturn<RegisterSchema>;
@@ -40,20 +43,24 @@ export default function RegisterForm({
   setCaptchaPassed,
   className = '',
 }: RegisterFormProps) {
+  const t = useTranslations('RegisterForm');
+
   const isFormDisabled = isSubmitting || isLoading;
-  // Dodajemy captchaPassed do warunków blokujących pola
   const areInputsDisabled = isFormDisabled || !captchaPassed;
-  const isSubmitDisabled = isFormDisabled || !csrfTokenReady || !captchaPassed || !form.formState.isValid;
+  const isSubmitDisabled =
+    isFormDisabled || !csrfTokenReady || !captchaPassed || !form.formState.isValid;
 
   return (
     <div className={className}>
       <Form {...form}>
         {isLoading && (
-          <div className="text-center text-sm text-muted-foreground mb-4">Ładowanie zabezpieczeń...</div>
+          <div className="text-center text-sm text-muted-foreground mb-4">
+            {t('loadingSecurity')}
+          </div>
         )}
         {!csrfTokenReady && !isLoading && (
           <div className="text-center text-sm text-destructive mb-4">
-            Błąd zabezpieczeń: Brak tokenu CSRF.
+            {t('csrfError')}
           </div>
         )}
         <form onSubmit={onSubmit} className="space-y-4">
@@ -63,13 +70,13 @@ export default function RegisterForm({
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="email">Adres E-mail</FormLabel>
+                  <FormLabel htmlFor="email">{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       id="email"
                       type="email"
-                      placeholder="Wprowadź adres e-mail"
+                      placeholder={t('emailPlaceholder')}
                       autoComplete="username"
                       maxLength={100}
                       disabled={areInputsDisabled}
@@ -84,14 +91,14 @@ export default function RegisterForm({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="password">Hasło</FormLabel>
+                  <FormLabel htmlFor="password">{t('passwordLabel')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
                         {...field}
                         id="password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="Wprowadź hasło"
+                        placeholder={t('passwordPlaceholder')}
                         autoComplete="new-password"
                         disabled={areInputsDisabled}
                       />
@@ -114,14 +121,14 @@ export default function RegisterForm({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="confirmPassword">Potwierdź hasło</FormLabel>
+                  <FormLabel htmlFor="confirmPassword">{t('confirmPasswordLabel')}</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
                         {...field}
                         id="confirmPassword"
                         type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder="Potwierdź hasło"
+                        placeholder={t('confirmPasswordPlaceholder')}
                         autoComplete="new-password"
                         disabled={areInputsDisabled}
                       />
@@ -142,25 +149,21 @@ export default function RegisterForm({
           </div>
 
           <Captcha onSuccess={() => setCaptchaPassed(true)} disabled={isFormDisabled} />
-          
+
           {!captchaPassed && (
             <div className="text-center text-sm text-muted-foreground">
-              Proszę rozwiązać CAPTCHA, aby odblokować formularz.
+              {t('captchaHint')}
             </div>
           )}
 
-          <Button
-            type="submit"
-            disabled={isSubmitDisabled}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isSubmitDisabled} className="w-full">
             {isSubmitting || isLoading ? (
               <>
                 <FaSpinner className="mr-2 animate-spin" />
-                Wysyłanie...
+                {t('submitting')}
               </>
             ) : (
-              'Zarejestruj się'
+              t('submit')
             )}
           </Button>
         </form>

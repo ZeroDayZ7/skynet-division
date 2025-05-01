@@ -1,18 +1,27 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { inter } from './fonts';
+import { ThemeProvider } from '@/components/theme/theme-provider';
+import { AuthProvider } from '@/context/AuthContext';
+import { Toaster } from '@/components/ui/sonner';
+import { NextIntlClientProvider } from 'next-intl';
+import {getLocale} from 'next-intl/server';
 import './globals.css';
-import ClientWrapper from '@/components/ClientWrapper';
 
-const inter = Inter ({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-  preload: false,
-})
+
+
+
+
+// const inter = Inter({
+//   subsets: ['latin', 'latin-ext'],
+//   variable: '--font-inter',
+//   display: 'swap',
+//   preload: false,
+//   weight: ['400', '500', '600', '700'],
+// });
 
 export const metadata: Metadata = {
-  title: 'DARK ARMY',
+  title: 'Dark Army',
   description: 'Zarządzaj Polska z jednego miejsca!',
   robots: {
     index: false,
@@ -27,13 +36,32 @@ export const metadata: Metadata = {
   referrer: 'no-referrer',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+
+
+export default async function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+  console.log('[app] RootLayout renderowany');
+  console.log(`locale: ${locale}`);
+
+
   return (
-    <html lang="pl" suppressHydrationWarning>
-      <body className={`${inter.className}  antialiased`}>
-        <ClientWrapper>
-          {children}
-        </ClientWrapper>
+    <html lang={locale} suppressHydrationWarning>
+      <body className={`${inter.className} antialiased`}>
+        <NextIntlClientProvider>
+          <AuthProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </AuthProvider>
+          <Toaster richColors />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

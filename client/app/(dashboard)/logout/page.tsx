@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Loader2, LogOut } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { fetchClient } from '@/lib/fetchClient';
 
 export default function LogoutPage() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -14,9 +15,9 @@ export default function LogoutPage() {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetchClient('/api/auth/logout', { method: 'POST' });
       logout();
-      router.push('/login');
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
       setIsLoggingOut(false);
@@ -24,7 +25,7 @@ export default function LogoutPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center gap-8">
+    <div className="flex w-full h-screen flex-col items-center justify-center gap-8">
       <div className="max-w-md space-y-4 text-center">
         <LogOut className="mx-auto h-12 w-12" />
         <h1 className="text-2xl font-bold">Wylogować się?</h1>

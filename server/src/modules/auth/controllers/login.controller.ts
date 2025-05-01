@@ -3,9 +3,8 @@ import { promisify } from 'util';
 import authService from '#ro/modules/auth/services/auth.service';
 import { generateJwtToken } from '#ro/common/utils/jwtToken.utils';
 import SystemLog from '#ro/common/utils/SystemLog';
-import { generateCsrfToken } from '#ro/common/csrf/csrf.utils';
 import { LoginPayload } from '#ro/modules/auth/validators/login.validator';
-import { setJwtCookie, setCSRFCookie } from '#ro/common/utils/cookie.utils';
+import { setJwtCookie } from '#ro/common/utils/cookie.utils';
 import AppError from '#ro/common/errors/AppError';
 import { isIP } from 'is-ip';
 import { getValidatedData } from '#ro/utils/request';
@@ -30,6 +29,7 @@ const validIp = isIP(ip) ? ip : '';
     req.session.userId = user.id;
     req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
+    req.session.nick = user.nick;
     delete req.session.csrfToken; // Usuń csrfToken z sesji, jeśli istnieje
 
     const saveSession = promisify(req.session.save.bind(req.session));
@@ -40,16 +40,20 @@ const validIp = isIP(ip) ? ip : '';
     setJwtCookie(res, token);
     // setCSRFCookie(res, tokenCSRF);
 
-    res.status(200).json({
+    const responsePayload = {
       success: true,
       isAuthenticated: true,
       user: {
         role: user.role,
         points: user.points,
-        hasDocumentsEnabled: user.documents!==null
+        nick: user.nick,
+        hasDocumentsEnabled: user.documents !== null,
       },
-      // tokenCSRF,
-    });
+    };
+    
+    SystemLog.info(responsePayload); // do logowania
+    res.status(200).json(responsePayload); // do odpowiedzi HTTP
+
   } catch (error: any) {
     if (error instanceof AppError) {
       error.sendErrorResponse(res);

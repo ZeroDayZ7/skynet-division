@@ -1,0 +1,50 @@
+{
+  "LoginPage": {
+    "welcome": "Welcome in Dark Army!",
+    "loginTitle": "Login",
+    "loginDescription": "Enter your details to access your account.",
+    "homePage": "Home Page",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "login": "Log in",
+    "loading": "Loading",
+    "loggingIn": "Logging in",
+    "csrfError": "Form is not ready (missing CSRF token)."
+  },
+  "RegisterPage": {
+    "title": "Register",
+    "formDescription": "Fill out the form to apply for an account. Expect verification.",
+    "initialDescription": "To begin the registration process, click the button below.",
+    "startButton": "Apply for registration",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in"
+  },
+  "RegisterForm": {
+    "loadingSecurity": "Loading security measures...",
+    "csrfError": "Security error: Missing CSRF token.",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "Enter your email address",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordLabel": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "captchaHint": "Please complete the CAPTCHA to unlock the form.",
+    "submitting": "Submitting...",
+    "submit": "Register"
+  },
+  "Captcha": {
+    "instructionPrefix": "Click all",
+    "instructionSuffix": "squares",
+    "label": "I'm not a robot",
+    "title": "CAPTCHA Verification",
+    "check": "Verify",
+    "incorrect": "Incorrect! Please try again.",
+    "colors": {
+      "blue": "blue",
+      "red": "red",
+      "green": "green",
+      "yellow": "yellow"
+    }
+  }
+}

@@ -5,8 +5,8 @@
 
 import { useState } from 'react';
 import { login } from '@/lib/api/auth';
-import { LoginSchema } from '@/lib/schemas/auth/loginSchema';
-import type { User } from '@/types/auth/index';
+import { LoginSchema } from '@/lib/schemas/auth';
+import type { User } from '@/context/AuthContext';
 
 interface LoginState {
   login: (credentials: LoginSchema, csrfToken: string) => Promise<{ user: User }>;
