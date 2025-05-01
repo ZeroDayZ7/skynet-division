@@ -3,7 +3,7 @@ import { checkSession } from '@/lib/session/checkSession';
 import { cookies } from 'next/headers';
 import { logMiddlewareRequest, logMiddlewareResponse } from './lib/middleware/logger-middleware';
 
-const publicPaths = ['/', '/login', '/register', '/activate'];
+const publicPaths = ['/', '/login', '/register', '/activate', '/test'];
 const roleBasedAccess = {
   admin: ['/admin/:path*'],
   user: ['/dashboard/:path*', '/profile/:path*', '/electronic-documents/:path*'],

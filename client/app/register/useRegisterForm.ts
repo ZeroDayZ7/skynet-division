@@ -44,7 +44,7 @@ export function useRegisterForm(): RegisterFormState {
       password: process.env.NODE_ENV === 'development' ? '' : '',
       confirmPassword: process.env.NODE_ENV === 'development' ? '' : '',
     },
-    mode: 'onTouched',
+    mode: 'onChange',
   });
 
   useEffect(() => {

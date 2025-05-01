@@ -12,7 +12,7 @@ const inter = Inter ({
 })
 
 export const metadata: Metadata = {
-  title: 'Aplikacja Obywatelska',
+  title: 'DARK ARMY',
   description: 'Zarządzaj Polska z jednego miejsca!',
   robots: {
     index: false,

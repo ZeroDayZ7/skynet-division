@@ -79,7 +79,6 @@
   --sidebar-ring: rgb(180, 180, 180);
 }
 
-
 .dark {
   --background: rgb(25, 25, 25);
   --foreground: rgb(218, 218, 218);
@@ -113,7 +112,6 @@
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: rgb(141, 141, 141);
 }
-
 
 @layer base {
   * {
