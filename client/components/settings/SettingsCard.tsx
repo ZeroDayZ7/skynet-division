@@ -14,10 +14,10 @@ export function SettingsCard({
 }) {
   return (
     <Link href={href}>
-      <div className="border rounded p-6 bg-card 
+      <div className="border rounded p-2 bg-card 
        transition-colors dark:hover:bg-muted/80 shadow">
         <div className="flex items-center gap-4">
-          <div className="p-3 rounded-full">
+          <div className="p-2 rounded-full">
             {icon}
           </div>
           <div>

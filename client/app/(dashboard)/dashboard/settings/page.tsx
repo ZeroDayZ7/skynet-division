@@ -6,15 +6,15 @@ import { Shield, User, Bell, Lock } from "lucide-react";
 
 export default function SettingsPage() {
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-8">Ustawienia</h1>
+    <div className="container mx-auto">
+      <h1 className="text-2xl font-bold mb-2">Ustawienia</h1>
       
       <SettingsSection title="Konto">
         <SettingsCard 
           title="Profil" 
-          description="Zarządzaj swoimi danymi osobowymi"
+          description="Zarządzaj swoimi danymi"
           icon={<User className="w-5 h-5" />}
-          href="/settings/profile"
+          href="/dashboard/settings/profile"
         />
       </SettingsSection>
 
@@ -23,7 +23,7 @@ export default function SettingsPage() {
           title="Preferencje" 
           description="Dostosuj powiadomienia"
           icon={<Bell className="w-5 h-5" />}
-          href="/settings/notifications"
+          href="/dashboard/settings/notifications"
         />
       </SettingsSection>
 
@@ -32,13 +32,13 @@ export default function SettingsPage() {
           title="Ochrona konta" 
           description="Zabezpieczenia i logowania"
           icon={<Shield className="w-5 h-5" />}
-          href="/settings/security"
+          href="/dashboard/settings/security"
         />
         <SettingsCard 
           title="Autoryzacja" 
           description="Ustawienia uwierzytelniania"
           icon={<Lock className="w-5 h-5" />}
-          href="/settings/auth"
+          href="/dashboard/settings/auth"
         />
       </SettingsSection>
     </div>
