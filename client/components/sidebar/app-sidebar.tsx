@@ -38,21 +38,28 @@ function useSidebarData() {
     navMain: [
       {
         title: t('main.home'),
-        url: '/dashboard',
+        url: '#',
         icon: SquareTerminal,
-        isActive: true,
+        isActive: false,
+        show: true,
+        enabled: true,
         items: [
-          { title: t('main.history'), url: '#' },
-          { title: t('main.starred'), url: '#' },
-          { title: t('main.settings'), url: '#' },
+          { 
+            title: t('main.history'), 
+            url: '/dashboard',
+            show: true,
+            enabled: true,
+          },
+          { title: t('main.job'), url: '/dashboard/jobs', enabled: true},
+          { title: t('main.settings'), url: '#', enabled: false},
         ],
       },
       {
         title: t('main.documents'),
-        url: '/dashboard/documents',
+        url: '#',
         icon: Bot,
         items: [
-          { title: t('documents.eid'), url: '#' },
+          { title: t('documents.eid'), url: '/dashboard/documents' },
           { title: t('documents.passport'), url: '#' },
         ],
       },
@@ -60,6 +67,7 @@ function useSidebarData() {
         title: t('main.docs'),
         url: '#',
         icon: BookOpen,
+        show: false,
         items: [
           { title: t('docs.intro'), url: '#' },
           { title: t('docs.start'), url: '#' },
@@ -69,13 +77,13 @@ function useSidebarData() {
       },
       {
         title: t('main.settings'),
-        url: '/dashboard/settings',
+        url: '#',
         icon: Settings2,
         items: [
-          { title: t('settings.general'), url: '#' },
-          { title: t('settings.team'), url: '#' },
-          { title: t('settings.billing'), url: '#' },
-          { title: t('settings.limits'), url: '#' },
+          { title: t('settings.general'), url: '/dashboard/settings' },
+          { title: t('settings.team'), url: '#', enabled: false },
+          { title: t('settings.billing'), url: '#', enabled: false },
+          { title: t('settings.limits'), url: '#', enabled: false },
         ],
       },
     ],
@@ -86,7 +94,7 @@ function useSidebarData() {
     projects: [
       { name: t('projects.design'), url: '#', icon: Frame },
       { name: t('projects.sales'), url: '#', icon: PieChart },
-      { name: t('projects.travel'), url: '#', icon: Map },
+      { name: t('projects.travel'), url: '#', icon: Map, show: false },
     ],
   }
 }
