@@ -6,7 +6,7 @@ import {
   BookOpen,
   Bot,
   Command,
-  Frame,
+  AlertTriangle,
   LifeBuoy,
   Map,
   PieChart,
@@ -95,7 +95,7 @@ function useSidebarData() {
       { title: t('secondary.feedback'), url: '/dashboard/feed-back', icon: Send },
     ],
     projects: [
-      { name: t('projects.design'), url: '#', icon: Frame },
+      { name: t('projects.emerygency'), url: '/intervention-group', icon: AlertTriangle },
       { name: t('projects.sales'), url: '#', icon: PieChart },
       { name: t('projects.travel'), url: '#', icon: Map, show: false },
     ],
@@ -127,10 +127,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      
+
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavProjects projects={data.projects} /> */}
+        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
 

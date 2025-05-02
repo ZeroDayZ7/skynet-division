@@ -42,7 +42,7 @@ export function EmergencyButton() {
           onClick={handleClick}
           variant="destructive"
           size="icon"
-          className="h-14 w-14 rounded shadow-xl animate-pulse z-[9999]"
+          className="h-14 w-14 shadow-xl animate-pulse z-[9999]"
         >
           <AlertTriangle className="h-8 w-8" />
         </Button>
