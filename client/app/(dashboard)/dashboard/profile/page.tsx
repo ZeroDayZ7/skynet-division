@@ -17,10 +17,7 @@ export default function UserProfilePage() {
   const t = useTranslations('UserProfile')
 
   return (
-    <div className="container py-4">
-      {/* <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
-      <p className="text-muted-foreground mb-4">{t('description')}</p> */}
-
+    <div className="container">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

@@ -7,6 +7,7 @@ import {
   LogOut,
   Sparkles,
   ChevronsRight,
+  Settings
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -87,6 +88,12 @@ export function NavUser() {
               <DropdownMenuItem>
                 <CreditCard className="mr-2 h-4 w-4" />
                 {t('billing')}
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/settings">
+                  <Settings className="mr-2 h-4 w-4" />
+                  {t('settings')}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell className="mr-2 h-4 w-4" />

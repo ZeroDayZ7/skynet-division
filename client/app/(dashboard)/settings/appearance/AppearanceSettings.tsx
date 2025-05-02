@@ -4,7 +4,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Sun, Moon, Monitor } from 'lucide-react';
 import { useThemeManager } from '@/components/theme/useThemeManager';
-import type { Theme } from '@/components/theme/useThemeManager'
+import type { Theme } from '@/components/theme/useThemeManager';
 
 export function AppearanceSettings() {
   const { resolvedTheme, mounted, setTheme } = useThemeManager();
@@ -12,8 +12,12 @@ export function AppearanceSettings() {
   if (!mounted) return null;
 
   return (
-    <div className="space-y-2">
-      <Label>Preferowany motyw</Label>
+    <fieldset className="space-y-2">
+      <legend className="flex items-center gap-2">
+        <Monitor className="h-5 w-5" />
+        <span>Preferowany motyw</span>
+      </legend>
+
       <RadioGroup
         value={resolvedTheme === 'system' ? 'system' : resolvedTheme}
         onValueChange={(value: Theme) => setTheme(value)}
@@ -23,7 +27,7 @@ export function AppearanceSettings() {
           <RadioGroupItem value="light" id="light" className="peer sr-only" />
           <Label
             htmlFor="light"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+            className="border-muted bg-popover hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex flex-col items-center justify-between rounded-md border-2 p-4"
           >
             <Sun className="mb-2 h-6 w-6" />
             Jasny
@@ -33,7 +37,7 @@ export function AppearanceSettings() {
           <RadioGroupItem value="dark" id="dark" className="peer sr-only" />
           <Label
             htmlFor="dark"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+            className="border-muted bg-popover hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex flex-col items-center justify-between rounded-md border-2 p-4"
           >
             <Moon className="mb-2 h-6 w-6" />
             Ciemny
@@ -43,13 +47,13 @@ export function AppearanceSettings() {
           <RadioGroupItem value="system" id="system" className="peer sr-only" />
           <Label
             htmlFor="system"
-            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+            className="border-muted bg-popover hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary flex flex-col items-center justify-between rounded-md border-2 p-4"
           >
             <Monitor className="mb-2 h-6 w-6" />
             System
           </Label>
         </div>
       </RadioGroup>
-    </div>
+    </fieldset>
   );
 }

@@ -12,7 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <ClientWrapper>
         <SidebarProvider className="flex flex-col">
           <SiteHeader />
-          <div className="flex flex-1 mx-2">
+          <div className="flex flex-1 mx-2 py-2">
             <AppSidebar />
             {children}
           </div>

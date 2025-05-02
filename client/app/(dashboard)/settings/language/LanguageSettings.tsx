@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Label } from '@/components/ui/label';
 import { Languages } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 
-export default function LanguageSelector() {
+export default function LanguageSettings() {
   const [lang, setLang] = useState<'pl' | 'en'>('pl');
 
   useEffect(() => {
@@ -23,13 +22,13 @@ export default function LanguageSelector() {
   };
 
   return (
-    <div className="space-y-2">
-      <Label className="flex items-center gap-2">
+    <fieldset className="space-y-2">
+      <legend className="flex items-center gap-2">
         <Languages className="h-5 w-5" />
         Język aplikacji
-      </Label>
+      </legend>
       <Select value={lang} onValueChange={onChange} required>
-        <SelectTrigger className="w-full max-w-md">
+        <SelectTrigger className="w-full max-w-xs">
           <span>{lang === 'pl' ? 'Polski' : 'English'}</span>
         </SelectTrigger>
         <SelectContent>
@@ -37,6 +36,6 @@ export default function LanguageSelector() {
           <SelectItem value="en">English</SelectItem>
         </SelectContent>
       </Select>
-    </div>
+    </fieldset>
   );
 }

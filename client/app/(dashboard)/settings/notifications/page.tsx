@@ -1,8 +1,8 @@
 // /app/(dashboard)/settings/general/page.tsx
-export default function GeneralSettingsPage() {
+export default function NotificationsSettingsPage() {
     return (
       <div>
-        <p>GeneralSettingsPage</p>
+        <p>NotificationsSettingsPage</p>
       </div>
     );
   }

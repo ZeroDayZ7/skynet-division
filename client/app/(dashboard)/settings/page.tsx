@@ -2,7 +2,7 @@
 export default function GeneralSettingsPage() {
     return (
       <div>
-        <p>GeneralSettingsPage</p>
+        <p>Możesz tu edytować podstawowe ustawienia aplikacji.</p>
       </div>
     );
   }
