@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { memo } from "react"
 import { ModeToggle } from "@/components/theme/theme-button"
-import LanguageSelector from "../LanguageSelector"
+// import LanguageSelector from "../../app/(dashboard)/settings/general/LanguageSelector"
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar()
@@ -34,7 +34,6 @@ export function SiteHeader() {
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <ModeToggle />
-        <LanguageSelector />
         {/* <Breadcrumb className="hidden sm:block">
           <BreadcrumbList>
             <BreadcrumbItem>

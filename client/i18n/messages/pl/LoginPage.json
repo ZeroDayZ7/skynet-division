@@ -1,0 +1,16 @@
+{
+    "LoginPage": {
+      "welcome": "Witaj w Dark Army!",
+      "loginTitle": "Zaloguj się",
+      "loginDescription": "Wpisz swoje dane, aby uzyskać dostęp do konta.",
+      "homePage": "Strona główna",
+      "register": "Rejestracja",
+      "email": "E-mail",
+      "password": "Hasło",
+      "login": "Zaloguj się",
+      "loading": "Ładowanie",
+      "loggingIn": "Logowanie...",
+      "csrfError": "Formularz nie jest gotowy (brak tokenu CSRF)."
+    }
+  }
+  

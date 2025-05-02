@@ -1,0 +1,18 @@
+{
+  "EDocuments": {
+    "title": "Dokumenty elektroniczne",
+    "description": "Złóż nowy wniosek lub zarządzaj aktualnymi dokumentami.",
+    "requests": {
+      "title": "Złóż wniosek",
+      "newApplication": "Nowy wniosek",
+      "updateId": "Wniosek o nowy dowód osobisty",
+      "updatePassport": "Wniosek o nowy paszport"
+    },
+    "documents": {
+      "title": "Twoje dokumenty",
+      "submitApplication": "Złóż wniosek",
+      "mydocuments": "Moje dokumenty",
+      "open": "Otwórz"
+    }
+  }
+}

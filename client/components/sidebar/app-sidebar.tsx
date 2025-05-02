@@ -59,8 +59,11 @@ function useSidebarData() {
         url: '#',
         icon: Bot,
         items: [
-          { title: t('documents.eid'), url: '/dashboard/documents' },
-          { title: t('documents.passport'), url: '#' },
+          { 
+            title: t('documents.submitApplication'), 
+            url: '/dashboard/documents/document-application' 
+          },
+          { title: t('documents.mydocuments'), url: '/dashboard/documents/mydocuments' },
         ],
       },
       {
@@ -80,8 +83,8 @@ function useSidebarData() {
         url: '#',
         icon: Settings2,
         items: [
-          { title: t('settings.general'), url: '/dashboard/settings' },
-          { title: t('settings.team'), url: '#', enabled: false },
+          { title: t('settings.general'), url: '/settings/general' },
+          { title: t('settings.team'), url: '/dashboard/settings', enabled: true },
           { title: t('settings.billing'), url: '#', enabled: false },
           { title: t('settings.limits'), url: '#', enabled: false },
         ],
@@ -89,7 +92,7 @@ function useSidebarData() {
     ],
     navSecondary: [
       { title: t('secondary.support'), url: '/dashboard/support', icon: LifeBuoy },
-      { title: t('secondary.feedback'), url: '#', icon: Send },
+      { title: t('secondary.feedback'), url: '/dashboard/feed-back', icon: Send },
     ],
     projects: [
       { name: t('projects.design'), url: '#', icon: Frame },

@@ -1,0 +1,15 @@
+{
+  "RegisterForm": {
+    "loadingSecurity": "Ładowanie zabezpieczeń...",
+    "csrfError": "Błąd zabezpieczeń: Brak tokenu CSRF.",
+    "emailLabel": "Adres E-mail",
+    "emailPlaceholder": "Wprowadź adres e-mail",
+    "passwordLabel": "Hasło",
+    "passwordPlaceholder": "Wprowadź hasło",
+    "confirmPasswordLabel": "Potwierdź hasło",
+    "confirmPasswordPlaceholder": "Potwierdź hasło",
+    "captchaHint": "Proszę rozwiązać CAPTCHA, aby odblokować formularz.",
+    "submitting": "Wysyłanie...",
+    "submit": "Zarejestruj się"
+  }
+}

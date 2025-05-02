@@ -1,6 +1,13 @@
-'use client'
+'use client';
 
-import { ChevronsUpDown, BadgeCheck, Bell, CreditCard, LogOut, Sparkles } from 'lucide-react'
+import {
+  BadgeCheck,
+  Bell,
+  CreditCard,
+  LogOut,
+  Sparkles,
+  ChevronsRight,
+} from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,24 +16,24 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@/components/ui/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar'
+} from '@/components/ui/sidebar';
 
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useAuth } from '@/context/AuthContext'
-import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+import { useTranslations } from 'next-intl';
 
 export function NavUser() {
-  const { isMobile } = useSidebar()
-  const router = useRouter()
-  const { user } = useAuth()
-  const t = useTranslations('NavUser')
+  const { isMobile } = useSidebar();
+  const router = useRouter();
+  const { user } = useAuth();
+  const t = useTranslations('NavUser');
 
   return (
     <SidebarMenu>
@@ -41,7 +48,7 @@ export function NavUser() {
                 <span className="truncate font-medium">{user?.nick}</span>
                 <span className="truncate text-xs">{user?.role}</span>
               </div>
-              <ChevronsUpDown className="ml-auto size-4" />
+              <ChevronsRight className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -54,10 +61,10 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
-                  {t('greeting')}: {user?.nick}
+                    {t('greeting')}: {user?.nick}
                   </span>
                   <span className="truncate font-medium">
-                  {t('role')}: {user?.role}
+                    {t('role')}: {user?.role}
                   </span>
                 </div>
               </div>
@@ -71,9 +78,11 @@ export function NavUser() {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck className="mr-2 h-4 w-4" />
-                {t('account')}
+              <DropdownMenuItem asChild>
+                <Link href="/dashboard/profile">
+                  <BadgeCheck className="mr-2 h-4 w-4" />
+                  <span>{t('account')}</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <CreditCard className="mr-2 h-4 w-4" />
@@ -95,5 +104,5 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

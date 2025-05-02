@@ -23,7 +23,6 @@ export function NavMain({
 }: {
   items: {
     title: string
-    url: string
     icon: LucideIcon
     isActive?: boolean
     show?: boolean
@@ -92,13 +91,10 @@ export function NavMain({
                 ) : (
                   <SidebarMenuButton asChild tooltip={item.title}>
                     {item.enabled !== false ? (
-                      <Link
-                        href={item.url}
-                        className="flex items-center space-x-2"
-                      >
+                      <>
                         <item.icon />
                         <span>{item.title}</span>
-                      </Link>
+                        </>
                     ) : (
                       <button
                         disabled

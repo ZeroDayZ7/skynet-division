@@ -1,6 +1,5 @@
 // i18n/request.ts
 import { getRequestConfig } from 'next-intl/server'
-import { notFound } from 'next/navigation'
 import { cookies, headers } from 'next/headers'
 
 const SUPPORTED_LOCALES = ['pl', 'en'] as const
@@ -16,26 +15,38 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   // 3) Wybór finalnej wartości (cookie > URL > domyślny)
   let locale: Locale = 'pl'
-  if (localeFromCookie && SUPPORTED_LOCALES.includes(localeFromCookie)) {
-    locale = localeFromCookie
-  } else if (
-    localeFromRequest &&
-    SUPPORTED_LOCALES.includes(localeFromRequest as Locale)
-  ) {
-    locale = localeFromRequest as Locale
+  switch (true) {
+    case localeFromCookie && SUPPORTED_LOCALES.includes(localeFromCookie):
+      locale = localeFromCookie
+      break
+    case localeFromRequest && SUPPORTED_LOCALES.includes(localeFromRequest as Locale):
+      locale = localeFromRequest as Locale
+      break
+    default:
+      break
   }
 
   // 4) Parsowanie nagłówka Accept-Language tylko jako fallback, jeżeli chcesz
   if (!localeFromCookie && !localeFromRequest) {
     const acceptLang = cookieStore.get('NEXT_LOCALE') || 'pl'
-    
     if (!acceptLang) {
       locale = 'pl'
     }
   }
 
-  // 5) Import odpowiedniego pliku z tłumaczeniami
-  const messages = (await import(`./messages/${locale}.json`)).default
+  // 5) Import odpowiedniego pliku z tłumaczeniami na podstawie wybranego języka
+  let messages
+  switch (locale) {
+    case 'pl':
+      messages = (await import('./messages/pl')).default
+      break
+    case 'en':
+      messages = (await import('./messages/en')).default
+      break
+    default:
+      messages = (await import('./messages/pl')).default  // domyślnie język polski
+      break
+  }
 
   return { locale, messages }
 })

@@ -1,0 +1,37 @@
+{
+  "Sidebar": {
+    "main": {
+      "home": "Strona główna",
+      "history": "Historia",
+      "job": "Praca",
+      "settings": "Ustawienia",
+      "documents": "Dokumenty",
+      "docs": "Dokumentacja"
+    },
+    "documents": {
+      "submitApplication": "Złóż wniosek",
+      "mydocuments": "Moje dokumenty"
+    },
+    "docs": {
+      "intro": "Wprowadzenie",
+      "start": "Zacznij tutaj",
+      "tutorials": "Samouczki",
+      "changelog": "Lista zmian"
+    },
+    "settings": {
+      "general": "Ogólne",
+      "team": "Zespół",
+      "billing": "Płatności",
+      "limits": "Limity"
+    },
+    "secondary": {
+      "support": "Pomoc techniczna",
+      "feedback": "Opinie"
+    },
+    "projects": {
+      "design": "Projektowanie",
+      "sales": "Sprzedaż i marketing",
+      "travel": "Podróże"
+    }
+  }
+}

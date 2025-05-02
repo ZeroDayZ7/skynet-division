@@ -1,0 +1,10 @@
+{
+  "RegisterPage": {
+    "title": "Rejestracja",
+    "formDescription": "Wypełnij formularz, aby złożyć wniosek o konto. Oczekuj weryfikacji.",
+    "initialDescription": "Aby rozpocząć proces rejestracji, kliknij przycisk poniżej.",
+    "startButton": "Złóż wniosek o rejestrację",
+    "alreadyHaveAccount": "Masz już konto?",
+    "login": "Zaloguj się"
+  }
+}

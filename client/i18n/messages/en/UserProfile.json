@@ -1,0 +1,17 @@
+{
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Manage your account and settings.",
+      "profile": {
+        "title": "Profile Information",
+        "nickname": "Nickname",
+        "rank": "Rank",
+        "role": "Role",
+        "points": "Points",
+        "joined": "Joined",
+        "status": "Status",
+        "edit": "Edit Profile"
+      }
+    }
+  }
+  

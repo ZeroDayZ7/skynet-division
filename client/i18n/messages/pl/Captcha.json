@@ -1,0 +1,16 @@
+{
+  "Captcha": {
+    "instructionPrefix": "Kliknij wszystkie",
+    "instructionSuffix": "kwadraty",
+    "label": "Nie jestem robotem",
+    "title": "Weryfikacja CAPTCHA",
+    "check": "Zweryfikuj",
+    "incorrect": "Niepoprawne! Spróbuj ponownie.",
+    "colors": {
+      "blue": "niebieski",
+      "red": "czerwony",
+      "green": "zielony",
+      "yellow": "żółty"
+    }
+  }
+}
