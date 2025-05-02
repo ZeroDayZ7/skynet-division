@@ -18,13 +18,13 @@ export const checkSessionStatus = async (
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     // Wyciągamy z sesji potrzebne wartości
-    const { userId: id, role, nick, points, notifications } = req.session ?? {};
+    const { userId: id, role, username, points, notifications } = req.session ?? {};
 
     // Tworzymy obiekt użytkownika
     const user = {
       id,
       role,
-      nick,
+      username,
       points,
       notifications,
     };

@@ -51,7 +51,7 @@ function useSidebarData() {
             enabled: true,
           },
           { title: t('main.job'), url: '/dashboard/jobs', enabled: true},
-          { title: t('main.settings'), url: '#', enabled: false},
+          // { title: t('main.citizenprojects'), url: '#', enabled: false},
         ],
       },
       {
@@ -79,14 +79,14 @@ function useSidebarData() {
         ],
       },
       {
-        title: t('main.settings'),
+        title: t('main.citizenprojects'),
         url: '#',
         icon: Settings2,
         items: [
-          { title: t('settings.general'), url: '/settings/general' },
-          { title: t('settings.team'), url: '/dashboard/settings', enabled: true },
-          { title: t('settings.billing'), url: '#', enabled: false },
-          { title: t('settings.limits'), url: '#', enabled: false },
+          { title: t('citizenprojects.general'), url: '/dashboard/citizens-projects' },
+          { title: t('citizenprojects.tutorial'), url: '/dashboard/settings', enabled: true },
+          { title: t('citizenprojects.panel'), url: '#', enabled: false },
+          { title: t('citizenprojects.favourites'), url: '#', enabled: false },
         ],
       },
     ],
@@ -96,8 +96,8 @@ function useSidebarData() {
     ],
     projects: [
       { name: t('projects.emerygency'), url: '/intervention-group', icon: AlertTriangle },
-      { name: t('projects.sales'), url: '#', icon: PieChart },
-      { name: t('projects.travel'), url: '#', icon: Map, show: false },
+      { name: t('projects.test'), url: '/test', icon: PieChart },
+      // { name: t('projects.travel'), url: '#', icon: Map, show: false },
     ],
   }
 }

@@ -40,7 +40,7 @@ export function FeedbackForm() {
         <CardContent className="space-y-6">
           {isSubmitted ? (
             <div className="p-4 text-sm text-green-600 border border-green-200 rounded-md">
-              Dziękujemy za opinię, {user?.nick}! Twoje uwagi są dla nas bardzo cenne.
+              Dziękujemy za opinię, {user?.username}! Twoje uwagi są dla nas bardzo cenne.
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>

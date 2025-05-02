@@ -4,8 +4,8 @@ import { z } from 'zod';
 // Schemat walidacji hasła
 export const passwordSchema = z
   .string()
-  .min(6, 'Hasło musi mieć co najmniej 6 znaków')
-  .max(100, 'Hasło nie może być dłuższe niż 100 znaków')
+  .min(8, 'Hasło musi mieć co najmniej 8 znaków')
+  .max(128, 'Hasło nie może być dłuższe niż 128 znaków')
   .regex(/^[^\s]+$/, 'Hasło nie może zawierać spacji');
 
 // Schemat walidacji PIN-u
@@ -21,6 +21,15 @@ export const emailSchema = z
   .max(100, 'Email za długi')
   .trim();
 
+// usernameSchema i surnameSchema używają regexu do walidacji:
+// ^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-]+$
+// Składnia regexu:
+// - a-zA-Z        → wszystkie litery alfabetu łacińskiego (małe i wielkie)
+// - ąćęłńóśźżĄĆĘŁŃÓŚŹŻ → polskie litery (małe i wielkie)
+// - \s            → spacje
+// - \-            → myślniki (np. dla nazwisk dwuczłonowych)
+// - ^ i $         → początek i koniec ciągu (cały string musi pasować)
+// - +   
 // Schemat walidacji nazwy użytkownika
 export const usernameSchema = z
   .string()

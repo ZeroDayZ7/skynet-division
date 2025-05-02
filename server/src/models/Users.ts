@@ -27,6 +27,11 @@ Users.init(
       autoIncrement: true,
       primaryKey: true,
     },
+    username:{
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true,
+    },
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
@@ -38,9 +43,6 @@ Users.init(
     pass: {
       type: DataTypes.STRING(60),
       allowNull: false,
-      validate: {
-        len: [6, 100],
-      }
     },
     pin: {
       type: DataTypes.STRING(60),
@@ -53,7 +55,7 @@ Users.init(
       defaultValue: 0,
     },
     activation_token: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(6),
       allowNull: true,
       defaultValue: null,
     },

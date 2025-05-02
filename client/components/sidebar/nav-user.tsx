@@ -46,7 +46,7 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.nick}</span>
+                <span className="truncate font-medium">{user?.username}</span>
                 <span className="truncate text-xs">{user?.role}</span>
               </div>
               <ChevronsRight className="ml-auto size-4" />
@@ -62,7 +62,7 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
-                    {t('greeting')}: {user?.nick}
+                    {t('greeting')}: {user?.username}
                   </span>
                   <span className="truncate font-medium">
                     {t('role')}: {user?.role}

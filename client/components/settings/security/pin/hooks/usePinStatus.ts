@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { fetchClient } from '@/lib/axiosClient';
-import { getCsrfToken } from '@/lib/getCsrfToken';
+import { fetchCsrfToken } from '@/lib/csrf';
 
 export function usePinStatus() {
   const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
@@ -13,11 +13,11 @@ export function usePinStatus() {
       try {
         setLoading(true);
 
-        const csrfToken = getCsrfToken();
+        const csrfToken = await fetchCsrfToken();
 
         const response = await fetchClient.get('/api/users/pin-status', {
           headers: {
-            'X-CSRF-Token': csrfToken || '',
+            'X-CSRF-Token': csrfToken,
           },
         });
 

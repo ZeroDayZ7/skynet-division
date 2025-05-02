@@ -23,7 +23,7 @@ export function useSupportForm() {
       await fetchClient('/api/support', {
         method: 'POST',
         body: JSON.stringify({
-          name: user?.nick,
+          name: user?.username,
           message,
         }),
       });

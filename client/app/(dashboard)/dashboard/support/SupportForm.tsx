@@ -24,7 +24,7 @@ export function SupportForm() {
             <Input
               id="name"
               disabled
-              value={user?.nick || ''}
+              value={user?.username || ''}
               placeholder={t('form.namePlaceholder')}
               autoComplete="off"
             />

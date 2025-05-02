@@ -29,7 +29,7 @@ const validIp = isIP(ip) ? ip : '';
     req.session.userId = user.id;
     req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
-    req.session.nick = user.nick;
+    req.session.username = user.username;
     delete req.session.csrfToken; // Usuń csrfToken z sesji, jeśli istnieje
 
     const saveSession = promisify(req.session.save.bind(req.session));
@@ -46,7 +46,7 @@ const validIp = isIP(ip) ? ip : '';
       user: {
         role: user.role,
         points: user.points,
-        nick: user.nick,
+        username: user.username,
         hasDocumentsEnabled: user.documents !== null,
       },
     };

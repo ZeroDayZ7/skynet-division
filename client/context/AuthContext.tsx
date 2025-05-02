@@ -1,15 +1,14 @@
 'use client';
 
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { FaSpinner } from 'react-icons/fa';
-import { checkSession } from '@/services/auth.service';
+import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
 
 
 // types/user.ts
 export type User = {
   id: string;
-  nick: string;
+  username: string;
   role: 'user' | 'admin' | "superadmin";
   points?: number;
   notifications: number;
@@ -18,7 +17,7 @@ export type User = {
 
 
 type AuthContextType = {
-  user: User | null;
+  user: User;
   isAuthenticated: boolean | null;
   isLoading: boolean;
   login: (user: User) => void;
@@ -91,7 +90,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   if (isLoading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <FaSpinner className="animate-spin text-white text-4xl" />
+        {/* <FaSpinner className="animate-spin text-white text-4xl" /> */}
+        <Loader2 className="animate-spin text-muted-foreground text-4xl" />
       </div>
     );
   }

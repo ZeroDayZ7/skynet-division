@@ -9,7 +9,7 @@ declare module 'express-session' {
     points: number;
     notifications?: number | null;
     email?: string | null;
-    nick?: string | null;
+    username?: string | null;
     
   }
 }

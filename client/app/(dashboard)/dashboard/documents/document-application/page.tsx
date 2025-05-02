@@ -14,7 +14,7 @@ export default function ElectronicDocumentsHome() {
   const t = useTranslations('EDocuments')
 
   return (
-    <div className="container py-10">
+    <div className="container">
       <h1 className="text-2xl font-bold mb-4">{t('title')}</h1>
       <p className="text-muted-foreground mb-4">{t('description')}</p>
 

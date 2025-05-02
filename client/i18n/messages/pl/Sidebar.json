@@ -4,7 +4,7 @@
       "home": "Strona główna",
       "history": "Historia",
       "job": "Praca",
-      "settings": "Ustawienia",
+      "citizenprojects": "Projekty obywatelskie",
       "documents": "Dokumenty",
       "docs": "Dokumentacja"
     },
@@ -18,11 +18,11 @@
       "tutorials": "Samouczki",
       "changelog": "Lista zmian"
     },
-    "settings": {
+    "citizenprojects": {
       "general": "Ogólne",
-      "team": "Zespół",
-      "billing": "Płatności",
-      "limits": "Limity"
+      "tutorial": "Wprowadzenie",
+      "panel": "Panel projektów",
+      "favourites": "Ulubione"
     },
     "secondary": {
       "support": "Pomoc techniczna",
@@ -30,7 +30,7 @@
     },
     "projects": {
       "emerygency": "Grupa Interwencyjna",
-      "sales": "Sprzedaż i marketing",
+      "test": "TEST",
       "travel": "Podróże"
     }
   }
