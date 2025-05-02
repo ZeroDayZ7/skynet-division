@@ -16,6 +16,7 @@ import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { memo } from "react"
 import { ModeToggle } from "@/components/theme/theme-button"
+import { EmergencyButton } from "../alarm/EmergencyButton"
 // import LanguageSelector from "../../app/(dashboard)/settings/general/LanguageSelector"
 
 export function SiteHeader() {
@@ -47,7 +48,8 @@ export function SiteHeader() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb> */}
-        <SearchForm className="w-full sm:ml-auto sm:w-auto" />
+        <EmergencyButton />
+        {/* <SearchForm className="w-full sm:ml-auto sm:w-auto" /> */}
         
       </div>
     </header>
