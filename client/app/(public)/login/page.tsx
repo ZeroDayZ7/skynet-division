@@ -28,7 +28,7 @@ export default function LoginPage() {
   const t = useTranslations('LoginPage'); // Użyj tłumaczeń z namespace 'LoginPage'
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-2 px-4 py-4">
+    <div className="min-h-screen flex flex-col items-center justify-center space-y-2">
       <Card className="w-[330px]">
         <CardHeader className="flex flex-col items-center space-y-2">
           <AppBrand />

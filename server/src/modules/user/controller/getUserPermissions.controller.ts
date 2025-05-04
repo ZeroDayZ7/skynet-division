@@ -12,12 +12,11 @@ export const getUserPermissionstToLoginController = async (req: Request, res: Re
     const permissions = await getUserPermissionsToLogin(userId);
 
     const response = {
-      success: true,
       permissions,
     };
 
     // Logowanie pełnej odpowiedzi w konsoli
-    SystemLog.warn(`Odpowiedź użytkownikowi: ${JSON.stringify(response, null, 2)}`);
+    // SystemLog.warn(`Odpowiedź użytkownikowi: ${JSON.stringify(response, null, 2)}`);
 
     res.status(200).json(response);
 

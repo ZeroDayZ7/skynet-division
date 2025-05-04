@@ -7,6 +7,16 @@
       "namePlaceholder": "Nazwa użytkownika",
       "emailLabel": "Twój e-mail",
       "emailPlaceholder": "Adres e-mail",
+      "topicLabel": "Temat zgłoszenia",
+      "topicPlaceholder": "Wybierz temat",
+      "topics": {
+        "general": "Pytanie ogólne",
+        "technical": "Problem techniczny",
+        "billing": "Płatności i rozliczenia",
+        "account": "Konto użytkownika",
+        "bug": "Zgłoszenie błędu",
+        "feature": "Propozycja funkcji"
+      },
       "messageLabel": "Wiadomość",
       "messagePlaceholder": "Opisz szczegółowo swój problem lub pytanie...",
       "submit": "Wyślij zgłoszenie",
@@ -14,6 +24,7 @@
     },
     "successMessage": "Twoje zgłoszenie zostało wysłane! Otrzymasz odpowiedź wkrótce.",
     "errors": {
+      "emptyTopic": "Proszę wybrać temat zgłoszenia",
       "emptyMessage": "Wiadomość nie może być pusta",
       "genericError": "Wystąpił błąd podczas wysyłania zgłoszenia"
     }

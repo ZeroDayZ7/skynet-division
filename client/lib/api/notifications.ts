@@ -1,5 +1,5 @@
 import { fetchClient } from '../fetchClient';
-import { Notification, NotificationsListResponse } from '@/components/notification/types/notification.types';
+import { NotificationsListResponse } from '@/components/notification/types/notification.types';
 import { z } from 'zod';
 import { toast } from 'sonner';
 
@@ -34,6 +34,24 @@ const NotificationCountSchema = z.object({
   }),
 });
 
+/**
+ * Pobiera łączną liczbę nieprzeczytanych powiadomień użytkownika.
+ */
+export const getUnreadNotificationsCount = async (): Promise<number> => {
+  try {
+    const url = `/api/users/notifications/count`; // zmień nazwę endpointu dla czytelności
+    const response = await fetchClient(url, {
+      method: 'GET',
+      credentials: 'include',
+    });
+
+    // return response.data; // jeśli response wygląda jak { success: true, data: 3 }
+    return z.number().parse(response.notifications.unreadCount ?? 0); // jeśli response wygląda jak { success: true, data: 3 }
+  } catch (error: any) {
+    toast.error('Błąd pobierania liczby powiadomień: ' + error.message);
+    throw error;
+  }
+};
 /**
  * Pobiera łączną liczbę przeczytanych i nieprzeczytanych powiadomień użytkownika.
  */

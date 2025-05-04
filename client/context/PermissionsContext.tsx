@@ -4,6 +4,7 @@ import { createContext, useState, useContext, useEffect, ReactNode } from 'react
 import { FaSpinner } from 'react-icons/fa';
 import { getUserPermissions } from './permissions/getUserPermissions';
 import { Permissions, UserPermissions } from './permissions/types';
+import { useCsrfToken } from '@/hooks/useCsrfToken';
 
 interface PermissionsContextType {
   permissions: Permissions | null;
@@ -16,12 +17,13 @@ const PermissionsContext = createContext<PermissionsContextType | undefined>(und
 export const PermissionsProvider = ({ children }: { children: ReactNode }) => {
   const [permissions, setPermissions] = useState<Permissions | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { csrfToken } = useCsrfToken();
 
   useEffect(() => {
     const fetchPermissions = async () => {
       setIsLoaded(false);
       try {
-        const response: UserPermissions | null = await getUserPermissions();
+        const response: UserPermissions | null = await getUserPermissions(csrfToken!);
         if (!response?.permissions) {
           throw new Error('Brak danych uprawnień');
         }

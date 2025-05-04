@@ -77,8 +77,6 @@
   --sidebar-accent-foreground: rgb(52, 52, 52);
   --sidebar-border: rgb(235, 235, 235);
   --sidebar-ring: rgb(180, 180, 180);
-  font-family: monospace;
-  font-size: 1rem;
 }
 
 .dark {
@@ -124,7 +122,7 @@
   }
 }
 
-/* body {
+body {
   font-family: monospace;
   font-size: 1rem;
-} */
+}

@@ -5,7 +5,7 @@ import { ThemeProvider } from '@/components/theme/theme-provider';
 import { AuthProvider } from '@/context/AuthContext';
 import { Toaster } from '@/components/ui/sonner';
 import { NextIntlClientProvider } from 'next-intl';
-import {getLocale} from 'next-intl/server';
+import { getLocale } from 'next-intl/server';
 import './globals.css';
 
 
@@ -22,7 +22,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Dark Army',
-  description: 'Zarządzaj Polska z jednego miejsca!',
+  description: 'Wolność nie jest darem, wolność jest prawem!',
   robots: {
     index: false,
     follow: false,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       noimageindex: true,
     },
   },
-  applicationName: 'Aplikacja Obywatelska',
+  applicationName: 'Dark Army',
   referrer: 'no-referrer',
 };
 
@@ -43,7 +43,7 @@ export default async function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   const locale = await getLocale();
   console.log('[app] RootLayout renderowany');
-  console.log(`locale: ${locale}`);
+  console.log(`[app] locale: ${locale}`);
 
 
   return (

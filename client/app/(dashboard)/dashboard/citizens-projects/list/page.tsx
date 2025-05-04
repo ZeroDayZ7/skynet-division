@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, MapPin, Loader2, ThumbsUp, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Search, MapPin, ThumbsUp, ChevronLeft, ChevronRight, Filter } from "lucide-react";
 
 import {
   Card,

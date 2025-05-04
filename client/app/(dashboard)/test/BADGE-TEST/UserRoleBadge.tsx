@@ -16,6 +16,7 @@ import {
   // Hexagon, // Hexagon import is not used in the rendering, can be removed
 } from "lucide-react";
 import { cn } from "@/lib/utils"; // Zakładam, że masz tę funkcję
+import { Icon } from "@radix-ui/react-select";
 
 // Typy rang użytkowników
 export type UserRole =
@@ -188,8 +189,8 @@ export function RankBadge({
   const sizeClasses = {
     sm: {
       badge: "px-2 py-1 text-xs",
-      icon: "w-3 h-3",
-      hexagon: "w-4 h-4",
+      icon: "w-5 h-5",
+      hexagon: "w-7 h-7",
     },
     md: {
       badge: "px-3 py-1.5 text-sm",
@@ -246,11 +247,12 @@ export function RankBadge({
 
       {/* Zmieniona struktura flexbox, aby wyśrodkować ikonę w jej wewnętrznym kontenerze */}
       <div className={cn(
-        "flex items-center justify-center rounded-sm", // Centrowanie przeniesione na ten div
+        "flex items-center justify-center rounded", // Centrowanie przeniesione na ten div
         colors.secondary,
         sizeClasses[size].hexagon
       )}>
         <div className={cn(
+          "flex items-center justify-center",
           colors.text,
           sizeClasses[size].icon,
           // Usunięto flex items-center justify-center stąd
@@ -303,7 +305,7 @@ export default function RankBadgeShowcase() {
         </div>
       </div>
 
-      <div className="mt-8 text-xs text-zinc-700 font-mono text-center">
+      <div className="mt-8 text-xs text-zinc-500 font-mono text-center">
         :: fsociety.dat :: {new Date().getFullYear()}
       </div>
     </div>

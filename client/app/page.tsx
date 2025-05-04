@@ -7,10 +7,9 @@ export default function HomePage() {
   const t = useTranslations('LoginPage'); // Użyj 'LoginPage', ponieważ tam są klucze
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-2 px-4 py-4">
-      <h1>{t('welcome')}</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center space-y-2">
       <AppBrand />
-      <p className="text-center text-gray-600 dark:text-gray-300 max-w-md">
+      <p className="text-center max-w-md">
         {t('loginDescription')}
       </p>
       <div className="flex space-x-4">

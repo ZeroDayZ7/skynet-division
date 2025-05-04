@@ -6,9 +6,19 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useSupportForm } from './useSupportForm';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export function SupportForm() {
-  const { user, message, setMessage, loading, handleSubmit, t } = useSupportForm();
+  const { 
+    user, 
+    message, 
+    setMessage, 
+    topic, 
+    setTopic, 
+    loading, 
+    handleSubmit, 
+    t 
+  } = useSupportForm();
 
   return (
     <div className="flex flex-1 items-center justify-center">
@@ -31,6 +41,23 @@ export function SupportForm() {
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="topic">{t('form.topicLabel')}</Label>
+            <Select value={topic} onValueChange={setTopic}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('form.topicPlaceholder')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="general">{t('form.topics.general')}</SelectItem>
+                <SelectItem value="technical">{t('form.topics.technical')}</SelectItem>
+                <SelectItem value="billing">{t('form.topics.billing')}</SelectItem>
+                <SelectItem value="account">{t('form.topics.account')}</SelectItem>
+                <SelectItem value="bug">{t('form.topics.bug')}</SelectItem>
+                <SelectItem value="feature">{t('form.topics.feature')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="message">{t('form.messageLabel')}</Label>
             <Textarea
               id="message"
@@ -43,7 +70,11 @@ export function SupportForm() {
             />
           </div>
 
-          <Button onClick={handleSubmit} disabled={loading} className="w-full">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={loading || !message.trim() || !topic}
+            className="w-full"
+          >
             {loading ? t('form.submitting') : t('form.submit')}
           </Button>
         </CardContent>

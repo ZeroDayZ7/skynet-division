@@ -1,8 +1,9 @@
 'use client';
 
-import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
+import { getUnreadNotificationsCount } from '@/lib/api/notifications';
 
 
 // types/user.ts
@@ -11,18 +12,16 @@ export type User = {
   username: string;
   role: 'user' | 'admin' | "superadmin";
   points?: number;
-  notifications: number;
+  notifications?: number;
   hasDocumentsEnabled?: boolean; // opcjonalnie, jeśli nie zawsze występuje
 };
 
-
 type AuthContextType = {
-  user: User;
+  user: User | null;
   isAuthenticated: boolean | null;
   isLoading: boolean;
   login: (user: User) => void;
   logout: () => void;
-  updateNotificationsContext: (count: number | ((prev: number) => number)) => void; // Obsługuje zarówno liczbę, jak i funkcję
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,31 +33,57 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      console.log('[AuthProvider] initializeAuth');
+// Sprawdzenie autentykacji przy pierwszym renderowaniu
+useEffect(() => {
+  checkAuth();
+}, []);
 
+// Funkcja sprawdzająca autentykację
+const checkAuth = useCallback(async (): Promise<boolean> => {
+  console.log('[AuthProvider][Initialize]: checkAuth');
+  setIsLoading(true);
+
+  try {
+    const session = await getUserSession(); // ważne: sesja musi być dostępna w ciasteczkach
+    if (session) {
+      console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
+      setUser(session.user as User);
+      setIsAuthenticated(true);
+      return true;
+    } else {
+      setUser(null);
+      setIsAuthenticated(false);
+      return false;
+    }
+  } catch (err) {
+    console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
+    setUser(null);
+    setIsAuthenticated(false);
+    return false;
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+
+
+  useEffect(() => {
+    console.log(`[AuthContext][Initialize]: unreadNotificationsCount`);
+    if (!user || !isAuthenticated) return;
+  
+    const fetchNotifications = async () => {
       try {
-        const session = await getUserSession(); // ważne: sesja musi być dostępna w ciasteczkach
-        if (session) {
-          console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
-          setUser(session.user as User);
-          setIsAuthenticated(true);
-        } else {
-          setUser(null);
-          setIsAuthenticated(false);
-        }
+        const unreadNotificationsCount = await getUnreadNotificationsCount();
+        console.log(`[AuthContext][unreadNotificationsCount]: ${JSON.stringify(unreadNotificationsCount)}`);
+        updateNotificationsContext(unreadNotificationsCount);
       } catch (err) {
-        console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setIsLoading(false);
+        console.error('[useEffect] Błąd podczas pobierania powiadomień:', err);
       }
     };
+  
+    fetchNotifications();
+  }, [isAuthenticated]);
+  
 
-    initializeAuth();
-  }, []);
 
   // Logowanie użytkownika
   const login = (user: User) => {
@@ -75,13 +100,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Aktualizacja licznika powiadomień
-  const updateNotificationsContext = (count: number | ((prev: number) => number)) => {
-    if (!user) return;
-
-    const newCount = typeof count === 'function' ? count(user.notifications) : count;
-    const updatedUser = { ...user, notifications: Math.max(0, newCount) };
+  const updateNotificationsContext = (count: number) => {
+    if (!user || typeof count !== 'number') return;
+  
+    const updatedUser = { ...user, notifications: Math.max(0, count) }; // Bezpośrednie ustawienie pobranej liczby powiadomień
     setUser(updatedUser);
-    // localStorage.setItem('user', JSON.stringify(updatedUser));
+    // localStorage.setItem('user', JSON.stringify(updatedUser)); // Opcjonalnie zapis do localStorage
   };
 
   console.log('[AuthProvider] render', { user, isLoading });
@@ -89,12 +113,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        {/* <FaSpinner className="animate-spin text-white text-4xl" /> */}
+      <div
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+        role="status"
+        aria-live="polite"
+      >
         <Loader2 className="animate-spin text-muted-foreground text-4xl" />
+        <span className="sr-only">Ładowanie danych, proszę czekać...</span>
       </div>
     );
   }
+  
 
   return (
     <AuthContext.Provider
@@ -104,7 +133,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isLoading,
         login,
         logout,
-        updateNotificationsContext,
       }}
     >
       {children}

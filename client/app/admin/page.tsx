@@ -1,14 +1,43 @@
 'use client';
 
-import { FaUserPlus, FaUsersCog, FaClipboardList } from 'react-icons/fa';
+import {
+  UserPlus,
+  Users,
+  ClipboardList,
+  Mail
+} from 'lucide-react';
 import { usePermissions } from '@/context/PermissionsContext';
 import MenuGrid from '@/components/ui/MenuGrid';
 
 const adminMenu = [
-  { id: 1, name: 'Zarejestruj Użytkownika', icon: FaUserPlus, link: '/admin/register', permissionKey: 'userCreate' },
-  { id: 2, name: 'Zarządzanie Użytkownikami', icon: FaUsersCog, link: '/admin/management', permissionKey: 'userManagement' },
-  { id: 3, name: 'Logi Systemowe', icon: FaClipboardList, link: '/admin/logs', permissionKey: 'viewLogs' },
-  // { id: 4, name: 'Zarządzanie Użytkownikami2', icon: FaUsersCog, link: '/admin/management2', permissionKey: 'userManagement' },
+  {
+    id: 1,
+    name: 'Zarejestruj Użytkownika',
+    icon: UserPlus,
+    link: '/admin/register',
+    permissionKey: 'userCreate',
+  },
+  {
+    id: 2,
+    name: 'Zarządzanie Użytkownikami',
+    icon: Users,
+    link: '/admin/management',
+    permissionKey: 'userManagement',
+  },
+  {
+    id: 3,
+    name: 'Logi Systemowe',
+    icon: ClipboardList,
+    link: '/admin/logs',
+    permissionKey: 'viewLogs',
+  },
+  {
+    id: 4,
+    name: 'Wiadomości Supportu',
+    icon: Mail,
+    link: '/admin/support-messages',
+    permissionKey: 'supportMessages',
+  },
 ];
 
 export default function AdminPanelPage() {
@@ -24,10 +53,10 @@ export default function AdminPanelPage() {
       icon: doc.icon,
       link: doc.link,
       label: doc.name,
-      enabled: hasPermissionEnabled(doc.permissionKey), // Używamy hasPermissionEnabled
-      visible: hasPermissionVisible(doc.permissionKey), // Używamy hasPermissionVisible
+      enabled: hasPermissionEnabled(doc.permissionKey),
+      visible: hasPermissionVisible(doc.permissionKey),
     }))
-    .filter((item) => item.visible); // Filtrujemy menu, pokazując tylko te, które mają visible === true
+    .filter((item) => item.visible);
 
   return (
     <div className="mx-auto">

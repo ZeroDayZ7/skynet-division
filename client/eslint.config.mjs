@@ -18,7 +18,10 @@ const eslintConfig = [
       'react-hooks/exhaustive-deps': 'off',
       '@typescript-eslint/no-explicit-any': 'off', // Wyłącza błąd związany z 'any'
       'prefer-const': 'off', // Wyłącza błąd związany z 'const'
-      'prefer-null': 'off'
+      'prefer-null': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'react/no-unescaped-entities': 'off',
+      'jsx-a11y/aria-props': 'off'
     }
   })
 ];

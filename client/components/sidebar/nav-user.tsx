@@ -2,12 +2,10 @@
 
 import {
   BadgeCheck,
-  Bell,
-  CreditCard,
   LogOut,
-  Sparkles,
   ChevronsRight,
-  Settings
+  Settings,
+  ShieldUser,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -29,10 +27,12 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useTranslations } from 'next-intl';
+import { NotificationBell } from './ui/NotificationBell';
+import { UserPlanBadge } from './ui/UserPlanBadge';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const router = useRouter();
+  // const router = useRouter();
   const { user } = useAuth();
   const t = useTranslations('NavUser');
 
@@ -73,8 +73,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <Sparkles className="mr-2 h-4 w-4" />
-                {t('upgrade')}
+                <UserPlanBadge plan={'free'} label={t('upgrade')} />
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -85,10 +84,14 @@ export function NavUser() {
                   <span>{t('account')}</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard className="mr-2 h-4 w-4" />
-                {t('billing')}
+
+              <DropdownMenuItem asChild>
+                <Link href="/admin">
+                  <ShieldUser className="mr-2 h-4 w-4" />
+                  {t('administration')}
+                </Link>
               </DropdownMenuItem>
+
               <DropdownMenuItem asChild>
                 <Link href="/settings">
                   <Settings className="mr-2 h-4 w-4" />
@@ -96,8 +99,10 @@ export function NavUser() {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Bell className="mr-2 h-4 w-4" />
-                {t('notifications')}
+                <NotificationBell
+                  count={user?.notifications}
+                  label={t('notifications')}
+                />
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

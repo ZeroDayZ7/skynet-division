@@ -1,23 +1,12 @@
 "use client"
 
 import { SidebarIcon } from "lucide-react"
-
-import { SearchForm } from "@/components/sidebar/search-form"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { memo } from "react"
 import { ModeToggle } from "@/components/theme/theme-button"
 import { EmergencyButton } from "../alarm/EmergencyButton"
-// import LanguageSelector from "../../app/(dashboard)/settings/general/LanguageSelector"
 
 export function SiteHeader() {
   const { toggleSidebar } = useSidebar()
@@ -35,21 +24,7 @@ export function SiteHeader() {
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <ModeToggle />
-        {/* <Breadcrumb className="hidden sm:block">
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="#">
-                Building Your Application
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            <BreadcrumbItem>
-              <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb> */}
         <EmergencyButton />
-        {/* <SearchForm className="w-full sm:ml-auto sm:w-auto" /> */}
         
       </div>
     </header>

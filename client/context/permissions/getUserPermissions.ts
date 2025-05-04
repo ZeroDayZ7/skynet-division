@@ -1,39 +1,25 @@
-'use server';
-
-import { cookies } from 'next/headers';
-import { fetchCsrfToken } from '@/lib/csrf';
 import { UserPermissions } from './types';
+import { fetchClient } from '@/lib/fetchClient';
 
-export async function getUserPermissions(): Promise<UserPermissions | null> {
+const URL = '/api/users/permissions';
+
+export async function getUserPermissions(csrfToken: string): Promise<UserPermissions | null> {
   try {
-    const cookieStore = await cookies();
-    const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
-    const csrfToken = await fetchCsrfToken(SESSION_KEY);
-    const cookiesHeader = cookieStore
-      .getAll()
-      .map((c) => `${c.name}=${c.value}`)
-      .join('; ');
-
-    const response = await fetch(`${process.env.EXPRESS_API_URL}/api/users/permissions`, {
+    const data = await fetchClient(URL, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
         'X-CSRF-Token': csrfToken,
-        Cookie: cookiesHeader,
       },
       cache: 'no-store',
     });
 
-    const data = await response.json();
     console.log('Pobrano uprawnienia użytkownika:', data);
 
-    if (!response.ok || !data.success) {
+    if (!data || !data.permissions) {
       return null;
     }
 
-    return {
-      permissions: data.permissions,
-    } as UserPermissions;
+    return { permissions: data.permissions };
   } catch (error) {
     console.error('Błąd podczas pobierania uprawnień użytkownika:', error);
     return null;

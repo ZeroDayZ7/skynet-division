@@ -80,22 +80,33 @@ export const markUserNotificationsAsRead = async (userId: number, ids: number[])
  * @param userId - ID użytkownika.
  * @returns Obiekt z liczbą nieprzeczytanych i przeczytanych powiadomień.
  */
-export const getNotificationsCount = async (userId: number): Promise<NotificationCounts> => {
+type CountType = 'read' | 'unread' | 'both';
+
+export const getNotificationsCount = async (
+  userId: number,
+  type: CountType = 'both'
+): Promise<Partial<NotificationCounts>> => {
   if (!userId) {
     throw new Error('Brak ID użytkownika');
   }
 
-  SystemLog.info(`Fetching notification counts for user ${userId}`);
+  SystemLog.info(`Fetching "${type}" notification counts for user ${userId}`);
 
+  if (type === 'read') {
+    const read = await NotificationModel.count({ where: { user_id: userId, is_read: 1 } });
+    return { read };
+  }
+
+  if (type === 'unread') {
+    const unread = await NotificationModel.count({ where: { user_id: userId, is_read: 0 } });
+    return { unread };
+  }
+
+  // Domyślnie oba
   const [unread, read] = await Promise.all([
-    NotificationModel.count({
-      where: { user_id: userId, is_read: 0 },
-    }),
-    NotificationModel.count({
-      where: { user_id: userId, is_read: 1 },
-    }),
+    NotificationModel.count({ where: { user_id: userId, is_read: 0 } }),
+    NotificationModel.count({ where: { user_id: userId, is_read: 1 } }),
   ]);
 
-  SystemLog.info(`Notification counts for user ${userId}: unread=${unread}, read=${read}`);
   return { unread, read };
 };

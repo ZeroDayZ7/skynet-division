@@ -7,7 +7,7 @@ declare module 'express-session' {
     csrfToken: string;
     role?: string;
     points: number;
-    notifications?: number | null;
+    notifications?: number;
     email?: string | null;
     username?: string | null;
     

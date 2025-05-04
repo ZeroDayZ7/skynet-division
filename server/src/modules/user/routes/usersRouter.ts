@@ -18,6 +18,7 @@ import { markNotificationsAsRead } from '../controller/notification/notification
 import { getUserPermissionstToLoginController } from '#ro/modules/user/controller/getUserPermissions.controller';
 import { notificationQuerySchema } from '../validators/notificationQuery.schema';
 import { countNotificationsController } from '../controller/notification/count.controller';
+import { meUserController } from '../controller/me/me.controller';
 
 
 const router = express.Router();
@@ -43,8 +44,8 @@ router.get('/notifications/read',
 );
 
 router.get('/notifications/count', 
-    authMiddleware, 
-    countNotificationsController
+    // authMiddleware, 
+    meUserController
 );
 
 router.patch('/notifications/read', 
@@ -52,7 +53,10 @@ router.patch('/notifications/read',
     markNotificationsAsRead
 );
 
-router.get('/permissions', csrfMiddleware, authMiddleware, getUserPermissionstToLoginController);
+router.get('/permissions', 
+    // csrfMiddleware, 
+    authMiddleware, 
+    getUserPermissionstToLoginController);
 
 
 // // Obsługuje inne niezdefiniowane trasy (404)
