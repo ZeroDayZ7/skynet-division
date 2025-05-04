@@ -1,4 +1,4 @@
-import BadgeShowcase from "./BADGE-TEST/UserRoleBadge";
+import BadgeShowcase from "../../../components/ui/ui/UserRoleBadge";
 
 export default function TEST() {
   return (

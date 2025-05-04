@@ -42,7 +42,6 @@ const adminMenu = [
 
 export default function AdminPanelPage() {
   const { permissions, hasPermissionEnabled, hasPermissionVisible } = usePermissions();
-  console.debug('== AdminPanelPage ==', permissions);
 
   if (!permissions) {
     return <div className="text-center text-red-500">Brak uprawnień</div>;

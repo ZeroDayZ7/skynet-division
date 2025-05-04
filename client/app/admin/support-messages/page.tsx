@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Table, TableRow, TableCell, TableBody, TableHeader, TableHead } from '@/components/ui/table';
-import { Pagination } from '@/components/ui/pagination';
-import { useSupportMessages } from './useSupportMessages';
-import TicketModal from './TicketModal'; // Importujemy nasz nowy komponent modalu
+import { SupportTicket, useSupportMessages, SupportTicketFilterStatus } from './useSupportMessages';
+import TicketModal from './TicketModal';
+import PaginationControl from '@/components/ui/ui/Pagination';
 
-const statusFilters = ['open', 'inprogress', 'closed'] as const;
+const statusFilters = ['all', 'new', 'open', 'in_progress', 'closed'] as const;
 
 export default function SupportMessagesPage() {
   const {
@@ -22,7 +22,6 @@ export default function SupportMessagesPage() {
     currentPage,
     setCurrentPage,
     totalPages,
-    updateTicketStatus,
   } = useSupportMessages();
 
   const getBadgeVariant = (status: string) => {
@@ -42,22 +41,22 @@ export default function SupportMessagesPage() {
         <h1 className="text-2xl font-bold">Support Messages</h1>
       </div>
 
-      {/* Status filters */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         {statusFilters.map((status) => (
           <Button
             key={status}
             variant={activeStatus === status ? 'default' : 'outline'}
-            onClick={() => setActiveStatus(status)}
+            onClick={() => setActiveStatus(status as SupportTicketFilterStatus)}
           >
+            {status === 'all' && 'All'}
+            {status === 'new' && 'New'}
             {status === 'open' && 'Open'}
-            {status === 'inprogress' && 'In Progress'}
+            {status === 'in_progress' && 'In Progress'}
             {status === 'closed' && 'Closed'}
           </Button>
         ))}
       </div>
 
-      {/* Search bar */}
       <div className="flex items-center gap-2 mb-6">
         <Input 
           placeholder="Search by username or topic..."
@@ -70,7 +69,6 @@ export default function SupportMessagesPage() {
         </Button>
       </div>
 
-      {/* Tickets table */}
       <div className="border rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
@@ -96,7 +94,7 @@ export default function SupportMessagesPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              tickets.map((ticket) => (
+              tickets.map((ticket: SupportTicket) => (
                 <TableRow key={ticket.id}>
                   <TableCell>{ticket.user_id}</TableCell>
                   <TableCell>{ticket.subject}</TableCell>
@@ -107,7 +105,6 @@ export default function SupportMessagesPage() {
                   </TableCell>
                   <TableCell>{new Date(ticket.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    {/* Wstawiamy TicketModal i przekazujemy ticket */}
                     <TicketModal ticket={ticket} />
                   </TableCell>
                 </TableRow>
@@ -117,16 +114,15 @@ export default function SupportMessagesPage() {
         </Table>
       </div>
 
-      {/* Pagination */}
-      {/* {totalPages > 1 && (
+      {totalPages > 1 && (
         <div className="mt-6">
-          <Pagination 
+          <PaginationControl 
             totalPages={totalPages} 
             currentPage={currentPage} 
             onPageChange={setCurrentPage}
           />
         </div>
-      )} */}
+      )}
     </div>
   );
 }

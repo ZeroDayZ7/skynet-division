@@ -6,15 +6,16 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import ClientWrapper from '@/components/ClientWrapper';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-
   return (
-    <div className="[--header-height:calc(theme(spacing.14))]">
+    <div className="[--header-height:theme(spacing.14)] h-screen flex flex-col">
       <ClientWrapper>
-        <SidebarProvider className="flex flex-col">
+        <SidebarProvider className="flex flex-col flex-1">
           <SiteHeader />
-          <div className="flex flex-1 mx-2 py-2">
+          <div className="flex flex-1 overflow-hidden">
             <AppSidebar />
-            {children}
+            <main className="flex-1 overflow-y-auto p-4">
+              {children}
+            </main>
           </div>
         </SidebarProvider>
       </ClientWrapper>

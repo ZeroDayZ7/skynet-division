@@ -11,7 +11,7 @@ import {
   CheckCircle,
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
-import { UserRankBadge, UserRole } from '../../test/BADGE-TEST/UserRoleBadge';
+import { UserRankBadge, UserRole } from '../../../../components/ui/ui/UserRoleBadge';
 
 export default function UserProfilePage() {
   const t = useTranslations('UserProfile');

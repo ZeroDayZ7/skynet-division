@@ -8,6 +8,8 @@ import eDocuments from './pl/EDocuments.json'
 import navUser from './pl/NavUser.json'
 import dashboard from './pl/Dashboard.json'
 import userProfile from './pl/UserProfile.json'
+import statusTicket from './pl/StatusTicket.json'
+import supportTopics from './pl/SupportTopics.json'
 
 const messagesPL = {
     ...loginPage,
@@ -20,6 +22,8 @@ const messagesPL = {
     ...navUser,
     ...dashboard,
     ...userProfile,
+    ...statusTicket,
+    ...supportTopics
   }
 
 export default messagesPL;

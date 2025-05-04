@@ -1,0 +1,28 @@
+[
+    {
+      "value": "item-1",
+      "question": "Jak mogę skontaktować się z supportem?",
+      "answer": "Możesz skontaktować się z nami, wypełniając formularz kontaktowy w zakładce \"Napisać do supportu\"."
+    },
+    {
+      "value": "item-2",
+      "question": "Co zrobić, jeśli moje zapytanie nie zostało rozwiązane?",
+      "answer": "Jeśli Twoje zapytanie nie zostało rozwiązane, prosimy o ponowne skontaktowanie się z nami. Nasz zespół zajmie się Twoją sprawą najszybciej jak to możliwe."
+    },
+    {
+      "value": "item-3",
+      "question": "Jak sprawdzić status mojego zapytania?",
+      "answer": "Status swojego zapytania możesz sprawdzić w zakładce \"Odpowiedzi\". Jeśli potrzebujesz dodatkowej pomocy, skontaktuj się z nami."
+    },
+    {
+      "value": "item-4",
+      "question": "Jakie godziny pracy ma support?",
+      "answer": "Nasz support jest dostępny od poniedziałku do piątku, w godzinach 9:00-17:00."
+    },
+    {
+      "value": "item-5",
+      "question": "Czy mogę zmienić moje zapytanie po jego wysłaniu?",
+      "answer": "Tak, możesz edytować swoje zapytanie kontaktując się z nami bezpośrednio. Prosimy o podanie numeru referencyjnego zapytania."
+    }
+  ]
+  

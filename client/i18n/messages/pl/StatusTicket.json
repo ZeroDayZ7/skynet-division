@@ -1,0 +1,9 @@
+{
+    "status": {
+      "new": "Nowe zgłoszenie",
+      "open": "Oczekuje na odpowiedź",
+      "in_progress": "W trakcie realizacji",
+      "closed": "Zamknięte"
+    }
+  }
+  

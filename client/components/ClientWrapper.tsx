@@ -3,7 +3,7 @@
 
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { MessageProvider } from '@/context/MessageContext';
+// import { MessageProvider } from '@/context/MessageContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,9 +21,7 @@ const queryClient = new QueryClient({
 export default function ClientWrapper({ children }: { children: ReactNode }) {
   return (
         <QueryClientProvider client={queryClient}>
-          <MessageProvider>
             {children}
-          </MessageProvider>
         </QueryClientProvider>
   );
 }

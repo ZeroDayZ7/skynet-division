@@ -60,7 +60,7 @@ export function useSupportForm() {
         toast.error(t('errors.genericError'));
       }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 

@@ -16,7 +16,6 @@ import {
   // Hexagon, // Hexagon import is not used in the rendering, can be removed
 } from "lucide-react";
 import { cn } from "@/lib/utils"; // Zakładam, że masz tę funkcję
-import { Icon } from "@radix-ui/react-select";
 
 // Typy rang użytkowników
 export type UserRole =

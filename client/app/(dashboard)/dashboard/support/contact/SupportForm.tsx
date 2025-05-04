@@ -7,8 +7,9 @@ import { Label } from '@/components/ui/label';
 import { useSupportForm } from './useSupportForm';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Loader } from '@/components/ui/loader';
 
-export function SupportForm() {
+export default function SupportForm() {
   const { 
     user, 
     message, 
@@ -19,10 +20,12 @@ export function SupportForm() {
     handleSubmit, 
     t 
   } = useSupportForm();
+  
+  if (loading) return <Loader />;
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      <Card className="w-full max-w-4xl">
+      <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle>{t('title')}</CardTitle>
           <CardDescription>{t('description')}</CardDescription>

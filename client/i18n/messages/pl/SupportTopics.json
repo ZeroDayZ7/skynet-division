@@ -1,0 +1,13 @@
+{
+    "support": {
+      "topics": {
+        "general": "Ogólne pytanie",
+        "technical": "Problem techniczny",
+        "billing": "Rozliczenia",
+        "account": "Konto użytkownika",
+        "bug": "Zgłoszenie błędu",
+        "feature": "Sugestia funkcji"
+      }
+    }
+  }
+  
