@@ -1,4 +1,6 @@
-import { useState } from 'react';
+'use client';
+
+import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,11 +17,13 @@ import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import ResponseDetails from './ResponseDetails';
+import { Badge } from '@/components/ui/badge';
 
 export default function Responses() {
   const t = useTranslations();
-  const { responses, loading, error } = useSupportMessages();
+  const { responses, loading, error, refetch } = useSupportMessages(); // Dodaj refetch
   const [selectedResponseId, setSelectedResponseId] = useState<number | null>(null);
+  const currentUserId = 93; // TODO: Pobierz z kontekstu autoryzacji (np. useAuth)
 
   if (loading) return <Loader />;
   if (error) return <div>{error}</div>;
@@ -39,6 +43,7 @@ export default function Responses() {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>ID</TableHead>
                   <TableHead className="w-[120px]">Data</TableHead>
                   <TableHead>Temat</TableHead>
                   <TableHead>Status</TableHead>
@@ -48,6 +53,7 @@ export default function Responses() {
               <TableBody>
                 {responses.map((response) => (
                   <TableRow key={response.id} className="hover:bg-muted/50">
+                    <TableCell>{response.id}</TableCell>
                     <TableCell>
                       {format(new Date(response.createdAt), 'dd.MM.yyyy', {
                         locale: pl,
@@ -56,7 +62,9 @@ export default function Responses() {
                     <TableCell>
                       {t(`support.topics.${response.subject}`)}
                     </TableCell>
-                    <TableCell>{t(`status.${response.status}`)}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
+                    </TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="outline"
@@ -79,7 +87,13 @@ export default function Responses() {
         </Card>
       )}
 
-      {selectedResponse && <ResponseDetails response={selectedResponse} />}
+      {selectedResponse && (
+        <ResponseDetails
+          response={selectedResponse}
+          currentUserId={currentUserId}
+          onStatusChange={refetch} // Przekaz callback do odświeżania
+        />
+      )}
     </div>
   );
 }

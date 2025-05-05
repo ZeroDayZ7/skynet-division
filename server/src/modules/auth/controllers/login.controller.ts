@@ -41,6 +41,7 @@ const validIp = isIP(ip) ? ip : '';
 
     const responsePayload = {
       user: {
+        id: user.id,
         role: user.role,
         username: user.username,
         hasDocumentsEnabled: user.documents !== null,

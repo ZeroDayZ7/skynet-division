@@ -1,42 +1,1134 @@
+jest powa¿na sprawa chce siê nauczyæ reducera przy pisaniu supportu, a wiêc tak 1. oddzielenie logiki od ux, 2. mam tabele do której chce pobieraæ wszystkie tickety user któe maj¹ stan "new, open, in_progress" oraz osobno chce dynamicznie otwieraæ ewentualnie closed gdy by on chcia³ podejrzeæ swoje stare rozwiazane tickety, ale nie od razu na ¿adanie, pobrane tickety max 5 do ustawienia w sta³ej, ma pobieraæ 5 do tabeli tzn podstawowe dane, jak id, data, status, temat te dane maj¹ byæ w tabeli, 'use client';
 
-Zaq1@wsx
+import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table';
+import { useSupportMessages } from './useSupportMessages';
+import { Loader } from '@/components/ui/loader';
+import { format } from 'date-fns';
+import { pl } from 'date-fns/locale';
+import ResponseDetails from './ResponseDetails';
+import { Badge } from '@/components/ui/badge';
 
+export default function Responses() {
+  const t = useTranslations();
+  const { responses, loading, error, refetch } = useSupportMessages(); // Dodaj refetch
+  const [selectedResponseId, setSelectedResponseId] = useState<number | null>(null);
+  const currentUserId = 93; // TODO: Pobierz z kontekstu autoryzacji (np. useAuth)
 
-{
-  "userManagement": {
-    "name": "userManagement",
-    "description": "ZarzÄ…dzanie uÅ¼ytkownikami",
-    "children": [
-      {
-        "name": "userCreate",
-        "description": "Tworzenie nowych uÅ¼ytkownikÃ³w",
-        "is_visible": true,
-        "is_enabled": false
-      },
-      {
-        "name": "userDelete",
-        "description": "Usuwanie uÅ¼ytkownikÃ³w",
-        "is_visible": true,
-        "is_enabled": true
-      },
-      {
-        "name": "userBlock",
-        "description": "Blokowanie lub odblokowanie uÅ¼ytkownikÃ³w",
-        "is_visible": true,
-        "is_enabled": true
-      },
-      {
-        "name": "userEdit",
-        "description": "Edycja danych uÅ¼ytkownika",
-        "is_visible": true,
-        "is_enabled": false
-      }
-    ]
-  },
-  "userEditPermissions": {
-    "name": "userEditPermissions",
-    "description": "Edycja uprawnieÅ„ uÅ¼ytkownika",
-    "is_visible": true,
-    "is_enabled": true
+  if (loading) return <Loader />;
+  if (error) return <div>{error}</div>;
+
+  const selectedResponse = responses.find((r) => r.id === selectedResponseId);
+
+  return (
+    <div className="space-y-2">
+      {responses.length === 0 ? (
+        <div>Nie masz ¿adnych wiadomoœci wsparcia.</div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Twoje wiadomoœci do supportu</CardTitle>
+          </CardHeader>
+          <CardContent className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead className="w-[120px]">Data</TableHead>
+                  <TableHead>Temat</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Akcja</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {responses.map((response) => (
+                  <TableRow key={response.id} className="hover:bg-muted/50">
+                    <TableCell>{response.id}</TableCell>
+                    <TableCell>
+                      {format(new Date(response.createdAt), 'dd.MM.yyyy', {
+                        locale: pl,
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {t(`support.topics.${response.subject}`)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-[100px]"
+                        onClick={() =>
+                          setSelectedResponseId((prev) =>
+                            prev === response.id ? null : response.id,
+                          )
+                        }
+                      >
+                        {selectedResponseId === response.id ? 'Ukryj' : 'Zobacz'}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+
+      {selectedResponse && (
+        <ResponseDetails
+          response={selectedResponse}
+          currentUserId={currentUserId}
+          onStatusChange={refetch} // Przekaz callback do odœwie¿ania
+        />
+      )}
+    </div>
+  );
+}, poŸniej ma byæ przycisk zobacz/ukryj, gdy user kliknie na dany ticket maj¹ pobraæ siê dane konkretnego ticketa np nr 6 do reducera, import { useReducer, useCallback } from 'react';
+
+interface TicketMessage {
+  id: number;
+  message: string;
+  sender_id: number;
+  sender: {
+    username: string;
+    role: string;
+  };
+}
+
+interface TicketDetails {
+  id: number;
+  messages: TicketMessage[];
+  status: string;
+  subject: string;
+  loading: boolean;
+  error: string | null;
+}
+
+type State = Record<number, TicketDetails>;
+
+type Action =
+  | { type: 'START_LOADING'; id: number }
+  | { type: 'SET_DETAILS'; id: number; data: Omit<TicketDetails, 'loading' | 'error'> }
+  | { type: 'SET_ERROR'; id: number; error: string }
+  | { type: 'ADD_MESSAGE'; id: number; message: TicketMessage }
+  | { type: 'SET_STATUS'; id: number; status: string }
+  | { type: 'RESET' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'START_LOADING':
+      return {
+        ...state,
+        [action.id]: { ...state[action.id], loading: true, error: null },
+      };
+    case 'SET_DETAILS':
+      return {
+        ...state,
+        [action.id]: {
+          ...action.data,
+          loading: false,
+          error: null,
+        },
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        [action.id]: {
+          ...(state[action.id] || {}),
+          loading: false,
+          error: action.error,
+        },
+      };
+    case 'ADD_MESSAGE':
+      return {
+        ...state,
+        [action.id]: {
+          ...state[action.id],
+          messages: [...state[action.id].messages, action.message],
+        },
+      };
+    case 'SET_STATUS':
+      return {
+        ...state,
+        [action.id]: {
+          ...state[action.id],
+          status: action.status,
+        },
+      };
+    case 'RESET':
+      return {};
+    default:
+      return state;
   }
 }
+
+export function useTicketReducer() {
+  const [state, dispatch] = useReducer(reducer, {});
+
+  const loadTicket = useCallback(async (id: number) => {
+    dispatch({ type: 'START_LOADING', id });
+
+    try {
+      const res = await fetch(`/api/support/${id}`);
+      const json = await res.json();
+      if (!json.success) throw new Error('B³¹d ³adowania ticketu');
+
+      dispatch({
+        type: 'SET_DETAILS',
+        id,
+        data: {
+          id,
+          messages: json.data.messages,
+          status: json.data.status,
+          subject: json.data.subject,
+        },
+      });
+    } catch (err) {
+      dispatch({ type: 'SET_ERROR', id, error: 'Nie uda³o siê pobraæ danych.' });
+    }
+  }, []);
+
+  const sendMessage = useCallback(async (id: number, message: string) => {
+    const res = await fetch(`/api/support/${id}/reply`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+
+    const json = await res.json();
+    if (!json.success) throw new Error('B³¹d podczas wysy³ania wiadomoœci');
+
+    dispatch({ type: 'ADD_MESSAGE', id, message: json.data });
+  }, []);
+
+  const closeTicket = useCallback(async (id: number) => {
+    const res = await fetch(`/api/support/${id}/close`, {
+      method: 'POST',
+    });
+
+    const json = await res.json();
+    if (!json.success) throw new Error('B³¹d podczas zamykania ticketu');
+
+    dispatch({ type: 'SET_STATUS', id, status: 'closed' });
+  }, []);
+
+  const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
+
+  return {
+    tickets: state,
+    loadTicket,
+    sendMessage,
+    closeTicket,
+    reset,
+  };
+}, ticket mo¿e mieæ 4 stany, new user wysy³a pierwszy raz ticket, open otwarty przed admina,  in_progress i closed, user ma mo¿liwoœæ , np ma ticket new, ale zanim admin odpisa³, to user klika zamknij ticketa, pojawia siê okna, albo text area i user mo¿e wpisaæ "" dobra sprawa rozwei¹zana, poŸniej gdy admin odpowie a user nie zamknie ticketa, tu user klika np odpowiedz i pojawia siê text arena gdzie moze wpisaæ i wys³¹æ odpowiedŸ, mo¿e gdy wyœle jedn¹ napisaæ drug¹ po jakimœ czasie jak sobie przypomni coœ zanim znowu admin odpisze, jak to zrobiæ professionalnie, opisz plan dzia³ania, i ostatnie rozdzielenie logiki od ux, 'use client';
+
+import { useState } from 'react';
+import {
+  Card, CardHeader, CardTitle, CardContent, CardDescription,
+} from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
+import { CalendarCheck, Info } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import ChatMessage from './ChatMessage';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
+import { useTicketReducer } from './useTicketReducer'; // nowa wersja z sendMessage
+
+interface ResponseDetailsProps {
+  response: {
+    id: number;
+    createdAt: Date;
+    subject: string;
+    status: string;
+    SupportMessages: {
+      id: number;
+      message: string;
+      sender_id: number;
+      sender: {
+        username: string;
+        role: string;
+      };
+    }[];
+  };
+  currentUserId: number;
+  onStatusChange?: () => void;
+}
+
+export default function ResponseDetails({ response, currentUserId, onStatusChange }: ResponseDetailsProps) {
+  const t = useTranslations();
+  const [isClosing, setIsClosing] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSending, setIsSending] = useState(false);
+
+  const { sendMessage, closeTicket } = useTicketReducer(); // <-- nowy hook
+  const formattedDate = new Date(response.createdAt).toLocaleString('pl-PL', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  });
+
+  const handleCloseTicket = async () => {
+    try {
+      setIsClosing(true);
+      await closeTicket(response.id);
+      toast.success('Zg³oszenie zosta³o zamkniête.');
+      onStatusChange?.();
+    } catch {
+      toast.error('Nie uda³o siê zamkn¹æ zg³oszenia.');
+    } finally {
+      setIsClosing(false);
+    }
+  };
+
+  const handleSend = async () => {
+    if (!message.trim()) return;
+
+    try {
+      setIsSending(true);
+      await sendMessage(response.id, message);
+      toast.success('Wiadomoœæ wys³ana.');
+      onStatusChange?.(); // ‹ powoduje refetch danych lub rerender z now¹ wiadomoœci¹
+      setMessage('');
+    } catch {
+      toast.error('Nie uda³o siê wys³aæ wiadomoœci.');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  return (
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Info className="h-5 w-5 text-muted-foreground" />
+          Szczegó³y zg³oszenia ID ~ {response.id}
+        </CardTitle>
+        <CardDescription className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CalendarCheck className="h-4 w-4" />
+          {formattedDate}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-4">
+        <div>
+          <p className="text-sm text-muted-foreground mb-1">Temat: {t(`support.topics.${response.subject}`)}</p>
+        </div>
+
+        <Separator />
+
+        <div className="flex items-center gap-2">
+          <p className="text-sm text-muted-foreground">Status:</p>
+          <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
+          {response.status !== 'closed' && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCloseTicket}
+              disabled={isClosing}
+              className="ml-4"
+            >
+              {isClosing ? 'Zamykanie...' : 'Zamknij zg³oszenie'}
+            </Button>
+          )}
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2">
+          <p className="text-sm text-muted-foreground mb-1">Rozmowa</p>
+          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+            {response.SupportMessages.length > 0 ? (
+              response.SupportMessages.map((msg) => (
+                <ChatMessage
+                  key={msg.id}
+                  message={{
+                    id: msg.id,
+                    message: msg.message,
+                    sender_id: msg.sender_id,
+                    sender: {
+                      id: msg.sender_id,
+                      username: msg.sender.username,
+                    },
+                  }}
+                  currentUserId={currentUserId}
+                />
+              ))
+            ) : (
+              <p className="italic text-muted-foreground">Brak wiadomoœci w rozmowie.</p>
+            )}
+          </div>
+        </div>
+
+        {response.status !== 'closed' && (
+          <>
+            <Separator />
+            <div className="space-y-2">
+              <Textarea
+                placeholder="Wpisz wiadomoœæ..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <div className="flex justify-end">
+                <Button onClick={handleSend} disabled={isSending || !message.trim()}>
+                  {isSending ? 'Wysy³anie...' : 'Wyœlij wiadomoœæ'}
+                </Button>
+              </div>
+            </div>
+          </>
+        )}
+      </CardContent>
+    </Card>
+  );
+}'use client';
+
+import React from 'react';
+import { cn } from '@/lib/utils';
+
+type ChatMessageProps = {
+  message: {
+    id: number;
+    message: string;
+    sender_id: number;
+    sender: {
+      id: number;
+      username: string;
+    };
+  };
+  currentUserId: number;
+};
+
+export default function ChatMessage({ message, currentUserId }: ChatMessageProps) {
+  const isCurrentUser = message.sender_id === currentUserId;
+
+  return (
+    <div
+      className={cn(
+        'flex w-full px-4 py-1',
+        isCurrentUser ? 'justify-end' : 'justify-start'
+      )}
+    >
+      <div
+        className={cn(
+          'max-w-[80%] px-4 py-2 rounded-xl shadow-md transition-all duration-200 animate-in fade-in slide-in-from-bottom-2',
+          isCurrentUser
+            ? 'bg-cyan-900 text-primary rounded-tr-none'
+            : 'bg-muted text-foreground rounded-tl-none'
+        )}
+      >
+        <div className="text-xs font-semibold text-muted-foreground mb-1">
+          {message.sender.username}
+        </div>
+        <div className="text-sm whitespace-pre-wrap break-words">
+          {message.message}
+        </div>
+      </div>
+    </div>
+  );
+}// closeTicketLogic.ts
+import { fetchClient } from '@/lib/fetchClient';
+import { toast } from 'sonner';
+
+export async function closeTicket(ticketId: number, onStatusChange?: () => void) {
+  try {
+    const res = await fetchClient(`/api/support/${ticketId}/close`, { // U¿ywamy template string do przekazania ID
+      method: 'PATCH',
+    });
+
+    if (res.success) {
+      toast.success("Zg³oszenie zosta³o zamkniête.");
+      onStatusChange?.(); // Bezpieczne wywo³anie callbacka
+    } else {
+      toast.error(res.message || 'Nie uda³o siê zamkn¹æ zg³oszenia.');
+    }
+  } catch (error) {
+    toast.error('Wyst¹pi³ b³¹d podczas zamykania zg³oszenia.');
+    console.error('B³¹d zamykania zg³oszenia:', error);
+  }
+}'use client';
+
+import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from '@/components/ui/table';
+import { useSupportMessages } from './useSupportMessages';
+import { Loader } from '@/components/ui/loader';
+import { format } from 'date-fns';
+import { pl } from 'date-fns/locale';
+import ResponseDetails from './ResponseDetails';
+import { Badge } from '@/components/ui/badge';
+
+export default function Responses() {
+  const t = useTranslations();
+  const { responses, loading, error, refetch } = useSupportMessages(); // Dodaj refetch
+  const [selectedResponseId, setSelectedResponseId] = useState<number | null>(null);
+  const currentUserId = 93; // TODO: Pobierz z kontekstu autoryzacji (np. useAuth)
+
+  if (loading) return <Loader />;
+  if (error) return <div>{error}</div>;
+
+  const selectedResponse = responses.find((r) => r.id === selectedResponseId);
+
+  return (
+    <div className="space-y-2">
+      {responses.length === 0 ? (
+        <div>Nie masz ¿adnych wiadomoœci wsparcia.</div>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Twoje wiadomoœci do supportu</CardTitle>
+          </CardHeader>
+          <CardContent className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead className="w-[120px]">Data</TableHead>
+                  <TableHead>Temat</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Akcja</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {responses.map((response) => (
+                  <TableRow key={response.id} className="hover:bg-muted/50">
+                    <TableCell>{response.id}</TableCell>
+                    <TableCell>
+                      {format(new Date(response.createdAt), 'dd.MM.yyyy', {
+                        locale: pl,
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {t(`support.topics.${response.subject}`)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-[100px]"
+                        onClick={() =>
+                          setSelectedResponseId((prev) =>
+                            prev === response.id ? null : response.id,
+                          )
+                        }
+                      >
+                        {selectedResponseId === response.id ? 'Ukryj' : 'Zobacz'}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      )}
+
+      {selectedResponse && (
+        <ResponseDetails
+          response={selectedResponse}
+          currentUserId={currentUserId}
+          onStatusChange={refetch} // Przekaz callback do odœwie¿ania
+        />
+      )}
+    </div>
+  );
+}import { useReducer, useCallback } from 'react';
+
+interface TicketMessage {
+  id: number;
+  message: string;
+  sender_id: number;
+  sender: {
+    username: string;
+    role: string;
+  };
+}
+
+interface TicketDetails {
+  id: number;
+  messages: TicketMessage[];
+  status: string;
+  subject: string;
+  loading: boolean;
+  error: string | null;
+}
+
+type State = Record<number, TicketDetails>;
+
+type Action =
+  | { type: 'START_LOADING'; id: number }
+  | { type: 'SET_DETAILS'; id: number; data: Omit<TicketDetails, 'loading' | 'error'> }
+  | { type: 'SET_ERROR'; id: number; error: string }
+  | { type: 'ADD_MESSAGE'; id: number; message: TicketMessage }
+  | { type: 'SET_STATUS'; id: number; status: string }
+  | { type: 'RESET' };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'START_LOADING':
+      return {
+        ...state,
+        [action.id]: { ...state[action.id], loading: true, error: null },
+      };
+    case 'SET_DETAILS':
+      return {
+        ...state,
+        [action.id]: {
+          ...action.data,
+          loading: false,
+          error: null,
+        },
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        [action.id]: {
+          ...(state[action.id] || {}),
+          loading: false,
+          error: action.error,
+        },
+      };
+    case 'ADD_MESSAGE':
+      return {
+        ...state,
+        [action.id]: {
+          ...state[action.id],
+          messages: [...state[action.id].messages, action.message],
+        },
+      };
+    case 'SET_STATUS':
+      return {
+        ...state,
+        [action.id]: {
+          ...state[action.id],
+          status: action.status,
+        },
+      };
+    case 'RESET':
+      return {};
+    default:
+      return state;
+  }
+}
+
+export function useTicketReducer() {
+  const [state, dispatch] = useReducer(reducer, {});
+
+  const loadTicket = useCallback(async (id: number) => {
+    dispatch({ type: 'START_LOADING', id });
+
+    try {
+      const res = await fetch(`/api/support/${id}`);
+      const json = await res.json();
+      if (!json.success) throw new Error('B³¹d ³adowania ticketu');
+
+      dispatch({
+        type: 'SET_DETAILS',
+        id,
+        data: {
+          id,
+          messages: json.data.messages,
+          status: json.data.status,
+          subject: json.data.subject,
+        },
+      });
+    } catch (err) {
+      dispatch({ type: 'SET_ERROR', id, error: 'Nie uda³o siê pobraæ danych.' });
+    }
+  }, []);
+
+  const sendMessage = useCallback(async (id: number, message: string) => {
+    const res = await fetch(`/api/support/${id}/reply`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+
+    const json = await res.json();
+    if (!json.success) throw new Error('B³¹d podczas wysy³ania wiadomoœci');
+
+    dispatch({ type: 'ADD_MESSAGE', id, message: json.data });
+  }, []);
+
+  const closeTicket = useCallback(async (id: number) => {
+    const res = await fetch(`/api/support/${id}/close`, {
+      method: 'POST',
+    });
+
+    const json = await res.json();
+    if (!json.success) throw new Error('B³¹d podczas zamykania ticketu');
+
+    dispatch({ type: 'SET_STATUS', id, status: 'closed' });
+  }, []);
+
+  const reset = useCallback(() => dispatch({ type: 'RESET' }), []);
+
+  return {
+    tickets: state,
+    loadTicket,
+    sendMessage,
+    closeTicket,
+    reset,
+  };
+}'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+
+interface SupportMessage {
+  id: number;
+  createdAt: Date;
+  subject: string;
+  status: string;
+  SupportMessages: {
+    id: number;
+    message: string;
+    sender_id: number;
+    sender: {
+      username: string;
+      role: string;
+    };
+  }[];
+}
+
+export function useSupportMessages() {
+  const [responses, setResponses] = useState<SupportMessage[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSupportMessages = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/support');
+      if (!response.ok) throw new Error('Nie uda³o siê pobraæ wiadomoœci');
+
+      const data = await response.json();
+      console.log(`data: ${JSON.stringify(data.data, null, 2)}`);
+      if (data.success) setResponses(data.data);
+      else setError('Nie uda³o siê pobraæ wiadomoœci');
+    } catch (err) {
+      setError('Wyst¹pi³ b³¹d przy pobieraniu wiadomoœci');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSupportMessages();
+  }, [fetchSupportMessages]);
+
+  return { responses, loading, error, refetch: fetchSupportMessages };
+}// controllers/supportController.ts
+
+import { RequestHandler } from 'express';
+import * as SupportService from '../services/support.service';
+import SystemLog from '#ro/common/utils/SystemLog';
+
+// POST /api/user/support - Tworzenie wiadomoœci wsparcia
+export const createSupportMessage: RequestHandler = async (req, res) => {
+  try {
+    const { subject, message } = req.body;
+    const userId = req.session.userId!;
+
+    SystemLog.warn(`subject: ${subject} | message: ${message} | userId: ${userId}`);
+
+    // Sprawdzanie, czy dane s¹ obecne
+    if (!userId || !subject || !message) {
+      res.status(400).json({ success: false, message: 'Brak userId, subject lub message' });
+    }
+
+    // Zapisanie wiadomoœci
+    const savedMessage = await SupportService.saveMessage(userId, subject, message);
+
+    res.status(201).json({ success: true, data: savedMessage });
+  } catch (err) {
+    console.error('[supportController.createSupportMessage]', err);
+    res.status(500).json({ success: false, message: 'Wewnêtrzny b³¹d serwera' });
+  }
+};
+
+// GET /api/user/support - Pobieranie wiadomoœci wsparcia u¿ytkownika
+export const getMySupportMessages: RequestHandler = async (req, res) => {
+  try {
+    // const userId = req.user?.id; // Jeœli masz usera w sesji
+    const userId = req.session.userId!;
+
+    if (!userId) {
+      res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+    }
+
+    const messages = await SupportService.getMessagesByUser(userId);
+
+    SystemLog.info(`[getMySupportMessages]: ${messages}`);
+    res.status(200).json({ success: true, data: messages });
+  } catch (err) {
+    console.error('[supportController.getMySupportMessages]', err);
+    res.status(500).json({ success: false, message: 'Wewnêtrzny b³¹d serwera' });
+  }
+};
+
+// GET /api/admin/support - Pobieranie wszystkich zg³oszeñ wsparcia dla admina
+export const getAllSupportMessagesForAdmin: RequestHandler = async (req, res) => {
+  try {
+    // Pobierz parametry z query
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const status = req.query.status as string | undefined;
+    const query = req.query.query as string | undefined;
+
+    // Walidacja parametrów
+    if (page < 1 || limit < 1) {
+      res.status(400).json({ success: false, message: 'Nieprawid³owe parametry paginacji' });
+    }
+
+    // Pobierz tickety z paginacj¹
+    const { tickets, totalItems } = await SupportService.getAllMessages({
+      page,
+      limit,
+      status,
+      query,
+    });
+
+    // Oblicz totalPages
+    const totalPages = Math.ceil(totalItems / limit);
+
+    // SystemLog.warn(`Tickets: ${tickets.length}, Total Items: ${totalItems}, Total Pages: ${totalPages}`);
+
+    res.status(200).json({
+      success: true,
+      tickets,
+      totalItems,
+      totalPages,
+      currentPage: page,
+    });
+  } catch (err) {
+    console.error('[supportController.getAllSupportMessagesForAdmin]', err);
+    res.status(500).json({ success: false, message: 'Wewnêtrzny b³¹d serwera' });
+  }
+};
+
+// PATCH /api/admin/support/:id - Aktualizacja statusu zg³oszenia
+export const updateSupportMessageStatus: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, response } = req.body;
+    const adminId = req.session.userId!;
+
+    if (!adminId) {
+      res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+    }
+
+    if (!status) {
+      res.status(400).json({ success: false, message: 'Brak statusu' });
+    }
+
+    const updatedMessage = await SupportService.updateMessageStatus(id, status, response, adminId);
+
+    res.status(200).json({ success: true, data: updatedMessage });
+  } catch (err) {
+    console.error('[supportController.updateSupportMessageStatus]', err);
+    res.status(500).json({ success: false, message: 'Wewnêtrzny b³¹d serwera' });
+  }
+};
+
+
+// Zamkniêcie zg³oszenia przez u¿ytkownika
+export const closeTicketByUser: RequestHandler = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.session.userId!;
+  
+      if (!userId) {
+        res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+      }
+  
+      const closedTicket = await SupportService.closeTicket(id, userId);
+      res.status(200).json({ success: true, data: closedTicket });
+    } catch (err) {
+      console.error('[supportController.closeTicketByUser]', err);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Wewnêtrzny b³¹d serwera' 
+      });
+    }
+  };
+
+  // Zamkniêcie zg³oszenia przez admina
+export const closeTicketByAdmin: RequestHandler = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const adminId = req.session.userId!;
+  
+      if (!adminId) {
+        res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+      }
+  
+      const closedTicket = await SupportService.closeTicket(id, adminId, true);
+      res.status(200).json({ success: true, data: closedTicket });
+    } catch (err) {
+      console.error('[supportController.closeTicketByAdmin]', err);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Wewnêtrzny b³¹d serwera' 
+      });
+    }
+  };// services/support.service.ts
+
+import SupportTicket from '#ro/models/support/SupportTicket';
+import SupportMessage from '#ro/models/support/SupportTicketMessage';
+import { SupportMessageCreationAttributes } from '#ro/models/support/SupportMessageAttributes';
+import { SupportCreationTicketAttributes } from '#ro/models/support/SupportTicketAttributes';
+import Users from '#ro/models/Users';
+import { Op } from 'sequelize';
+
+// Tworzenie nowej wiadomoœci wsparcia
+// Funkcja do zapisania nowego zg³oszenia i wiadomoœci
+export async function saveMessage(userId: number, subject: string, message: string) {
+  // Tworzymy nowe zg³oszenie (ticket)
+  const newticket: SupportCreationTicketAttributes = {
+    user_id: userId,
+    subject,
+    status: 'new', // Status pocz¹tkowy zg³oszenia
+  };
+
+  const ticket = await SupportTicket.create(newticket);
+
+  // Tworzymy now¹ wiadomoœæ (message)
+  const newMessage: SupportMessageCreationAttributes = {
+    ticket_id: ticket.id,  // Powi¹zanie wiadomoœci z zg³oszeniem
+    sender_type: 'user', // Nadawca wiadomoœci to u¿ytkownik
+    sender_id: userId, // ID u¿ytkownika
+    message, // Treœæ wiadomoœci
+  };
+
+  await SupportMessage.create(newMessage);
+
+  return { success: true };
+}
+
+
+
+
+
+
+
+
+interface GetAllMessagesOptions {
+  page: number;
+  limit: number;
+  status?: string;
+  query?: string;
+}
+
+// Pobieranie wszystkich wiadomoœci dla admina
+export async function getAllMessages(options: GetAllMessagesOptions) {
+  const { page, limit, status, query } = options;
+
+  // Oblicz offset
+  const offset = (page - 1) * limit;
+
+  // Warunki filtrowania
+  const where: any = {};
+
+  // Filtr statusu
+  if (status && status !== 'all') {
+    where.status = status;
+  }
+
+  // Wyszukiwanie po subject lub user_id
+  if (query) {
+    where[Op.or] = [
+      { subject: { [Op.iLike]: `%${query}%` } },
+      { user_id: { [Op.eq]: parseInt(query) || 0 } },
+    ];
+  }
+
+  // Pobierz tickety z paginacj¹
+  const { rows: tickets, count: totalItems } = await SupportTicket.findAndCountAll({
+    where,
+    limit,
+    offset,
+    order: [['createdAt', 'DESC']],
+  });
+
+  return { tickets, totalItems };
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// services/support.service.ts
+export async function getMessagesByUser(userId: number) {
+  return await SupportTicket.findAll({
+    where: {
+      user_id: userId,
+    },
+    order: [['createdAt', 'DESC']], // Sortowanie zg³oszeñ
+    attributes: ['id', 'subject', 'status', 'createdAt'],
+    include: [
+      {
+        model: SupportMessage,
+        as: 'SupportMessages',
+        order: [['id', 'ASC']], // Sortowanie wiadomoœci po ID rosn¹co
+        attributes: ['id', 'sender_id', 'message', 'createdAt'],
+        separate: true, // Wymagane dla sortowania w included models
+        include: [
+          {
+            model: Users,
+            as: 'sender',
+            attributes: ['username', 'role'],
+          },
+        ],
+      },
+    ],
+  });
+}
+
+
+
+// services/support.service.ts
+
+export async function closeTicket(
+  ticketId: string | number,
+  userId: number,
+  isAdmin: boolean = false
+) {
+  const ticket = await SupportTicket.findByPk(ticketId);
+  
+  if (!ticket) {
+    throw new Error('Zg³oszenie nie zosta³o znalezione');
+  }
+
+  // Walidacja uprawnieñ
+  if (!isAdmin && ticket.user_id !== userId) {
+    throw new Error('Nie masz uprawnieñ do zamkniêcia tego zg³oszenia');
+  }
+
+  // Aktualizacja statusu
+  ticket.status = 'closed';
+  await ticket.save();
+
+  // Dodanie systemowej wiadomoœci o zamkniêciu
+  await SupportMessage.create({
+    ticket_id: ticket.id,
+    sender_type: isAdmin ? 'support' : 'user',
+    sender_id: userId,
+    message: isAdmin 
+      ? 'Zg³oszenie zosta³o zamkniête przez administratora'
+      : 'Zg³oszenie zosta³o zamkniête przez u¿ytkownika'
+  });
+
+  return ticket;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Aktualizacja statusu wiadomoœci wsparcia
+// Aktualizacja statusu wiadomoœci wsparcia
+
+export async function updateMessageStatus(
+  ticketId: string,
+  status: 'new' | 'open' | 'in_progress' | 'closed',
+  response: string | null,
+  adminId: number
+) {
+  const ticket = await SupportTicket.findByPk(ticketId);
+
+  if (!ticket) {
+    throw new Error('Zg³oszenie nie zosta³o znalezione');
+  }
+
+  // Zmieniamy status zg³oszenia
+  ticket.status = status;
+  await ticket.save();
+
+  // Jeœli admin odpisa³ – dodajemy wiadomoœæ do tabeli support_ticket_messages
+  if (response && response.trim().length > 0) {
+    await SupportMessage.create({
+      ticket_id: ticket.id,
+      sender_type: 'support',
+      sender_id: adminId,
+      message: response.trim(),
+    });
+  }
+
+  return ticket;
+}// routes/supportRoutes.ts
+
+import { Router } from 'express';
+import * as SupportController from '../controller/support.controller';
+
+const router = Router();
+
+// Œcie¿ki dla u¿ytkownika
+router.post('/', SupportController.createSupportMessage); // Pobierz listê zg³oszeñ  
+router.get('/', SupportController.getMySupportMessages); // Utwórz nowe zg³oszenie  
+router.patch('/:id/close', SupportController.closeTicketByUser); // Zaktualizuj zg³oszenie  
+
+// Œcie¿ki dla administratora
+router.get('/admin/tickets', SupportController.getAllSupportMessagesForAdmin);
+router.patch('/admin/tickets/:id/response', SupportController.updateSupportMessageStatus);
+
+export default router;

@@ -9,6 +9,7 @@ import type { UserRole } from '@/components/ui/RoleBadge';
 
 // types/user.ts
 export type User = {
+  id: number;
   username: string;
   role: UserRole;
   hasDocumentsEnabled?: boolean;

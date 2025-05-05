@@ -1,17 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface SupportMessage {
   id: number;
-  uder_id: number;
-  date: string;
-  message: string;
+  createdAt: Date;
   subject: string;
   status: string;
-  response: string;
-  responder_id: number;
-  createdAt: Date;
+  SupportMessages: {
+    id: number;
+    message: string;
+    sender_id: number;
+    sender: {
+      username: string;
+      role: string;
+    };
+  }[];
 }
 
 export function useSupportMessages() {
@@ -19,25 +23,26 @@ export function useSupportMessages() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchSupportMessages = async () => {
-      try {
-        const response = await fetch('/api/support');
-        if (!response.ok) throw new Error('Nie udało się pobrać wiadomości');
+  const fetchSupportMessages = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/support');
+      if (!response.ok) throw new Error('Nie udało się pobrać wiadomości');
 
-        const data = await response.json();
-        console.log(`data: ${JSON.stringify(data.data, null, 2)}`);
-        if (data.success) setResponses(data.data);
-        else setError('Nie udało się pobrać wiadomości');
-      } catch (err) {
-        setError('Wystąpił błąd przy pobieraniu wiadomości');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSupportMessages();
+      const data = await response.json();
+      console.log(`data: ${JSON.stringify(data.data, null, 2)}`);
+      if (data.success) setResponses(data.data);
+      else setError('Nie udało się pobrać wiadomości');
+    } catch (err) {
+      setError('Wystąpił błąd przy pobieraniu wiadomości');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  return { responses, loading, error };
+  useEffect(() => {
+    fetchSupportMessages();
+  }, [fetchSupportMessages]);
+
+  return { responses, loading, error, refetch: fetchSupportMessages };
 }

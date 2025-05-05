@@ -100,26 +100,26 @@ export async function getAllMessages(options: GetAllMessagesOptions) {
 
 
 
+// services/support.service.ts
 export async function getMessagesByUser(userId: number) {
   return await SupportTicket.findAll({
     where: {
       user_id: userId,
-      status: {
-        [Op.in]: ['new', 'open', 'in_progress'], // Filtrujemy tylko te statusy
-      },
     },
-    order: [['createdAt', 'DESC']], // Sortowanie wg daty zgłoszenia
-    attributes: ['id', 'status', 'subject', 'createdAt'],
+    order: [['createdAt', 'DESC']], // Sortowanie zgłoszeń
+    attributes: ['id', 'subject', 'status', 'createdAt'],
     include: [
       {
-        model: SupportMessage, // Włączamy tabelę wiadomości
-        as: 'SupportMessages', // alias 'SupportMessages' musi odpowiadać aliasowi w definicji relacji
-        attributes: ['sender_id', 'message'], // Pobieramy dane wiadomości
+        model: SupportMessage,
+        as: 'SupportMessages',
+        order: [['id', 'ASC']], // Sortowanie wiadomości po ID rosnąco
+        attributes: ['id', 'sender_id', 'message', 'createdAt'],
+        separate: true, // Wymagane dla sortowania w included models
         include: [
           {
-            model: Users, // Dołączamy użytkownika (nadawcę wiadomości)
-            as: 'sender', // Alias odpowiadający relacji w modelu
-            attributes: ['username', 'role'], // Pobieramy username i role nadawcy wiadomości
+            model: Users,
+            as: 'sender',
+            attributes: ['username', 'role'],
           },
         ],
       },
@@ -129,6 +129,40 @@ export async function getMessagesByUser(userId: number) {
 
 
 
+// services/support.service.ts
+
+export async function closeTicket(
+  ticketId: string | number,
+  userId: number,
+  isAdmin: boolean = false
+) {
+  const ticket = await SupportTicket.findByPk(ticketId);
+  
+  if (!ticket) {
+    throw new Error('Zgłoszenie nie zostało znalezione');
+  }
+
+  // Walidacja uprawnień
+  if (!isAdmin && ticket.user_id !== userId) {
+    throw new Error('Nie masz uprawnień do zamknięcia tego zgłoszenia');
+  }
+
+  // Aktualizacja statusu
+  ticket.status = 'closed';
+  await ticket.save();
+
+  // Dodanie systemowej wiadomości o zamknięciu
+  await SupportMessage.create({
+    ticket_id: ticket.id,
+    sender_type: isAdmin ? 'support' : 'user',
+    sender_id: userId,
+    message: isAdmin 
+      ? 'Zgłoszenie zostało zamknięte przez administratora'
+      : 'Zgłoszenie zostało zamknięte przez użytkownika'
+  });
+
+  return ticket;
+}
 
 
 

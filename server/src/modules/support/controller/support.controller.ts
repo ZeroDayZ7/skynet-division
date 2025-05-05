@@ -110,3 +110,46 @@ export const updateSupportMessageStatus: RequestHandler = async (req, res) => {
     res.status(500).json({ success: false, message: 'Wewnętrzny błąd serwera' });
   }
 };
+
+
+// Zamknięcie zgłoszenia przez użytkownika
+export const closeTicketByUser: RequestHandler = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const userId = req.session.userId!;
+  
+      if (!userId) {
+        res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+      }
+  
+      const closedTicket = await SupportService.closeTicket(id, userId);
+      res.status(200).json({ success: true, data: closedTicket });
+    } catch (err) {
+      console.error('[supportController.closeTicketByUser]', err);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Wewnętrzny błąd serwera' 
+      });
+    }
+  };
+
+  // Zamknięcie zgłoszenia przez admina
+export const closeTicketByAdmin: RequestHandler = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const adminId = req.session.userId!;
+  
+      if (!adminId) {
+        res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+      }
+  
+      const closedTicket = await SupportService.closeTicket(id, adminId, true);
+      res.status(200).json({ success: true, data: closedTicket });
+    } catch (err) {
+      console.error('[supportController.closeTicketByAdmin]', err);
+      res.status(500).json({ 
+        success: false, 
+        message: 'Wewnętrzny błąd serwera' 
+      });
+    }
+  };
