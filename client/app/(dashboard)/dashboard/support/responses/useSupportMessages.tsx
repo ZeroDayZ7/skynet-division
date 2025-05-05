@@ -26,7 +26,7 @@ export function useSupportMessages() {
         if (!response.ok) throw new Error('Nie udało się pobrać wiadomości');
 
         const data = await response.json();
-        console.log(`data: ${JSON.stringify(data.data)}`);
+        console.log(`data: ${JSON.stringify(data.data, null, 2)}`);
         if (data.success) setResponses(data.data);
         else setError('Nie udało się pobrać wiadomości');
       } catch (err) {

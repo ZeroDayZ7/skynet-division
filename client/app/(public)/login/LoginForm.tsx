@@ -99,7 +99,7 @@ const t = useTranslations('LoginPage');
           )}
         </Button>
         {/* CSRF token not ready message */}
-        {!csrfTokenReady && !isLoading && <p className="text-muted-foreground text-center text-xs">{t('LoginPage.csrfError')}</p>}
+        {!csrfTokenReady && !isLoading && <p className="text-muted-foreground text-center text-xs">{t('csrfError')}</p>}
       </form>
     </Form>
   );

@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import app from './app';
-import { initializePrisma, disconnectPrisma } from '#ro/config/prisma.config';
+// import { initializePrisma, disconnectPrisma } from '#ro/config/prisma.config';
 import { initializeSequelize, disconnectSequelize } from '#ro/config/sequelize.config';
 import SystemLog from '#ro/common/utils/SystemLog';
 

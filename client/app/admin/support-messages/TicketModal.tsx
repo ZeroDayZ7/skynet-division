@@ -66,7 +66,7 @@ const TicketModal = ({ ticket }: TicketModalProps) => {
             disabled={isSubmitting}
           >
             <option value="open">Open</option>
-            <option value="inprogress">In Progress</option>
+            <option value="in_progress">In Progress</option>
             <option value="closed">Closed</option>
           </select>
 

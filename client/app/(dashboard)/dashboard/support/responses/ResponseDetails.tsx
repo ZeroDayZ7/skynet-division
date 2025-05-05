@@ -4,9 +4,7 @@ import { Separator } from '@/components/ui/separator';
 import { MessageSquareReply, User, CalendarCheck, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-// import { UserRole, RankBadge } from '@/components/ui/ui/UserRoleBadge';
-import { UserRole, RankBadge } from "@/components/ui/RoleBadge/index";
-
+import { UserRole, RankBadge } from "@/components/ui/RoleBadge/index"; // Importuj RankBadge
 
 interface ResponseDetailsProps {
   response: {
@@ -59,7 +57,7 @@ export default function ResponseDetails({ response }: ResponseDetailsProps) {
 
         <div className="flex items-center gap-2">
           <p className="text-sm text-muted-foreground">Status:</p>
-          <Badge variant="outline">{t(`status.${response.status}`)}</Badge> {/* Tłumaczenie bezpośrednie */}
+          <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
         </div>
 
         <Separator />
@@ -81,14 +79,12 @@ export default function ResponseDetails({ response }: ResponseDetailsProps) {
           Udzielona przez: 
           {response.responder ? (
             <>
-             <RankBadge role={response.responder.username as UserRole}/>
-              {/* <span>{response.responder.username} </span> */}
+              <RankBadge role={response.responder.username as UserRole} />
               <RankBadge role={response.responder.role as UserRole} />
             </>
           ) : (
             'Nieznany'
           )}
-
         </div>
       </CardContent>
     </Card>

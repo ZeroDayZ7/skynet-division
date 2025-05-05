@@ -44,9 +44,20 @@ export function useLoginForm(): LoginFormState {
 
   useEffect(() => {
     if (csrfError) {
-      toast.error(`Błąd bezpieczeństwa: ${csrfError}. Odśwież stronę.`);
+      toast.error(`Brak tokenu CSRF lub błąd bezpieczeństwa.`, {
+        description: 'Odśwież stronę, lub spróbuj później',
+        duration: 7000
+      });
     }
   }, [csrfError]);
+
+  // toast.error(`${data.message}`, {
+  //   description: "Zaloguj się ponownie",
+  //   duration: 5000,
+  //   position: "top-center", // Toast pojawi się w prawym górnym rogu
+  //   richColors: true,
+  //   icon: "❌", // Można dodać ikonę
+  // });
 
   const toggleShowPassword = useCallback(() => {
     setShowPassword((prev) => !prev);

@@ -6,6 +6,8 @@ import UserNotification from '#ro/models/UserNotification';
 import NotificationTemplate from '#ro/modules/user/models/notification.template.model';
 import PermissionTemplate from '#ro/models/PermissionTemplate';
 import PermissionUser from '#ro/models/PermissionUser';
+import SupportTicket from '#ro/models/support/SupportTicket';
+import SupportMessage from '#ro/models/support/SupportTicketMessage';
 
 export default function defineUserAssociations() {
   // Relacja Users <-> UserData
@@ -39,7 +41,14 @@ export default function defineUserAssociations() {
     foreignKey: 'permission_id',
     as: 'template_permission',
   });
-  
+
+
+  SupportTicket.hasMany(SupportMessage, { foreignKey: 'ticket_id', as: 'SupportMessages' });
+  SupportTicket.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
+
+  SupportMessage.belongsTo(SupportTicket, { foreignKey: 'ticket_id', as: 'ticket' });
+  SupportMessage.belongsTo(Users, { foreignKey: 'sender_id', as: 'sender' });
+ 
 
 }
 

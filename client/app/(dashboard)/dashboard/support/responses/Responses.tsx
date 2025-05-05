@@ -1,4 +1,3 @@
-// components/Responses.tsx
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -15,7 +14,7 @@ import { useSupportMessages } from './useSupportMessages';
 import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import ResponseDetails from './ResponseDetails'; // Importuj komponent
+import ResponseDetails from './ResponseDetails';
 
 export default function Responses() {
   const t = useTranslations();
@@ -80,7 +79,7 @@ export default function Responses() {
         </Card>
       )}
 
-      {selectedResponse && <ResponseDetails response={selectedResponse} />} {/* Użyj komponentu */}
+      {selectedResponse && <ResponseDetails response={selectedResponse} />}
     </div>
   );
 }

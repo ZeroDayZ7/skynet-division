@@ -27,7 +27,6 @@ const validIp = isIP(ip) ? ip : '';
     // const tokenCSRF = generateCsrfToken();
 
     req.session.userId = user.id;
-    req.session.points = user.points ?? 0;
     req.session.role = user.role ?? 'user';
     req.session.username = user.username;
     delete req.session.csrfToken; // Usuń csrfToken z sesji, jeśli istnieje
@@ -41,11 +40,8 @@ const validIp = isIP(ip) ? ip : '';
     // setCSRFCookie(res, tokenCSRF);
 
     const responsePayload = {
-      success: true,
-      isAuthenticated: true,
       user: {
         role: user.role,
-        points: user.points,
         username: user.username,
         hasDocumentsEnabled: user.documents !== null,
       },

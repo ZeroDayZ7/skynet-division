@@ -8,7 +8,6 @@ import {
   Command,
   AlertTriangle,
   LifeBuoy,
-  Map,
   PieChart,
   Send,
   Settings2,

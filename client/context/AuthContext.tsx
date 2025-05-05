@@ -4,21 +4,25 @@ import { createContext, useState, useContext, ReactNode, useEffect, useCallback 
 import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
 import { getUnreadNotificationsCount } from '@/lib/api/notifications';
+import type { UserRole } from '@/components/ui/RoleBadge';
 
 
 // types/user.ts
 export type User = {
-  id: string;
   username: string;
-  role: 'user' | 'admin' | "superadmin";
+  role: UserRole;
+  hasDocumentsEnabled?: boolean;
+};
+
+export type FullUser = {
   points?: number;
   notifications?: number;
-  hasDocumentsEnabled?: boolean; // opcjonalnie, jeśli nie zawsze występuje
+
 };
 
 type AuthContextType = {
   user: User | null;
-  isAuthenticated: boolean | null;
+  fullUser: FullUser | null,
   isLoading: boolean;
   login: (user: User) => void;
   logout: () => void;
@@ -29,7 +33,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // Komponent dostarczający kontekst autoryzacji
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [fullUser, setFullUser] = useState<FullUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
@@ -48,17 +52,14 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     if (session) {
       console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
       setUser(session.user as User);
-      setIsAuthenticated(true);
       return true;
     } else {
       setUser(null);
-      setIsAuthenticated(false);
       return false;
     }
   } catch (err) {
     console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
     setUser(null);
-    setIsAuthenticated(false);
     return false;
   } finally {
     setIsLoading(false);
@@ -68,7 +69,7 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
 
   useEffect(() => {
     console.log(`[AuthContext][Initialize]: unreadNotificationsCount`);
-    if (!user || !isAuthenticated) return;
+    if (!user) return;
   
     const fetchNotifications = async () => {
       try {
@@ -81,21 +82,19 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     };
   
     fetchNotifications();
-  }, [isAuthenticated]);
+  }, [user]);
   
 
 
   // Logowanie użytkownika
   const login = (user: User) => {
     setUser(user);
-    setIsAuthenticated(true);
     // localStorage.setItem('user', JSON.stringify(user));
   };
 
   // Wylogowanie użytkownika
   const logout = () => {
     setUser(null);
-    setIsAuthenticated(false);
     // localStorage.removeItem('user');
   };
 
@@ -103,8 +102,8 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
   const updateNotificationsContext = (count: number) => {
     if (!user || typeof count !== 'number') return;
   
-    const updatedUser = { ...user, notifications: Math.max(0, count) }; // Bezpośrednie ustawienie pobranej liczby powiadomień
-    setUser(updatedUser);
+    const updatedUser = { ...fullUser, notifications: Math.max(0, count) }; // Bezpośrednie ustawienie pobranej liczby powiadomień
+    setFullUser(updatedUser);
     // localStorage.setItem('user', JSON.stringify(updatedUser)); // Opcjonalnie zapis do localStorage
   };
 
@@ -129,7 +128,7 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated,
+        fullUser,
         isLoading,
         login,
         logout,

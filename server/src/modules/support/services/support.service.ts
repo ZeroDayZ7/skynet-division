@@ -1,17 +1,42 @@
 // services/support.service.ts
 
-import Support from '#models/SupportMessages';
+import SupportTicket from '#ro/models/support/SupportTicket';
+import SupportMessage from '#ro/models/support/SupportTicketMessage';
+import { SupportMessageCreationAttributes } from '#ro/models/support/SupportMessageAttributes';
+import { SupportCreationTicketAttributes } from '#ro/models/support/SupportTicketAttributes';
 import Users from '#ro/models/Users';
 import { Op } from 'sequelize';
 
 // Tworzenie nowej wiadomości wsparcia
+// Funkcja do zapisania nowego zgłoszenia i wiadomości
 export async function saveMessage(userId: number, subject: string, message: string) {
-  return await Support.create({
+  // Tworzymy nowe zgłoszenie (ticket)
+  const newticket: SupportCreationTicketAttributes = {
     user_id: userId,
     subject,
-    message,
-  });
+    status: 'new', // Status początkowy zgłoszenia
+  };
+
+  const ticket = await SupportTicket.create(newticket);
+
+  // Tworzymy nową wiadomość (message)
+  const newMessage: SupportMessageCreationAttributes = {
+    ticket_id: ticket.id,  // Powiązanie wiadomości z zgłoszeniem
+    sender_type: 'user', // Nadawca wiadomości to użytkownik
+    sender_id: userId, // ID użytkownika
+    message, // Treść wiadomości
+  };
+
+  await SupportMessage.create(newMessage);
+
+  return { success: true };
 }
+
+
+
+
+
+
 
 
 interface GetAllMessagesOptions {
@@ -45,7 +70,7 @@ export async function getAllMessages(options: GetAllMessagesOptions) {
   }
 
   // Pobierz tickety z paginacją
-  const { rows: tickets, count: totalItems } = await Support.findAndCountAll({
+  const { rows: tickets, count: totalItems } = await SupportTicket.findAndCountAll({
     where,
     limit,
     offset,
@@ -55,38 +80,109 @@ export async function getAllMessages(options: GetAllMessagesOptions) {
   return { tickets, totalItems };
 }
 
-// Pobieranie wiadomości wsparcia dla danego użytkownika
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function getMessagesByUser(userId: number) {
-  return await Support.findAll({
-    where: { user_id: userId },
-    order: [['createdAt', 'DESC']],
-    attributes: {
-      exclude: ['responder_id'],
+  return await SupportTicket.findAll({
+    where: {
+      user_id: userId,
+      status: {
+        [Op.in]: ['new', 'open', 'in_progress'], // Filtrujemy tylko te statusy
+      },
     },
+    order: [['createdAt', 'DESC']], // Sortowanie wg daty zgłoszenia
+    attributes: ['id', 'status', 'subject', 'createdAt'],
     include: [
       {
-        model: Users,
-        as: 'responder', // to odnosi się do relacji, którą zdefiniowałeś w modelu Support
-        attributes: ['username', 'role'], // wybieramy tylko te pola, które chcesz pobrać
+        model: SupportMessage, // Włączamy tabelę wiadomości
+        as: 'SupportMessages', // alias 'SupportMessages' musi odpowiadać aliasowi w definicji relacji
+        attributes: ['sender_id', 'message'], // Pobieramy dane wiadomości
+        include: [
+          {
+            model: Users, // Dołączamy użytkownika (nadawcę wiadomości)
+            as: 'sender', // Alias odpowiadający relacji w modelu
+            attributes: ['username', 'role'], // Pobieramy username i role nadawcy wiadomości
+          },
+        ],
       },
     ],
   });
 }
 
 
-// Aktualizacja statusu wiadomości wsparcia
-export async function updateMessageStatus(id: string, status: 'open' | 'in_progress' | 'closed', response: string, responderId: number) {
-  const message = await Support.findByPk(id);
 
-  if (!message) {
-    throw new Error('Wiadomość nie została znaleziona');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Aktualizacja statusu wiadomości wsparcia
+// Aktualizacja statusu wiadomości wsparcia
+
+export async function updateMessageStatus(
+  ticketId: string,
+  status: 'new' | 'open' | 'in_progress' | 'closed',
+  response: string | null,
+  adminId: number
+) {
+  const ticket = await SupportTicket.findByPk(ticketId);
+
+  if (!ticket) {
+    throw new Error('Zgłoszenie nie zostało znalezione');
   }
 
-  message.status = status;
-  message.response = response;
-  message.responder_id = responderId;
+  // Zmieniamy status zgłoszenia
+  ticket.status = status;
+  await ticket.save();
 
-  await message.save();
+  // Jeśli admin odpisał – dodajemy wiadomość do tabeli support_ticket_messages
+  if (response && response.trim().length > 0) {
+    await SupportMessage.create({
+      ticket_id: ticket.id,
+      sender_type: 'support',
+      sender_id: adminId,
+      message: response.trim(),
+    });
+  }
 
-  return message;
+  return ticket;
 }
+
+

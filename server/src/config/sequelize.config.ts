@@ -29,6 +29,8 @@ export async function initializeSequelize() {
   try {
     await sequelize.authenticate();
     SystemLog.info('Sequelize connected to MySQL database...');
+    // await sequelize.sync({ alter: false }); // lub false
+    // console.log('Models synced');
   } catch (error) {
     SystemLog.error('Sequelize connection failed:', error);
     throw error;

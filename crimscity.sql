@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 29, 2025 at 05:52 PM
+-- Generation Time: May 05, 2025 at 05:45 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.4
 
@@ -66,20 +66,6 @@ CREATE TABLE `citizen_project_votes` (
   `user_id` int(11) NOT NULL,
   `project_id` int(10) UNSIGNED NOT NULL,
   `vote_type` enum('up','down') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `contact`
---
-
-CREATE TABLE `contact` (
-  `id` int(11) NOT NULL,
-  `email` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subject` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -164,7 +150,8 @@ INSERT INTO `permission_templates` (`id`, `key`, `description`, `createdAt`) VAL
 (4, 'userDelete', 'Usuwanie użytkowników', '2025-04-21 14:36:16'),
 (5, 'userBlock', 'Blokowanie lub odblokowanie użytkowników', '2025-04-21 14:36:16'),
 (6, 'userEdit', 'Edycja danych użytkownika', '2025-04-21 14:36:16'),
-(7, 'userEditPermissions', 'Edycja uprawnień użytkownika', '2025-04-21 14:36:16');
+(7, 'userEditPermissions', 'Edycja uprawnień użytkownika', '2025-04-21 14:36:16'),
+(8, 'supportMessages', 'Wiadomości', '2025-04-21 14:36:16');
 
 -- --------------------------------------------------------
 
@@ -209,7 +196,33 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
-('8XRy7fevklY9S3GUWFt1Xj9ERE7fOAq0', NULL, '2025-04-30 18:51:36', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-04-30T18:51:36.683Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"csrfToken\":\"1f520410-b325-49f9-b0f9-d3a047cb2d4f\"}', '2025-04-29 17:51:02', '2025-04-29 17:51:36');
+('FHBy63LsKnEGLZ6n6zRW5bqc47etFyil', NULL, '2025-05-04 21:20:35', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-05-04T21:19:35.445Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"csrfToken\":\"96cadd35-0c66-4602-9219-f8ccbe2e9ce5\"}', '2025-05-03 20:08:17', '2025-05-03 20:20:35'),
+('IuO-cVKiwr2v85B9SWjCRlZ3dnaPpTxy', NULL, '2025-05-05 11:31:29', '{\"cookie\":{\"originalMaxAge\":89999999,\"expires\":\"2025-05-05T11:01:01.386Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"points\":50,\"role\":\"superadmin\",\"username\":\"white_rose\",\"csrfToken\":\"ecf7ff0e-5f7d-4928-acad-8e5a95cddcc1\"}', '2025-05-03 20:38:31', '2025-05-04 10:31:29');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `support_messages`
+--
+
+CREATE TABLE `support_messages` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `user_id` int(11) UNSIGNED NOT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `message` text NOT NULL,
+  `status` enum('new','in_progress','closed','open') DEFAULT 'new',
+  `response` text,
+  `responder_id` int(11) UNSIGNED DEFAULT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `support_messages`
+--
+
+INSERT INTO `support_messages` (`id`, `user_id`, `subject`, `message`, `status`, `response`, `responder_id`, `createdAt`, `updatedAt`) VALUES
+(3, 77, 'technical', '123', 'in_progress', 'wal się', 77, '2025-05-04 00:55:53', '2025-05-04 06:10:00');
 
 -- --------------------------------------------------------
 
@@ -219,12 +232,13 @@ INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `update
 
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pass` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pin` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `points` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `activation_token` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `permissions` json DEFAULT NULL,
+  `activation_token` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `documents` json DEFAULT NULL,
   `login_count` int(10) UNSIGNED DEFAULT '0',
   `role` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `userBlock` tinyint(1) NOT NULL DEFAULT '0',
@@ -239,10 +253,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `pass`, `pin`, `points`, `activation_token`, `permissions`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
-(4, 'unknown2@example.com', '$2b$10$eMau1KnpQaBvqH7sTIx08OOmU4355hMgvfiw8OfaEdFQOXrQggRN2', NULL, 3, NULL, NULL, NULL, 'user', 1, 0, NULL, NULL, '2025-04-08 17:58:25', '2025-04-27 07:10:57'),
-(71, 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
-(77, 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', NULL, 50, NULL, '{\"userEdit\": {\"hidden\": false, \"enabled\": true}, \"viewLogs\": {\"hidden\": false, \"enabled\": false}, \"userBlock\": {\"hidden\": false, \"enabled\": true}, \"userCreate\": {\"hidden\": false, \"enabled\": true}, \"userDelete\": {\"hidden\": false, \"enabled\": true}, \"userManagement\": {\"hidden\": false, \"enabled\": true}, \"userEditPermissions\": {\"hidden\": false, \"enabled\": true}}', 1194, 'superadmin', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-29 17:50:08');
+INSERT INTO `users` (`id`, `username`, `email`, `pass`, `pin`, `points`, `activation_token`, `documents`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
+(71, '', 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
+(77, 'white_rose', 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$V/7WltFUv3IDzs/XCFpLvurO/3ePgyZxcaXR7Rbrg6CeQtP6P1z..', 50, NULL, '{\"documents\": {\"eid\": true, \"passport\": false, \"driving_license\": true}, \"test_features\": {\"betaAccess\": true, \"newsletter\": false}}', 1242, 'root', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-05-03 20:38:33'),
+(93, '', 'jan@example.com', '$2b$10$hiZkpGS7be4jrwQdLfegm.eAi7CgS0vEhfBITHTcWADiOtNhp4KTG', NULL, 50, NULL, NULL, 2, 'user', 0, 0, NULL, '::1', '2025-04-30 06:24:07', '2025-04-30 10:04:38');
 
 -- --------------------------------------------------------
 
@@ -328,11 +342,7 @@ CREATE TABLE `user_notifications` (
 --
 
 INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `createdAt`) VALUES
-(1, 77, 1, 1, '2025-04-16 10:16:06'),
-(2, 77, 2, 1, '2025-04-16 10:16:06'),
-(3, 77, 3, 1, '2025-04-16 10:16:06'),
-(4, 77, 4, 1, '2025-04-16 10:16:06'),
-(5, 77, 5, 1, '2025-04-16 10:16:06'),
+(1, 77, 1, 0, '2025-04-16 10:16:06'),
 (26, 90, 1, 1, '2025-04-28 09:58:35'),
 (27, 90, 1, 1, '2025-04-28 09:58:35'),
 (28, 90, 1, 1, '2025-04-28 09:58:35'),
@@ -354,7 +364,10 @@ INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`,
 (44, 90, 1, 1, '2025-04-28 09:58:35'),
 (45, 90, 1, 1, '2025-04-28 09:58:35'),
 (46, 90, 1, 1, '2025-04-28 09:58:35'),
-(47, 90, 1, 1, '2025-04-28 09:58:35');
+(47, 90, 1, 1, '2025-04-28 09:58:35'),
+(48, 91, 1, 0, '2025-04-29 19:10:16'),
+(49, 92, 1, 0, '2025-04-29 21:23:03'),
+(50, 93, 1, 1, '2025-04-30 06:48:00');
 
 -- --------------------------------------------------------
 
@@ -406,7 +419,8 @@ INSERT INTO `user_permission` (`id`, `permission_id`, `user_id`, `is_visible`, `
 (7, 4, 77, 1, 0),
 (8, 5, 77, 1, 1),
 (9, 6, 77, 1, 1),
-(10, 7, 77, 1, 1);
+(10, 7, 77, 1, 1),
+(11, 8, 77, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -477,12 +491,6 @@ ALTER TABLE `citizen_project_votes`
   ADD KEY `project_id` (`project_id`);
 
 --
--- Indexes for table `contact`
---
-ALTER TABLE `contact`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `document_types`
 --
 ALTER TABLE `document_types`
@@ -529,6 +537,14 @@ ALTER TABLE `session`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`sid`);
+
+--
+-- Indexes for table `support_messages`
+--
+ALTER TABLE `support_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usrid` (`user_id`),
+  ADD KEY `resid` (`responder_id`);
 
 --
 -- Indexes for table `users`
@@ -620,12 +636,6 @@ ALTER TABLE `citizen_project_votes`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `contact`
---
-ALTER TABLE `contact`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `job_postings`
 --
 ALTER TABLE `job_postings`
@@ -641,13 +651,19 @@ ALTER TABLE `notification_templates`
 -- AUTO_INCREMENT for table `permission_templates`
 --
 ALTER TABLE `permission_templates`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `support_messages`
+--
+ALTER TABLE `support_messages`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `user_data`
@@ -671,7 +687,7 @@ ALTER TABLE `user_eid_data`
 -- AUTO_INCREMENT for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `user_passport_data`
@@ -683,7 +699,7 @@ ALTER TABLE `user_passport_data`
 -- AUTO_INCREMENT for table `user_permission`
 --
 ALTER TABLE `user_permission`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_referrals`
@@ -712,6 +728,13 @@ ALTER TABLE `citizen_project_comments`
 --
 ALTER TABLE `job_postings`
   ADD CONSTRAINT `ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `support_messages`
+--
+ALTER TABLE `support_messages`
+  ADD CONSTRAINT `resid` FOREIGN KEY (`responder_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `usrid` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `user_eid_data`
