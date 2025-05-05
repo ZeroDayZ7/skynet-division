@@ -11,7 +11,7 @@ const SupportForm = dynamic(() => import('./contact/SupportForm'), {
   loading: () => <Loader />, // Pokazuje komunikat lub loader podczas ładowania
 });
 
-const Responses = dynamic(() => import('./responses/Responses'), {
+const Responses = dynamic(() => import('./responses/SupportTickets'), {
   ssr: false, // Zapewnia, że komponent jest renderowany tylko po stronie klienta
   loading: () => <Loader />, // Pokazuje komunikat lub loader podczas ładowania
 });

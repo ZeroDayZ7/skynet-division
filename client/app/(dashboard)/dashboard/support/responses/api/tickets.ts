@@ -1,5 +1,5 @@
 import { fetchClient } from '@/lib/fetchClient';
-import type { SupportTicket, TicketMessage } from '../support';
+import type { SupportTicket, TicketMessage } from '../types/support';
 
 export async function getTickets(status: string[], limit: number): Promise<SupportTicket[]> {
   const query = new URLSearchParams({
@@ -7,7 +7,7 @@ export async function getTickets(status: string[], limit: number): Promise<Suppo
     limit: limit.toString(),
   });
   const data = await fetchClient<{ success: boolean; data: SupportTicket[] }>(
-    `/support?${query}`
+    `/api/support?${query}`
   );
   return data.data;
 }
@@ -19,7 +19,8 @@ export async function getTicketDetails(id: number): Promise<{
   subject: string;
   createdAt: string;
 }> {
-  const data = await fetchClient<{ success: boolean; data: any }>(`/support/${id}`);
+  const data = await fetchClient<{ success: boolean; data: any }>(`/api/support/${id}`);
+  console.log(`data: ${JSON.stringify(data)}`);
   return data.data;
 }
 
@@ -28,4 +29,5 @@ export async function closeTicket(id: number, reason?: string): Promise<void> {
     method: 'PATCH',
     body: JSON.stringify({ reason }),
   });
+  
 }

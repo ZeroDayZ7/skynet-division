@@ -43,7 +43,7 @@ export default function defineUserAssociations() {
   });
 
 
-  SupportTicket.hasMany(SupportMessage, { foreignKey: 'ticket_id', as: 'SupportMessages' });
+  SupportTicket.hasMany(SupportMessage, { foreignKey: 'ticket_id', as: 'messages' });
   SupportTicket.belongsTo(Users, { foreignKey: 'user_id', as: 'user' });
 
   SupportMessage.belongsTo(SupportTicket, { foreignKey: 'ticket_id', as: 'ticket' });

@@ -1,2 +1,3 @@
 export * from './tickets';
-export * from './messages';
+export * from './fetchMessages';
+export * from './sendMessage';

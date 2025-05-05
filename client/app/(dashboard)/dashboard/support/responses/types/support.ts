@@ -1,3 +1,4 @@
+// support.types
 export interface SupportTicket {
     id: number;
     createdAt: string;
@@ -14,4 +15,14 @@ export interface SupportTicket {
       username: string;
       role: string;
     };
+  }
+  
+  export interface TicketDetails {
+    id: number;
+    messages: TicketMessage[];
+    status: 'new' | 'open' | 'in_progress' | 'closed';
+    subject: string;
+    createdAt: string;
+    loading: boolean;
+    error: string | null;
   }

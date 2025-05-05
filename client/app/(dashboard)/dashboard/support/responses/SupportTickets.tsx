@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,38 +12,64 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import TicketDetails from './TicketDetails';
-import { Badge } from '@/components/ui/badge';
 import { useSupportTickets } from './useSupportTickets';
+import { useAuth } from '@/context/AuthContext';
 
 /**
  * Komponent wyświetlający listę ticketów wsparcia użytkownika
  */
 export default function SupportTickets() {
   const t = useTranslations();
-  const { tickets, fetchTickets, fetchClosedTickets, ticketDetails } = useSupportTickets();
+  const {
+    tickets,
+    loading,
+    error,
+    fetchTickets,
+    fetchClosedTickets,
+    ticketDetails,
+    loadTicketDetails,
+  } = useSupportTickets();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [showClosed, setShowClosed] = useState(false);
-  const currentUserId = 93; // TODO: Pobierz z kontekstu autoryzacji
+  const { user } = useAuth();
+  const currentUserId = user?.id || 93; // Fallback na 93, jeśli brak usera
 
   useEffect(() => {
     fetchTickets(); // Pobierz aktywne tickety przy montowaniu
   }, [fetchTickets]);
 
-  const handleShowClosed = () => {
+  const handleSelectTicket = useCallback(
+    (id: number) => {
+      const isSame = selectedTicketId === id;
+      setSelectedTicketId(isSame ? null : id);
+      if (!isSame && !ticketDetails[id]) {
+        loadTicketDetails(id);
+      }
+    },
+    [selectedTicketId, ticketDetails, loadTicketDetails]
+  );
+
+  const handleShowClosed = useCallback(() => {
     setShowClosed(true);
     fetchClosedTickets();
-  };
+  }, [fetchClosedTickets]);
 
   const selectedTicket = selectedTicketId ? ticketDetails[selectedTicketId] : null;
 
+  if (loading && tickets.length === 0) return <Loader />;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+
   return (
     <div className="space-y-4">
-      {tickets.length === 0 && !showClosed ? (
-        <div>Nie masz żadnych aktywnych zgłoszeń wsparcia.</div>
+      {tickets.length === 0 ? (
+        <div className="text-center text-muted-foreground">
+          Nie masz żadnych zgłoszeń wsparcia.
+        </div>
       ) : (
         <Card>
           <CardHeader>
@@ -81,15 +107,8 @@ export default function SupportTickets() {
                         variant="outline"
                         size="sm"
                         className="w-[100px]"
-                        onClick={() => {
-                          setSelectedTicketId((prev) =>
-                            prev === ticket.id ? null : ticket.id
-                          );
-                          if (selectedTicketId !== ticket.id) {
-                            // Ładuj szczegóły tylko, jeśli ticket nie jest już wybrany
-                            useSupportTickets().loadTicketDetails(ticket.id);
-                          }
-                        }}
+                        onClick={() => handleSelectTicket(ticket.id)}
+                        aria-label={selectedTicketId === ticket.id ? 'Ukryj szczegóły' : 'Pokaż szczegóły'}
                       >
                         {selectedTicketId === ticket.id ? 'Ukryj' : 'Zobacz'}
                       </Button>
@@ -106,7 +125,7 @@ export default function SupportTickets() {
         <TicketDetails
           ticket={selectedTicket}
           currentUserId={currentUserId}
-          onStatusChange={() => fetchTickets()} // Odśwież listę po zmianie statusu
+          onStatusChange={() => fetchTickets()}
         />
       )}
     </div>

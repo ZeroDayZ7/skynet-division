@@ -12,6 +12,7 @@ class SupportTicket extends Model<SupportTicketAttributes, SupportCreationTicket
   public status!: 'new' | 'open' | 'in_progress' | 'closed';
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  SupportMessages: any;
 }
 
 

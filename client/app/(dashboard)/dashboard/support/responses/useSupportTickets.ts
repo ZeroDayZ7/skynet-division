@@ -1,36 +1,28 @@
 'use client';
 
 import { useReducer, useCallback } from 'react';
-import * as SupportApi from './supportApi';
-import { SupportTicket, TicketMessage } from './support';
+import * as SupportApi from './api';
+import { SupportTicket, TicketMessage, TicketDetails } from './types/support';
+import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 
 /**
- * Interfejs stanu ticketa
- */
-interface TicketDetails {
-  id: number;
-  messages: TicketMessage[];
-  status: 'new' | 'open' | 'in_progress' | 'closed';
-  subject: string;
-  createdAt: string;
-  loading: boolean;
-  error: string | null;
-}
-
-/**
- * Stan reducer'a - mapa ticketów według ID
+ * Stan reducer'a
  */
 type State = {
   tickets: SupportTicket[];
   ticketDetails: Record<number, TicketDetails>;
+  loading: boolean;
+  error: string | null;
 };
 
 /**
  * Akcje reducer'a
  */
 type Action =
+  | { type: 'START_FETCHING' }
   | { type: 'FETCH_TICKETS'; tickets: SupportTicket[] }
   | { type: 'FETCH_CLOSED_TICKETS'; tickets: SupportTicket[] }
+  | { type: 'SET_ERROR'; error: string }
   | { type: 'START_LOADING_DETAILS'; id: number }
   | {
       type: 'SET_TICKET_DETAILS';
@@ -47,16 +39,24 @@ type Action =
  */
 function reducer(state: State, action: Action): State {
   switch (action.type) {
+    case 'START_FETCHING':
+      return { ...state, loading: true, error: null };
     case 'FETCH_TICKETS':
       return {
         ...state,
         tickets: action.tickets,
+        loading: false,
+        error: null,
       };
     case 'FETCH_CLOSED_TICKETS':
       return {
         ...state,
         tickets: [...state.tickets, ...action.tickets],
+        loading: false,
+        error: null,
       };
+    case 'SET_ERROR':
+      return { ...state, loading: false, error: action.error };
     case 'START_LOADING_DETAILS':
       return {
         ...state,
@@ -75,21 +75,39 @@ function reducer(state: State, action: Action): State {
           },
         },
       };
-    case 'SET_TICKET_DETAILS':
-      return {
-        ...state,
-        ticketDetails: {
+      case 'SET_TICKET_DETAILS':
+        console.log('[ADD_MESSAGE] typeof action.id:', typeof action.id);
+console.log('[ADD_MESSAGE] Object.keys(state.ticketDetails):', Object.keys(state.ticketDetails));
+
+        console.log('[SET_TICKET_DETAILS] action.id:', action.id);
+        console.log('[SET_TICKET_DETAILS] action.data:', action.data);
+        console.log('[SET_TICKET_DETAILS] state.ticketDetails (before):', state.ticketDetails);
+        console.log('[SET_TICKET_DETAILS] state.tickets (before):', state.tickets);
+      
+        const updatedTicketDetails = {
           ...state.ticketDetails,
           [action.id]: {
             ...action.data,
             loading: false,
             error: null,
           },
-        },
-        tickets: state.tickets.map((ticket) =>
-          ticket.id === action.id ? { ...ticket, status: action.data.status } : ticket
-        ),
-      };
+        };
+      
+        const updatedTickets = state.tickets.map((ticket) =>
+          ticket.id === action.id
+            ? { ...ticket, status: action.data.status }
+            : ticket,
+        );
+      
+        console.log('[SET_TICKET_DETAILS] updatedTicketDetails:', updatedTicketDetails);
+        console.log('[SET_TICKET_DETAILS] updatedTickets:', updatedTickets);
+      
+        return {
+          ...state,
+          ticketDetails: updatedTicketDetails,
+          tickets: updatedTickets,
+        };
+      
     case 'SET_TICKET_ERROR':
       return {
         ...state,
@@ -108,22 +126,45 @@ function reducer(state: State, action: Action): State {
           },
         },
       };
-    case 'ADD_MESSAGE':
-      return {
-        ...state,
-        ticketDetails: {
-          ...state.ticketDetails,
-          [action.id]: {
-            ...state.ticketDetails[action.id],
-            messages: [...state.ticketDetails[action.id].messages, action.message],
+      case 'ADD_MESSAGE':
+        console.log('[ADD_MESSAGE] action.id:', action.id);
+        console.log('[ADD_MESSAGE] action.message:', action.message);
+      
+        const ticket = state.ticketDetails[action.id];
+        console.log('[ADD_MESSAGE] state.ticketDetails[action.id]:', ticket);
+      
+        if (!ticket) {
+          console.warn(`[ADD_MESSAGE] Brak ticketDetails dla id: ${action.id}, nie dodaję wiadomości.`);
+          return state;
+        }
+      
+        const updatedMessages = [...(ticket.messages || []), action.message];
+        console.log('[ADD_MESSAGE] updatedMessages:', updatedMessages);
+      
+        const updatedTicket = {
+          ...ticket,
+          messages: updatedMessages,
+        };
+        console.log('[ADD_MESSAGE] updatedTicket:', updatedTicket);
+      
+        const updatedState = {
+          ...state,
+          ticketDetails: {
+            ...state.ticketDetails,
+            [action.id]: updatedTicket,
           },
-        },
-      };
+        };
+        console.log('[ADD_MESSAGE] updatedState:', updatedState);
+      
+        return updatedState;
+      
     case 'SET_TICKET_STATUS':
       return {
         ...state,
         tickets: state.tickets.map((ticket) =>
-          ticket.id === action.id ? { ...ticket, status: action.status } : ticket
+          ticket.id === action.id
+            ? { ...ticket, status: action.status }
+            : ticket,
         ),
         ticketDetails: {
           ...state.ticketDetails,
@@ -134,7 +175,7 @@ function reducer(state: State, action: Action): State {
         },
       };
     case 'RESET':
-      return { tickets: [], ticketDetails: {} };
+      return { tickets: [], ticketDetails: {}, loading: false, error: null };
     default:
       return state;
   }
@@ -144,35 +185,42 @@ function reducer(state: State, action: Action): State {
  * Hook do zarządzania ticketami wsparcia
  */
 export function useSupportTickets() {
-  const [state, dispatch] = useReducer(reducer, { tickets: [], ticketDetails: {} });
+  const [state, dispatch] = useReducer(reducer, {
+    tickets: [],
+    ticketDetails: {},
+    loading: false,
+    error: null,
+  });
 
-  /**
-   * Pobieranie listy ticketów
-   */
-  const fetchTickets = useCallback(async (status: string[] = ['new', 'open', 'in_progress']) => {
-    try {
-      const tickets = await SupportApi.getTickets(status, 5);
-      dispatch({ type: 'FETCH_TICKETS', tickets });
-    } catch (err) {
-      console.error('Błąd pobierania ticketów:', err);
-    }
-  }, []);
+  const fetchTickets = useCallback(
+    async (status: string[] = ['new', 'open', 'in_progress']) => {
+      dispatch({ type: 'START_FETCHING' });
+      try {
+        const tickets = await SupportApi.getTickets(status, 5);
+        dispatch({ type: 'FETCH_TICKETS', tickets });
+      } catch (err) {
+        dispatch({
+          type: 'SET_ERROR',
+          error: 'Nie udało się pobrać ticketów.',
+        });
+      }
+    },
+    [],
+  );
 
-  /**
-   * Pobieranie zamkniętych ticketów
-   */
   const fetchClosedTickets = useCallback(async () => {
+    dispatch({ type: 'START_FETCHING' });
     try {
       const tickets = await SupportApi.getTickets(['closed'], 5);
       dispatch({ type: 'FETCH_CLOSED_TICKETS', tickets });
     } catch (err) {
-      console.error('Błąd pobierania zamkniętych ticketów:', err);
+      dispatch({
+        type: 'SET_ERROR',
+        error: 'Nie udało się pobrać zamkniętych ticketów.',
+      });
     }
   }, []);
 
-  /**
-   * Ładowanie szczegółów ticketa
-   */
   const loadTicketDetails = useCallback(async (id: number) => {
     dispatch({ type: 'START_LOADING_DETAILS', id });
     try {
@@ -183,7 +231,7 @@ export function useSupportTickets() {
         data: {
           id,
           messages: data.messages,
-          status: data.status,
+          status: data.status as SupportTicketStatus,
           subject: data.subject,
           createdAt: data.createdAt,
         },
@@ -197,21 +245,23 @@ export function useSupportTickets() {
     }
   }, []);
 
-  /**
-   * Wysyłanie wiadomości
-   */
   const sendMessage = useCallback(async (id: number, message: string) => {
     try {
-      const newMessage = await SupportApi.sendMessage(id, message);
-      dispatch({ type: 'ADD_MESSAGE', id, message: newMessage });
+      const response = await SupportApi.sendMessage(id, message);
+      // if (response) {
+      //   const messageData = response;
+      //   console.log(`Kurwa: ${JSON.stringify(messageData, null, 2)}`);
+      //   console.log(`id: ${id}`);
+      //   // return;
+      // }
+
+      dispatch({ type: 'ADD_MESSAGE', id, message: response });
+      return response;
     } catch (err) {
-      throw new Error('Błąd wysyłania wiadomości');
+      throw new Error(`Błąd wysyłania wiadomości ${err}`);
     }
   }, []);
 
-  /**
-   * Zamykanie ticketa
-   */
   const closeTicket = useCallback(async (id: number, reason?: string) => {
     try {
       await SupportApi.closeTicket(id, reason);
@@ -221,9 +271,6 @@ export function useSupportTickets() {
     }
   }, []);
 
-  /**
-   * Resetowanie stanu
-   */
   const reset = useCallback(() => {
     dispatch({ type: 'RESET' });
   }, []);
@@ -231,6 +278,8 @@ export function useSupportTickets() {
   return {
     tickets: state.tickets,
     ticketDetails: state.ticketDetails,
+    loading: state.loading,
+    error: state.error,
     fetchTickets,
     fetchClosedTickets,
     loadTicketDetails,

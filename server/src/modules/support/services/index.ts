@@ -4,3 +4,4 @@ export * from './getTicketsByUser';
 export * from './getTicketDetails';
 export * from './closeTicket';
 export * from './updateMessageStatus';
+export * from './addReplyToTicket';

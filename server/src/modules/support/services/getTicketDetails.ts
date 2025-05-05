@@ -1,4 +1,5 @@
 // services/support/getTicketDetails.ts
+import SystemLog from '#ro/common/utils/SystemLog';
 import SupportTicket from '#ro/models/support/SupportTicket';
 import SupportMessage from '#ro/models/support/SupportTicketMessage';
 import Users from '#ro/models/Users';
@@ -9,11 +10,11 @@ export async function getTicketDetails(ticketId: number, userId: number) {
       id: ticketId,
       user_id: userId,
     },
-    attributes: ['id', 'subject', 'status', 'createdAt'],
+    attributes: ['id', 'user_id' ,'subject', 'status', 'createdAt'],
     include: [
       {
         model: SupportMessage,
-        as: 'SupportMessages',
+        as: 'messages',
         separate: true,
         order: [['id', 'ASC']],
         attributes: ['id', 'sender_id', 'message', 'createdAt'],
@@ -27,8 +28,7 @@ export async function getTicketDetails(ticketId: number, userId: number) {
       },
     ],
   });
-
-  if (!ticket) throw new Error('Zgłoszenie nie istnieje lub brak dostępu.');
+  
 
   return ticket;
 }

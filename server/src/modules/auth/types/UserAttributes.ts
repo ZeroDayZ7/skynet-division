@@ -10,7 +10,7 @@ export interface UserAttributes {
   activation_token: string | null;
   documents?: Record<string, boolean> | null; // Dodane pole
   login_count: number;
-  role: string | null;
+  role: string;
   userBlock: boolean;
   loginAttempts: number | null;
   lastLoginAttempt: Date | null;

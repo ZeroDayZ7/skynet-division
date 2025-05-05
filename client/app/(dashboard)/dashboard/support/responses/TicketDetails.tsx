@@ -11,7 +11,8 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import ChatMessage from './ChatMessage';
 import { useSupportTickets } from './useSupportTickets';
-import { TicketDetails } from './support';
+
+import type { TicketDetails } from './types/support';
 
 /**
  * Interfejs właściwości komponentu TicketDetails
@@ -41,15 +42,17 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
 
   const handleSend = async () => {
     if (!message.trim()) return;
-
+    
     try {
       setIsSending(true);
-      await sendMessage(ticket.id, message);
+      console.log(`ticket.id: ${ticket.id}, message: ${message}`);
+      const res = await sendMessage(ticket.id, message);
+      // console.log(`[TicketDetails][response]: ${JSON.stringify(res, null, 2)}`);
       toast.success('Wiadomość wysłana.');
       setMessage('');
       onStatusChange?.();
-    } catch {
-      toast.error('Nie udało się wysłać wiadomości.');
+    } catch(error) {
+      toast.error(`Nie udało się wysłać wiadomości. ${error}`);
     } finally {
       setIsSending(false);
     }

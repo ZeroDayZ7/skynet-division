@@ -9,7 +9,7 @@ import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 import { checkRole } from '#ro/common/middlewares/role.middleware.js';
 
-
+// /api
 const router = express.Router();
 
 // Globalne endpointy
