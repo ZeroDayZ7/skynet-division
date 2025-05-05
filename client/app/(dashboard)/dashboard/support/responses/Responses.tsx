@@ -12,32 +12,59 @@ import {
   TableBody,
   TableCell,
 } from '@/components/ui/table';
-import { useSupportMessages } from './useSupportMessages';
+import { Badge } from '@/components/ui/badge';
 import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import ResponseDetails from './ResponseDetails';
-import { Badge } from '@/components/ui/badge';
+import { useTickets } from './useTickets';
+import { Ticket } from './ticket';
 
+/**
+ * Komponent wyświetlający listę ticketów użytkownika w tabeli
+ */
 export default function Responses() {
   const t = useTranslations();
-  const { responses, loading, error, refetch } = useSupportMessages(); // Dodaj refetch
-  const [selectedResponseId, setSelectedResponseId] = useState<number | null>(null);
+  const {
+    tickets,
+    loading,
+    error,
+    loadTickets,
+    loadClosedTickets,
+    refetch,
+  } = useTickets();
+  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const currentUserId = 93; // TODO: Pobierz z kontekstu autoryzacji (np. useAuth)
 
-  if (loading) return <Loader />;
-  if (error) return <div>{error}</div>;
+  // Wybór ticketu do wyświetlenia szczegółów
+  const handleSelectTicket = useCallback(
+    (id: number) => {
+      setSelectedTicketId((prev) => (prev === id ? null : id));
+    },
+    []
+  );
 
-  const selectedResponse = responses.find((r) => r.id === selectedResponseId);
+  // Ładowanie zamkniętych ticketów
+  const handleLoadClosed = useCallback(() => {
+    loadClosedTickets();
+  }, [loadClosedTickets]);
+
+  // Wybrany ticket do wyświetlenia szczegółów
+  const selectedTicket = tickets.find((ticket) => ticket.id === selectedTicketId);
+
+  if (loading && tickets.length === 0) return <Loader />;
+  if (error) return <div className="text-red-500">{error}</div>;
 
   return (
-    <div className="space-y-2">
-      {responses.length === 0 ? (
-        <div>Nie masz żadnych wiadomości wsparcia.</div>
+    <div className="space-y-4">
+      {tickets.length === 0 ? (
+        <div className="text-center text-muted-foreground">
+          Nie masz żadnych zgłoszeń wsparcia.
+        </div>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle>Twoje wiadomości do supportu</CardTitle>
+            <CardTitle>Twoje zgłoszenia wsparcia</CardTitle>
           </CardHeader>
           <CardContent className="overflow-x-auto">
             <Table>
@@ -51,32 +78,35 @@ export default function Responses() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {responses.map((response) => (
-                  <TableRow key={response.id} className="hover:bg-muted/50">
-                    <TableCell>{response.id}</TableCell>
+                {tickets.map((ticket: Ticket) => (
+                  <TableRow key={ticket.id} className="hover:bg-muted/50">
+                    <TableCell>{ticket.id}</TableCell>
                     <TableCell>
-                      {format(new Date(response.createdAt), 'dd.MM.yyyy', {
+                      {format(new Date(ticket.createdAt), 'dd.MM.yyyy', {
                         locale: pl,
                       })}
                     </TableCell>
                     <TableCell>
-                      {t(`support.topics.${response.subject}`)}
+                      {t(`support.topics.${ticket.subject}`)}
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">{t(`status.${response.status}`)}</Badge>
+                      <Badge variant="outline">
+                        {t(`status.${ticket.status}`)}
+                      </Badge>
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="outline"
                         size="sm"
                         className="w-[100px]"
-                        onClick={() =>
-                          setSelectedResponseId((prev) =>
-                            prev === response.id ? null : response.id,
-                          )
+                        onClick={() => handleSelectTicket(ticket.id)}
+                        aria-label={
+                          selectedTicketId === ticket.id
+                            ? 'Ukryj szczegóły zgłoszenia'
+                            : 'Pokaż szczegóły zgłoszenia'
                         }
                       >
-                        {selectedResponseId === response.id ? 'Ukryj' : 'Zobacz'}
+                        {selectedTicketId === ticket.id ? 'Ukryj' : 'Zobacz'}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -87,11 +117,24 @@ export default function Responses() {
         </Card>
       )}
 
-      {selectedResponse && (
+      {/* Przycisk do ładowania zamkniętych ticketów */}
+      <div className="flex justify-center">
+        <Button
+          variant="outline"
+          onClick={handleLoadClosed}
+          disabled={loading}
+          aria-label="Pokaż zamknięte zgłoszenia"
+        >
+          {loading ? 'Ładowanie...' : 'Pokaż zamknięte zgłoszenia'}
+        </Button>
+      </div>
+
+      {/* Szczegóły wybranego ticketu */}
+      {selectedTicket && (
         <ResponseDetails
-          response={selectedResponse}
+          response={selectedTicket}
           currentUserId={currentUserId}
-          onStatusChange={refetch} // Przekaz callback do odświeżania
+          onStatusChange={refetch}
         />
       )}
     </div>

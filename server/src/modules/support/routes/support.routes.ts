@@ -1,14 +1,15 @@
 // routes/supportRoutes.ts
 
 import { Router } from 'express';
-import * as SupportController from '../controller/support.controller';
+import * as SupportController from '../controller/index';
 
 const router = Router();
 
 // Ścieżki dla użytkownika
-router.post('/', SupportController.createSupportMessage); // Pobierz listę zgłoszeń  
-router.get('/', SupportController.getMySupportMessages); // Utwórz nowe zgłoszenie  
-router.patch('/:id/close', SupportController.closeTicketByUser); // Zaktualizuj zgłoszenie  
+router.get('/', SupportController.getMySupportTicket); // lista zgłoszeń (nagłówki)
+router.get('/:id', SupportController.getTicketDetailsById); // szczegóły zgłoszenia
+router.post('/', SupportController.createSupportTicket); // utwórz nowe zgłoszenie
+router.patch('/:id/close', SupportController.closeTicketByUser); // zamknij zgłoszenie
 
 // Ścieżki dla administratora
 router.get('/admin/tickets', SupportController.getAllSupportMessagesForAdmin);
