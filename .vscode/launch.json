@@ -32,13 +32,15 @@
       "internalConsoleOptions": "neverOpen",
       "runtimeArgs": [
         "--inspect",
+        // "--verbose",
         "--exec",
         "tsx",
         "-r",
         "dotenv/config"
       ],
       "env": {
-        "NODE_ENV": "development"
+        "NODE_ENV": "development",
+        // "TSX_TRACE": "1"
       }
     },
 
