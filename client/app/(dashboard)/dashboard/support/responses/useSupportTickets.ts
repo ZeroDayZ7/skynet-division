@@ -44,7 +44,7 @@ export function useSupportTickets(): UseSupportTicketsReturn {
           messages: [...(old.messages || []), newMessage],
         };
       });
-      queryClient.invalidateQueries({ queryKey: ['ticketDetails', id] });
+      // queryClient.invalidateQueries({ queryKey: ['ticketDetails', id] });
     },
   });
 

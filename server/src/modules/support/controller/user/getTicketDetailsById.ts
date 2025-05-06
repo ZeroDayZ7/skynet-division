@@ -21,7 +21,7 @@ export const getTicketDetailsById: RequestHandler = async (req, res) => {
       res.status(403).json({ success: false, message: 'Brak uprawnień' });
       return;
     }
-
+    SystemLog.debug(`TICKIET: ${JSON.stringify(ticket)}`);
     res.status(200).json({ success: true, data: ticket });
   } catch (err) {
     console.error('[supportController.getTicketDetails]', err);
