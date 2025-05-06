@@ -1,4 +1,5 @@
 import type { SupportTicketStatus } from "@/app/admin/support-messages/useSupportMessages";
+export type { SupportTicketStatus };
 
 export interface SupportTicket {
   id: number;
