@@ -25,7 +25,7 @@ export async function getTicketDetails(id: number): Promise<{
 }
 
 export async function closeTicket(id: number, reason?: string): Promise<void> {
-  await fetchClient(`/support/${id}/close`, {
+  await fetchClient(`/api/support/${id}/close`, {
     method: 'PATCH',
     body: JSON.stringify({ reason }),
   });
