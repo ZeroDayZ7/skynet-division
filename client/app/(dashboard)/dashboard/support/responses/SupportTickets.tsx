@@ -66,11 +66,7 @@ export default function SupportTickets() {
   }, [fetchClosedTickets]);
 
   // Połącz aktywne i zamknięte tickety, jeśli showClosed jest true
-  const displayedTickets = showClosed
-    ? [...tickets, ...closedTickets].filter(
-        (ticket, index, self) => self.findIndex(t => t.id === ticket.id) === index
-      )
-    : tickets;
+  const displayedTickets = showClosed ? closedTickets : tickets;
 
   // Debugowanie ticketów
   console.log('[SupportTickets] Tickets:', tickets);
