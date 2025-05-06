@@ -41,15 +41,18 @@ export async function getTicketDetails(id: number): Promise<{
   subject: string;
   createdAt: string;
 }> {
-  const data = await fetchClient<{
-    id: number;
-    messages: TicketMessage[];
-    status: string;
-    subject: string;
-    createdAt: string;
+  const response = await fetchClient<{
+    success: boolean;
+    data: {
+      id: number;
+      messages: TicketMessage[];
+      status: string;
+      subject: string;
+      createdAt: string;
+    };
   }>(`/api/support/${id}`);
-  console.log(`[getTicketDetails] Data: ${JSON.stringify(data)}`);
-  return data;
+  console.log(`[getTicketDetails] Data: ${JSON.stringify(response)}`);
+  return response.data; // Zwracamy tylko wewnętrzny obiekt data
 }
 
 export async function closeTicket(id: number, reason?: string): Promise<void> {

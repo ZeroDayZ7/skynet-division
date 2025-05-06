@@ -48,7 +48,9 @@ export default function PaginationControl({
 
   return (
     <Pagination>
-      <PaginationContent>
+      <PaginationContent 
+      className='w-auto max-auto justify-center'
+      >
         <PaginationItem>
           <PaginationPrevious
             href="#"

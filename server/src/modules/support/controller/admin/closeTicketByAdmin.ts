@@ -9,11 +9,11 @@ import SystemLog from '#ro/common/utils/SystemLog';
       const adminId = req.session.userId!;
   
       if (!adminId) {
-        res.status(401).json({ success: false, message: 'Nieautoryzowane' });
+        res.status(401).json({ message: 'Nieautoryzowane' });
       }
   
       const closedTicket = await SupportService.closeTicket(Number(id), adminId, reason === '' ? 'Brak wiadomość' : '');
-      res.status(200).json({ success: true, data: closedTicket });
+      res.status(200).json({ data: closedTicket });
     } catch (err) {
       console.error('[supportController.closeTicketByAdmin]', err);
       res.status(500).json({ 

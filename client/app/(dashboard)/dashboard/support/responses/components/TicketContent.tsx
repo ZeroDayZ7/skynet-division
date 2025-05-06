@@ -29,24 +29,26 @@ export function TicketContent({
   console.log('[TicketContent] Props:', { tickets, loading, error, currentPage, totalPages });
 
   return (
-    <div className="overflow-x-auto">
-      {loading && tickets.length === 0 ? (
-        <Loader />
-      ) : error ? (
-        <div className="text-center text-red-500">Błąd: {error}</div>
-      ) : tickets.length === 0 ? (
-        <div className="text-center text-muted-foreground">
-          {showClosed ? 'Nie masz żadnych zamkniętych zgłoszeń wsparcia.' : 'Nie masz żadnych aktywnych zgłoszeń wsparcia.'}
-        </div>
-      ) : (
-        <TicketTable
-          tickets={tickets}
-          selectedTicketId={selectedTicketId}
-          onSelectTicket={onSelectTicket}
-        />
-      )}
+    <div className="flex flex-col h-full min-h-[350px] overflow-x-auto">
+      <div className="flex-grow">
+        {loading && tickets.length === 0 ? (
+          <Loader />
+        ) : error ? (
+          <div className="text-center text-red-500">Błąd: {error}</div>
+        ) : tickets.length === 0 ? (
+          <div className="text-center text-muted-foreground">
+            {showClosed ? 'Brak zamkniętych zgłoszeń' : 'Brak aktywnych zgłoszeń'}
+          </div>
+        ) : (
+          <TicketTable
+            tickets={tickets}
+            selectedTicketId={selectedTicketId}
+            onSelectTicket={onSelectTicket}
+          />
+        )}
+      </div>
       {totalPages > 1 && (
-        <div className="mt-4">
+        <div className="mt-auto pt-4">
           <PaginationControl
             totalPages={totalPages}
             currentPage={currentPage}
@@ -57,4 +59,5 @@ export function TicketContent({
       )}
     </div>
   );
+  
 }

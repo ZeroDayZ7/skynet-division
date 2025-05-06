@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import * as SupportApi from '../api';
 import TicketDetails from '../TicketDetails';
-import { useSupportTickets } from '../hooks/useSupportTickets';
+import { useSupportTickets } from '../hooks/support-tickets';
 import { useAuth } from '@/context/AuthContext';
 import { TicketDetails as TicketDetailsType } from '../types/support';
 import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
@@ -21,6 +21,7 @@ export default function SupportTickets() {
   const [activePage, setActivePage] = useState(1);
   const [closedPage, setClosedPage] = useState(1);
   const defaultLimit = 5;
+  const scrollPositionRef = useRef<number>(0);
 
   const {
     tickets,
@@ -34,26 +35,43 @@ export default function SupportTickets() {
   } = useSupportTickets(activePage, closedPage, defaultLimit);
 
   const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useQuery<
-    TicketDetailsType,
-    Error
-  >({
-    queryKey: ['ticketDetails', selectedTicketId],
-    queryFn: async () => {
-      if (!selectedTicketId) throw new Error('No ticket ID selected');
-      const data = await SupportApi.getTicketDetails(selectedTicketId);
-      console.log('[SupportTickets] Fetched ticket details:', data);
-      return {
-        id: selectedTicketId,
-        messages: data.messages || [],
-        status: data.status as SupportTicketStatus,
-        subject: data.subject,
-        createdAt: data.createdAt,
-      };
-    },
-    enabled: !!selectedTicketId,
-    staleTime: 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
+  TicketDetailsType,
+  Error
+>({
+  queryKey: ['ticketDetails', selectedTicketId],
+  queryFn: async () => {
+    if (!selectedTicketId) throw new Error('No ticket ID selected');
+    const data = await SupportApi.getTicketDetails(selectedTicketId);
+    console.log('[SupportTickets] Fetched ticket details:', data);
+    return {
+      id: data.id,
+      messages: data.messages || [],
+      status: data.status as SupportTicketStatus,
+      subject: data.subject,
+      createdAt: data.createdAt,
+      loading: false,
+      error: null,
+    };
+  },
+  enabled: !!selectedTicketId,
+  staleTime: 60 * 1000,
+  refetchOnWindowFocus: false,
+});
+
+  // Zapis i przywracanie pozycji przewijania
+  useEffect(() => {
+    const handleScroll = () => {
+      scrollPositionRef.current = window.scrollY;
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      window.scrollTo(0, scrollPositionRef.current);
+    }
+  }, [loading]);
 
   const handleSelectTicket = useCallback(
     (id: number) => {
@@ -66,19 +84,20 @@ export default function SupportTickets() {
 
   const handleShowClosed = useCallback(() => {
     setShowClosed(true);
-    setClosedPage(1); // Reset strony przy zmianie widoku
+    setClosedPage(1);
     fetchClosedTickets(1, defaultLimit);
   }, [fetchClosedTickets]);
 
   const handleShowActive = useCallback(() => {
     setShowClosed(false);
-    setActivePage(1); // Reset strony przy zmianie widoku
+    setActivePage(1);
     fetchTickets(1, defaultLimit);
   }, [fetchTickets]);
 
   const handlePageChange = useCallback(
     (page: number) => {
       console.log('[SupportTickets] Page change:', { page, showClosed });
+      scrollPositionRef.current = window.scrollY; // Zapis pozycji przed zmianą strony
       if (showClosed) {
         setClosedPage(page);
         fetchClosedTickets(page, defaultLimit);
@@ -93,12 +112,6 @@ export default function SupportTickets() {
   const displayedTickets = showClosed ? closedTickets : tickets;
   const currentPage = showClosed ? closedTicketsPagination.currentPage : ticketsPagination.currentPage;
   const totalPages = showClosed ? closedTicketsPagination.totalPages : ticketsPagination.totalPages;
-
-  console.log('[SupportTickets] Tickets:', tickets);
-  console.log('[SupportTickets] Closed Tickets:', closedTickets);
-  console.log('[SupportTickets] Displayed Tickets:', displayedTickets);
-  console.log('[SupportTickets] Pagination:', { currentPage, totalPages });
-  console.log('[SupportTickets] Loading:', loading, 'Error:', error);
 
   return (
     <div className="space-y-4">

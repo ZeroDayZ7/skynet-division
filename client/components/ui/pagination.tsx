@@ -77,7 +77,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className=" visible sm:block">Previous</span>
+      <span className=" visible sm:block">Wstecz</span>
     </PaginationLink>
   )
 }
@@ -93,7 +93,7 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className=" visible sm:block">Next</span>
+      <span className=" visible sm:block">Dalej</span>
       <ChevronRightIcon />
     </PaginationLink>
   )
@@ -105,13 +105,13 @@ function PaginationEllipsis({
 }: React.ComponentProps<"span">) {
   return (
     <span
-      aria- visible
+      aria-hidden="true"
       data-slot="pagination-ellipsis"
       className={cn("flex size-9 items-center justify-center", className)}
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">Pokaż więcej</span>
     </span>
   )
 }
