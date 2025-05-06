@@ -10,6 +10,7 @@ declare module 'express-session' {
     notifications?: number;
     email?: string | null;
     username?: string | null;
+    hasDocumentsEnabled?: boolean;
     
   }
 }

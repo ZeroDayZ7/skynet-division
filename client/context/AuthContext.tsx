@@ -46,12 +46,13 @@ useEffect(() => {
 // Funkcja sprawdzająca autentykację
 const checkAuth = useCallback(async (): Promise<boolean> => {
   console.log('[AuthProvider][Initialize]: checkAuth');
-  setIsLoading(true);
 
   try {
-    const session = await getUserSession(); // ważne: sesja musi być dostępna w ciasteczkach
+    const session = await getUserSession();
+    console.log(JSON.stringify(session));
+    
     if (session) {
-      console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
+      // console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
       setUser(session.user as User);
       return true;
     } else {
@@ -69,13 +70,13 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
 
 
   useEffect(() => {
-    console.log(`[AuthContext][Initialize]: unreadNotificationsCount`);
+    // console.log(`[AuthContext][Initialize]: unreadNotificationsCount`);
     if (!user) return;
   
     const fetchNotifications = async () => {
       try {
         const unreadNotificationsCount = await getUnreadNotificationsCount();
-        console.log(`[AuthContext][unreadNotificationsCount]: ${JSON.stringify(unreadNotificationsCount)}`);
+        // console.log(`[AuthContext][unreadNotificationsCount]: ${JSON.stringify(unreadNotificationsCount)}`);
         updateNotificationsContext(unreadNotificationsCount);
       } catch (err) {
         console.error('[useEffect] Błąd podczas pobierania powiadomień:', err);

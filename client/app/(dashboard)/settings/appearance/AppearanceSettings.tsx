@@ -1,13 +1,25 @@
 'use client';
 
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Sun, Moon, Monitor } from 'lucide-react';
-import { useThemeManager } from '@/components/theme/useThemeManager';
-import type { Theme } from '@/components/theme/useThemeManager';
 
 export function AppearanceSettings() {
-  const { resolvedTheme, mounted, setTheme } = useThemeManager();
+  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // setTheme('system');
+
+  console.log(`resolverTheme: ${resolvedTheme}`);
+  console.log(`Theme: ${theme}`);
+  console.log(`systemTheme ${systemTheme}`);
+
+  // Po stronie klienta, by zapobiec błędom w SSR
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return null;
 
@@ -19,8 +31,8 @@ export function AppearanceSettings() {
       </legend>
 
       <RadioGroup
-        value={resolvedTheme === 'system' ? 'system' : resolvedTheme}
-        onValueChange={(value: Theme) => setTheme(value)}
+        value={theme ?? 'system'}
+        onValueChange={(value) => setTheme(value)}
         className="grid grid-cols-3 gap-4"
       >
         <div>

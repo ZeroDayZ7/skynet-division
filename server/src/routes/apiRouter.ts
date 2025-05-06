@@ -22,13 +22,8 @@ router.use('/support', supportRouter);
 router.use('/auth', authRouter);
 router.use('/users', usersRouter);
 router.use('/admin', 
-      csrfMiddleware, 
       authMiddleware, 
       checkRole(['admin', 'superadmin']),
       adminRouter);
-
-router.use((req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
 
 export default router;

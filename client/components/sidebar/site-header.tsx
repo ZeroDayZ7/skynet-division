@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { useSidebar } from "@/components/ui/sidebar"
 import { memo } from "react"
-import { ModeToggle } from "@/components/theme/theme-button"
+import { ThemeToggle } from "../theme/theme-button"
 import { EmergencyButton } from "../alarm/EmergencyButton"
 
 export function SiteHeader() {
@@ -23,7 +23,7 @@ export function SiteHeader() {
           <SidebarIcon />
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
-        <ModeToggle />
+        <ThemeToggle />
         <EmergencyButton />
         
       </div>

@@ -58,10 +58,4 @@ router.get('/permissions',
     authMiddleware, 
     getUserPermissionstToLoginController);
 
-
-// // Obsługuje inne niezdefiniowane trasy (404)
-// router.use((req, res) => {
-//   res.status(404).json({ error: 'Not Found' });
-// });
-
-export default router; // Zmiana na ESM
+export default router;

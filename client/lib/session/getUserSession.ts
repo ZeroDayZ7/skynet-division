@@ -2,7 +2,6 @@ import { fetchClient } from "@/lib/fetchClient";
 import { User } from '@/context/AuthContext';
 
 export type Session = {
-  isAuthenticated: true;
   user: User;
 };
 
@@ -14,7 +13,7 @@ export async function getUserSession(): Promise<Session | null> {
       credentials: 'include',
     });
 
-    if (session?.isAuthenticated && session?.user) {
+    if (session.user) {
       return session;
     }
 

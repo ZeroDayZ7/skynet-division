@@ -91,7 +91,7 @@ function useSidebarData() {
     ],
     navSecondary: [
       { title: t('secondary.support'), url: '/dashboard/support', icon: LifeBuoy },
-      { title: t('secondary.feedback'), url: '/dashboard/feed-back', icon: Send },
+      // { title: t('secondary.feedback'), url: '/dashboard/feed-back', icon: Send },
     ],
     projects: [
       { name: t('projects.emerygency'), url: '/intervention-group', icon: AlertTriangle },

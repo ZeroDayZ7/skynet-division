@@ -18,22 +18,21 @@ export const checkSessionStatus = async (
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     // Wyciągamy z sesji potrzebne wartości
-    const { userId: id, role, username, points, notifications } = req.session ?? {};
+    const { userId: id, role, username} = req.session ?? {};
 
     // Tworzymy obiekt użytkownika
     const user = {
       id,
       role,
       username,
-      points,
-      notifications,
     };
 
     // Tworzymy payload odpowiedzi
     const responsePayload = {
-      isAuthenticated: true,
       user,
     };
+
+    SystemLog.warn(responsePayload);
 
     // Wysyłamy odpowiedź
     res.status(200).json(responsePayload);

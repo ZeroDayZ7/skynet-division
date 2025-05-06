@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import SystemLog from '#ro/common/utils/SystemLog';
-import AppError, { ErrorType } from '#ro/common/errors/AppError';
+import AppError from '#ro/common/errors/AppError';
 
 export const checkRole = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {

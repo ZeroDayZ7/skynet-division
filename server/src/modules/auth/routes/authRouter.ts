@@ -28,17 +28,13 @@ router.post('/login',
 // Wylogowanie
 router.post('/logout', authMiddleware, logoutController);
 
-// router.post('/check-email', authMiddleware, checkEmailAvailabilityController);
-
-// Status
-
-
 // Rejestracja
 router.post('/register', 
     csrfMiddleware, 
     validateRequest<RegisterPayload>(RegisterSchema), 
     registerController);
 
+// Activate
 router.post('/activate', 
     csrfMiddleware,
     validateRequest<ActivationTokenPayload>(ActivationTokenSchema), 
@@ -51,12 +47,4 @@ router.post('/resend-activation',
     resendActivationController
 );
 
-// Odświeżanie tokena
-// router.post('/refresh-token', require('../endpoints/auth/refreshToken.js'));
-
-// Obsługuje inne niezdefiniowane trasy (404)
-// router.use((req, res) => {
-//   res.status(404).json({ error: 'Not Found' });
-// });
-
-export default router; // Zmiana na ESM
+export default router;
