@@ -26,7 +26,7 @@ router.post('/login',
 );
 
 // Wylogowanie
-router.post('/logout', authMiddleware, logoutController);
+router.post('/logout', logoutController);
 
 // Rejestracja
 router.post('/register', 

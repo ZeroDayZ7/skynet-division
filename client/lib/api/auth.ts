@@ -11,6 +11,7 @@ const LOGIN_ENDPOINT = '/api/auth/login';
 const REGISTER_ENDPOINT = '/api/auth/register';
 const ACTIVATE_ENDPOINT = '/api/auth/activate';
 const RESEND_ENDPOINT = '/api/auth/resend-activation';
+const LOGOUT_ENDPOINT = '/api/auth/logout';
 
 /**
  * Loguje użytkownika przy użyciu podanych danych uwierzytelniających.
@@ -78,5 +79,17 @@ export async function resendActivationCode(email: string, csrfToken: string): Pr
     method: 'POST',
     headers: { 'X-CSRF-Token': csrfToken },
     body: JSON.stringify({ email }),
+  });
+}
+
+/**
+ * Wylogowuje użytkownika, wysyłając żądanie do endpointu wylogowania.
+ * @param csrfToken - Token CSRF dla żądania.
+ * @returns Void w przypadku sukcesu.
+ * @throws Error w przypadku niepowodzenia wylogowania.
+ */
+export async function logout(): Promise<void> {
+  await fetchClient(LOGOUT_ENDPOINT, {
+    method: 'POST',
   });
 }

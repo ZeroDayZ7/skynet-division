@@ -30,32 +30,18 @@ import { useTranslations } from 'next-intl';
 import { NotificationBell } from './ui/NotificationBell'; // Wizualny komponent
 import Notifications from '../notification/Notification';
 import { UserPlanBadge } from './ui/UserPlanBadge';
+import LogoutDialog from '../auth/LogoutDialog';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, fullUser } = useAuth();
   const t = useTranslations('NavUser');
 
+  const [logoutOpen, setLogoutOpen] = useState(false);
   // Dodaj stan dla Dropdown Menu
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   // Stan dla Notification Sheet
   const [isNotificationSheetOpen, setIsNotificationSheetOpen] = useState(false);
-
-  // Handler otwierający Sheet - teraz zamyka najpierw dropdown
-  const handleOpenNotificationSheet = useCallback(() => {
-    setIsDropdownOpen(false); // Zamknij dropdown
-    setIsNotificationSheetOpen(true); 
-    // Użyj setTimeout z opóźnieniem 0ms lub kilkoma ms.
-    // Daje to przeglądarce szansę na przetworzenie zamknięcia dropdown.
-    // setTimeout(() => {
-    //   setIsNotificationSheetOpen(true); // Otwórz sheet po chwili
-    // }, 50); // Spróbuj z 0ms, jeśli błąd nadal występuje, zwiększ np. do 50ms
-  }, []);
-
-  // Handler do zarządzania stanem Sheet (przekazany do komponentu Notifications)
-  const handleNotificationSheetOpenChange = useCallback((open: boolean) => {
-    setIsNotificationSheetOpen(open);
-  }, []);
 
   return (
     <>
@@ -79,8 +65,6 @@ export function NavUser() {
               className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
               side={isMobile ? 'bottom' : 'right'}
               align="end"
-              // Domyślne zachowanie onInteractOutside i onEscapeKeyDown
-              // powinno działać poprawnie z kontrolowanym stanem
             >
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
@@ -108,7 +92,6 @@ export function NavUser() {
                     <span>{t('account')}</span>
                   </Link>
                 </DropdownMenuItem>
-
                 <DropdownMenuItem asChild>
                   <Link href="/admin">
                     <ShieldUser className="mr-2 h-4 w-4" />
@@ -122,25 +105,21 @@ export function NavUser() {
                     {t('settings')}
                   </Link>
                 </DropdownMenuItem>
-
-                {/* Element menu dla powiadomień - wywołuje handler zamykający dropdown i otwierający sheet */}
-                <DropdownMenuItem onSelect={handleOpenNotificationSheet}>
-                   {/* Upewnij się, że onSelect nie jest przerwane (preventDefault) */}
-                   {/* Domyślnie onSelect w kontrolowanym menu nie zamyka go samo,
-                       dlatego musimy ustawić setIsDropdownOpen(false) w handlerze */}
+                <DropdownMenuItem asChild>
+                <DropdownMenuItem onSelect={() => setIsNotificationSheetOpen(true)}>
                   <NotificationBell
                     count={fullUser?.notifications}
                     label={t('notifications')}
                   />
                 </DropdownMenuItem>
-
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/logout">
+                <DropdownMenuItem onSelect={() => setLogoutOpen(true)}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>{t('logout')}</span>
-                </Link>
+                </DropdownMenuItem>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -150,8 +129,11 @@ export function NavUser() {
       {/* Renderuj Sheet niezależnie od DropdownMenu */}
       <Notifications
         open={isNotificationSheetOpen}
-        onOpenChange={handleNotificationSheetOpenChange}
+        onOpenChange={setIsNotificationSheetOpen}
       />
+
+      <LogoutDialog open={logoutOpen} onOpenChange={setLogoutOpen} />
+
     </>
   );
 }
