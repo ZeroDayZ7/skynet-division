@@ -1,5 +1,0 @@
-
-UPDATE user_notifications SET is_read = 0 WHERE user_id = 77;
-RENAME TABLE stara_nazwa TO nowa_nazwa;
-
-

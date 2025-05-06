@@ -1,3 +1,4 @@
+// page.tsx
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,7 +12,7 @@ const SupportForm = dynamic(() => import('./contact/SupportForm'), {
   loading: () => <Loader />, // Pokazuje komunikat lub loader podczas ładowania
 });
 
-const Responses = dynamic(() => import('./responses/SupportTickets'), {
+const Responses = dynamic(() => import('./responses/components/SupportTickets'), {
   ssr: false, // Zapewnia, że komponent jest renderowany tylko po stronie klienta
   loading: () => <Loader />, // Pokazuje komunikat lub loader podczas ładowania
 });

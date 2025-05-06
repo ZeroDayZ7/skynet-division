@@ -1,0 +1,39 @@
+{
+    "your_support_tickets": "Twoje zgłoszenia wsparcia",
+    "show_closed_tickets": "Pokaż zamknięte zgłoszenia",
+    "show_only_active_tickets": "Pokaż tylko aktywne zgłoszenia",
+    "no_closed_support_tickets": "Nie masz żadnych zamkniętych zgłoszeń wsparcia.",
+    "no_active_support_tickets": "Nie masz żadnych aktywnych zgłoszeń wsparcia.",
+    "date": "Data",
+    "subject": "Temat",
+    "statusTitle": "Status",
+    "action": "Akcja",
+    "hide": "Ukryj",
+    "view": "Zobacz",
+    "hide_details": "Ukryj szczegóły",
+    "show_details": "Pokaż szczegóły",
+    "ticket_details": "Szczegóły zgloszenia",
+    "close_ticket": "Zamknij zgłoszenie",
+    "closing": "Zamykanie...",
+    "cancel": "Anuluj",
+    "confirm": "Potwierdź",
+    "enter_reason_for_closing": "Wpisz powód zamknięcia zgłoszenia...",
+    "conversation": "Rozmowa",
+    "no_messages_in_conversation": "Brak wiadomości w rozmowie.",
+    "enter_message": "Wpisz wiadomość...",
+    "send_message": "Wyślij wiadomość",
+    "sending": "Wysyłanie...",
+    "status": {
+      "new": "Nowy",
+      "open": "Otwarty",
+      "in_progress": "W trakcie",
+      "closed": "Zamknięty"
+    },
+    "support": {
+      "topics": {
+        "bug": "Błąd",
+        "feature": "Funkcjonalność",
+        "other": "Inne"
+      }
+    }
+  }

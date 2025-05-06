@@ -9,6 +9,7 @@ export async function getTickets(status: string[], limit: number): Promise<Suppo
   const data = await fetchClient<{ success: boolean; data: SupportTicket[] }>(
     `/api/support?${query}`
   );
+  console.log(`data2: ${JSON.stringify(data)}`);
   return data.data;
 }
 

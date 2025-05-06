@@ -11,11 +11,11 @@ import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { useQuery } from '@tanstack/react-query';
-import * as SupportApi from './api';
-import TicketDetails2 from './TicketDetails'; // Używamy TicketDetails2, jak w dostarczonym kodzie
-import { useSupportTickets } from './useSupportTickets';
+import * as SupportApi from '../api';
+import TicketDetails2 from '../TicketDetails'; // Używamy TicketDetails2, jak w dostarczonym kodzie
+import { useSupportTickets } from '../hooks/useSupportTickets';
 import { useAuth } from '@/context/AuthContext';
-import { SupportTicket, TicketDetails } from './types/support';
+import { SupportTicket, TicketDetails } from '../types/support';
 import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 
 export default function SupportTickets() {

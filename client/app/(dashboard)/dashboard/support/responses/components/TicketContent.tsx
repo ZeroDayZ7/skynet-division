@@ -1,9 +1,7 @@
-// src/components/TicketContent.tsx
 import { Loader } from '@/components/ui/loader';
 import type { SupportTicket } from '../types/support';
 import { TicketTable } from './TicketTable';
-import { useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
+import PaginationControl from '@/components/ui/ui/PaginationControl';
 
 interface TicketContentProps {
   tickets: SupportTicket[];
@@ -28,19 +26,17 @@ export function TicketContent({
   totalPages,
   onPageChange,
 }: TicketContentProps) {
-  const t = useTranslations();
+  console.log('[TicketContent] Props:', { tickets, loading, error, currentPage, totalPages });
 
   return (
     <div className="overflow-x-auto">
       {loading && tickets.length === 0 ? (
         <Loader />
       ) : error ? (
-        <div className="text-center text-red-500">{error}</div>
+        <div className="text-center text-red-500">Błąd: {error}</div>
       ) : tickets.length === 0 ? (
         <div className="text-center text-muted-foreground">
-          {showClosed
-            ? t('Nie masz żadnych zamkniętych zgłoszeń wsparcia.')
-            : t('Nie masz żadnych aktywnych zgłoszeń wsparcia.')}
+          {showClosed ? 'Nie masz żadnych zamkniętych zgłoszeń wsparcia.' : 'Nie masz żadnych aktywnych zgłoszeń wsparcia.'}
         </div>
       ) : (
         <TicketTable
@@ -50,24 +46,13 @@ export function TicketContent({
         />
       )}
       {totalPages > 1 && (
-        <div className="flex justify-between mt-4">
-          <Button
-            variant="outline"
-            disabled={currentPage === 1}
-            onClick={() => onPageChange(currentPage - 1)}
-          >
-            Poprzednia strona
-          </Button>
-          <span>
-            Strona {currentPage} z {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            disabled={currentPage === totalPages}
-            onClick={() => onPageChange(currentPage + 1)}
-          >
-            Następna strona
-          </Button>
+        <div className="mt-4">
+          <PaginationControl
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+            maxVisiblePages={5}
+          />
         </div>
       )}
     </div>

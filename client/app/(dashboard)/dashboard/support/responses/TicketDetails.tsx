@@ -1,3 +1,4 @@
+// src/components/TicketDetails.tsx
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -9,8 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { CalendarCheck, Info } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
-import ChatMessage from './ChatMessage';
-import { useSupportTickets } from './useSupportTickets';
+import ChatMessage from './components/ChatMessage';
+import { useSupportTickets } from './hooks/useSupportTickets';
 import type { TicketDetails } from './types/support';
 
 interface TicketDetailsProps {
@@ -34,7 +35,6 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
     timeStyle: 'short',
   });
 
-  // Funkcja do przewijania na dół kontenera wiadomości
   const scrollToBottom = () => {
     if (messagesContainerRef.current) {
       messagesContainerRef.current.scrollTo({
@@ -44,7 +44,6 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
     }
   };
 
-  // Przewiń na dół przy pierwszym renderowaniu lub gdy zmienia się liczba wiadomości
   useEffect(() => {
     scrollToBottom();
   }, [ticket.messages.length]);
@@ -55,13 +54,12 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
     try {
       setIsSending(true);
       await sendMessage({ id: ticket.id, message });
-      toast.success('Wiadomość wysłana.');
+      toast.success(t('send_message_success'));
       setMessage('');
       onStatusChange?.();
-      // Przewiń na dół po wysłaniu wiadomości
       scrollToBottom();
     } catch (error) {
-      toast.error(`Nie udało się wysłać wiadomości. ${error}`);
+      toast.error(t('send_message_error', { error }));
     } finally {
       setIsSending(false);
     }
@@ -76,12 +74,12 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
     try {
       setIsClosing(true);
       await closeTicket({ id: ticket.id, reason: closeReason || undefined });
-      toast.success('Zgłoszenie zamknięte.');
+      toast.success(t('close_ticket_success'));
       setCloseReason('');
       setShowCloseReason(false);
       onStatusChange?.();
     } catch {
-      toast.error('Nie udało się zamknąć zgłoszenia.');
+      toast.error(t('close_ticket_error'));
     } finally {
       setIsClosing(false);
     }
@@ -92,7 +90,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <Info className="h-5 w-5 text-muted-foreground" />
-          Szczegóły zgłoszenia ID ~ {ticket.id}
+          {t('ticket_details', { id: ticket.id })}
         </CardTitle>
         <CardDescription className="flex items-center gap-2 text-sm text-muted-foreground">
           <CalendarCheck className="h-4 w-4" />
@@ -102,15 +100,15 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
       <CardContent className="space-y-4">
         <div>
           <p className="text-sm text-muted-foreground mb-1">
-            Temat: {t(`support.topics.${ticket.subject}`)}
+            {t('subject')}: {ticket.subject}
           </p>
         </div>
 
         <Separator />
 
         <div className="flex items-center gap-2">
-          <p className="text-sm text-muted-foreground">Status:</p>
-          <Badge variant="outline">{t(`status.${ticket.status}`)}</Badge>
+          <p className="text-sm text-muted-foreground">{t('status')}:</p>
+          <Badge variant="outline">{t(`status`)}</Badge>
           {ticket.status !== 'closed' && (
             <Button
               variant="outline"
@@ -118,9 +116,9 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
               onClick={() => setShowCloseReason(true)}
               disabled={isClosing}
               className="ml-4"
-              aria-label="Zamknij zgłoszenie"
+              aria-label={t('close_ticket')}
             >
-              {isClosing ? 'Zamykanie...' : 'Zamknij zgłoszenie'}
+              {isClosing ? t('closing') : t('close_ticket')}
             </Button>
           )}
         </div>
@@ -128,7 +126,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
         {showCloseReason && ticket.status !== 'closed' && (
           <div className="space-y-2">
             <Textarea
-              placeholder="Wpisz powód zamknięcia zgłoszenia..."
+              placeholder={t('enter_reason_for_closing')}
               value={closeReason}
               onChange={(e) => setCloseReason(e.target.value)}
             />
@@ -138,13 +136,13 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
                 onClick={() => setShowCloseReason(false)}
                 disabled={isClosing}
               >
-                Anuluj
+                {t('cancel')}
               </Button>
               <Button
                 onClick={handleCloseTicket}
                 disabled={isClosing || (ticket.status === 'new' && !closeReason.trim())}
               >
-                Potwierdź
+                {t('confirm')}
               </Button>
             </div>
           </div>
@@ -153,7 +151,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
         <Separator />
 
         <div className="space-y-2">
-          <p className="text-sm text-muted-foreground mb-1">Rozmowa</p>
+          <p className="text-sm text-muted-foreground mb-1">{t('conversation')}</p>
           <div
             ref={messagesContainerRef}
             className="space-y-2 max-h-[400px] overflow-y-auto pr-2"
@@ -183,7 +181,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
                 />
               ))
             ) : (
-              <p className="italic text-muted-foreground">Brak wiadomości w rozmowie.</p>
+              <p className="italic text-muted-foreground">{t('no_messages_in_conversation')}</p>
             )}
           </div>
         </div>
@@ -193,7 +191,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
             <Separator />
             <div className="space-y-2">
               <Textarea
-                placeholder="Wpisz wiadomość..."
+                placeholder={t('enter_message')}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
               />
@@ -201,9 +199,9 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
                 <Button
                   onClick={handleSend}
                   disabled={isSending || !message.trim()}
-                  aria-label="Wyślij wiadomość"
+                  aria-label={t('send_message')}
                 >
-                  {isSending ? 'Wysyłanie...' : 'Wyślij wiadomość'}
+                  {isSending ? t('sending') : t('send_message')}
                 </Button>
               </div>
             </div>

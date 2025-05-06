@@ -1,5 +1,3 @@
-// src/components/TicketTable.tsx
-import { useTranslations } from 'next-intl';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,7 +6,6 @@ import { pl } from 'date-fns/locale';
 import type { SupportTicket } from '../types/support';
 import type { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 
-
 interface TicketTableProps {
   tickets: SupportTicket[];
   selectedTicketId: number | null;
@@ -16,8 +13,6 @@ interface TicketTableProps {
 }
 
 export function TicketTable({ tickets, selectedTicketId, onSelectTicket }: TicketTableProps) {
-  const t = useTranslations();
-
   const getBadgeVariant = (status: SupportTicketStatus) => {
     switch (status) {
       case 'new':
@@ -33,15 +28,28 @@ export function TicketTable({ tickets, selectedTicketId, onSelectTicket }: Ticke
     }
   };
 
+  const statusLabels: Record<SupportTicketStatus, string> = {
+    new: 'Nowy',
+    open: 'Otwarty',
+    in_progress: 'W trakcie',
+    closed: 'Zamknięty',
+  };
+
+  const subjectLabels: Record<string, string> = {
+    bug: 'Błąd',
+    feature: 'Funkcjonalność',
+    other: 'Inne',
+  };
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
-          <TableHead className="w-[120px]">{t('Data')}</TableHead>
-          <TableHead>{t('Temat')}</TableHead>
-          <TableHead>{t('Status')}</TableHead>
-          <TableHead className="text-right">{t('Akcja')}</TableHead>
+          <TableHead className="w-[120px]">Data</TableHead>
+          <TableHead>Temat</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead className="text-right">Akcja</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -51,10 +59,10 @@ export function TicketTable({ tickets, selectedTicketId, onSelectTicket }: Ticke
             <TableCell>
               {format(new Date(ticket.createdAt), 'dd.MM.yyyy', { locale: pl })}
             </TableCell>
-            <TableCell>{t(`support.topics.${ticket.subject}`)}</TableCell>
+            <TableCell>{subjectLabels[ticket.subject] || ticket.subject}</TableCell>
             <TableCell>
               <Badge variant={getBadgeVariant(ticket.status)}>
-                {t(`status.${ticket.status}`)}
+                {statusLabels[ticket.status] || ticket.status}
               </Badge>
             </TableCell>
             <TableCell className="text-right">
@@ -63,9 +71,9 @@ export function TicketTable({ tickets, selectedTicketId, onSelectTicket }: Ticke
                 size="sm"
                 className="w-[100px]"
                 onClick={() => onSelectTicket(ticket.id)}
-                aria-label={selectedTicketId === ticket.id ? t('Ukryj szczegóły') : t('Pokaż szczegóły')}
+                aria-label={selectedTicketId === ticket.id ? 'Ukryj szczegóły' : 'Pokaż szczegóły'}
               >
-                {selectedTicketId === ticket.id ? t('Ukryj') : t('Zobacz')}
+                {selectedTicketId === ticket.id ? 'Ukryj' : 'Zobacz'}
               </Button>
             </TableCell>
           </TableRow>

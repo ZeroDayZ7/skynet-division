@@ -1,19 +1,27 @@
-// src/components/SupportTickets.tsx
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { useQuery } from '@tanstack/react-query';
 import * as SupportApi from '../api';
-import TicketDetails2 from '../TicketDetails';
-import { useSupportTickets } from '../useSupportTickets';
+import TicketDetails from '../TicketDetails';
+import { useSupportTickets } from '../hooks/useSupportTickets';
 import { useAuth } from '@/context/AuthContext';
-import { SupportTicket, TicketDetails } from '../types/support';
+import { TicketDetails as TicketDetailsType } from '../types/support';
 import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 import { TicketHeader } from './TicketHeader';
 import { TicketContent } from './TicketContent';
+import { Loader } from '@/components/ui/loader';
 
 export default function SupportTickets() {
+  const { user } = useAuth();
+  const currentUserId = user?.id || 93;
+  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
+  const [showClosed, setShowClosed] = useState(false);
+  const [activePage, setActivePage] = useState(1);
+  const [closedPage, setClosedPage] = useState(1);
+  const defaultLimit = 5;
+
   const {
     tickets,
     closedTickets,
@@ -23,13 +31,12 @@ export default function SupportTickets() {
     error,
     fetchTickets,
     fetchClosedTickets,
-  } = useSupportTickets();
-  const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
-  const [showClosed, setShowClosed] = useState(false);
-  const { user } = useAuth();
-  const currentUserId = user?.id || 93;
+  } = useSupportTickets(activePage, closedPage, defaultLimit);
 
-  const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useQuery<TicketDetails, Error>({
+  const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useQuery<
+    TicketDetailsType,
+    Error
+  >({
     queryKey: ['ticketDetails', selectedTicketId],
     queryFn: async () => {
       if (!selectedTicketId) throw new Error('No ticket ID selected');
@@ -41,16 +48,12 @@ export default function SupportTickets() {
         status: data.status as SupportTicketStatus,
         subject: data.subject,
         createdAt: data.createdAt,
-        loading: false,
-        error: null,
       };
     },
     enabled: !!selectedTicketId,
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
   });
-
-  useEffect(() => {
-    fetchTickets();
-  }, [fetchTickets]);
 
   const handleSelectTicket = useCallback(
     (id: number) => {
@@ -63,40 +66,44 @@ export default function SupportTickets() {
 
   const handleShowClosed = useCallback(() => {
     setShowClosed(true);
-    console.log('[SupportTickets] Fetching closed tickets');
-    fetchClosedTickets.refetch();
+    setClosedPage(1); // Reset strony przy zmianie widoku
+    fetchClosedTickets(1, defaultLimit);
   }, [fetchClosedTickets]);
 
   const handleShowActive = useCallback(() => {
     setShowClosed(false);
-  }, []);
+    setActivePage(1); // Reset strony przy zmianie widoku
+    fetchTickets(1, defaultLimit);
+  }, [fetchTickets]);
+
+  const handlePageChange = useCallback(
+    (page: number) => {
+      console.log('[SupportTickets] Page change:', { page, showClosed });
+      if (showClosed) {
+        setClosedPage(page);
+        fetchClosedTickets(page, defaultLimit);
+      } else {
+        setActivePage(page);
+        fetchTickets(page, defaultLimit);
+      }
+    },
+    [showClosed, fetchTickets, fetchClosedTickets]
+  );
 
   const displayedTickets = showClosed ? closedTickets : tickets;
-
   const currentPage = showClosed ? closedTicketsPagination.currentPage : ticketsPagination.currentPage;
   const totalPages = showClosed ? closedTicketsPagination.totalPages : ticketsPagination.totalPages;
-
-  const handlePageChange = (page: number) => {
-    if (showClosed) {
-      fetchClosedTickets.refetch(page);
-    } else {
-      fetchTickets(page);
-    }
-  };
 
   console.log('[SupportTickets] Tickets:', tickets);
   console.log('[SupportTickets] Closed Tickets:', closedTickets);
   console.log('[SupportTickets] Displayed Tickets:', displayedTickets);
   console.log('[SupportTickets] Pagination:', { currentPage, totalPages });
+  console.log('[SupportTickets] Loading:', loading, 'Error:', error);
 
   return (
     <div className="space-y-4">
       <Card>
-        <TicketHeader
-          showClosed={showClosed}
-          onShowClosed={handleShowClosed}
-          onShowActive={handleShowActive}
-        />
+        <TicketHeader showClosed={showClosed} onShowClosed={handleShowClosed} onShowActive={handleShowActive} />
         <TicketContent
           tickets={displayedTickets}
           selectedTicketId={selectedTicketId}
@@ -115,12 +122,15 @@ export default function SupportTickets() {
           {ticketLoading && <Loader />}
           {ticketError && <div className="text-center text-red-500">{ticketError.message}</div>}
           {selectedTicket && (
-            <TicketDetails2
+            <TicketDetails
               ticket={selectedTicket}
               currentUserId={currentUserId}
               onStatusChange={() => {
-                fetchTickets();
-                if (showClosed) fetchClosedTickets.refetch();
+                if (showClosed) {
+                  fetchClosedTickets(closedPage, defaultLimit);
+                } else {
+                  fetchTickets(activePage, defaultLimit);
+                }
               }}
             />
           )}

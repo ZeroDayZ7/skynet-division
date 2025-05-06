@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Table, TableRow, TableCell, TableBody, TableHeader, TableHead } from '@/components/ui/table';
 import { SupportTicket, useSupportMessages, SupportTicketFilterStatus } from './useSupportMessages';
 import TicketModal from './TicketModal';
-import PaginationControl from '@/components/ui/ui/Pagination';
+import PaginationControl from '@/components/ui/ui/PaginationControl';
 
 const statusFilters = ['all', 'new', 'open', 'in_progress', 'closed'] as const;
 

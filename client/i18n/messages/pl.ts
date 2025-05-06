@@ -10,6 +10,7 @@ import dashboard from './pl/Dashboard.json'
 import userProfile from './pl/UserProfile.json'
 import statusTicket from './pl/StatusTicket.json'
 import supportTopics from './pl/SupportTopics.json'
+import support from './pl/Support.json'
 
 const messagesPL = {
     ...loginPage,
@@ -23,7 +24,8 @@ const messagesPL = {
     ...dashboard,
     ...userProfile,
     ...statusTicket,
-    ...supportTopics
+    ...supportTopics,
+    ...support
   }
 
 export default messagesPL;
