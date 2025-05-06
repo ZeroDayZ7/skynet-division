@@ -23,6 +23,7 @@ export function TicketDetailsCloseReason({
   return (
     <div className="space-y-2">
       <Textarea
+        name='reason'
         placeholder="Podaj powód zamknięcia zgłoszenia"
         value={closeReason}
         onChange={(e) => onCloseReasonChange(e.target.value)}

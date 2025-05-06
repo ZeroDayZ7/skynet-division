@@ -19,6 +19,7 @@ export function TicketDetailsMessageInput({
   return (
     <div className="space-y-2">
       <Textarea
+        name="reply"
         placeholder="Wpisz wiadomość"
         value={message}
         onChange={(e) => onMessageChange(e.target.value)}

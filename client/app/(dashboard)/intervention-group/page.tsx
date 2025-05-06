@@ -17,7 +17,7 @@ export default function InterventionGroupPage() {
   const reset = () => setStep(0);
 
   return (
-    <div className="w-3/4 mx-auto space-y-4">
+    <div className="xl:w-2/3 sm:w-full mx-auto space-y-4">
       <InterventionHeader />
 
       {step >= 1 && <AboutProject />}
