@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -11,21 +11,14 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import ChatMessage from './ChatMessage';
 import { useSupportTickets } from './useSupportTickets';
-
 import type { TicketDetails } from './types/support';
 
-/**
- * Interfejs właściwości komponentu TicketDetails
- */
 interface TicketDetailsProps {
   ticket: TicketDetails;
   currentUserId: number;
   onStatusChange?: () => void;
 }
 
-/**
- * Komponent wyświetlający szczegóły ticketa wsparcia
- */
 export default function TicketDetails({ ticket, currentUserId, onStatusChange }: TicketDetailsProps) {
   const t = useTranslations();
   const { sendMessage, closeTicket } = useSupportTickets();
@@ -34,24 +27,40 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
   const [isClosing, setIsClosing] = useState(false);
   const [closeReason, setCloseReason] = useState('');
   const [showCloseReason, setShowCloseReason] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const formattedDate = new Date(ticket.createdAt).toLocaleString('pl-PL', {
     dateStyle: 'medium',
     timeStyle: 'short',
   });
 
+  // Funkcja do przewijania na dół kontenera wiadomości
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  };
+
+  // Przewiń na dół przy pierwszym renderowaniu lub gdy zmienia się liczba wiadomości
+  useEffect(() => {
+    scrollToBottom();
+  }, [ticket.messages.length]);
+
   const handleSend = async () => {
     if (!message.trim()) return;
-    
+
     try {
       setIsSending(true);
-      console.log(`ticket.id: ${ticket.id}, message: ${message}`);
-      const res = await sendMessage(ticket.id, message);
-      // console.log(`[TicketDetails][response]: ${JSON.stringify(res, null, 2)}`);
+      await sendMessage({ id: ticket.id, message });
       toast.success('Wiadomość wysłana.');
       setMessage('');
       onStatusChange?.();
-    } catch(error) {
+      // Przewiń na dół po wysłaniu wiadomości
+      scrollToBottom();
+    } catch (error) {
       toast.error(`Nie udało się wysłać wiadomości. ${error}`);
     } finally {
       setIsSending(false);
@@ -66,7 +75,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
 
     try {
       setIsClosing(true);
-      await closeTicket(ticket.id, closeReason || undefined);
+      await closeTicket({ id: ticket.id, reason: closeReason || undefined });
       toast.success('Zgłoszenie zamknięte.');
       setCloseReason('');
       setShowCloseReason(false);
@@ -77,9 +86,6 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
       setIsClosing(false);
     }
   };
-
-  if (ticket.loading) return <div>Ładowanie...</div>;
-  if (ticket.error) return <div>{ticket.error}</div>;
 
   return (
     <Card className="w-full">
@@ -148,7 +154,10 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
 
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground mb-1">Rozmowa</p>
-          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+          <div
+            ref={messagesContainerRef}
+            className="space-y-2 max-h-[400px] overflow-y-auto pr-2"
+          >
             {ticket.messages.length > 0 ? (
               ticket.messages.map((msg, index) => (
                 <ChatMessage
@@ -161,7 +170,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
                       username: msg.sender.username,
                       role: msg.sender.role,
                     },
-                    createdAt: msg.createdAt, // Zakładamy, że backend zwraca createdAt
+                    createdAt: msg.createdAt,
                   }}
                   currentUserId={currentUserId}
                   showUsername={

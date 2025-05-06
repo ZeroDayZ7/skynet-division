@@ -1,65 +1,66 @@
+// src/components/SupportTickets.tsx
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from '@/components/ui/table';
+import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Loader } from '@/components/ui/loader';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
-import TicketDetails from './TicketDetails';
+import { useQuery } from '@tanstack/react-query';
+import * as SupportApi from './api';
+import TicketDetails2 from './TicketDetails';
 import { useSupportTickets } from './useSupportTickets';
 import { useAuth } from '@/context/AuthContext';
+import { SupportTicket, TicketDetails } from './types/support';
+import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 
-/**
- * Komponent wyświetlający listę ticketów wsparcia użytkownika
- */
 export default function SupportTickets() {
   const t = useTranslations();
-  const {
-    tickets,
-    loading,
-    error,
-    fetchTickets,
-    fetchClosedTickets,
-    ticketDetails,
-    loadTicketDetails,
-  } = useSupportTickets();
+  const { tickets, loading, error, fetchTickets, fetchClosedTickets } = useSupportTickets();
   const [selectedTicketId, setSelectedTicketId] = useState<number | null>(null);
   const [showClosed, setShowClosed] = useState(false);
   const { user } = useAuth();
-  const currentUserId = user?.id || 93; // Fallback na 93, jeśli brak usera
+  const currentUserId = user?.id || 93;
+
+  // Pobieranie szczegółów wybranego ticketa
+  const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useQuery<TicketDetails, Error>({
+    queryKey: ['ticketDetails', selectedTicketId],
+    queryFn: async () => {
+      if (!selectedTicketId) throw new Error('No ticket ID selected');
+      const data = await SupportApi.getTicketDetails(selectedTicketId);
+      return {
+        id: selectedTicketId,
+        messages: data.messages,
+        status: data.status as SupportTicketStatus,
+        subject: data.subject,
+        createdAt: data.createdAt,
+        loading: false,
+        error: null,
+      };
+    },
+    enabled: !!selectedTicketId, // Wykonaj zapytanie tylko, gdy selectedTicketId istnieje
+  });
 
   useEffect(() => {
-    fetchTickets(); // Pobierz aktywne tickety przy montowaniu
+    fetchTickets();
   }, [fetchTickets]);
 
   const handleSelectTicket = useCallback(
     (id: number) => {
       const isSame = selectedTicketId === id;
       setSelectedTicketId(isSame ? null : id);
-      if (!isSame && !ticketDetails[id]) {
-        loadTicketDetails(id);
-      }
     },
-    [selectedTicketId, ticketDetails, loadTicketDetails]
+    [selectedTicketId]
   );
 
   const handleShowClosed = useCallback(() => {
     setShowClosed(true);
     fetchClosedTickets();
   }, [fetchClosedTickets]);
-
-  const selectedTicket = selectedTicketId ? ticketDetails[selectedTicketId] : null;
 
   if (loading && tickets.length === 0) return <Loader />;
   if (error) return <div className="text-center text-red-500">{error}</div>;
@@ -92,7 +93,7 @@ export default function SupportTickets() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tickets.map((ticket) => (
+                {tickets.map((ticket: SupportTicket) => (
                   <TableRow key={ticket.id} className="hover:bg-muted/50">
                     <TableCell>{ticket.id}</TableCell>
                     <TableCell>
@@ -121,12 +122,18 @@ export default function SupportTickets() {
         </Card>
       )}
 
-      {selectedTicket && (
-        <TicketDetails
-          ticket={selectedTicket}
-          currentUserId={currentUserId}
-          onStatusChange={() => fetchTickets()}
-        />
+      {selectedTicketId && (
+        <div>
+          {ticketLoading && <Loader />}
+          {ticketError && <div className="text-center text-red-500">{ticketError.message}</div>}
+          {selectedTicket && (
+            <TicketDetails2
+              ticket={selectedTicket}
+              currentUserId={currentUserId}
+              onStatusChange={() => fetchTickets()}
+            />
+          )}
+        </div>
       )}
     </div>
   );
