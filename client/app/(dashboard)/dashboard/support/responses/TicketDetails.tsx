@@ -107,8 +107,8 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
         <Separator />
 
         <div className="flex items-center gap-2">
-          <p className="text-sm text-muted-foreground">{t('status')}:</p>
-          <Badge variant="outline">{t(`status`)}</Badge>
+          <p className="text-sm text-muted-foreground">Status:</p>
+          <Badge variant="outline">{ticket.status}</Badge>
           {ticket.status !== 'closed' && (
             <Button
               variant="outline"

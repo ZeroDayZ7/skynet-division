@@ -41,7 +41,7 @@ export function useSupportTickets(activePage: number = 1, closedPage: number = 1
       };
     },
     staleTime: 60 * 1000,
-    cacheTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: false,
     keepPreviousData: true, // Zachowuje poprzednie dane podczas ładowania nowej strony
