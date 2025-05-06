@@ -1,7 +1,7 @@
 {
   "SupportPage": {
     "title": "Wsparcie techniczne",
-    "description": "Masz pytania lub problemy? Wypełnij formularz, a nasz zespół pomoże Ci tak szybko, jak to możliwe.",
+    "description": "Wypełnij formularz, a nasz zespół pomoże Ci tak szybko, jak to możliwe.",
     "form": {
       "nameLabel": "Twoja nazwa użytkownika",
       "namePlaceholder": "Nazwa użytkownika",

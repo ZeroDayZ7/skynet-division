@@ -1,19 +1,35 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { fetchClient } from '@/lib/fetchClient';
-import { toast } from 'sonner';
 import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import { fetchClient } from '@/lib/fetchClient';
 import { useCsrfToken } from '@/hooks/useCsrfToken';
 
+const SupportSchema = z.object({
+  topic: z.string().min(1, 'Wybierz temat'),
+  message: z.string().min(1, 'Wiadomość nie może być pusta'),
+});
+
+export type SupportFormData = z.infer<typeof SupportSchema>;
+
 export function useSupportForm() {
-  const { csrfToken, error: csrfError } = useCsrfToken();
-  const { user } = useAuth();
-  const [message, setMessage] = useState('');
-  const [topic, setTopic] = useState('');
-  const [loading, setLoading] = useState(false);
   const t = useTranslations('SupportPage');
+  const { user } = useAuth();
+  const { csrfToken, error: csrfError } = useCsrfToken();
+
+  const form = useForm<SupportFormData>({
+    resolver: zodResolver(SupportSchema),
+    defaultValues: {
+      topic: '',
+      message: '',
+    },
+    mode: 'onBlur'
+  });
 
   useEffect(() => {
     if (csrfError) {
@@ -21,23 +37,12 @@ export function useSupportForm() {
     }
   }, [csrfError]);
 
-  const handleSubmit = async () => {
+  const onSubmit = async (data: SupportFormData) => {
     if (!csrfToken || csrfError) {
       toast.error('Brak tokenu CSRF lub błąd bezpieczeństwa. Odśwież stronę.');
       return;
     }
 
-    if (!topic) {
-      toast.error(t('errors.emptyTopic'));
-      return;
-    }
-
-    if (!message.trim()) {
-      toast.error(t('errors.emptyMessage'));
-      return;
-    }
-
-    setLoading(true);
     try {
       await fetchClient('/api/support', {
         method: 'POST',
@@ -46,32 +51,21 @@ export function useSupportForm() {
         },
         body: JSON.stringify({
           name: user?.username,
-          subject: topic,
-          message,
+          subject: data.topic,
+          message: data.message,
         }),
       });
       toast.success(t('successMessage'));
-      setMessage('');
-      setTopic('');
+      form.reset();
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        toast.error(err.message || t('errors.genericError'));
-      } else {
-        toast.error(t('errors.genericError'));
-      }
-    } finally {
-        setLoading(false);
+      toast.error(err instanceof Error ? err.message : t('errors.genericError'));
     }
   };
 
   return {
     user,
-    message,
-    setMessage,
-    topic,
-    setTopic,
-    loading,
-    handleSubmit,
+    form,
     t,
+    onSubmit,
   };
 }

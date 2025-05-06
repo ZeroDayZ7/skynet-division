@@ -13,6 +13,9 @@ export interface UseSupportTicketsReturn {
   sendMessage: (args: { id: number; message: string }) => Promise<TicketMessage>;
   closeTicket: (args: { id: number; reason?: string }) => Promise<void>;
   reset: () => void;
+  selectedTicket?: TicketDetails; // Dodajemy pole dla szczegółów zgłoszenia
+  ticketLoading: boolean; // Stan ładowania
+  ticketError: Error | null; // Błąd, jeśli występuje
 }
 
 export type FetchTicketsData = {

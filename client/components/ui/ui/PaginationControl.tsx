@@ -48,9 +48,7 @@ export default function PaginationControl({
 
   return (
     <Pagination>
-      <PaginationContent 
-      className='w-auto max-auto justify-center'
-      >
+      <PaginationContent className="max-auto w-auto justify-center">
         <PaginationItem>
           <PaginationPrevious
             href="#"
@@ -58,6 +56,10 @@ export default function PaginationControl({
               e.preventDefault();
               if (currentPage > 1) onPageChange(currentPage - 1);
             }}
+            aria-disabled={currentPage === 1}
+            className={
+              currentPage === 1 ? 'pointer-events-none opacity-50' : ''
+            }
           />
         </PaginationItem>
 
@@ -76,11 +78,12 @@ export default function PaginationControl({
           </PaginationItem>
         ))}
 
-        {totalPages > maxVisiblePages && currentPage + Math.floor(maxVisiblePages / 2) < totalPages && (
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-        )}
+        {totalPages > maxVisiblePages &&
+          currentPage + Math.floor(maxVisiblePages / 2) < totalPages && (
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+          )}
 
         <PaginationItem>
           <PaginationNext
@@ -89,6 +92,10 @@ export default function PaginationControl({
               e.preventDefault();
               if (currentPage < totalPages) onPageChange(currentPage + 1);
             }}
+            aria-disabled={currentPage === totalPages}
+            className={
+              currentPage === totalPages ? 'pointer-events-none opacity-50' : ''
+            }
           />
         </PaginationItem>
       </PaginationContent>

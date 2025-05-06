@@ -32,7 +32,7 @@ export default function ChatMessage({
   const isCurrentUser = message.sender_id === currentUserId;
   const isSupport = message.sender.role === 'admin' || message.sender.role === 'root';
   const formattedTime = format(new Date(message.createdAt), 'HH:mm', { locale: pl });
-
+                                                            //dd.MM.yyyy HH:mm
   return (
     <div
       className={cn(

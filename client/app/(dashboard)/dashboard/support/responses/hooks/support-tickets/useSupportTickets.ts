@@ -6,12 +6,14 @@ import { useSendMessage } from './sendMessage';
 import { useCloseTicket } from './closeTicket';
 import { useReset } from './reset';
 import { useFetchHandlers } from './fetchHandlers';
+import { useTicketDetails } from './useTicketDetails'; // Nowy import
 import { UseSupportTicketsReturn } from './types';
 
 export function useSupportTickets(
   activePage: number = 1,
   closedPage: number = 1,
-  defaultLimit: number = 5
+  defaultLimit: number = 5,
+  selectedTicketId: number | null = null // Nowy parametr
 ): UseSupportTicketsReturn {
   const fetchTickets = useFetchTickets(activePage, defaultLimit);
   const fetchClosedTickets = useFetchClosedTickets(closedPage, defaultLimit);
@@ -19,6 +21,7 @@ export function useSupportTickets(
   const closeTicket = useCloseTicket(fetchTickets.data);
   const reset = useReset();
   const { fetchTicketsHandler, fetchClosedTicketsHandler } = useFetchHandlers();
+  const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useTicketDetails(selectedTicketId); // Użycie nowego hooka
 
   return {
     tickets: fetchTickets.data?.tickets ?? [],
@@ -38,5 +41,8 @@ export function useSupportTickets(
     sendMessage: sendMessage.mutateAsync,
     closeTicket: closeTicket.mutateAsync,
     reset,
+    selectedTicket, // Dodajemy wyniki z useTicketDetails
+    ticketLoading,
+    ticketError,
   };
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { useSupportTickets } from './hooks/support-tickets';
@@ -64,7 +64,7 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
   };
 
   return (
-    <Card className="w-full">
+    <>
       <TicketDetailsHeader ticketId={ticket.id} createdAt={ticket.createdAt} />
       <CardContent className="space-y-4">
         <TicketDetailsSubject subject={ticket.subject} />
@@ -98,6 +98,6 @@ export default function TicketDetails({ ticket, currentUserId, onStatusChange }:
           </>
         )}
       </CardContent>
-    </Card>
+    </>
   );
 }

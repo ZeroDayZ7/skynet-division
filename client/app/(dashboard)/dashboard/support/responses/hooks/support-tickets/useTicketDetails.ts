@@ -11,7 +11,7 @@ export function useTicketDetails(selectedTicketId: number | null) {
     queryFn: async () => {
       if (!selectedTicketId) throw new Error('No ticket ID selected');
       const data = await SupportApi.getTicketDetails(selectedTicketId);
-      console.log('[useTicketDetails] Fetched ticket details:', data);
+      // console.log('[useTicketDetails] Fetched ticket details:', data);
       return {
         id: data.id,
         messages: data.messages || [],
@@ -25,5 +25,7 @@ export function useTicketDetails(selectedTicketId: number | null) {
     enabled: !!selectedTicketId,
     staleTime: 60 * 1000,
     refetchOnWindowFocus: false,
+    placeholderData: (previous) => previous,
+    
   });
 }

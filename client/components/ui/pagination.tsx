@@ -7,6 +7,7 @@ import {
 
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -69,6 +70,7 @@ function PaginationPrevious({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const isMobile = useIsMobile();
   return (
     <PaginationLink
       aria-label="Go to previous page"
@@ -77,7 +79,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className=" visible sm:block">Wstecz</span>
+      <span className=" visible sm:block">{!isMobile ? 'Wstecz' : ''}</span>
     </PaginationLink>
   )
 }
@@ -86,6 +88,7 @@ function PaginationNext({
   className,
   ...props
 }: React.ComponentProps<typeof PaginationLink>) {
+  const isMobile = useIsMobile();
   return (
     <PaginationLink
       aria-label="Go to next page"
@@ -93,7 +96,7 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className=" visible sm:block">Dalej</span>
+      <span className=" visible sm:block">{!isMobile ? 'Dalej' : ''}</span>
       <ChevronRightIcon />
     </PaginationLink>
   )

@@ -2,16 +2,12 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
-import { useQuery } from '@tanstack/react-query';
-import * as SupportApi from '../api';
 import TicketDetails from '../TicketDetails';
 import { useSupportTickets } from '../hooks/support-tickets';
 import { useAuth } from '@/context/AuthContext';
-import { TicketDetails as TicketDetailsType } from '../types/support';
-import { SupportTicketStatus } from '@/app/admin/support-messages/useSupportMessages';
 import { TicketHeader } from './TicketHeader';
 import { TicketContent } from './TicketContent';
-import { Loader } from '@/components/ui/loader';
+import { TicketDetailsSkeleton } from './TicketDetailsSkeleton';
 
 export default function SupportTickets() {
   const { user } = useAuth();
@@ -32,46 +28,25 @@ export default function SupportTickets() {
     error,
     fetchTickets,
     fetchClosedTickets,
-  } = useSupportTickets(activePage, closedPage, defaultLimit);
-
-  const { data: selectedTicket, isLoading: ticketLoading, error: ticketError } = useQuery<
-  TicketDetailsType,
-  Error
->({
-  queryKey: ['ticketDetails', selectedTicketId],
-  queryFn: async () => {
-    if (!selectedTicketId) throw new Error('No ticket ID selected');
-    const data = await SupportApi.getTicketDetails(selectedTicketId);
-    console.log('[SupportTickets] Fetched ticket details:', data);
-    return {
-      id: data.id,
-      messages: data.messages || [],
-      status: data.status as SupportTicketStatus,
-      subject: data.subject,
-      createdAt: data.createdAt,
-      loading: false,
-      error: null,
-    };
-  },
-  enabled: !!selectedTicketId,
-  staleTime: 60 * 1000,
-  refetchOnWindowFocus: false,
-});
+    selectedTicket, // Nowe pole
+    ticketLoading, // Nowe pole
+    ticketError, // Nowe pole
+  } = useSupportTickets(activePage, closedPage, defaultLimit, selectedTicketId); // Przekazujemy selectedTicketId
 
   // Zapis i przywracanie pozycji przewijania
-  useEffect(() => {
-    const handleScroll = () => {
-      scrollPositionRef.current = window.scrollY;
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     scrollPositionRef.current = window.scrollY;
+  //   };
+  //   window.addEventListener('scroll', handleScroll);
+  //   return () => window.removeEventListener('scroll', handleScroll);
+  // }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      window.scrollTo(0, scrollPositionRef.current);
-    }
-  }, [loading]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //     window.scrollTo(0, scrollPositionRef.current);
+  //   }
+  // }, [loading]);
 
   const handleSelectTicket = useCallback(
     (id: number) => {
@@ -131,8 +106,8 @@ export default function SupportTickets() {
       </Card>
 
       {selectedTicketId && (
-        <div>
-          {ticketLoading && <Loader />}
+        <Card className="w-full">
+          {ticketLoading && <TicketDetailsSkeleton />}
           {ticketError && <div className="text-center text-red-500">{ticketError.message}</div>}
           {selectedTicket && (
             <TicketDetails
@@ -147,7 +122,7 @@ export default function SupportTickets() {
               }}
             />
           )}
-        </div>
+        </Card>
       )}
     </div>
   );
