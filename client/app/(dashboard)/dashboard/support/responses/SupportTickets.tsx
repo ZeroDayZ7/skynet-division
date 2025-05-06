@@ -58,7 +58,8 @@ export default function SupportTickets() {
   );
 
   const handleShowClosed = useCallback(() => {
-    setShowClosed(true);
+    // setShowClosed(true);
+    console.log(`siema`);
     fetchClosedTickets();
   }, [fetchClosedTickets]);
 
