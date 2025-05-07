@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 useEffect(() => {
   checkAuth();
 }, []);
-
+console.log('[AuthProvider] render', { user, isLoading });
 // Funkcja sprawdzająca autentykację
 const checkAuth = useCallback(async (): Promise<boolean> => {
   console.log('[AuthProvider][Initialize]: checkAuth');
@@ -109,7 +109,7 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     // localStorage.setItem('user', JSON.stringify(updatedUser)); // Opcjonalnie zapis do localStorage
   };
 
-  console.log('[AuthProvider] render', { user, isLoading });
+
 
   // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {

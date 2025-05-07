@@ -22,6 +22,6 @@ export function useFetchClosedTickets(closedPage: number, defaultLimit: number) 
     gcTime: 5 * 60 * 1000,
     retry: 1,
     refetchOnWindowFocus: false,
-    placeholderData: (previous) => previous,
+    // placeholderData: (previous) => previous,
   });
 }

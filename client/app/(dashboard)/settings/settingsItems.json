@@ -1,0 +1,30 @@
+[
+    {
+      "label": "Twoje konto",
+      "path": "account",
+      "children": [
+        { "label": "Informacje o koncie", "path": "info" },
+        { "label": "Zmień hasło", "path": "change-password" },
+        { "label": "Zarządzaj logowaniami", "path": "logins" },
+        { "label": "Usuń konto", "path": "delete" },
+        { "label": "Połączone aplikacje", "path": "apps" }
+      ]
+    },
+    {
+      "label": "Monetyzacja",
+      "path": "monetization",
+      "children": [
+        { "label": "Ustawienia reklam", "path": "ads" },
+        { "label": "Przychody", "path": "earnings" }
+      ]
+    },
+    {
+      "label": "Premium",
+      "path": "premium",
+      "children": [
+        { "label": "Kup Premium", "path": "buy" },
+        { "label": "Zarządzaj subskrypcją", "path": "manage" }
+      ]
+    }
+  ]
+  

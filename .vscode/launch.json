@@ -16,7 +16,7 @@
       "internalConsoleOptions": "neverOpen",
       "env": {
         "NODE_ENV": "development"
-      }
+      },
     },
     
     // 🔁 1. Debug z nodemon + tsx
@@ -63,6 +63,13 @@
       "env": {
         "NODE_ENV": "development"
       }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Frontend + Backend",
+      "configurations": ["Debug with NextJs", "Debug with nodemon + tsx"],
+      "stopAll": true
     }
   ]
 }
