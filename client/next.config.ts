@@ -77,6 +77,7 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   poweredByHeader: false,
   reactStrictMode: false,
+  output: 'export'
 };
 
 const withNextIntl = createNextIntlPlugin();

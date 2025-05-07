@@ -2,7 +2,7 @@ name: CI - Next.js Build and Test
 
 # Uruchomienie akcji przy każdym pushu lub pull request
 on:
-  push:
+  workflow_dispatch:
     branches:
       - main  # Uruchomienie na push do gałęzi 'main'
   pull_request:
