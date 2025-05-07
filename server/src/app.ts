@@ -1,16 +1,16 @@
 import express, { Request, Response } from 'express';
-import sessionManager from '#ro/middlewares/core/session.middlewares';
+import sessionManager from '#ro/common/middlewares/core/session.middlewares';
 import cookieParser from 'cookie-parser';
 import SystemLog from '#ro/common/utils/SystemLog';
 // import { setLocale } from '#ro/language/i18nSetup';
-import { requestLoggerDev } from './middlewares/core/requestLogger.middleware';
+import { requestLoggerDev } from './common/middlewares/core/requestLogger.middleware';
 import apiRouter from '#ro/routes/apiRouter';
 import defineUserAssociations from '#ro/config/associations';
 import { globalErrorMiddleware } from './common/errors/globalErrorMiddleware';
 
-import { globalLimiter } from './middlewares/core/DDOS/globalLimiter.middleware';
-import { corsMiddleware } from './middlewares/security/cors.middleware';
-import { helmetMiddleware } from './middlewares/security/helmet.middleware';
+import { globalLimiter } from './common/middlewares/core/DDOS/globalLimiter.middleware';
+import { corsMiddleware } from './common/middlewares/security/cors.middleware';
+import { helmetMiddleware } from './common/middlewares/security/helmet.middleware';
 
 
 const app = express();
@@ -36,10 +36,10 @@ app.use(globalLimiter);
 //   app.use(requestLoggerDev);
 // }
 
-app.post("/api/test", (req, res) => {
-  SystemLog.warn(`Wiadomość z Next server:", ${JSON.stringify(req.body, null, 2)}`);
-  res.json({ status: true, data: req.body });
-});
+// app.post("/api/test", (req, res) => {
+//   SystemLog.warn(`Wiadomość z Next server:", ${JSON.stringify(req.body, null, 2)}`);
+//   res.json({ status: true, data: req.body });
+// });
 
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', uptime: process.uptime() });

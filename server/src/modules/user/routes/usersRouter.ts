@@ -2,7 +2,7 @@ import express from 'express';
 
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { authMiddleware } from '../../../common/middlewares/auth.middleware';
-import { validateRequest } from '#ro/middlewares/validate.middleware';
+import { validateRequest } from '#ro/common/middlewares/validate.middleware';
 import { pinSchema, PinPayload } from '../validators/pin.validation';
 
 import { checkPinController } from '#ro/modules/user/controller/checkPinController';

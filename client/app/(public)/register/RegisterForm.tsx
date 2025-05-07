@@ -12,7 +12,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
-import Captcha from '@/components/Captcha/Captcha';
+import Captcha from '@/components/auth/Captcha/Captcha';
 import { RegisterSchema } from '@/lib/schemas/auth';
 import { useTranslations } from 'next-intl';
 

@@ -6,7 +6,7 @@ import { registerController } from '../controllers/register.controller';
 import { activateController } from '#ro/modules/auth/controllers/activate.controller';
 import { resendActivationController } from '../controllers/resend-activation.controller';
 
-import { validateRequest } from '#ro/common/middlewares/validateRequest';
+import { validateRequest } from '#ro/common/middlewares/validate.middleware';
 
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';

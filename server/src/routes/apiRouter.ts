@@ -8,6 +8,9 @@ import { checkSessionStatus } from '#ro/modules/auth/controllers/session.control
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { authMiddleware } from '#ro/common/middlewares/auth.middleware';
 import { checkRole } from '#ro/common/middlewares/role.middleware.js';
+import { validateRequest } from '#ro/common/middlewares/validate.middleware';
+
+import { RegisterSchema, RegisterPayload } from '#ro/modules/auth/validators/register.validator';
 
 // /api
 const router = express.Router();
@@ -16,7 +19,19 @@ const router = express.Router();
 router.get('/csrf-token', getCsrfToken);
 router.get('/session', checkSessionStatus);
 
+router.post(
+      '/test',
+      validateRequest<RegisterPayload>(RegisterSchema),
+      (req, res) => {
+        const data = (req as any)._validatedData;
+        res.json({ success: true, message: 'OK', data });
+      }
+    );
+
+
+
 router.use('/support', supportRouter);
+
 
 // Podłączanie podrouterów
 router.use('/auth', authRouter);

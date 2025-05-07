@@ -24,7 +24,7 @@ export function SiteHeader() {
         </Button>
         <Separator orientation="vertical" className="mr-2 h-4" />
         <ThemeToggle />
-        <EmergencyButton />
+        {/* <EmergencyButton /> */}
         
       </div>
     </header>

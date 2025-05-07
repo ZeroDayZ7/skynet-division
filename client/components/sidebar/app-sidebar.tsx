@@ -4,7 +4,6 @@ import * as React from 'react'
 import Link from 'next/link'
 import {
   BookOpen,
-  Bot,
   Command,
   AlertTriangle,
   LifeBuoy,
@@ -12,6 +11,7 @@ import {
   Send,
   Settings2,
   SquareTerminal,
+  FileDigit
 } from 'lucide-react'
 
 import { NavMain } from '@/components/sidebar/nav-main'
@@ -56,7 +56,7 @@ function useSidebarData() {
       {
         title: t('main.documents'),
         url: '#',
-        icon: Bot,
+        icon: FileDigit,
         items: [
           { 
             title: t('documents.submitApplication'), 
@@ -83,7 +83,7 @@ function useSidebarData() {
         icon: Settings2,
         items: [
           { title: t('citizenprojects.general'), url: '/dashboard/citizens-projects' },
-          { title: t('citizenprojects.tutorial'), url: '/dashboard/settings', enabled: true },
+          // { title: t('citizenprojects.tutorial'), url: '/dashboard/settings', enabled: true },
           { title: t('citizenprojects.panel'), url: '#', enabled: false },
           { title: t('citizenprojects.favourites'), url: '#', enabled: false },
         ],
