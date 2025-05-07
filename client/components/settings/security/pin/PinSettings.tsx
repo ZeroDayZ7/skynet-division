@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
-import { SetPinModal } from './SetPinModal';
+// import { SetPinModal } from './SetPinModal';
 import PinButton from './PinButton';
 import { toast } from 'sonner';
 import { nanoid } from 'nanoid';
@@ -49,14 +49,14 @@ export default function PinSettings() {
           <PinButton isPinSet={isPinSet} loading={loading} onClick={handlePinButtonClick} />
       </div>
 
-      {isPinSet !== null && (
+      {/* {isPinSet !== null && (
         <SetPinModal
           isOpen={isSetPinModalOpen}
           onClose={() => setIsSetPinModalOpen(false)}
           onSuccess={handlePinSetSuccess}
           isPinSet={isPinSet}
         />
-      )}
+      )} */}
     </>
   );
 }
