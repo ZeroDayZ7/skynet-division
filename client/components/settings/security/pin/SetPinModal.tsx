@@ -3,7 +3,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { SetPinForm } from './SetPinForm';
-import { useSetPin } from '@/app/api/users/settings/useSetPin';
+import { useSetPin } from '@/app/_api/users/settings/useSetPin';
 
 interface SetPinModalProps {
   isOpen: boolean;

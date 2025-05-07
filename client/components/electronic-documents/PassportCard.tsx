@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import ErrorMessage from "../errors/ErrorMessage";
 import Image from "next/image";
-import { UserDataPassport } from "@/app/api/users/electronic-documents/useGetUserPassportData";
+import { UserDataPassport } from "@/app/_api/users/electronic-documents/useGetUserPassportData";
 
 // Interfejs propsów komponentu
 interface PassportCardProps {

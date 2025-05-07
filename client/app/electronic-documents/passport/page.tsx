@@ -1,4 +1,4 @@
-import { getUserPassportData } from "@/app/api/users/electronic-documents/useGetUserPassportData";
+import { getUserPassportData } from "@/app/_api/users/electronic-documents/useGetUserPassportData";
 import PassportCard from "@/components/electronic-documents/PassportCard";
 
 export default async function PassportPage() {

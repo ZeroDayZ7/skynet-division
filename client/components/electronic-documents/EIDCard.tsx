@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import ErrorMessage from "../errors/ErrorMessage";
 import Image from "next/image";
-import { UserDataEID } from "@/app/api/users/electronic-documents/useGetUserEIDData";
+import { UserDataEID } from "@/app/_api/users/electronic-documents/useGetUserEIDData";
 // import { error } from "console";
 
 // Interfejs propsów komponentu
