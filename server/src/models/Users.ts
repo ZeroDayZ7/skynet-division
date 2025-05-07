@@ -5,9 +5,7 @@ import { UserAttributes, UserCreationAttributes } from '#ro/modules/auth/types/U
 class Users extends Model<UserAttributes, UserCreationAttributes> {
   public readonly id!: number;
   public username!: string;
-
-  private pass!: string;
-
+  public pass!: string;
   public email!: string;
   public user!: string;
   public pin!: number | null;

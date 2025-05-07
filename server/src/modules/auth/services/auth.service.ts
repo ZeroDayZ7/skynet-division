@@ -1,7 +1,7 @@
 // auth/services/auth.services.ts
 import userService from '#ro/modules/auth/services/user.service';
 import SystemLog from '#ro/common/utils/SystemLog';
-import AppError, { ErrorType } from '#errors/AppError';
+import AppError from '#errors/AppError';
 import { UserAttributes } from '#ro/modules/auth/types/UserAttributes';
 import { verifyUserPassword } from '#ro/common/utils/auth.utils';
 import { ERROR_MESSAGES } from '#ro/common/errors/errorMessages';
@@ -35,6 +35,7 @@ export const validateUser = async (
 
   const isPasswordValid = await verifyUserPassword(user.id, password);
   if (!isPasswordValid) {
+    SystemLog.warn(`XXX`);
     await userService.incrementLoginAttempts(email);
     throw new AppError('INVALID_CREDENTIALS', 401, false, ERROR_MESSAGES.INVALID_CREDENTIALS);
   }

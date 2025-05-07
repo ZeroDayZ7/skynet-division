@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 05, 2025 at 05:45 AM
+-- Generation Time: May 07, 2025 at 12:56 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.3.4
 
@@ -196,33 +196,82 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
-('FHBy63LsKnEGLZ6n6zRW5bqc47etFyil', NULL, '2025-05-04 21:20:35', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-05-04T21:19:35.445Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"csrfToken\":\"96cadd35-0c66-4602-9219-f8ccbe2e9ce5\"}', '2025-05-03 20:08:17', '2025-05-03 20:20:35'),
-('IuO-cVKiwr2v85B9SWjCRlZ3dnaPpTxy', NULL, '2025-05-05 11:31:29', '{\"cookie\":{\"originalMaxAge\":89999999,\"expires\":\"2025-05-05T11:01:01.386Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"points\":50,\"role\":\"superadmin\",\"username\":\"white_rose\",\"csrfToken\":\"ecf7ff0e-5f7d-4928-acad-8e5a95cddcc1\"}', '2025-05-03 20:38:31', '2025-05-04 10:31:29');
+('_5l2K2fgqkWDPFB8C1q69E3h3f4VHr5F', NULL, '2025-05-07 22:11:23', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-05-07T20:43:04.966Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"role\":\"root\",\"username\":\"white_rose\",\"hasDocumentsEnabled\":true}', '2025-05-06 19:43:04', '2025-05-06 21:11:23'),
+('woapqv7GB3YOOP8_MDKTKPbeCqlnKqpO', NULL, '2025-05-07 18:09:15', '{\"cookie\":{\"originalMaxAge\":90000000,\"expires\":\"2025-05-07T18:09:04.035Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"lax\"},\"userId\":77,\"role\":\"root\",\"username\":\"white_rose\"}', '2025-05-06 17:07:17', '2025-05-06 17:09:15');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `support_messages`
+-- Table structure for table `support_ticket`
 --
 
-CREATE TABLE `support_messages` (
+CREATE TABLE `support_ticket` (
   `id` int(11) UNSIGNED NOT NULL,
   `user_id` int(11) UNSIGNED NOT NULL,
-  `subject` varchar(255) DEFAULT NULL,
-  `message` text NOT NULL,
+  `subject` varchar(30) DEFAULT NULL,
   `status` enum('new','in_progress','closed','open') DEFAULT 'new',
-  `response` text,
-  `responder_id` int(11) UNSIGNED DEFAULT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `support_messages`
+-- Dumping data for table `support_ticket`
 --
 
-INSERT INTO `support_messages` (`id`, `user_id`, `subject`, `message`, `status`, `response`, `responder_id`, `createdAt`, `updatedAt`) VALUES
-(3, 77, 'technical', '123', 'in_progress', 'wal się', 77, '2025-05-04 00:55:53', '2025-05-04 06:10:00');
+INSERT INTO `support_ticket` (`id`, `user_id`, `subject`, `status`, `createdAt`, `updatedAt`) VALUES
+(8, 93, 'bug', 'open', '2025-05-05 14:41:45', '2025-05-06 11:03:50'),
+(9, 93, 'bug', 'closed', '2025-05-05 14:41:45', '2025-05-06 01:18:39'),
+(10, 93, 'bug', 'new', '2025-05-05 14:41:45', '2025-05-06 01:19:19'),
+(41, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(42, 93, 'feature', 'open', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(43, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(44, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(45, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(46, 93, 'bug', 'closed', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(47, 93, 'feature', 'closed', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(48, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(49, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(50, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(51, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(52, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(53, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(54, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(55, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19'),
+(56, 93, 'bug', 'new', '2025-05-06 13:41:19', '2025-05-06 13:41:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `support_ticket_messages`
+--
+
+CREATE TABLE `support_ticket_messages` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `ticket_id` int(11) UNSIGNED NOT NULL,
+  `sender_type` enum('user','support') NOT NULL,
+  `sender_id` int(11) UNSIGNED NOT NULL,
+  `message` text NOT NULL,
+  `createdAt` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `support_ticket_messages`
+--
+
+INSERT INTO `support_ticket_messages` (`id`, `ticket_id`, `sender_type`, `sender_id`, `message`, `createdAt`) VALUES
+(4, 8, 'user', 93, 'Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika', '2025-05-05 14:41:45'),
+(5, 8, 'support', 77, 'Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika Zgłoszenie zostało zamknięte przez użytkownika', '2025-05-05 14:44:14'),
+(73, 8, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: już dałem rade', '2025-05-06 00:56:40'),
+(74, 8, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: huj', '2025-05-06 00:58:36'),
+(75, 9, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: 123', '2025-05-06 00:59:40'),
+(76, 8, 'user', 93, '123', '2025-05-06 01:00:14'),
+(77, 8, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: 123', '2025-05-06 01:03:38'),
+(78, 9, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: 123', '2025-05-06 01:18:39'),
+(79, 8, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: 111', '2025-05-06 01:19:19'),
+(82, 8, 'user', 93, '12345', '2025-05-06 11:03:43'),
+(83, 8, 'user', 93, 'Zgłoszenie zamknięte przez użytkownika: 123', '2025-05-06 11:03:50'),
+(84, 53, 'user', 93, '123', '2025-05-06 14:55:43'),
+(85, 56, 'user', 93, '123', '2025-05-06 15:15:47');
 
 -- --------------------------------------------------------
 
@@ -255,8 +304,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `pass`, `pin`, `points`, `activation_token`, `documents`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
 (71, '', 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
-(77, 'white_rose', 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$V/7WltFUv3IDzs/XCFpLvurO/3ePgyZxcaXR7Rbrg6CeQtP6P1z..', 50, NULL, '{\"documents\": {\"eid\": true, \"passport\": false, \"driving_license\": true}, \"test_features\": {\"betaAccess\": true, \"newsletter\": false}}', 1242, 'root', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-05-03 20:38:33'),
-(93, '', 'jan@example.com', '$2b$10$hiZkpGS7be4jrwQdLfegm.eAi7CgS0vEhfBITHTcWADiOtNhp4KTG', NULL, 50, NULL, NULL, 2, 'user', 0, 0, NULL, '::1', '2025-04-30 06:24:07', '2025-04-30 10:04:38');
+(77, 'white_rose', 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$V/7WltFUv3IDzs/XCFpLvurO/3ePgyZxcaXR7Rbrg6CeQtP6P1z..', 50, NULL, '{\"documents\": {\"eid\": true, \"passport\": false, \"driving_license\": true}, \"test_features\": {\"betaAccess\": true, \"newsletter\": false}}', 1259, 'root', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-05-06 19:43:06'),
+(93, 'test_user', 'jan@example.com', '$2b$10$hiZkpGS7be4jrwQdLfegm.eAi7CgS0vEhfBITHTcWADiOtNhp4KTG', NULL, 50, NULL, NULL, 7, 'user', 0, 0, NULL, '::1', '2025-04-30 06:24:07', '2025-05-06 09:12:18');
 
 -- --------------------------------------------------------
 
@@ -342,7 +391,7 @@ CREATE TABLE `user_notifications` (
 --
 
 INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `createdAt`) VALUES
-(1, 77, 1, 0, '2025-04-16 10:16:06'),
+(1, 77, 1, 1, '2025-04-16 10:16:06'),
 (26, 90, 1, 1, '2025-04-28 09:58:35'),
 (27, 90, 1, 1, '2025-04-28 09:58:35'),
 (28, 90, 1, 1, '2025-04-28 09:58:35'),
@@ -539,12 +588,19 @@ ALTER TABLE `sessions`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `support_messages`
+-- Indexes for table `support_ticket`
 --
-ALTER TABLE `support_messages`
+ALTER TABLE `support_ticket`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `usrid` (`user_id`),
-  ADD KEY `resid` (`responder_id`);
+  ADD KEY `usrid` (`user_id`);
+
+--
+-- Indexes for table `support_ticket_messages`
+--
+ALTER TABLE `support_ticket_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ops_1` (`ticket_id`),
+  ADD KEY `ops_2` (`sender_id`);
 
 --
 -- Indexes for table `users`
@@ -654,10 +710,16 @@ ALTER TABLE `permission_templates`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `support_messages`
+-- AUTO_INCREMENT for table `support_ticket`
 --
-ALTER TABLE `support_messages`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `support_ticket`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+
+--
+-- AUTO_INCREMENT for table `support_ticket_messages`
+--
+ALTER TABLE `support_ticket_messages`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -730,11 +792,17 @@ ALTER TABLE `job_postings`
   ADD CONSTRAINT `ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `support_messages`
+-- Constraints for table `support_ticket`
 --
-ALTER TABLE `support_messages`
-  ADD CONSTRAINT `resid` FOREIGN KEY (`responder_id`) REFERENCES `users` (`id`),
+ALTER TABLE `support_ticket`
   ADD CONSTRAINT `usrid` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `support_ticket_messages`
+--
+ALTER TABLE `support_ticket_messages`
+  ADD CONSTRAINT `ops_1` FOREIGN KEY (`ticket_id`) REFERENCES `support_ticket` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ops_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `user_eid_data`

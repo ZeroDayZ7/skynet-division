@@ -10,12 +10,13 @@ const sequelize =
   global.sequelize ||
   new Sequelize({
     dialect: 'mysql',
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST || 'mysql',
     port: Number(process.env.DB_PORT) || 3306,
     username: process.env.DB_USERNAME || 'root',
-    password: process.env.DB_PASSWORD || 'root',
+    password: process.env.DB_PASSWORD || 'inside88',
     database: process.env.DB_DATABASE || 'crimscity',
     logging: false,
+    // logging: (msg) => SystemLog.info(msg),
     // logging: process.env.NODE_ENV === 'development' ? (msg) => SystemLog.info(msg) : false,
   });
 

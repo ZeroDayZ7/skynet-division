@@ -118,7 +118,7 @@ router.post('/reset-password', async (req, res) => {
     }
 
     // Hashuj nowe hasło
-    const hashedPassword = await bcrypt.hash(newPassword, process.env.BCRYPT_ROUND);
+    const hashedPassword = await bcrypt.hash(newPassword, BCRYPT_SALT_ROUNDS);
 
     // Zaktualizuj hasło użytkownika i wyczyść token resetowania
     const isPasswordUpdated = await updateUserPassword(user, hashedPassword);
@@ -273,7 +273,7 @@ router.post('/api/registration', async (req, res) => {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(password, process.env.BCRYPT_ROUND);
+    const hashedPassword = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
 
     if (!hashedPassword) {
       return res.status(400).json({
@@ -506,7 +506,7 @@ function updateUserPassword(userId, newPassword) {
   return new Promise(async (resolve, reject) => {
     try {
       // Zahaszuj nowe hasło
-      const hashedPassword = await bcrypt.hash(newPassword, process.env.BCRYPT_ROUND);
+      const hashedPassword = await bcrypt.hash(newPassword, BCRYPT_SALT_ROUNDS);
       // Zaktualizuj hasło użytkownika w bazie danych
       const query = 'UPDATE users SET pass = ? WHERE ids = ?';
       db.query(query, [hashedPassword, userId.ids], (error, results) => {

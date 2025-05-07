@@ -18,6 +18,11 @@ import { ResendPayload, ResendActivateToken,  } from '../validators/resendActiva
 
 const router = express.Router();
 
+
+// router.post('/login', csrfMiddleware, (req, res) => {
+//     console.log('Login endpoint hit');
+//     res.send('Login route accessed');
+// });
 // Logowanie
 router.post('/login', 
     csrfMiddleware, 
@@ -25,22 +30,26 @@ router.post('/login',
     loginController
 );
 
-// Wylogowanie
-router.post('/logout', logoutController);
+// // Wylogowanie
+router.post('/logout', 
+    logoutController
+);
 
 // Rejestracja
 router.post('/register', 
     csrfMiddleware, 
     validateRequest<RegisterPayload>(RegisterSchema), 
-    registerController);
+    registerController
+);
 
-// Activate
+// // Activate
 router.post('/activate', 
     csrfMiddleware,
     validateRequest<ActivationTokenPayload>(ActivationTokenSchema), 
-    activateController);
+    activateController
+);
 
-// Endpoint do ponownego wysyłania kodu aktywacyjnego
+// // Endpoint do ponownego wysyłania kodu aktywacyjnego
 router.post('/resend-activation', 
     csrfMiddleware,
     validateRequest<ResendPayload>(ResendActivateToken), 

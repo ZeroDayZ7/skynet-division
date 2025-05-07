@@ -1,58 +1,91 @@
-import express, { Request, Response } from 'express';
-import sessionManager from '#ro/common/middlewares/core/session.middlewares';
+import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import cors from 'cors';
+
+import sessionManager from '#ro/common/middlewares/core/session.middlewares';
+import { globalLimiter } from '#ro/common/middlewares/core/DDOS/globalLimiter.middleware';
+import { corsMiddleware } from '#ro/common/middlewares/security/cors.middleware';
+import { helmetMiddleware } from '#ro/common/middlewares/security/helmet.middleware';
+import { globalErrorMiddleware } from '#ro/common/errors/globalErrorMiddleware';
 import SystemLog from '#ro/common/utils/SystemLog';
-// import { setLocale } from '#ro/language/i18nSetup';
-import { requestLoggerDev } from './common/middlewares/core/requestLogger.middleware';
 import apiRouter from '#ro/routes/apiRouter';
 import defineUserAssociations from '#ro/config/associations';
-import { globalErrorMiddleware } from './common/errors/globalErrorMiddleware';
 
-import { globalLimiter } from './common/middlewares/core/DDOS/globalLimiter.middleware';
-import { corsMiddleware } from './common/middlewares/security/cors.middleware';
-import { helmetMiddleware } from './common/middlewares/security/helmet.middleware';
-
-
+// Inicjalizacja aplikacji Express
 const app = express();
-app.use(helmetMiddleware);
-// CORS
-app.use(corsMiddleware)
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+// Middleware zabezpieczające
+app.use(helmetMiddleware); // Ustawia nagłówki HTTP dla bezpieczeństwa
+app.use(corsMiddleware); // Obsługuje CORS
 
-// Baza / relacje
-defineUserAssociations();
-// Sesje
+// Parsowanie żądań
+app.use(express.json()); // Parsuje JSON w ciele żądania
+app.use(express.urlencoded({ extended: true })); // Parsuje dane z formularzy
+app.use(cookieParser()); // Parsuje ciasteczka
+
+// Inicjalizacja sesji
 sessionManager(app);
-// app.use(setLocale);
 
+// Inicjalizacja relacji w bazie danych
+defineUserAssociations();
 
-// Limiter
+// Limiter żądań (ochrona przed DDOS)
 app.use(globalLimiter);
 
-// if (process.env.NODE_ENV !== 'production') {
-//   app.use(requestLoggerDev);
-// }
+// Środowisko deweloperskie - opcjonalne logowanie żądań
+if (process.env.NODE_ENV !== 'production') {
+  // app.use(requestLoggerDev); // Odkomentuj, jeśli potrzebujesz logowania żądań
+}
 
-// app.post("/api/test", (req, res) => {
-//   SystemLog.warn(`Wiadomość z Next server:", ${JSON.stringify(req.body, null, 2)}`);
-//   res.json({ status: true, data: req.body });
-// });
-
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', uptime: process.uptime() });
+/**
+ * Endpoint testowy do weryfikacji komunikacji z serwerem
+ * @route POST /api/test
+ * @param req - Obiekt żądania Express
+ * @param res - Obiekt odpowiedzi Express
+ */
+app.post('/api/test', (req: Request, res: Response) => {
+  SystemLog.info(`Testowy request: ${JSON.stringify(req.body, null, 2)}`);
+  res.json({ status: true, data: req.body });
 });
-// Routing
+
+/**
+ * Endpoint do sprawdzania zmiennych środowiskowych
+ * @route GET /env
+ * @param req - Obiekt żądania Express
+ * @param res - Obiekt odpowiedzi Express
+ */
+app.get('/env', (req: Request, res: Response) => {
+  res.json(process.env); // Zwraca zmienne środowiskowe
+});
+
+/**
+ * Endpoint do sprawdzania stanu serwera
+ * @route GET /health
+ * @param req - Obiekt żądania Express
+ * @param res - Obiekt odpowiedzi Express
+ */
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'OK',
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Routing API
 app.use('/api', apiRouter);
 
-// Błędy
+// Globalna obsługa błędów
 app.use(globalErrorMiddleware);
 
+// Obsługa nieistniejących tras
 app.use((req: Request, res: Response) => {
-  res.status(404).send("Nic tu nie ma, lamusie! Spróbuj czegoś innego.");
+  res.status(404).json({
+    status: 'error',
+    message: 'Co tu szukasz lamusie ?',
+  });
 });
 
+// Eksport aplikacji dla testów i serwera
 export default app;
- 

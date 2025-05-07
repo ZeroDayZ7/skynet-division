@@ -6,6 +6,8 @@ import SystemLog from '#ro/common/utils/SystemLog';
 
 async function startServer() {
   try {
+    SystemLog.info(`"Application starting..."`);
+    // console.log(process.env);
     // Inicjalizacja Prisma i Sequelize
     // await initializePrisma();
     await initializeSequelize();
