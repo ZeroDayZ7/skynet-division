@@ -18,7 +18,7 @@ interface UsePermissionsDialogReturn {
   loading: boolean;
   error: string | null;
   handlePermissionChange: (key: string, field: 'is_enabled' | 'is_visible', value: boolean) => void;
-  handleSave: () => Promise<void>;
+  // handleSave: () => Promise<void>;
 }
 
 export const usePermissionsDialog = ({
@@ -85,27 +85,27 @@ export const usePermissionsDialog = ({
     []
   );
 
-  const handleSave = useCallback(async () => {
-    if (!user || Object.keys(userPermissions).length === 0) {
-      setError('Brak uprawnień do zapisania.');
-      return;
-    }
+  // const handleSave = useCallback(async () => {
+  //   if (!user || Object.keys(userPermissions).length === 0) {
+  //     setError('Brak uprawnień do zapisania.');
+  //     return;
+  //   }
 
-    setError(null);
-    try {
-      const result = await editPermissions(user.id, userPermissions);
-      if (result.success) {
-        permissionsCache.set(user.id, userPermissions);
-        setOpen(false);
-        onClose();
-        router.refresh();
-      } else {
-        setError(result.message || 'Nie udało się zapisać uprawnień.');
-      }
-    } catch (error) {
-      setError('Wystąpił błąd podczas zapisywania uprawnień.');
-    }
-  }, [user, userPermissions, onClose, router, permissionsCache]);
+  //   setError(null);
+  //   try {
+  //     const result = await editPermissions(user.id, userPermissions);
+  //     if (result.success) {
+  //       permissionsCache.set(user.id, userPermissions);
+  //       setOpen(false);
+  //       onClose();
+  //       router.refresh();
+  //     } else {
+  //       setError(result.message || 'Nie udało się zapisać uprawnień.');
+  //     }
+  //   } catch (error) {
+  //     setError('Wystąpił błąd podczas zapisywania uprawnień.');
+  //   }
+  // }, [user, userPermissions, onClose, router, permissionsCache]);
 
   return {
     open,
@@ -114,6 +114,6 @@ export const usePermissionsDialog = ({
     loading,
     error,
     handlePermissionChange,
-    handleSave,
+    // handleSave,
   };
 };

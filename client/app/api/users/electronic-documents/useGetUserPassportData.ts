@@ -27,7 +27,7 @@ export const getUserPassportData = async (): Promise<UserDataPassport | null> =>
   const cookieStore = await cookies();
   const SESSION_KEY = cookieStore.get("SESSION_KEY")?.value || "";
 
-  const csrfToken = await fetchCsrfToken(SESSION_KEY);
+  const csrfToken = await fetchCsrfToken();
 
   const cookiesHeader = cookieStore
     .getAll()

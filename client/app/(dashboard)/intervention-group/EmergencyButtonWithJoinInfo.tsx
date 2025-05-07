@@ -13,7 +13,7 @@ export function EmergencyButton() {
   const [loadingDots, setLoadingDots] = useState("");
 
   useEffect(() => {
-    let dotsInterval;
+    let dotsInterval: NodeJS.Timeout | number; // Określamy typ zmiennej
     if (alarmActive && alarmStage < 4) {
       dotsInterval = setInterval(() => {
         setLoadingDots(prev => prev.length >= 3 ? "" : prev + ".");
@@ -23,7 +23,7 @@ export function EmergencyButton() {
   }, [alarmActive, alarmStage]);
 
   useEffect(() => {
-    let stageTimer;
+    let stageTimer: NodeJS.Timeout | number;
     if (alarmActive) {
       // Przejście przez różne etapy alarmu
       const stageTimes = [2000, 3000, 4000]; // czasy w ms dla każdego etapu

@@ -1,4 +1,3 @@
-// components/dashboard/DashboardMenu.tsx
 'use client';
 
 import React from 'react';
@@ -26,7 +25,7 @@ export default function DashboardMenu() {
       label: 'Ustawienia', 
       enabled: true 
     },
-    ...(user?.role === 'admin' || user?.role === 'superadmin'
+    ...(user?.role && (user.role === 'root' || user.role === 'init')
       ? [{ icon: FaUserShield, link: '/admin', label: 'Administracja', enabled: true }]
       : []),
   ];

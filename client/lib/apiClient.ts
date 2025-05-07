@@ -41,7 +41,7 @@ export async function apiClient<T>(
   try {
     const cookieStore = await cookies();
     const SESSION_KEY = cookieStore.get('SESSION_KEY')?.value || '';
-    const csrfToken = await fetchCsrfToken(SESSION_KEY);
+    const csrfToken = await fetchCsrfToken();
     console.log(`[apiClient] CSRF Token: ${csrfToken}`);
     const cookiesHeader = cookieStore
       .getAll()

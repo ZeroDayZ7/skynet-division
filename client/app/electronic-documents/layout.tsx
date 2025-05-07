@@ -1,4 +1,3 @@
-import { ModeToggle } from '@/components/theme/theme-button';
 import BackButton from '@/components/ui/BackButton';
 import MainMenuButton from '@/components/ui/MainMenuButton';
 
@@ -11,7 +10,6 @@ export default function DocumentsLayout({ children }: { children: React.ReactNod
       shadow dark:bg-card">
         <BackButton />
         <MainMenuButton />
-        <ModeToggle />
       </header>
 
       {/* Treść */}

@@ -1,4 +1,3 @@
-// app/admin/management/actions/permissions.ts
 'use server';
 
 import { apiClient } from '@/lib/apiClient';
@@ -14,7 +13,7 @@ interface Permissions {
 }
 
 export async function getPermissions(userId: number): Promise<Permissions | null> {
-  const response = await apiClient<{ success: boolean; permissions: Permissions }>(
+  const response = await apiClient<{ permissions: Permissions }>(
     `/api/admin/users/get/permissions`,
     {
       method: 'POST',
@@ -24,8 +23,8 @@ export async function getPermissions(userId: number): Promise<Permissions | null
 
   console.log(`[getPermissions] Odpowiedź: ${JSON.stringify(response)}`);
 
-  if (response.success && response.permissions) {
-    return response.permissions;
+  if (response?.data?.permissions) {
+    return response.data.permissions;
   }
 
   return null;
@@ -43,7 +42,7 @@ export async function editPermissions(userId: number, permissions: Permissions):
 
     console.log(`[editPermissions] Odpowiedź: ${JSON.stringify(response)}`);
 
-    return response.success;
+    return response?.data?.success ?? false; // jeśli data.success nie istnieje → false
   } catch (error) {
     console.error(`[editPermissions] Błąd podczas wysyłania uprawnień dla userId ${userId}: ${error}`);
     return false;

@@ -83,6 +83,5 @@ export const useEditPermissions = (user: User | null, hasEditPermission: boolean
     loading,
     error,
     savePermissions,
-    // assignDefaultPermissions,
   };
 };

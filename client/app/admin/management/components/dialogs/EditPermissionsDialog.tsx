@@ -69,7 +69,7 @@ export const EditPermissionsDialog: React.FC<EditPermissionsDialogProps> = ({ us
         ) : (
           <div className="text-center text-muted-foreground">
             <div>Brak przypisanych uprawnień.</div>
-            <Button onClick={assignDefaultPermissions}>Nadaj uprawnienia</Button>
+            {/* <Button onClick={assignDefaultPermissions}>Nadaj uprawnienia</Button> */}
           </div>
         )}
       </DialogContent>

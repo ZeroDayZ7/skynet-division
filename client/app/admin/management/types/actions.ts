@@ -6,3 +6,5 @@ export interface SelectedUser {
   userBlock: boolean;
   action: 'edit' | 'permissions' | 'block' | 'delete';
 }
+
+export type UserAction = 'edit' | 'permissions' | 'block' | 'delete'; // <- Tego TS potrzebuje
