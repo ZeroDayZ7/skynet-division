@@ -1,73 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
+import { publicPaths, matchesPath } from '@/lib/middleware/matchers';
+import { isAuthenticated } from '@/lib/middleware/auth-middleware';
+// import { logMiddlewareRequest, logMiddlewareResponse } from '@/lib/middleware/logger-middleware';
 
-export default createMiddleware({
+const i18nMiddleware = createMiddleware({
   locales: ['pl', 'en'],
-  defaultLocale: 'pl'
-})
-
-import { checkSession } from '@/lib/session/checkSession';
-import { cookies } from 'next/headers';
-import { logMiddlewareRequest, logMiddlewareResponse } from './lib/middleware/logger-middleware';
-
-const publicPaths = ['/', '/login', '/register', '/activate', '/test'];
-const roleBasedAccess = {
-  admin: ['/admin/:path*'],
-  user: ['/dashboard/:path*', '/profile/:path*', '/electronic-documents/:path*'],
-};
-
-const matchesPath = (pathname: string, patterns: string[]): boolean => {
-  return patterns.some((pattern) => {
-    const regex = new RegExp(`^${pattern.replace(/:path\*/, '.*')}$`);
-    return regex.test(pathname);
-  });
-};
+  defaultLocale: 'pl',
+});
 
 export async function middleware(request: NextRequest) {
-  // const start = performance.now();
+  const { pathname } = request.nextUrl;
 
-  // if (process.env.NODE_ENV === "development") {
-  //   await logMiddlewareRequest(request, start);
-  // }
+  // Obsługa next-intl
+  const intlResponse = i18nMiddleware(request);
+  if (intlResponse instanceof NextResponse) {
+    return intlResponse;
+  }
 
-  // const { pathname } = request.nextUrl;
+  if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
+    return NextResponse.next();
+  }
 
-  // if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
-  //   const response = NextResponse.next();
-  //   // if (process.env.NODE_ENV === "development") {
-  //   //   logMiddlewareResponse(response, start);
-  //   // }
-  //   return response;
-  // }
+  const isAuth = await isAuthenticated(request);
 
-  // const cookieStore = await cookies();
-  // const cookieName = process.env.SESSION_COOKIE_NAME?.toString() || 'SESSION_KEY';
-  // const getSessionCookie = cookieStore.get(cookieName);
-  // const sessionKey = getSessionCookie ? `${getSessionCookie.value}` : '';
+  if (!isAuth) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
-  // try {
-  //   const session = await checkSession(sessionKey);
-
-  //   if (!session.isAuthenticated || !session.user) {
-  //     const loginUrl = new URL('/login', request.url);
-  //     loginUrl.searchParams.set('redirect', pathname);
-  //     return NextResponse.redirect(loginUrl);
-  //   }
-
-  //   const response = NextResponse.next();
-  //   response.headers.set('x-user-role', session.user.role);
-
-  //   // if (process.env.NODE_ENV === 'development') {
-  //   //   logMiddlewareResponse(response, start);
-  //   // }
-
-  //   return response;
-  // } catch (error) {
-  //   console.error('Błąd w middleware:', error);
-  //   const loginUrl = new URL('/login', request.url);
-  //   loginUrl.searchParams.set('redirect', pathname);
-  //   return NextResponse.redirect(loginUrl);
-  // }
+  return NextResponse.next();
 }
 
 export const config = {

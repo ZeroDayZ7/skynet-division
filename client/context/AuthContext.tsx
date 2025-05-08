@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
 import { getUnreadNotificationsCount } from '@/lib/api/notifications';
 import type { UserRole } from '@/components/ui/RoleBadge';
+import { useRouter } from 'next/navigation';
 
 
 // types/user.ts
@@ -35,38 +36,40 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [fullUser, setFullUser] = useState<FullUser | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
 
 // Sprawdzenie autentykacji przy pierwszym renderowaniu
-useEffect(() => {
-  checkAuth();
-}, []);
+// useEffect(() => {
+//   checkAuth();
+// }, []);
 console.log('[AuthProvider] render', { user, isLoading });
 // Funkcja sprawdzająca autentykację
-const checkAuth = useCallback(async (): Promise<boolean> => {
-  console.log('[AuthProvider][Initialize]: checkAuth');
+// const checkAuth = useCallback(async (): Promise<boolean> => {
+//   console.log('[AuthProvider][Initialize]: checkAuth');
 
-  try {
-    const session = await getUserSession();
-    console.log(JSON.stringify(session));
+//   try {
+//     const session = await getUserSession();
+//     console.log(JSON.stringify(session));
     
-    if (session) {
-      // console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
-      setUser(session.user as User);
-      return true;
-    } else {
-      setUser(null);
-      return false;
-    }
-  } catch (err) {
-    console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
-    setUser(null);
-    return false;
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+//     if (session) {
+//       // console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);
+//       setUser(session.user as User);
+//       router.replace('/dashboard');
+//       return true;
+//     } else {
+//       setUser(null);
+//       return false;
+//     }
+//   } catch (err) {
+//     console.error('[AuthProvider] Błąd podczas sprawdzania sesji:', err);
+//     setUser(null);
+//     return false;
+//   } finally {
+//     setIsLoading(false);
+//   }
+// }, []);
 
 
   useEffect(() => {

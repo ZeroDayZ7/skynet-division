@@ -1,10 +1,9 @@
 // lib/auth.ts
 // import { Session } from "@/lib/session/types/session.types";
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const apiUrl = process.env.EXPRESS_API_URL || "http://localhost:3001";
 
 
 export type Session = {
-  isAuthenticated: boolean;
   user: {
     id: string;
     role: "user" | "admin";
@@ -19,7 +18,7 @@ export type Session = {
  */
 export async function checkSession(sessionKey: string): Promise<Session> {
   if (!sessionKey) {
-    return { isAuthenticated: false, user: null };
+    return { user: null };
   }
 
   try {
@@ -32,17 +31,16 @@ export async function checkSession(sessionKey: string): Promise<Session> {
     });
 
     if (!response.ok) {
-      return { isAuthenticated: false, user: null };
+      return { user: null };
     }
 
     const user = await response.json();
     console.log(`[checkSession] Odpowiedź z backendu:`, user);
     return {
-      isAuthenticated: user.isAuthenticated,
       user: user.user,
     };
   } catch (err) {
     console.error("Błąd podczas pobierania sesji:", err);
-    return { isAuthenticated: false, user: null };
+    return { user: null };
   }
 }
