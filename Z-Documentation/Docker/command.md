@@ -1,24 +1,34 @@
-/*
-
-
-
-// uruchamia kontenery i buduje obrazy, jeśli nie istnieją
+## uruchamia kontenery i buduje obrazy, jeśli nie istnieją
+```
 docker-compose up --build
+```
 
-//  wchodzi interaktywnie do kontenera next-server
+## wchodzi interaktywnie do kontenera next-server 
+```
 docker exec -it next-mysql mysql -u root -p
-//wchodzi interaktywnie do kontenera next-server
-docker exec -it next-server sh
-//pokazuje logi wszystkich kontenerów
+```
+### pokazuje logi wszystkich kontenerów
+```
 docker-compose logs -f
-// lista sieci Dockera
+```
+### lista sieci Dockera
+```
 docker network ls
-// Wejście do kontenera interaktywnie (shell)
+```
+## Wejście do kontenera interaktywnie (shell)
+```
 docker exec -it next-server sh
+```
+```
 docker exec -it next-server bash
+```
+```
 docker exec -it next-server /bin/bash
+```
+```
 env
-printenv
+```
+```printenv```
 // Sprawdź logi aplikacji
 docker exec -it next-server cat /root/.npm/_logs/2025-05-07T08_35_55_834Z-debug-0.log
 

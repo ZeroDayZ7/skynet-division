@@ -1,5 +1,4 @@
-Kiedy mówię o **skryptach i narzędziach**, mam na myśli różnorodne zastosowania Pythona do automatyzacji codziennych zadań, integracji systemów, zarządzania danymi, czy kontrolowania różnych procesów. Oto kilka przykładów, jak Python może być używany do pisania takich skryptów i narzędzi:
-
+PYTHON
 ### 1. **Automatyzacja zadań systemowych**
 
 * **Zarządzanie plikami**: Python może pomóc w automatycznym kopiowaniu, przenoszeniu, usuwaniu plików, monitorowaniu katalogów czy wykonywaniu operacji na plikach (np. zmiana nazw, tworzenie archiwów).
