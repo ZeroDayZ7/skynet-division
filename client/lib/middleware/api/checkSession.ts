@@ -1,46 +1,36 @@
-// lib/auth.ts
-// import { Session } from "@/lib/session/types/session.types";
-const apiUrl = process.env.EXPRESS_API_URL || "http://localhost:3001";
-
+const apiUrl = process.env.EXPRESS_API_URL || 'http://localhost:3001';
 
 export type Session = {
-  user: {
-    id: string;
-    role: "user" | "admin";
-    // inne pola...
-  } | null;
+  isAuthenticated: boolean;
 };
 
-
 /**
- * Sprawdza sesję użytkownika, walidując ciasteczko i pobierając dane użytkownika.
- * @param sessionKey - Wartość ciasteczka 'SESSION_KEY'
+ * Sprawdza sesję użytkownika na podstawie klucza sesji.
+ * @param sessionKey - Wartość ciasteczka sesji
+ * @returns Obiekt sesji z danymi użytkownika lub null
+ * @throws Error w przypadku problemów z backendem
  */
 export async function checkSession(sessionKey: string): Promise<Session> {
   if (!sessionKey) {
-    return { user: null };
+    return { isAuthenticated: false };
   }
 
   try {
-    // Wykonaj zapytanie do backendu, aby zweryfikować sesję
     const response = await fetch(`${apiUrl}/api/session`, {
-      method: "GET",
-      headers: {
-        Cookie: `${process.env.SESSION_COOKIE_NAME}=${sessionKey}`, // Wysłanie tylko samego ciasteczka
-      },
+      method: 'GET',
+      // headers: {
+      //   Cookie: `${process.env.SESSION_COOKIE_NAME}=${sessionKey}`,
+      // },
+      credentials: 'include', // W razie potrzeby obsługi cross-origin
     });
 
     if (!response.ok) {
-      return { user: null };
+      return { isAuthenticated: false };
     }
 
     const user = await response.json();
-    console.log(`[checkSession] Odpowiedź z backendu:`, user);
-    return {
-      user: user.user,
-    };
+    return { isAuthenticated: user.isAuthenticated };
   } catch (err) {
-    console.error("Błąd podczas pobierania sesji:", err);
-    return { user: null };
+    throw new Error('Failed to verify session');
   }
 }

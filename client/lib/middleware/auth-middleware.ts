@@ -1,6 +1,6 @@
 // lib/middleware/auth-middleware.ts
 import { NextRequest } from 'next/server';
-import { checkSession } from './api/checkSession';
+import { checkSession, Session } from './api/checkSession';
 import { cookies } from 'next/headers';
 
 export async function isAuthenticated(request: NextRequest): Promise<boolean> {
@@ -10,8 +10,8 @@ export async function isAuthenticated(request: NextRequest): Promise<boolean> {
   const sessionKey = getSessionCookie?.value || '';
 
   try {
-    const session = await checkSession(sessionKey);
-    return Boolean(session.user);
+    const session: Session = await checkSession(sessionKey);
+    return Boolean(session);
   } catch (error) {
     console.error('Auth middleware error:', error);
     return false;

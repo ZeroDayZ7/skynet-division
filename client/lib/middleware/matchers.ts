@@ -1,20 +1,18 @@
-// lib/middleware/matchers.ts
-export const publicPaths = ['/', '/login', '/register', '/activate', '/test'];
+// Stałe konfiguracyjne
+export const publicPaths = ['/', '/login', '/register', '/activate'];
+export const allowedPaths = ['/dashboard/:path*', '/profile', '/settings'];
+export const excludedPaths = ['/_next/', '/images/', '/favicon.ico', '/.well-known/', '/static/'];
 
-export const allowedPaths = ['/dashboard/*', '/profile', '/settings'];
-
-
-// export function matchesPath(pathname: string, patterns: string[]): boolean {
-//   return patterns.some((pattern) => {
-//     const regex = new RegExp(`^${pattern.replace(/:path\*/, '.*')}$`);
-//     return regex.test(pathname);
-//   });
-// }
+// Cache dla wyrażen regularnych
+const regexCache = new Map<string, RegExp>();
 
 export function matchesPath(pathname: string, patterns: string[]): boolean {
-    return patterns.some((pattern) => {
+  return patterns.some((pattern) => {
+    // Użyj cache dla wyrażen regularnych
+    if (!regexCache.has(pattern)) {
       const regex = new RegExp(`^${pattern.replace(/:path\*/, '.*').replace(/\*/g, '.*')}$`);
-      return regex.test(pathname);
-    });
-  }
-  
+      regexCache.set(pattern, regex);
+    }
+    return regexCache.get(pattern)!.test(pathname);
+  });
+}

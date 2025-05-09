@@ -11,36 +11,44 @@ import { isAuthenticated } from '@/lib/middleware/auth-middleware';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  // console.log(`pathname: ${pathname}`);
+  console.log(`pathname: ${pathname}`)
 
+    // Pomiń statyczne zasoby i inne wykluczone ścieżki
+  if (
+    pathname.startsWith('/_next/') ||
+    pathname.startsWith('/images/') ||
+    pathname.startsWith('/favicon.ico') ||
+    pathname.startsWith('/.well-known/') ||
+    pathname.startsWith('/static/')
+  ) {
+    return NextResponse.next();
+  }
 
-  // Obsługa next-intl
-  // const intlResponse = i18nMiddleware(request);
-  // if (intlResponse instanceof NextResponse) {
-  //   return intlResponse;
-  // }
-
+   // Sprawdź, czy ścieżka jest publiczna
   if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
     return NextResponse.next();
   }
 
   const isAuth = await isAuthenticated(request);
+  console.log(`isAuth: ${isAuth}`);
 
-  // if (isAuth && matchesPath(pathname, publicPaths)) {
-  //   return NextResponse.redirect(new URL('/dashboard', request.url));
-  // }
+
+
+ // Jeśli użytkownik jest zalogowany, przekieruj z publicznych ścieżek na dashboard
+  if (isAuth && (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths))) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
   
-
+  // Jeśli użytkownik nie jest zalogowany, przekieruj na login
   if (!isAuth) {
-    // const loginUrl = new URL('/login', request.url);
-    // loginUrl.searchParams.set('redirect', pathname);
-    // return NextResponse.redirect(loginUrl);
-    return NextResponse.redirect(new URL('/login', request.url));
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname); // Zachowaj ścieżkę do przekierowania po zalogowaniu
+    return NextResponse.redirect(loginUrl);
   }
 
-  // if (isAuth && !allowedPaths.includes(pathname)) {
-  //   const notFoundUrl = new URL('/404', request.url);
-  //   return NextResponse.rewrite(notFoundUrl);
+// Jeśli użytkownik jest zalogowany, ale ścieżka nie jest dozwolona, zwróć 404
+  // if (isAuth && !allowedPaths.includes(pathname) && !matchesPath(pathname, allowedPaths)) {
+  //   return NextResponse.rewrite(new URL('/404', request.url));
   // }
   
 
@@ -48,5 +56,7 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  matcher: [
+    '/((?!_next/static|_next/image|favicon.ico|images/|.well-known/|static/).*)',
+  ],
 };
