@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+/**
+ * Logs detailed information about an incoming HTTP request.
+ * 
+ * @param {NextRequest} request - The incoming request from Next.js middleware.
+ * @param {number} [startTime] - Optional timestamp (from `performance.now()`) to calculate duration.
+ * 
+ * @example
+ * const start = performance.now();
+ * await logMiddlewareRequest(request, start);
+ */
 export const logMiddlewareRequest = async (request: NextRequest, startTime?: number) => {
   const { method } = request;
   const pathname = request.nextUrl.pathname;
@@ -22,6 +32,22 @@ export const logMiddlewareRequest = async (request: NextRequest, startTime?: num
   }
 };
 
+/**
+ * Logs detailed information about an outgoing HTTP response.
+ * 
+ * @param {NextResponse} response - The outgoing response from Next.js middleware.
+ * @param {number} [startTime] - Optional timestamp to measure response time.
+ * 
+ * @example
+ * const response = NextResponse.next();
+ * logMiddlewareResponse(response, startTime);
+ * return response;
+ * 
+ * if (process.env.NODE_ENV === "development") {
+    await logMiddlewareRequest(request, start);
+   }
+
+ */
 export const logMiddlewareResponse = (response: NextResponse, startTime?: number) => {
   let timeMs = 'n/a';
   if (startTime !== undefined) {
