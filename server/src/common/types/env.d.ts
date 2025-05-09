@@ -1,48 +1,54 @@
 declare namespace NodeJS {
-    interface ProcessEnv {
-      // DATABASE
-      DB_HOST: string;
-      DB_PORT: string;
-      DB_DATABASE: string;
-      DB_USERNAME: string;
-      DB_PASSWORD: string;
-  
-      // SERVER
-      PORT: string;
-  
-      // URL
-      API_URL: string;
-  
-      BCRYPT_ROUND: string;
-  
-      JWT_KEY: string;
-      JWT_SECRET: string;
-      JWT_EXPIRES_IN: string;
-      JWT_ISSUER: string;
-      JWT_COOKIE_NAME: string
-  
-     
+  interface ProcessEnv {
+    // DATABASE
+    DB_HOST: string;
+    DB_PORT: string;
+    DB_DATABASE: string;
+    DB_USERNAME: string;
+    DB_PASSWORD: string;
 
-      // SESSION
-      ACCESS_COOKIE_NAME: string;
-      SESSION_COOKIE_NAME: string;
-      SESSION_EXPIRES: string;
-      SESSION_SECRET_KEY: string;
-      SESSION_COOKIE_DOMAIN: string;
-      SESSION_MAX_AGE: string;
+    // SERVER
+    PORT: string;
 
-      // EncryptionConfig
-      ENCRYPTION_KEY: string;
-      ENCRYPTION_ALGORITHM: string;
-      IV_LENGTH: string;
-      TAG_LENGTH: string;
+    // URL
+    API_URL: string;
 
+    // BCRYPT
+    BCRYPT_SALT_ROUNDS: string;
 
-      CSRF_COOKIE_NAME: string;
-  
-      CORS_EXPIRES: string;
-  
-      PHOTO_UPLOAD_DIR: string;
-    }
+    // JWT
+    JWT_COOKIE_NAME: string;
+    JWT_SECRET: string;
+    JWT_EXPIRES_IN: string;
+    JWT_ISSUER: string;
+
+    // SESSION
+    SESSION_COOKIE_NAME: string;
+    SESSION_SECRET_KEY: string;
+    SESSION_EXPIRES: string;
+    SESSION_COOKIE_DOMAIN: string;
+
+    // CSRF
+    CSRF_COOKIE_NAME: string;
+
+    // CORS
+    CORS_EXPIRES: string;
+
+    // PHOTO UPLOAD DIR
+    PHOTO_UPLOAD_DIR: string;
+
+    // Encryption Config
+    ENCRYPTION_KEY: string;
+    ENCRYPTION_ALGORITHM: string;
+    IV_LENGTH: string;
+    TAG_LENGTH: string;
+
+    // NODE_ENV
+    NODE_ENV: string;
+
+    // REDIS
+    REDIS_HOST: string;
+    REDIS_PORT: string;
+    REDIS_PASSWORD: string;
   }
-  
+}

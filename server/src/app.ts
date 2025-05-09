@@ -1,9 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
-import cors from 'cors';
-
-import sessionManager from '#ro/common/middlewares/core/session.middlewares';
+import sessionManager from '#ro/config/session.config';
 import { globalLimiter } from '#ro/common/middlewares/core/DDOS/globalLimiter.middleware';
 import { corsMiddleware } from '#ro/common/middlewares/security/cors.middleware';
 import { helmetMiddleware } from '#ro/common/middlewares/security/helmet.middleware';

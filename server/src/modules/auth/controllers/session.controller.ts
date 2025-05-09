@@ -14,22 +14,22 @@ export const checkSessionStatus = async (
 ): Promise<void> => {
   // Logowanie sesji dla debugowania
 
-  // SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
+  SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     // Wyciągamy z sesji potrzebne wartości
     const { userId: id, role, username} = req.session ?? {};
 
     // Tworzymy obiekt użytkownika
-    const user = {
-      id,
-      role,
-      username,
-    };
+    // const user = {
+    //   id,
+    //   role,
+    //   username,
+    // };
 
     // Tworzymy payload odpowiedzi
     const responsePayload = {
-      user,
+      isAuthenticated: true
     };
 
     SystemLog.warn(responsePayload);

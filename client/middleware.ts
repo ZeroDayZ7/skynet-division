@@ -20,15 +20,15 @@ export async function middleware(request: NextRequest) {
   //   return intlResponse;
   // }
 
-  // if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
-  //   return NextResponse.next();
-  // }
+  if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
+    return NextResponse.next();
+  }
 
   const isAuth = await isAuthenticated(request);
 
-  if (isAuth && matchesPath(pathname, publicPaths)) {
-    return NextResponse.redirect(new URL('/dashboard', request.url));
-  }
+  // if (isAuth && matchesPath(pathname, publicPaths)) {
+  //   return NextResponse.redirect(new URL('/dashboard', request.url));
+  // }
   
 
   if (!isAuth) {
