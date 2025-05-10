@@ -24,27 +24,22 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-   // Sprawdź, czy ścieżka jest publiczna
-  if (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths)) {
-    return NextResponse.next();
-  }
-
   const isAuth = await isAuthenticated(request);
   console.log(`isAuth: ${isAuth}`);
-
-
+  
 
  // Jeśli użytkownik jest zalogowany, przekieruj z publicznych ścieżek na dashboard
   if (isAuth && (publicPaths.includes(pathname) || matchesPath(pathname, publicPaths))) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
   
-  // Jeśli użytkownik nie jest zalogowany, przekieruj na login
-  if (!isAuth) {
+  // Jeśli użytkownik nie jest zalogowany i próbuje wejść na stronę niepubliczną
+  if (!isAuth && !publicPaths.includes(pathname) && !matchesPath(pathname, publicPaths)) {
     const loginUrl = new URL('/login', request.url);
-    loginUrl.searchParams.set('redirect', pathname); // Zachowaj ścieżkę do przekierowania po zalogowaniu
+    loginUrl.searchParams.set('redirect', pathname); // zachowaj redirect po zalogowaniu
     return NextResponse.redirect(loginUrl);
   }
+
 
 // Jeśli użytkownik jest zalogowany, ale ścieżka nie jest dozwolona, zwróć 404
   // if (isAuth && !allowedPaths.includes(pathname) && !matchesPath(pathname, allowedPaths)) {

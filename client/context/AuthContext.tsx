@@ -3,7 +3,6 @@
 import { createContext, useState, useContext, ReactNode, useEffect, useCallback } from 'react';
 import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
-import { getUnreadNotificationsCount } from '@/lib/api/notifications';
 import type { UserRole } from '@/components/ui/RoleBadge';
 import { useRouter } from 'next/navigation';
 
@@ -13,18 +12,15 @@ export type User = {
   id: number;
   username: string;
   role: UserRole;
+  points?: number;
+  notifications?: number;
   hasDocumentsEnabled?: boolean;
 };
 
-export type FullUser = {
-  points?: number;
-  notifications?: number;
-
-};
 
 type AuthContextType = {
+  isAuthenticated: boolean;
   user: User | null;
-  fullUser: FullUser | null,
   isLoading: boolean;
   login: (user: User) => void;
   logout: () => void;
@@ -34,8 +30,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Komponent dostarczający kontekst autoryzacji
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
-  const [fullUser, setFullUser] = useState<FullUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
 
@@ -72,23 +68,6 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
 }, []);
 
 
-  useEffect(() => {
-    // console.log(`[AuthContext][Initialize]: unreadNotificationsCount`);
-    if (!user) return;
-  
-    const fetchNotifications = async () => {
-      try {
-        const unreadNotificationsCount = await getUnreadNotificationsCount();
-        // console.log(`[AuthContext][unreadNotificationsCount]: ${JSON.stringify(unreadNotificationsCount)}`);
-        updateNotificationsContext(unreadNotificationsCount);
-      } catch (err) {
-        console.error('[useEffect] Błąd podczas pobierania powiadomień:', err);
-      }
-    };
-  
-    fetchNotifications();
-  }, [user]);
-  
 
 
   // Logowanie użytkownika
@@ -102,17 +81,6 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     setUser(null);
     // localStorage.removeItem('user');
   };
-
-  // Aktualizacja licznika powiadomień
-  const updateNotificationsContext = (count: number) => {
-    if (!user || typeof count !== 'number') return;
-  
-    const updatedUser = { ...fullUser, notifications: Math.max(0, count) }; // Bezpośrednie ustawienie pobranej liczby powiadomień
-    setFullUser(updatedUser);
-    // localStorage.setItem('user', JSON.stringify(updatedUser)); // Opcjonalnie zapis do localStorage
-  };
-
-
 
   // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {
@@ -133,7 +101,7 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
     <AuthContext.Provider
       value={{
         user,
-        fullUser,
+        isAuthenticated,
         isLoading,
         login,
         logout,

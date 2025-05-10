@@ -11,7 +11,8 @@ export async function isAuthenticated(request: NextRequest): Promise<boolean> {
 
   try {
     const session: Session = await checkSession(sessionKey);
-    return Boolean(session);
+    console.log(`session: ${JSON.stringify(session)}`);
+    return Boolean(session.user);
   } catch (error) {
     console.error('Auth middleware error:', error);
     return false;

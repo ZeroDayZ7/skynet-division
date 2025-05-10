@@ -8,6 +8,7 @@ import { globalErrorMiddleware } from '#ro/common/errors/globalErrorMiddleware';
 import SystemLog from '#ro/common/utils/SystemLog';
 import apiRouter from '#ro/routes/apiRouter';
 import defineUserAssociations from '#ro/config/associations';
+import { requestLoggerDev } from './common/middlewares/core/requestLogger.middleware';
 
 // Inicjalizacja aplikacji Express
 const app = express();

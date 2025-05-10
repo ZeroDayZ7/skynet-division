@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize';
 import SystemLog from '#ro/common/utils/SystemLog';
+import { env } from './env/env';
 
 declare global {
   var sequelize: Sequelize | undefined;
@@ -10,11 +11,11 @@ const sequelize =
   global.sequelize ||
   new Sequelize({
     dialect: 'mysql',
-    host: process.env.DB_HOST || 'mysql',
-    port: Number(process.env.DB_PORT) || 3306,
-    username: process.env.DB_USERNAME || 'root',
-    password: process.env.DB_PASSWORD || 'inside88',
-    database: process.env.DB_DATABASE || 'crimscity',
+    host: env.DB_HOST,
+    port: env.DB_PORT,
+    username: env.DB_USERNAME,
+    password: env.DB_PASSWORD,
+    database: env.DB_DATABASE,
     logging: false,
     // logging: (msg) => SystemLog.info(msg),
     // logging: process.env.NODE_ENV === 'development' ? (msg) => SystemLog.info(msg) : false,

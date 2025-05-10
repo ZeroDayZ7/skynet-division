@@ -6,7 +6,7 @@ export interface UserAttributes {
   email: string | null;
   pass: string;
   pin: string | null;
-  points: number | null;
+  points: number;
   activation_token: string | null;
   documents?: Record<string, boolean> | null; // Dodane pole
   login_count: number;

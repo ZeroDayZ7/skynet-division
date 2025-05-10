@@ -1,7 +1,16 @@
+import { UserRole } from '@/components/ui/ui/UserRoleBadge';
+
 const apiUrl = process.env.EXPRESS_API_URL || 'http://localhost:3001';
 
 export type Session = {
-  isAuthenticated: boolean;
+  user: {
+    id: number;
+    username: string;
+    role: UserRole;
+    points?: number;
+    notifications?: number;
+    hasDocumentsEnabled?: boolean;
+  } | null;
 };
 
 /**
@@ -12,24 +21,24 @@ export type Session = {
  */
 export async function checkSession(sessionKey: string): Promise<Session> {
   if (!sessionKey) {
-    return { isAuthenticated: false };
+    return { user: null };
   }
 
   try {
     const response = await fetch(`${apiUrl}/api/session`, {
       method: 'GET',
-      // headers: {
-      //   Cookie: `${process.env.SESSION_COOKIE_NAME}=${sessionKey}`,
-      // },
-      credentials: 'include', // W razie potrzeby obsługi cross-origin
+      headers: {
+        Cookie: `${process.env.SESSION_COOKIE_NAME}=${sessionKey}`,
+      },
+      // credentials: 'include', // W razie potrzeby obsługi cross-origin
     });
 
     if (!response.ok) {
-      return { isAuthenticated: false };
+      return { user: null };
     }
 
     const user = await response.json();
-    return { isAuthenticated: user.isAuthenticated };
+    return { user: user.user };
   } catch (err) {
     throw new Error('Failed to verify session');
   }
