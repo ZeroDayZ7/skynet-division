@@ -8,6 +8,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { REGEXP_ONLY_DIGITS } from "input-otp"
 
 const pinSchema = z
   .object({
@@ -50,8 +51,8 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
             <FormItem className="flex flex-col items-center">
               <FormLabel>{isPinSet ? 'Nowy kod PIN' : 'Kod PIN (4 cyfry)'}</FormLabel>
               <FormControl>
-                <InputOTP {...field} maxLength={4}>
-                  <InputOTPGroup className="justify-center">
+                <InputOTP {...field} maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
+                  <InputOTPGroup className="justify-center" >
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
                     <InputOTPSlot index={2} />
@@ -71,7 +72,7 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
             <FormItem className="flex flex-col items-center">
               <FormLabel>{isPinSet ? 'Potwierdź nowy kod PIN' : 'Potwierdź kod PIN'}</FormLabel>
               <FormControl>
-                <InputOTP {...field} maxLength={4}>
+                <InputOTP {...field} maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
                   <InputOTPGroup className="justify-center">
                     <InputOTPSlot index={0} />
                     <InputOTPSlot index={1} />
