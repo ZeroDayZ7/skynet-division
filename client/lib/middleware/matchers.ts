@@ -1,6 +1,7 @@
 // Stałe konfiguracyjne
 export const publicPaths = ['/', '/login', '/register', '/activate'];
 export const allowedPaths = ['/dashboard/:path*', '/profile', '/settings'];
+export const protectedPaths = ['/dashboard', '/settings', '/account'];
 export const excludedPaths = ['/_next/', '/images/', '/favicon.ico', '/.well-known/', '/static/'];
 
 // Cache dla wyrażen regularnych

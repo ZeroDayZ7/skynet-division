@@ -3,10 +3,6 @@ import express from 'express';
 import { csrfMiddleware } from '#ro/common/csrf/csrf.middleware';
 import { authMiddleware } from '../../../common/middlewares/auth.middleware';
 import { validateRequest } from '#ro/common/middlewares/validate.middleware';
-import { pinSchema, PinPayload } from '../validators/pin.validation';
-
-import { checkPinController } from '#ro/modules/user/controller/checkPinController';
-import { setPinController } from '#ro/modules/user/controller/setPinController';
 
 import { getUserEIDData } from '../controller/usersData/userEIDController';
 import { getUserPassportData } from '../controller/usersData/userPassportController';
@@ -17,7 +13,7 @@ import { markNotificationsAsRead } from '../controller/notification/notification
 
 import { getUserPermissionstToLoginController } from '#ro/modules/user/controller/getUserPermissions.controller';
 import { notificationQuerySchema } from '../validators/notificationQuery.schema';
-import { countNotificationsController } from '../controller/notification/count.controller';
+// import { countNotificationsController } from '../controller/notification/count.controller';
 import { meUserController } from '../controller/me/me.controller';
 
 
@@ -26,9 +22,6 @@ const router = express.Router();
 // Elektroniczny dowód
 router.post('/user-eid', csrfMiddleware, authMiddleware, getUserEIDData);
 router.post('/user-passport', csrfMiddleware, authMiddleware, getUserPassportData);
-
-router.get('/pin-status', authMiddleware, checkPinController);
-router.post('/set-pin', validateRequest<PinPayload>(pinSchema), authMiddleware, setPinController);
 
 // pobieranie powidomień usera
 router.get('/notifications/unread', 
