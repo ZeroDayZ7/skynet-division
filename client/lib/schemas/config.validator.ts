@@ -21,20 +21,17 @@ export const emailSchema = z
   .max(100, 'Email za długi')
   .trim();
 
-// usernameSchema i surnameSchema używają regexu do walidacji:
-// ^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\-]+$
-// Składnia regexu:
-// - a-zA-Z        → wszystkie litery alfabetu łacińskiego (małe i wielkie)
-// - ąćęłńóśźżĄĆĘŁŃÓŚŹŻ → polskie litery (małe i wielkie)
-// - \s            → spacje
-// - \-            → myślniki (np. dla nazwisk dwuczłonowych)
-// - ^ i $         → początek i koniec ciągu (cały string musi pasować)
-// - +   
+export const activationTokenSchema = z
+  .string()
+  .email('Niepoprawny adres email')
+  .max(100, 'Email za długi')
+  .trim();
+
 // Schemat walidacji nazwy użytkownika
 export const usernameSchema = z
   .string()
-  .min(3, 'Username musi mieć co najmniej 3 znaki')
-  .max(30, 'Username nie może mieć więcej niż 30 znaków')
+  .min(3, 'Pole musi mieć co najmniej 3 znaki')
+  .max(30, 'Pole nie może mieć więcej niż 30 znaków')
   .regex(/^[a-zA-Z0-9_-]+$/, 'Username może zawierać tylko litery, cyfry, _ i -')
   .regex(/^(?![_.-])(?=[a-zA-Z0-9_-]*[a-zA-Z0-9])[a-zA-Z0-9_-]+$/, 'Username nie może zaczynać się ani kończyć na _ lub -');
 

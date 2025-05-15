@@ -1,20 +1,20 @@
-// components/settings/security/pin/SetPinForm.tsx
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { z } from 'zod';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { REGEXP_ONLY_DIGITS } from "input-otp"
+import { Eye, EyeOff } from 'lucide-react';
 
 const pinSchema = z
   .object({
     pin: z.string().length(4, 'Kod PIN musi mieć dokładnie 4 cyfry').regex(/^\d{4}$/, 'Kod PIN musi składać się z cyfr'),
     confirmPin: z.string().length(4, 'Kod PIN musi mieć dokładnie 4 cyfry').regex(/^\d{4}$/, 'Kod PIN musi składać się z cyfr'),
-    password: z.string().min(8, 'Hasło jest wymagane'),
+    password: z.string().min(8, 'Hasło musi mieć co najmniej 8 znaków'),
   })
   .refine((data) => data.pin === data.confirmPin, {
     message: 'Kody PIN nie są identyczne',
@@ -41,6 +41,13 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
     },
   });
 
+  const [showPin, setShowPin] = useState(false);
+
+  const handleCancel = () => {
+    form.reset(); // Resetuj formularz
+    onCancel();
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} id="setpinform" className="space-y-6">
@@ -51,12 +58,12 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
             <FormItem className="flex flex-col items-center">
               <FormLabel>{isPinSet ? 'Nowy kod PIN' : 'Kod PIN (4 cyfry)'}</FormLabel>
               <FormControl>
-                <InputOTP {...field} maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
-                  <InputOTPGroup className="justify-center" >
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
+                <InputOTP {...field} maxLength={4}>
+                  <InputOTPGroup className="justify-center">
+                    <InputOTPSlot index={0} mask={!showPin} />
+                    <InputOTPSlot index={1} mask={!showPin} />
+                    <InputOTPSlot index={2} mask={!showPin} />
+                    <InputOTPSlot index={3} mask={!showPin} />
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>
@@ -72,12 +79,12 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
             <FormItem className="flex flex-col items-center">
               <FormLabel>{isPinSet ? 'Potwierdź nowy kod PIN' : 'Potwierdź kod PIN'}</FormLabel>
               <FormControl>
-                <InputOTP {...field} maxLength={4} pattern={REGEXP_ONLY_DIGITS}>
+                <InputOTP {...field} maxLength={4}>
                   <InputOTPGroup className="justify-center">
-                    <InputOTPSlot index={0} />
-                    <InputOTPSlot index={1} />
-                    <InputOTPSlot index={2} />
-                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={0} mask={!showPin} />
+                    <InputOTPSlot index={1} mask={!showPin} />
+                    <InputOTPSlot index={2} mask={!showPin} />
+                    <InputOTPSlot index={3} mask={!showPin} />
                   </InputOTPGroup>
                 </InputOTP>
               </FormControl>
@@ -112,7 +119,32 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
         </div>
 
         <div className="flex justify-end gap-2 pt-4">
-          <Button variant="outline" onClick={onCancel} type="button" disabled={isLoading}>
+          <Button
+            // className='w-35'
+            type="button"
+            variant="outline"
+            onClick={() => setShowPin(!showPin)}
+            disabled={isLoading}
+            aria-label={showPin ? 'Ukryj PIN' : 'Pokaż PIN'}
+          >
+            {showPin ? (
+              <>
+                <EyeOff className="h-4 w-4 mr-2"/>
+                Ukryj PIN
+              </>
+            ) : (
+              <>
+                <Eye className="h-4 w-4 mr-2" />
+                Pokaż PIN
+              </>
+            )}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCancel}
+            disabled={isLoading}
+          >
             Anuluj
           </Button>
           <Button type="submit" disabled={isLoading}>

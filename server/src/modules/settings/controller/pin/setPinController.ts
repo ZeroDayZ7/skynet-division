@@ -6,7 +6,6 @@ import { setUserPin } from '#ro/modules/settings/services/pin.service';
 import { verifyUserPassword, hashValue } from '#ro/common/utils/auth.utils';
 import { getValidatedData } from '#ro/utils/request';
 import { PinPayload } from '../../validators/pin.validation';
-import { ERROR_CODES } from '#ro/common/errors/errorCodes';
 
 export const setPinController = async (req: Request, res: Response): Promise<void> => {
   try {

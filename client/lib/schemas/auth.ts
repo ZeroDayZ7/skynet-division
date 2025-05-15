@@ -4,15 +4,15 @@
  */
 
 import { z } from 'zod';
+import { activationTokenSchema, emailSchema, passwordSchema, usernameSchema } from './config.validator';
 
-const SPECIAL_CHARS = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/;
 
 /**
  * Schemat walidacji dla formularza logowania.
  */
 export const loginSchema = z.object({
-  email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
-  password: z.string().min(6, { message: 'Hasło musi mieć co najmniej 6 znaków.' }),
+  email: emailSchema,
+  password: passwordSchema,
 });
 
 /**
@@ -20,14 +20,10 @@ export const loginSchema = z.object({
  */
 export const registerSchema = z
   .object({
-    email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
-    password: z
-      .string()
-      .min(8, { message: 'Hasło musi mieć co najmniej 8 znaków.' })
-      .regex(/\d/, { message: 'Hasło musi zawierać co najmniej jedną cyfrę.' })
-      .regex(/[A-Z]/, { message: 'Hasło musi zawierać co najmniej jedną dużą literę.' })
-      .regex(SPECIAL_CHARS, { message: 'Hasło musi zawierać co najmniej jeden znak specjalny.' }),
-    confirmPassword: z.string().min(8, { message: 'Potwierdź hasło' }),
+    email: emailSchema,
+    username: usernameSchema,
+    password: passwordSchema,
+    confirmPassword: passwordSchema,
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: 'Hasła nie są identyczne.',
@@ -38,17 +34,14 @@ export const registerSchema = z
  * Schemat walidacji dla formularza aktywacji.
  */
 export const activateSchema = z.object({
-  activationToken: z
-    .string()
-    .length(6, { message: 'Kod aktywacyjny musi mieć dokładnie 6 cyfr.' })
-    .regex(/^\d{6}$/, { message: 'Kod aktywacyjny musi składać się z 6 cyfr.' }),
+  activationToken: activationTokenSchema,
 });
 
 /**
  * Schemat walidacji dla ponownego wysyłania kodu aktywacyjnego.
  */
 export const resendActivationSchema = z.object({
-  email: z.string().email({ message: 'Nieprawidłowy adres e-mail' }),
+  email: emailSchema,
 });
 
 /**

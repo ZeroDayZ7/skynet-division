@@ -34,7 +34,7 @@ export default function SettingsPage() {
   }, [isPinSet]);
 
   const handleToggle2FA = (checked: boolean) => {
-    // setTwoFactorEnabled(checked);
+    setTwoFactorEnabled(checked);
 
     if (checked && !isPinSet) {
       toast.warning('Kod PIN nie jest ustawiony', {
@@ -44,7 +44,7 @@ export default function SettingsPage() {
           onClick: () => setIsModalOpen(true),
         },
       });
-      // setTwoFactorEnabled(false);
+      setTwoFactorEnabled(false);
       return;
     }
   };
