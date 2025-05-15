@@ -42,9 +42,10 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
   });
 
   const [showPin, setShowPin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleCancel = () => {
-    form.reset(); // Resetuj formularz
+    form.reset();
     onCancel();
   };
 
@@ -97,17 +98,27 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
           control={form.control}
           name="password"
           render={({ field }) => (
-            <FormItem className="flex flex-col items-center">
+            <FormItem className="flex flex-col items-center w-full">
               <FormLabel htmlFor="password">Aktualne hasło</FormLabel>
               <FormControl>
-                <Input
-                  id="password"
-                  type="password"
-                  {...field}
-                  disabled={isLoading}
-                  className="w-full max-w-xs"
-                  autoComplete="off"
-                />
+                <div className="relative w-full">
+                  <Input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    {...field}
+                    disabled={isLoading}
+                    className="pr-10"
+                    // autoComplete="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-2 flex items-center justify-center text-muted-foreground"
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -120,7 +131,6 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
 
         <div className="flex justify-end gap-2 pt-4">
           <Button
-            // className='w-35'
             type="button"
             variant="outline"
             onClick={() => setShowPin(!showPin)}
@@ -129,7 +139,7 @@ export function SetPinForm({ error, isLoading, onSubmit, onCancel, isPinSet }: S
           >
             {showPin ? (
               <>
-                <EyeOff className="h-4 w-4 mr-2"/>
+                <EyeOff className="h-4 w-4 mr-2" />
                 Ukryj PIN
               </>
             ) : (

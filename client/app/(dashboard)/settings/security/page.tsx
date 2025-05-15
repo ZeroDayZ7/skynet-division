@@ -2,15 +2,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
-import PinButton from './pin/PinButton';
 import { usePinStatus } from './pin/hooks/usePinStatus';
-import { fetchClient } from '@/lib/axiosClient';
 import dynamic from 'next/dynamic';
 import { Loader } from '@/components/ui/loader';
-import { ShieldCheck, ShieldOff } from 'lucide-react';
 import TwoFactorSwitch from './components/TwoFactorSection';
 import PinSection from './components/PinSection';
 
@@ -71,9 +66,9 @@ export default function SettingsPage() {
           onClose={() => setIsModalOpen(false)}
           onSuccess={(message) => {
             toast.success(message);
-            setIsModalOpen(false); // <--- DODAJ TO
-            setIsPinSet(true);
-            setTwoFactorEnabled(true);
+            setIsModalOpen(false);
+            // setIsPinSet(true);
+            // setTwoFactorEnabled(true);
             // refetch(); // odśwież status PIN
           }}
           isPinSet={!!isPinSet}

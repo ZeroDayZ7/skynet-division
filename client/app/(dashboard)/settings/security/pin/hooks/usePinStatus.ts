@@ -10,7 +10,7 @@ export function usePinStatus() {
   const fetchPinStatus = async () => {
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await fetchClient.get('/api/settings/two-factor');
       setIsPinSet(response.data.isPinSet);
     } catch (error) {
