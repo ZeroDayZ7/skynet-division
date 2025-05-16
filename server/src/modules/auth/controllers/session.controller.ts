@@ -8,8 +8,8 @@ export const checkSessionStatus = async (
 ): Promise<void> => {
   // Logowanie sesji dla debugowania
 
-  SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
-  SystemLog.warn(`req.user: ${req.session.userId}`);
+  // SystemLog.warn(`[checkSessionStatus]: ${JSON.stringify(req.session, null, 2)}`);
+  // SystemLog.warn(`req.user: ${req.session.userId}`);
   if (req.session.userId) {
     // Sesja istnieje, użytkownik jest zalogowany
     // Wyciągamy z sesji potrzebne wartości
@@ -29,7 +29,7 @@ export const checkSessionStatus = async (
       user,
     };
 
-    SystemLog.warn(responsePayload);
+    // SystemLog.warn(responsePayload);
 
     // Wysyłamy odpowiedź
     res.status(200).json(responsePayload);

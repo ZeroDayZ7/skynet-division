@@ -41,14 +41,14 @@ useEffect(() => {
   checkAuth();
 }, []);
 
-console.log('[AuthProvider] render', { user, isLoading });
+// console.log('[AuthProvider] render', { user, isLoading });
 // Funkcja sprawdzająca autentykację
 const checkAuth = useCallback(async (): Promise<boolean> => {
-  console.log('[AuthProvider][Initialize]: checkAuth');
+  // console.log('[AuthProvider][Initialize]: checkAuth');
 
   try {
     const session = await getUserSession();
-    console.log(JSON.stringify(session));
+    // console.log(JSON.stringify(session));
     
     if (session) {
       // console.log(`[AuthContext/SESSION]: ${JSON.stringify(session)}`);

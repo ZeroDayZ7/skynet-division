@@ -4,6 +4,7 @@ import UserSettings from '../models/UserSettings';
 
 interface PinStatusResult {
   isPinSet: boolean;
+  isTwoFactorEnabled: boolean;
 }
 
 /**
@@ -13,7 +14,7 @@ interface PinStatusResult {
 export const checkPinStatus = async (userId: number): Promise<PinStatusResult> => {
   const settings = await UserSettings.findOne({
     where: { user_id: userId },
-    attributes: ['pin_hash'],
+    attributes: ['pin_hash', 'two_factor_enabled'],
   });
 
   if (!settings) {
@@ -22,6 +23,7 @@ export const checkPinStatus = async (userId: number): Promise<PinStatusResult> =
 
   return {
     isPinSet: settings.pin_hash !== null,
+    isTwoFactorEnabled: !!settings.two_factor_enabled,
   };
 };
 

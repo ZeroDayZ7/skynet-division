@@ -10,8 +10,15 @@ import TwoFactorSwitch from './components/TwoFactorSection';
 import PinSection from './components/PinSection';
 
 export default function SettingsPage() {
-  const { isPinSet, loading, setIsPinSet, refetch } = usePinStatus();
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const {
+  isPinSet,
+  isTwoFactorEnabled,
+  loading,
+  setIsPinSet,
+  setIsTwoFactorEnabled,
+  // refetch,
+} = usePinStatus();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // ⬇️ Lazy loading
@@ -24,33 +31,19 @@ export default function SettingsPage() {
   useEffect(() => {
     if (isPinSet !== null) {
       console.log(`isPinSet: ${isPinSet}`);
-      setTwoFactorEnabled(isPinSet);
+      console.log(`isTwoFactorEnabled: ${isTwoFactorEnabled}`);
+      // setTwoFactorEnabled(isTwoFactorEnabled);
     }
   }, [isPinSet]);
-
-  const handleToggle2FA = (checked: boolean) => {
-    setTwoFactorEnabled(checked);
-
-    if (checked && !isPinSet) {
-      toast.warning('Kod PIN nie jest ustawiony', {
-        description: 'Aby włączyć 2FA, musisz najpierw ustawić kod PIN.',
-        action: {
-          label: 'Ustaw PIN',
-          onClick: () => setIsModalOpen(true),
-        },
-      });
-      setTwoFactorEnabled(false);
-      return;
-    }
-  };
 
   return (
     <div className="space-y-4">
       <TwoFactorSwitch
-        checked={twoFactorEnabled}
+        checked={isTwoFactorEnabled}
         disabled={loading}
         isPinSet={isPinSet}
-        onCheckedChange={handleToggle2FA}
+        // onCheckedChange={handleToggle2FA}
+        onCheckedChange={setIsTwoFactorEnabled} // prosty setter
         onRequirePinSetup={() => setIsModalOpen(true)}
       />
 
@@ -67,7 +60,7 @@ export default function SettingsPage() {
           onSuccess={(message) => {
             toast.success(message);
             setIsModalOpen(false);
-            // setIsPinSet(true);
+            setIsPinSet(true);
             // setTwoFactorEnabled(true);
             // refetch(); // odśwież status PIN
           }}

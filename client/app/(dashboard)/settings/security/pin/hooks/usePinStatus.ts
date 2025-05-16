@@ -1,24 +1,36 @@
-// components/settings/security/pin/hooks/usePinStatus.ts
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { fetchClient } from '@/lib/axiosClient';
 
+interface PinStatus {
+  isPinSet: boolean;
+  isTwoFactorEnabled: boolean;
+}
+
 export function usePinStatus() {
-  const [isPinSet, setIsPinSet] = useState<boolean | null>(null);
+  const [status, setStatus] = useState<PinStatus | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchPinStatus = async () => {
     try {
       setLoading(true);
-      // await new Promise((resolve) => setTimeout(resolve, 1000));
       const response = await fetchClient.get('/api/settings/two-factor');
-      setIsPinSet(response.data.isPinSet);
+      setStatus(response.data);
     } catch (error) {
-      console.error('Błąd pobierania statusu PIN:', error);
-      toast.error('Błąd podczas sprawdzania statusu PIN');
-      setIsPinSet(null);
+      console.error('Błąd pobierania statusu PIN i 2FA:', error);
+      toast.error('Błąd podczas sprawdzania statusu zabezpieczeń');
+      setStatus(null);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateTwoFactorSetting = async (enabled: boolean) => {
+    try {
+      await fetchClient.post('/api/settings/two-factor', { enabled });
+      setStatus((prev) => (prev ? { ...prev, isTwoFactorEnabled: enabled } : null));
+    } catch (error) {
+      console.error('Błąd aktualizacji 2FA:', error);
     }
   };
 
@@ -26,5 +38,15 @@ export function usePinStatus() {
     fetchPinStatus();
   }, []);
 
-  return { isPinSet, loading, setIsPinSet, refetch: fetchPinStatus};
+  return {
+    isPinSet: status?.isPinSet ?? null,
+    isTwoFactorEnabled: status?.isTwoFactorEnabled ?? false,
+    loading,
+    refetch: fetchPinStatus,
+    setIsPinSet: (value: boolean) =>
+      setStatus((prev) => (prev ? { ...prev, isPinSet: value } : null)),
+
+    // Ta funkcja aktualizuje bazę danych!
+    setIsTwoFactorEnabled: updateTwoFactorSetting,
+  };
 }
