@@ -95,7 +95,9 @@ export default function ActivateForm({
                       autoFocus={true}
                     />
                   </FormControl>
-                  <FormMessage />
+                  {/* <FormMessage /> */}
+                  {/* {process.env.NODE_ENV === 'development' && <FormMessage />} */}
+
                 </FormItem>
               )}
             />

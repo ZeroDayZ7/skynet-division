@@ -23,9 +23,8 @@ export const emailSchema = z
 
 export const activationTokenSchema = z
   .string()
-  .email('Niepoprawny adres email')
-  .max(100, 'Email za długi')
-  .trim();
+  .regex(/^\d{6}$/, 'Kod aktywacyjny musi składać się z dokładnie 6 cyfr.');
+
 
 // Schemat walidacji nazwy użytkownika
 export const usernameSchema = z

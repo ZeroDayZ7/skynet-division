@@ -1,7 +1,7 @@
 import Users from '#ro/models/Users';
-import { generateActivationToken } from '#ro/common/utils/auth.utils';
+import { generateActivationToken, hashValue } from '#ro/common/utils/auth.utils';
 import AppError from '#ro/common/errors/AppError';
-import { hashValue } from '#ro/common/utils/auth.utils';
+import { v4 as uuidv4 } from 'uuid'; // ✅ Użyj prawdziwego UUID
 
 /**
  * Sprawdza, czy email jest wolny.
@@ -11,28 +11,44 @@ export const checkEmailAvailability = async (email: string): Promise<boolean> =>
   return !existingUser;
 };
 
+export const checkUsernameAvailability = async (username: string): Promise<boolean> => {
+  const existingUsername = await Users.findOne({ where: { username } });
+  return !existingUsername;
+};
+
+
 /**
- * Tworzy nowego użytkownika.
+ * Tworzy nowego użytkownika z domyślnymi danymi.
  */
 export const createUser = async (email: string, password: string): Promise<Users> => {
+  // ✅ Sprawdź email
   const emailFree = await checkEmailAvailability(email);
-  
   if (!emailFree) {
     throw new AppError('EMAIL_ALREADY_TAKEN', 409, false, 'Ten e-mail jest już zajęty.');
   }
 
+  // ✅ Hash hasła
   const hashedPassword = await hashValue(password);
+
+  // ✅ Token aktywacyjny
   const activationToken = generateActivationToken();
 
+  // ✅ Tymczasowa nazwa użytkownika
+  const tempUsername = `user-${uuidv4().slice(0, 8)}`;
+
+  // ✅ Utwórz użytkownika z domyślnymi danymi
   const newUser = await Users.create({
     email,
+    username: tempUsername,
     pass: hashedPassword,
     points: 0,
-    role: 'user',
+    role: 'init',
     userBlock: false,
     loginAttempts: 0,
     login_count: 0,
-    activation_token: activationToken
+    activation_token: activationToken,
+    pin: null,
+    documents: null
   });
 
   return newUser;

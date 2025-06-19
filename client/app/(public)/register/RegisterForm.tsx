@@ -15,6 +15,7 @@ import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Captcha from '@/components/auth/Captcha/Captcha';
 import { RegisterSchema } from '@/lib/schemas/auth';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 
 interface RegisterFormProps {
   form: UseFormReturn<RegisterSchema>;
@@ -48,18 +49,40 @@ export default function RegisterForm({
   const isFormDisabled = isSubmitting || isLoading;
   const areInputsDisabled = isFormDisabled || !captchaPassed;
   const isSubmitDisabled =
-    isFormDisabled || !csrfTokenReady || !captchaPassed || !form.formState.isValid;
+    isFormDisabled ||
+    !csrfTokenReady ||
+    !captchaPassed ||
+    !form.formState.isValid;
+
+// wewnątrz komponentu RegisterForm:
+useEffect(() => {
+  console.log('isSubmitting:', isSubmitting);
+  console.log('isLoading:', isLoading);
+  console.log('isFormDisabled:', isFormDisabled);
+  console.log('csrfTokenReady:', !csrfTokenReady);
+  console.log('captchaPassed:', !captchaPassed);
+  console.log('formState.isValid:', !form.formState.isValid);
+  console.log('isSubmitDisabled:', isSubmitDisabled);
+}, [
+  isSubmitting,
+  isLoading,
+  isFormDisabled,
+  csrfTokenReady,
+  captchaPassed,
+  form.formState.isValid,
+  isSubmitDisabled,
+]);
 
   return (
     <div className={className}>
       <Form {...form}>
         {isLoading && (
-          <div className="text-center text-sm text-muted-foreground mb-4">
+          <div className="text-muted-foreground mb-4 text-center text-sm">
             {t('loadingSecurity')}
           </div>
         )}
         {!csrfTokenReady && !isLoading && (
-          <div className="text-center text-sm text-destructive mb-4">
+          <div className="text-destructive mb-4 text-center text-sm">
             {t('csrfError')}
           </div>
         )}
@@ -105,7 +128,7 @@ export default function RegisterForm({
                       <button
                         type="button"
                         onClick={() => togglePasswordVisibility('password')}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        className="text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2"
                         disabled={areInputsDisabled}
                       >
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -121,7 +144,9 @@ export default function RegisterForm({
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="confirmPassword">{t('confirmPasswordLabel')}</FormLabel>
+                  <FormLabel htmlFor="confirmPassword">
+                    {t('confirmPasswordLabel')}
+                  </FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
@@ -134,8 +159,10 @@ export default function RegisterForm({
                       />
                       <button
                         type="button"
-                        onClick={() => togglePasswordVisibility('confirmPassword')}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        onClick={() =>
+                          togglePasswordVisibility('confirmPassword')
+                        }
+                        className="text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2"
                         disabled={areInputsDisabled}
                       >
                         {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
@@ -148,10 +175,16 @@ export default function RegisterForm({
             />
           </div>
 
-          <Captcha onSuccess={() => setCaptchaPassed(true)} disabled={isFormDisabled} />
+          <Captcha
+            onSuccess={() => {
+              console.log('Captcha passed');
+              setCaptchaPassed(true);
+            }}
+            disabled={isFormDisabled}
+          />
 
           {!captchaPassed && (
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-muted-foreground text-center text-sm">
               {t('captchaHint')}
             </div>
           )}

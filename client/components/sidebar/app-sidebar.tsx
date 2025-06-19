@@ -37,7 +37,7 @@ function useSidebarData() {
     navMain: [
       {
         title: t('main.home'),
-        url: '#',
+        url: '/dashboard',
         icon: SquareTerminal,
         isActive: false,
         show: true,
@@ -49,7 +49,7 @@ function useSidebarData() {
             show: true,
             enabled: true,
           },
-          { title: t('main.job'), url: '/dashboard/jobs', enabled: true},
+          // { title: t('main.job'), url: '/dashboard/jobs', enabled: true}, 
           // { title: t('main.citizenprojects'), url: '#', enabled: false},
         ],
       },

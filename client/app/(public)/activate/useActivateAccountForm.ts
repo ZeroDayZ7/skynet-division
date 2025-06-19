@@ -23,7 +23,7 @@ export function useActivateAccountForm(csrfToken: string | null) {
   const form = useForm<ActivateSchema>({
     resolver: zodResolver(activateSchema),
     defaultValues: { activationToken: '' },
-    mode: 'onSubmit',
+    mode: 'onChange',
   });
 
   /**

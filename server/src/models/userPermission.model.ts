@@ -1,7 +1,7 @@
 // models/PermissionUser.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '#ro/config/sequelize.config';
-import PermissionTemplate from '#ro/models/PermissionTemplate';
+import PermissionTemplate from '#ro/models/permissionTemplate.model';
 
 interface PermissionUserAttributes {
   id: number;

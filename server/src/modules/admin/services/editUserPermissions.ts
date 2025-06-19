@@ -1,6 +1,6 @@
 // modules/admin/services/editUserPermissions.ts
-import PermissionUser from '#ro/models/PermissionUser';
-import PermissionTemplate from '#ro/models/PermissionTemplate';
+import PermissionUser from '#ro/models/userPermission.model';
+import PermissionTemplate from '#ro/models/permissionTemplate.model';
 import SystemLog from '#ro/common/utils/SystemLog';
 
 interface PermissionEntry {

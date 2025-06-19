@@ -72,7 +72,7 @@ Users.init(
     role: {
       type: DataTypes.STRING(10),
       allowNull: false,
-      defaultValue: 'user',
+      defaultValue: 'init',
     },
     userBlock: {
       type: DataTypes.BOOLEAN,

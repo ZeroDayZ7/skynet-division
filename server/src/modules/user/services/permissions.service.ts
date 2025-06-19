@@ -1,7 +1,7 @@
 // services/permissions.service.ts
 import SystemLog from '#ro/common/utils/SystemLog';
-import PermissionUser from '#ro/models/PermissionUser';
-import PermissionTemplate from '#ro/models/PermissionTemplate';
+import PermissionUser from '#ro/models/userPermission.model';
+import PermissionTemplate from '#ro/models/permissionTemplate.model';
 
 interface PermissionEntry {
   is_visible: boolean;

@@ -14,7 +14,7 @@ const settingsItems = [
 
 export default function SettingsPage() {
   return (
-    <div className="text-white p-4">
+    <div className="text-white">
       <h1 className="text-xl font-bold mb-4">Ustawienia</h1>
       <ul className="space-y-2">
         {settingsItems.map((item) => (

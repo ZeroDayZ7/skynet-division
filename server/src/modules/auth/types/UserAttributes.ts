@@ -3,7 +3,7 @@
 export interface UserAttributes {
   id: number;
   username: string;
-  email: string | null;
+  email: string;
   pass: string;
   pin: string | null;
   points: number;

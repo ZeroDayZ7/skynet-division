@@ -7,7 +7,7 @@ export function AppBrand() {
   return (
     <Link href="/" className="flex items-center space-x-2">
       <h1 className="text-2xl font-bold text-gray-700 dark:text-gray-200">
-        DARK
+        Biały
       </h1>
       <Image
         src="/images/logo.png"
@@ -18,7 +18,7 @@ export function AppBrand() {
         priority
       />
       <h1 className="text-2xl font-bold text-gray-700 dark:text-gray-200">
-        ARMY
+        Orzeł
       </h1>
     </Link>
   );
