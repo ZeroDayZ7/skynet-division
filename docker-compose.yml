@@ -81,6 +81,36 @@ services:
     networks:
       - app-network
 
+  postgres:
+    image: postgres:latest
+    container_name: next-security_logs
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_DB: security_logs
+      POSTGRES_USER: audit_user
+      POSTGRES_PASSWORD: strongpassword123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: next-pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+
 
 #   nginx:
 #     image: nginx:latest
@@ -119,3 +149,7 @@ networks:
 volumes:
   db_data:
   redis_data:
+  postgres_data:
+  pgadmin_data:
+  
+

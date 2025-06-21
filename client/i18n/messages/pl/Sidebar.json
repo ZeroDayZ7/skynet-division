@@ -1,11 +1,11 @@
 {
   "Sidebar": {
     "main": {
-      "home": "Strona główna",
-      "history": "Historia",
+      "myAffairs": "Moje sprawy",
+      "ApplicationHistory": "Historia wniosków",
       "job": "Praca",
       "citizenprojects": "Projekty obywatelskie",
-      "documents": "Dokumenty",
+      "modules": "Moduły",
       "docs": "Dokumentacja"
     },
     "documents": {

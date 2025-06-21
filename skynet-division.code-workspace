@@ -5,5 +5,17 @@
 		}
 	],
 	"settings": {
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"server": "localhost",
+				"port": 5433,
+				"driver": "PostgreSQL",
+				"name": "audit-service",
+				"database": "security_logs",
+				"username": "audit_user",
+				"password": "strongpassword123"
+			}
+		]
 	}
 }

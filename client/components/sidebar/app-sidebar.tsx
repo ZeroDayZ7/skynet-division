@@ -36,15 +36,15 @@ function useSidebarData() {
   return {
     navMain: [
       {
-        title: t('main.home'),
+        title: t('main.myAffairs'),
         url: '/dashboard',
         icon: SquareTerminal,
-        isActive: false,
-        show: true,
-        enabled: true,
+        // isActive: false,
+        // show: true,
+        // enabled: true,
         items: [
           { 
-            title: t('main.history'), 
+            title: t('main.ApplicationHistory'), 
             url: '/dashboard',
             show: true,
             enabled: true,
@@ -54,7 +54,7 @@ function useSidebarData() {
         ],
       },
       {
-        title: t('main.documents'),
+        title: t('main.modules'),
         url: '#',
         icon: FileDigit,
         items: [

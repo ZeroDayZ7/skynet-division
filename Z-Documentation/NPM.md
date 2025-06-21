@@ -7,6 +7,7 @@
   Zaktualizuj `package.json` do najnowszych wersji:
 
 - **ncu --dep=dev -u**  
+npx npm-check-updates -u
   Aktualizuj zależności deweloperskie:
 
 - **npm install**
