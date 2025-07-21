@@ -5,3 +5,5 @@ Otwiera narzędzie do wycinania i szkicowania (Windows), umożliwiające robieni
 
 ## 2. **`shell:start menu`**
 Otwiera folder z menu Start w systemie Windows.
+
+optionalfeatures
