@@ -1,0 +1,22 @@
+services:
+  redis:
+    image: redis:8.2-rc1-alpine3.22
+    container_name: kas-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis-data:/data
+    command: >
+      redis-server
+      --appendonly yes
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 20mb
+    networks:
+      - sknet
+
+volumes:
+  redis-data:
+
+networks:
+  sknet:
+    external: true
