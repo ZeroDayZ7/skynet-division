@@ -18,6 +18,7 @@ import { NavMain } from '@/components/sidebar/nav-main'
 import { NavProjects } from '@/components/sidebar/nav-projects'
 import { NavSecondary } from '@/components/sidebar/nav-secondary'
 import { NavUser } from '@/components/sidebar/nav-user'
+import { NavModules } from '@/components/sidebar/nav-modules'
 import {
   Sidebar,
   SidebarContent,
@@ -89,6 +90,10 @@ function useSidebarData() {
         ],
       },
     ],
+    modules:[
+      { name: t('modules.mod1'), url: '/modules', icon: AlertTriangle },
+      // { name: t('modules.travel'), url: '#', icon: Map, show: false },
+    ],
     navSecondary: [
       { title: t('secondary.support'), url: '/dashboard/support', icon: LifeBuoy },
       // { title: t('secondary.feedback'), url: '/dashboard/feed-back', icon: Send },
@@ -127,7 +132,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
+        <NavModules modules={data.modules} />
         <NavMain items={data.navMain} />
+        
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>

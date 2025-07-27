@@ -12,10 +12,10 @@ import {
 } from "@/components/ui/sidebar";
 import Link from 'next/link';
 
-export function NavProjects({
-  projects,
+export function NavModules({
+  modules,
 }: {
-  projects: {
+  modules: {
     name: string
     url: string
     icon: LucideIcon
@@ -25,9 +25,9 @@ export function NavProjects({
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Modules</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {modules.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link href={item.url}>

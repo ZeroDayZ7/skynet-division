@@ -42,6 +42,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --close: var(--color);
 }
 
 :root {
@@ -77,6 +78,7 @@
   --sidebar-accent-foreground: rgb(52, 52, 52);
   --sidebar-border: rgb(235, 235, 235);
   --sidebar-ring: rgb(180, 180, 180);
+  --close: rgb(255, 0, 0);
 }
 
 .dark {
@@ -111,6 +113,7 @@
   --sidebar-accent-foreground: rgb(251, 251, 251);
   --sidebar-border: rgba(255, 255, 255, 0.1);
   --sidebar-ring: rgb(141, 141, 141);
+  --close: rgb(255, 0, 0);
 }
 
 @layer base {

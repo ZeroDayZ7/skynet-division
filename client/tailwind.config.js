@@ -4,7 +4,9 @@ module.exports = {
   darkMode: "class", // Używa klasy "dark" na <html> do przełączania motywu
   theme: {
     extend: {
-      
+      // textColor:{
+      //   close: 'var(--close)',
+      // }
     },
   },
   plugins: [],

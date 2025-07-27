@@ -32,6 +32,11 @@
       "emerygency": "Grupa Interwencyjna",
       "test": "TEST",
       "travel": "Podróże"
+    },
+    "modules": {
+      "mod1": "Aplikacje Rządowe",
+      "mod2": "MOD 2",
+      "mod3": "MOD 3"
     }
   }
 }
