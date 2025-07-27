@@ -5,15 +5,15 @@ export const env = cleanEnv(process.env, {
   // DATABASE
   DB_HOST: str({ default: 'localhost' }),
   DB_PORT: num({ default: 3306 }),
-  DB_DATABASE: str({ default: 'crimscity' }),
+  DB_DATABASE: str({ default: 'dbauth' }),
   DB_USERNAME: str({ default: 'root' }),
-  DB_PASSWORD: str({ default: 'root' }),
+  DB_PASSWORD: str({ default: 'admin' }),
 
   // SERVER
   PORT: num({ default: 3001 }),
 
   // URL
-  API_URL: str({ default: 'http://localhost:3000' }),
+  FRONTEND_URL: str({ default: 'http://localhost:3000' }),
 
   // BCRYPT
   BCRYPT_SALT_ROUNDS: num({ default: 10 }),
@@ -51,5 +51,5 @@ export const env = cleanEnv(process.env, {
   // REDIS
   REDIS_HOST: str({ default: 'localhost' }),
   REDIS_PORT: num({ default: 6379 }),
-  REDIS_PASSWORD: str({ default: 'redis_password' }),
+  REDIS_PASSWORD: str({ default: 'admin' }),
 });

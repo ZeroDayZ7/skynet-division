@@ -1,6 +1,6 @@
 import { UserRole } from '@/components/ui/ui/UserRoleBadge';
 
-const apiUrl = process.env.EXPRESS_API_URL || 'http://localhost:3001';
+const apiUrl = process.env.EXPRESS_API_URL || 'http://localhost:4000';
 
 export type Session = {
   user: {

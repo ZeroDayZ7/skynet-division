@@ -1,4 +1,4 @@
-const apiUrl = process.env.NEXT_PUBLIC_API_SERV || "http://localhost:3001";
+const apiUrl = process.env.NEXT_PUBLIC_API_SERV || "http://localhost:4000";
 
 const DEFAULT_TIMEOUT = 5000;
 

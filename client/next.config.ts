@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:3001'}/api/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:4000'}/api/:path*`,
       },
     ];
   },
@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
   // //   ];
   // // },
   async headers() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:3001';
+    const apiUrl = process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:4000';
     return [
       // 1. Statyczne zasoby Next.js - agresywny cache
       // 1. Statyczne zasoby Next.js - agresywny cache
@@ -72,7 +72,7 @@ const nextConfig: NextConfig = {
     ];
   },
   publicRuntimeConfig: {
-    apiUrl: process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:3001',
+    apiUrl: process.env.NEXT_PUBLIC_API_SERV || 'http://localhost:4000',
   },
   compress: true,
   productionBrowserSourceMaps: false,

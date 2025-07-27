@@ -57,7 +57,7 @@ export async function apiClient<T>(
 
     // Poprawka: Usuń początkowy ukośnik z URL, aby uniknąć podwójnych ukośników
     const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
-    const apiUrl = `http://localhost:3001/${cleanUrl}`;
+    const apiUrl = `http://localhost:4000/${cleanUrl}`;
 
     const response = await fetch(apiUrl, {
       method: options.method || 'GET',

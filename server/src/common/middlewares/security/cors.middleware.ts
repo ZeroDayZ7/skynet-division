@@ -1,7 +1,8 @@
 import cors from 'cors';
+import { env } from '#ro/config/env/env';
 
 const corsOptions = {
-  origin: process.env.API_URL,
+  origin: env.FRONTEND_URL,
   credentials: true,
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],

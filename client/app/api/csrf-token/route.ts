@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const response = await fetch('http://localhost:3001/api/csrf-token', {
+    const response = await fetch('http://localhost:4000/api/csrf-token', {
       method: 'GET',
       credentials: 'include',
     });

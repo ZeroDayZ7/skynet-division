@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const csrfToken = request.headers.get('X-CSRF-Token');
     console.log(`csrfToken: ${csrfToken}`);
 
-    const response = await fetch('http://localhost:3001/api/register', {
+    const response = await fetch('http://localhost:4000/api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

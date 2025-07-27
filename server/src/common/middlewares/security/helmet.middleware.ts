@@ -1,5 +1,6 @@
 import helmet from 'helmet';
 import { HelmetOptions } from 'helmet';
+import { env } from '#ro/config/env/env';
 
 const helmetOptions: HelmetOptions = {
   contentSecurityPolicy: {
@@ -8,7 +9,7 @@ const helmetOptions: HelmetOptions = {
       scriptSrc: ["'self'", "'unsafe-inline'"], // ⚠️ 'unsafe-inline' to ryzyko XSS
       styleSrc: ["'self'", "'unsafe-inline'"],  // ⚠️ 'unsafe-inline' to ryzyko
       imgSrc: ["'self'", 'data:'],
-      connectSrc: ["'self'", process.env.API_URL ?? 'http://localhost:3000'],
+      connectSrc: ["'self'", env.FRONTEND_URL ?? 'http://localhost:3000'],
     },
   },
   xssFilter: true,       // Ustawia `X-XSS-Protection: 1; mode=block`

@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     // console.log("========================================");
 
     // Wysyłamy żądanie do backendu Express
-    const expressResponse = await fetch("http://localhost:3001/api/test", {
+    const expressResponse = await fetch("http://localhost:4000/api/test", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -11,7 +11,7 @@ declare namespace NodeJS {
     PORT: string;
 
     // URL
-    API_URL: string;
+    FRONTEND_URL: string;
 
     // BCRYPT
     BCRYPT_SALT_ROUNDS: string;
