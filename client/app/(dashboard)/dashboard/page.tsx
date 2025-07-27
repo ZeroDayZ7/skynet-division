@@ -14,7 +14,7 @@ const alerts = 2
 
 function WelcomeBanner({ nickname }: { nickname: string }) {
   return (
-    <Card className="text-white shadow-xl">
+    <Card className="shadow-xl">
       <CardHeader>
         <CardTitle className="text-2xl">Witaj, {nickname}</CardTitle>
       </CardHeader>

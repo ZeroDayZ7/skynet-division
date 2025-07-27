@@ -1,0 +1,315 @@
+ 
+ 
+ 
+ 
+───────────── useLogin.ts ───────────── 
+/**
+ * Hook for handling login API calls with loading and error states.
+ * @module hooks/useLogin
+ */
+
+import { useState } from 'react';
+import { login } from '@/lib/api/auth';
+import { LoginSchema } from '@/lib/schemas/auth';
+import type { User } from '@/context/AuthContext';
+
+interface LoginState {
+  login: (credentials: LoginSchema, csrfToken: string) => Promise<{ user: User }>;
+  isLoading: boolean;
+  error: string | null;
+}
+
+/**
+ * Manages login API calls with state handling.
+ * @returns Login function and state.
+ */
+export function useLogin(): LoginState {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const loginFn = async (credentials: LoginSchema, csrfToken: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      return await login(credentials, csrfToken);
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return { login: loginFn, isLoading, error };
+} 
+───────────── useLoginForm.ts ───────────── 
+/**
+ * Hook for managing login form state and submission.
+ * @module hooks/useLoginForm
+ */
+
+import { useState, useEffect, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useCsrfToken } from '@/hooks/useCsrfToken';
+import { useLogin } from './useLogin';
+import { useAuth } from '@/context/AuthContext';
+import { loginSchema, LoginSchema } from '@/lib/schemas/auth';
+
+interface LoginFormState {
+  form: ReturnType<typeof useForm<LoginSchema>>;
+  isSubmitting: boolean;
+  isLoading: boolean;
+  showPassword: boolean;
+  toggleShowPassword: () => void;
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+  csrfTokenReady: boolean;
+}
+
+/**
+ * Manages login form with validation, CSRF, and API integration.
+ * @returns Form state and handlers.
+ */
+export function useLoginForm(): LoginFormState {
+  const { csrfToken, isLoading: isCsrfLoading, error: csrfError, refreshToken } = useCsrfToken();
+  const { login: loginApi } = useLogin();
+  const { login: loginContext } = useAuth();
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const form = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: process.env.NODE_ENV === 'development' ? 'yovasec567@fincainc.com' : '',
+      password: process.env.NODE_ENV === 'development' ? 'Zaq1@wsx' : '',
+    },
+  });
+
+  useEffect(() => {
+    if (csrfError) {
+      toast.error(`Brak tokenu CSRF lub błąd bezpieczeństwa.`, {
+        description: 'Odśwież stronę, lub spróbuj później',
+        duration: 7000
+      });
+    }
+  }, [csrfError]);
+
+  // toast.error(`${data.message}`, {
+  //   description: "Zaloguj się ponownie",
+  //   duration: 5000,
+  //   position: "top-center", // Toast pojawi się w prawym górnym rogu
+  //   richColors: true,
+  //   icon: "❌", // Można dodać ikonę
+  // });
+
+  const toggleShowPassword = useCallback(() => {
+    setShowPassword((prev) => !prev);
+  }, []);
+
+  const onSubmit = async (data: LoginSchema) => {
+    if (!csrfToken || csrfError) {
+      toast.error('Brak tokenu CSRF lub błąd bezpieczeństwa. Odśwież stronę.');
+      return;
+    }
+
+    try {
+      const { user } = await loginApi(data, csrfToken);
+      // console.log(`user: ${JSON.stringify(user)}`);
+      loginContext(user);
+      toast.success('Zalogowano pomyślnie');
+      router.replace('/dashboard');
+    } catch (err: any) {
+      toast.error(err.message || 'Logowanie nie powiodło się. Spróbuj ponownie.');
+    }
+  };
+
+  return {
+    form,
+    isSubmitting: form.formState.isSubmitting || isCsrfLoading,
+    isLoading: isCsrfLoading,
+    showPassword,
+    toggleShowPassword,
+    onSubmit: form.handleSubmit(onSubmit),
+    csrfTokenReady: !!csrfToken && !csrfError,
+  };
+} 
+───────────── LoginForm.tsx ───────────── 
+// LoginForm.tsx
+'use client';
+
+import { UseFormReturn } from 'react-hook-form'; // Importuj typy react-hook-form
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { FaSpinner, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { LoginSchema } from '@/lib/schemas/auth';
+import { useTranslations } from 'next-intl';
+
+interface LoginFormProps {
+  form: UseFormReturn<LoginSchema>; // Przyjmij całą instancję form
+  isLoading: boolean;
+  isSubmitting: boolean;
+  showPassword?: boolean; // Opcjonalne, jeśli logika jest w hooku
+  toggleShowPassword?: () => void; // Opcjonalne
+  onSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>; // Handler z hooka
+  csrfTokenReady: boolean; // Informacja o gotowości tokenu
+}
+
+export function LoginForm({ 
+  form,
+  isLoading,
+  isSubmitting,
+  showPassword,
+  toggleShowPassword,
+  onSubmit,
+  csrfTokenReady
+}: LoginFormProps) {
+
+const t = useTranslations('LoginPage');
+
+  const isDisabled = isSubmitting;
+
+  return (
+    <Form {...form}>
+      {' '}
+      {/* Unpack the full form instance */}
+      <form onSubmit={onSubmit} className="space-y-4">
+        {/* Email Field */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="email">{t('email')}</FormLabel>
+              <FormControl>
+                <Input {...field} id="email" disabled={isDisabled} autoComplete="username" placeholder="email@example.com" />
+              </FormControl>
+              <FormMessage /> {/* Validation errors for this field */}
+            </FormItem>
+          )}
+        />
+
+        {/* Password Field */}
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="password">{t('password')}</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input {...field} id="password" type={showPassword ? 'text' : 'password'} disabled={isDisabled} autoComplete="current-password" placeholder="******" />
+                  {/* Password toggle button */}
+                  {toggleShowPassword && (
+                    <button
+                      type="button"
+                      onClick={toggleShowPassword}
+                      className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500 hover:text-gray-700 disabled:cursor-not-allowed"
+                      disabled={isDisabled}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  )}
+                </div>
+              </FormControl>
+              <FormMessage /> {/* Validation errors for this field */}
+            </FormItem>
+          )}
+        />
+
+        {/* Submit Button */}
+        <Button type="submit" className="w-full" disabled={isDisabled || !csrfTokenReady}>
+          {isSubmitting ? (
+            <>
+              <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
+              {t('loggingIn')}...
+            </>
+          ) : csrfTokenReady ? (
+            t('login')
+          ) : (
+            <>
+              <FaSpinner className="mr-2 h-4 w-4 animate-spin" />
+              {t('loading')}...
+            </>
+          )}
+        </Button>
+        {/* CSRF token not ready message */}
+        {!csrfTokenReady && !isLoading && <p className="text-muted-foreground text-center text-xs">{t('csrfError')}</p>}
+      </form>
+    </Form>
+  );
+}
+ 
+───────────── page.tsx ───────────── 
+'use client';
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { LoginForm } from './LoginForm';
+import { useLoginForm } from './useLoginForm';
+import { AppBrand } from '@/components/auth/AppBrand';
+import Link from 'next/link';
+
+import { useTranslations } from 'next-intl';
+
+export default function LoginPage() {
+  const {
+    form,
+    isLoading,
+    isSubmitting,
+    showPassword,
+    toggleShowPassword,
+    onSubmit,
+    csrfTokenReady,
+  } = useLoginForm();
+
+  const t = useTranslations('LoginPage'); // Użyj tłumaczeń z namespace 'LoginPage'
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center space-y-2">
+      <Card className="w-[330px]">
+        <CardHeader className="flex flex-col items-center space-y-2">
+          <AppBrand />
+          <div className="mt-4">
+            {/* Tłumaczenie tytułu */}
+            <CardTitle>{t('loginTitle')}</CardTitle>
+            <CardDescription>
+              {/* Tłumaczenie opisu */}
+              {t('loginDescription')}
+            </CardDescription>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <LoginForm
+            form={form}
+            isLoading={isLoading}
+            isSubmitting={isSubmitting}
+            showPassword={showPassword}
+            toggleShowPassword={toggleShowPassword}
+            onSubmit={onSubmit}
+            csrfTokenReady={csrfTokenReady}
+          />
+          <div className="mt-4 text-center text-sm text-gray-500">
+            <Link href="/" className="hover:underline">
+              {t('homePage')}
+            </Link>{' '}
+            |
+            <Link href="/register" className="ml-2 hover:underline">
+              {t('register')}
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+ 
