@@ -16,6 +16,6 @@
 /build
 # debug
 npm-debug.log*
-
+dbauth.sql
 # env files (can opt-in for committing if needed)
 .env*

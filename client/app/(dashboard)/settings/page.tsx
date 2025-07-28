@@ -3,11 +3,11 @@
 import Link from 'next/link';
 
 const settingsItems = [
-  { label: 'Twoje konto', path: 'account' },            // → ma submenu
-  { label: 'Bezpieczeństwo', path: 'security' },        // → od razu panel
+  { label: 'Twoje konto', path: 'account' }, // → ma submenu
+  { label: 'Bezpieczeństwo', path: 'security' }, // → od razu panel
   // { label: 'Prywatność i bezpieczeństwo', path: 'privacy' }, // → od razu panel
   // { label: 'Powiadomienia', path: 'notifications' },
-  // { label: 'Dostępność, wyświetlanie i języki', path: 'accessibility' },
+  { label: 'Wygląd', path: 'appearance' },
   // { label: 'Dodatkowe materiały', path: 'resources' },
   // { label: 'Centrum Pomocy', path: 'help' },
 ];

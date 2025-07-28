@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: May 07, 2025 at 12:56 PM
--- Server version: 5.7.24
--- PHP Version: 8.3.4
+-- Host: mysql:3306
+-- Generation Time: Lip 28, 2025 at 12:10 PM
+-- Wersja serwera: 8.0.43
+-- Wersja PHP: 8.2.27
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,105 +18,105 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `crimscity`
+-- Baza danych: `dbauth`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `citizen_projects`
+-- Struktura tabeli dla tabeli `citizen_projects`
 --
 
 CREATE TABLE `citizen_projects` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `budget` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `location` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `creator_id` int(10) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `budget` int UNSIGNED NOT NULL DEFAULT '0',
+  `location` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `creator_id` int UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `upvotes` int(11) DEFAULT '0',
-  `downvotes` int(11) DEFAULT '0'
+  `upvotes` int DEFAULT '0',
+  `downvotes` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `citizen_project_comments`
+-- Struktura tabeli dla tabeli `citizen_project_comments`
 --
 
 CREATE TABLE `citizen_project_comments` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `project_id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `comment` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `project_id` int UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
+  `comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `citizen_project_votes`
+-- Struktura tabeli dla tabeli `citizen_project_votes`
 --
 
 CREATE TABLE `citizen_project_votes` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `project_id` int(10) UNSIGNED NOT NULL,
-  `vote_type` enum('up','down') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
+  `project_id` int UNSIGNED NOT NULL,
+  `vote_type` enum('up','down') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `document_types`
+-- Struktura tabeli dla tabeli `document_types`
 --
 
 CREATE TABLE `document_types` (
-  `id` tinyint(4) NOT NULL,
-  `name` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL
+  `id` tinyint NOT NULL,
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `job_postings`
+-- Struktura tabeli dla tabeli `job_postings`
 --
 
 CREATE TABLE `job_postings` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `company` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `postal_code` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postal_code` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `salary_min` decimal(10,2) DEFAULT NULL,
   `salary_max` decimal(10,2) DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `requirements` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `requirements` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notification_templates`
+-- Struktura tabeli dla tabeli `notification_templates`
 --
 
 CREATE TABLE `notification_templates` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `notification_templates`
+-- Zrzut danych tabeli `notification_templates`
 --
 
 INSERT INTO `notification_templates` (`id`, `title`, `message`, `type`, `createdAt`) VALUES
@@ -129,18 +129,18 @@ INSERT INTO `notification_templates` (`id`, `title`, `message`, `type`, `created
 -- --------------------------------------------------------
 
 --
--- Table structure for table `permission_templates`
+-- Struktura tabeli dla tabeli `permission_templates`
 --
 
 CREATE TABLE `permission_templates` (
-  `id` int(11) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
   `key` varchar(100) NOT NULL,
   `description` text,
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Dumping data for table `permission_templates`
+-- Zrzut danych tabeli `permission_templates`
 --
 
 INSERT INTO `permission_templates` (`id`, `key`, `description`, `createdAt`) VALUES
@@ -156,43 +156,43 @@ INSERT INTO `permission_templates` (`id`, `key`, `description`, `createdAt`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sequelize_meta`
+-- Struktura tabeli dla tabeli `sequelize_meta`
 --
 
 CREATE TABLE `sequelize_meta` (
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `session`
+-- Struktura tabeli dla tabeli `session`
 --
 
 CREATE TABLE `session` (
-  `id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiresAt` datetime(3) NOT NULL,
-  `sid` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL
+  `sid` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sessions`
+-- Struktura tabeli dla tabeli `sessions`
 --
 
 CREATE TABLE `sessions` (
-  `sid` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `userId` int(11) UNSIGNED DEFAULT NULL,
+  `sid` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userId` int UNSIGNED DEFAULT NULL,
   `expires` datetime DEFAULT NULL,
-  `data` text COLLATE utf8mb4_unicode_ci,
+  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `sessions`
+-- Zrzut danych tabeli `sessions`
 --
 
 INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `updatedAt`) VALUES
@@ -202,20 +202,20 @@ INSERT INTO `sessions` (`sid`, `userId`, `expires`, `data`, `createdAt`, `update
 -- --------------------------------------------------------
 
 --
--- Table structure for table `support_ticket`
+-- Struktura tabeli dla tabeli `support_ticket`
 --
 
 CREATE TABLE `support_ticket` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
   `subject` varchar(30) DEFAULT NULL,
   `status` enum('new','in_progress','closed','open') DEFAULT 'new',
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Dumping data for table `support_ticket`
+-- Zrzut danych tabeli `support_ticket`
 --
 
 INSERT INTO `support_ticket` (`id`, `user_id`, `subject`, `status`, `createdAt`, `updatedAt`) VALUES
@@ -242,20 +242,20 @@ INSERT INTO `support_ticket` (`id`, `user_id`, `subject`, `status`, `createdAt`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `support_ticket_messages`
+-- Struktura tabeli dla tabeli `support_ticket_messages`
 --
 
 CREATE TABLE `support_ticket_messages` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `ticket_id` int(11) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `ticket_id` int UNSIGNED NOT NULL,
   `sender_type` enum('user','support') NOT NULL,
-  `sender_id` int(11) UNSIGNED NOT NULL,
+  `sender_id` int UNSIGNED NOT NULL,
   `message` text NOT NULL,
   `createdAt` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Dumping data for table `support_ticket_messages`
+-- Zrzut danych tabeli `support_ticket_messages`
 --
 
 INSERT INTO `support_ticket_messages` (`id`, `ticket_id`, `sender_type`, `sender_id`, `message`, `createdAt`) VALUES
@@ -276,58 +276,59 @@ INSERT INTO `support_ticket_messages` (`id`, `ticket_id`, `sender_type`, `sender
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktura tabeli dla tabeli `users`
 --
 
 CREATE TABLE `users` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `username` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pass` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pin` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `points` int(10) UNSIGNED NOT NULL DEFAULT '0',
-  `activation_token` varchar(6) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pass` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pin_hash` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `two_factor_enabled` tinyint DEFAULT NULL,
+  `points` int UNSIGNED NOT NULL DEFAULT '0',
+  `activation_token` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `documents` json DEFAULT NULL,
-  `login_count` int(10) UNSIGNED DEFAULT '0',
-  `role` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `login_count` int UNSIGNED DEFAULT '0',
+  `role` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `userBlock` tinyint(1) NOT NULL DEFAULT '0',
-  `loginAttempts` tinyint(4) NOT NULL DEFAULT '0',
+  `loginAttempts` tinyint NOT NULL DEFAULT '0',
   `lastLoginAttempt` datetime DEFAULT NULL,
-  `lastLoginIp` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `lastLoginIp` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `users`
+-- Zrzut danych tabeli `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `pass`, `pin`, `points`, `activation_token`, `documents`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
-(71, '', 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
-(77, 'white_rose', 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$V/7WltFUv3IDzs/XCFpLvurO/3ePgyZxcaXR7Rbrg6CeQtP6P1z..', 50, NULL, '{\"documents\": {\"eid\": true, \"passport\": false, \"driving_license\": true}, \"test_features\": {\"betaAccess\": true, \"newsletter\": false}}', 1259, 'root', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-05-06 19:43:06'),
-(93, 'test_user', 'jan@example.com', '$2b$10$hiZkpGS7be4jrwQdLfegm.eAi7CgS0vEhfBITHTcWADiOtNhp4KTG', NULL, 50, NULL, NULL, 7, 'user', 0, 0, NULL, '::1', '2025-04-30 06:24:07', '2025-05-06 09:12:18');
+INSERT INTO `users` (`id`, `username`, `email`, `pass`, `pin_hash`, `two_factor_enabled`, `points`, `activation_token`, `documents`, `login_count`, `role`, `userBlock`, `loginAttempts`, `lastLoginAttempt`, `lastLoginIp`, `createdAt`, `updatedAt`) VALUES
+(71, '', 'hesidak940@bsomek.com', '$2b$10$nhksDTDiaqH/RMniHpx86ejMoq8SVvvNOCs427QQPAYQeSnMcRy8e', NULL, NULL, 0, NULL, NULL, 4, NULL, 1, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-04-23 19:19:23'),
+(77, 'white_rose', 'yovasec567@fincainc.com', '$2b$10$Hw9clcQtRnjoOFO8yo69He0gFkxfNfnAlzIq1P8YlASAAShdc/CCO', '$2b$10$V/7WltFUv3IDzs/XCFpLvurO/3ePgyZxcaXR7Rbrg6CeQtP6P1z..', 0, 50, NULL, '{\"documents\": {\"eid\": true, \"passport\": false, \"driving_license\": true}, \"test_features\": {\"betaAccess\": true, \"newsletter\": false}}', 1262, 'root', 0, 0, NULL, '::1', '2025-04-08 17:58:25', '2025-07-28 11:37:26'),
+(93, 'test_user', 'jan@example.com', '$2b$10$hiZkpGS7be4jrwQdLfegm.eAi7CgS0vEhfBITHTcWADiOtNhp4KTG', NULL, NULL, 50, NULL, NULL, 7, 'user', 0, 0, NULL, '::1', '2025-04-30 06:24:07', '2025-05-06 09:12:18');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_data`
+-- Struktura tabeli dla tabeli `user_data`
 --
 
 CREATE TABLE `user_data` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `first_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `second_name` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `last_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `pesel` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `first_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `second_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `last_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pesel` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `birth_date` date NOT NULL,
-  `birth_place` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `gender` varchar(1) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `nationality` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `birth_place` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `nationality` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user_data`
+-- Zrzut danych tabeli `user_data`
 --
 
 INSERT INTO `user_data` (`id`, `user_id`, `first_name`, `second_name`, `last_name`, `pesel`, `birth_date`, `birth_place`, `gender`, `nationality`) VALUES
@@ -336,37 +337,37 @@ INSERT INTO `user_data` (`id`, `user_id`, `first_name`, `second_name`, `last_nam
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_details`
+-- Struktura tabeli dla tabeli `user_details`
 --
 
 CREATE TABLE `user_details` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
   `hire_date` date NOT NULL,
-  `contract_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contract_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `hourly_rate` decimal(10,2) DEFAULT NULL,
   `salary` decimal(10,2) DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `isActive` tinyint(4) DEFAULT NULL
+  `isActive` tinyint DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_eid_data`
+-- Struktura tabeli dla tabeli `user_eid_data`
 --
 
 CREATE TABLE `user_eid_data` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `document_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `document_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `issue_date` date NOT NULL,
   `expiration_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user_eid_data`
+-- Zrzut danych tabeli `user_eid_data`
 --
 
 INSERT INTO `user_eid_data` (`id`, `user_id`, `document_number`, `issue_date`, `expiration_date`) VALUES
@@ -375,19 +376,19 @@ INSERT INTO `user_eid_data` (`id`, `user_id`, `document_number`, `issue_date`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_notifications`
+-- Struktura tabeli dla tabeli `user_notifications`
 --
 
 CREATE TABLE `user_notifications` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `notification_id` int(10) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `notification_id` int UNSIGNED NOT NULL,
   `is_read` tinyint(1) NOT NULL DEFAULT '0',
   `createdAt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user_notifications`
+-- Zrzut danych tabeli `user_notifications`
 --
 
 INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`, `createdAt`) VALUES
@@ -421,23 +422,23 @@ INSERT INTO `user_notifications` (`id`, `user_id`, `notification_id`, `is_read`,
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_passport_data`
+-- Struktura tabeli dla tabeli `user_passport_data`
 --
 
 CREATE TABLE `user_passport_data` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `user_id` int(10) UNSIGNED NOT NULL,
-  `passport_number` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `passport_number` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `issue_date` date NOT NULL,
   `expiration_date` date NOT NULL,
-  `country_code` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'POL',
-  `passport_type` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'P',
+  `country_code` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'POL',
+  `passport_type` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'P',
   `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user_passport_data`
+-- Zrzut danych tabeli `user_passport_data`
 --
 
 INSERT INTO `user_passport_data` (`id`, `user_id`, `passport_number`, `issue_date`, `expiration_date`, `country_code`, `passport_type`, `createdAt`, `updatedAt`) VALUES
@@ -446,19 +447,19 @@ INSERT INTO `user_passport_data` (`id`, `user_id`, `passport_number`, `issue_dat
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_permission`
+-- Struktura tabeli dla tabeli `user_permission`
 --
 
 CREATE TABLE `user_permission` (
-  `id` int(11) UNSIGNED NOT NULL,
-  `permission_id` int(11) UNSIGNED NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `permission_id` int UNSIGNED NOT NULL,
+  `user_id` int NOT NULL,
   `is_visible` tinyint(1) DEFAULT '0',
   `is_enabled` tinyint(1) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
--- Dumping data for table `user_permission`
+-- Zrzut danych tabeli `user_permission`
 --
 
 INSERT INTO `user_permission` (`id`, `permission_id`, `user_id`, `is_visible`, `is_enabled`) VALUES
@@ -474,35 +475,59 @@ INSERT INTO `user_permission` (`id`, `permission_id`, `user_id`, `is_visible`, `
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_referrals`
+-- Struktura tabeli dla tabeli `user_referrals`
 --
 
 CREATE TABLE `user_referrals` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `referrer_id` int(10) UNSIGNED NOT NULL,
-  `referred_user_id` int(10) UNSIGNED NOT NULL,
+  `id` int UNSIGNED NOT NULL,
+  `referrer_id` int UNSIGNED NOT NULL,
+  `referred_user_id` int UNSIGNED NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `_prisma_migrations`
+-- Struktura tabeli dla tabeli `user_settings`
 --
 
-CREATE TABLE `_prisma_migrations` (
-  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `checksum` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `finished_at` datetime(3) DEFAULT NULL,
-  `migration_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logs` text COLLATE utf8mb4_unicode_ci,
-  `rolled_back_at` datetime(3) DEFAULT NULL,
-  `started_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `applied_steps_count` int(10) UNSIGNED NOT NULL DEFAULT '0'
+CREATE TABLE `user_settings` (
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED NOT NULL,
+  `pin_hash` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `two_factor_enabled` tinyint(1) DEFAULT '0',
+  `dark_mode` tinyint(1) NOT NULL DEFAULT '0',
+  `biometric_enabled` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `_prisma_migrations`
+-- Zrzut danych tabeli `user_settings`
+--
+
+INSERT INTO `user_settings` (`id`, `user_id`, `pin_hash`, `two_factor_enabled`, `dark_mode`, `biometric_enabled`, `created_at`, `updated_at`) VALUES
+(1, 77, '$2b$12$6e.42MV0FWNaayqDCghKP.YdlCvi5BEs/ZBuv/RHL95u.v.F8aN1q', 1, 0, 0, '2025-07-28 12:07:51', '2025-07-28 12:09:52');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `_prisma_migrations`
+--
+
+CREATE TABLE `_prisma_migrations` (
+  `id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `checksum` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `finished_at` datetime(3) DEFAULT NULL,
+  `migration_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `rolled_back_at` datetime(3) DEFAULT NULL,
+  `started_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `applied_steps_count` int UNSIGNED NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Zrzut danych tabeli `_prisma_migrations`
 --
 
 INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_name`, `logs`, `rolled_back_at`, `started_at`, `applied_steps_count`) VALUES
@@ -510,11 +535,11 @@ INSERT INTO `_prisma_migrations` (`id`, `checksum`, `finished_at`, `migration_na
 ('ca024804-632e-4789-8ba3-6ac542aba049', '4213d8e89a8a7e5bdf0ae9d1ee5e6fbb96943e057a93afc9a08c70870287dee1', '2025-04-15 13:18:38.287', '20250415131836_init', NULL, NULL, '2025-04-15 13:18:36.845', 1);
 
 --
--- Indexes for dumped tables
+-- Indeksy dla zrzutów tabel
 --
 
 --
--- Indexes for table `citizen_projects`
+-- Indeksy dla tabeli `citizen_projects`
 --
 ALTER TABLE `citizen_projects`
   ADD PRIMARY KEY (`id`),
@@ -522,7 +547,7 @@ ALTER TABLE `citizen_projects`
   ADD KEY `citizen_projects_ibfk_1` (`creator_id`);
 
 --
--- Indexes for table `citizen_project_comments`
+-- Indeksy dla tabeli `citizen_project_comments`
 --
 ALTER TABLE `citizen_project_comments`
   ADD PRIMARY KEY (`id`),
@@ -531,7 +556,7 @@ ALTER TABLE `citizen_project_comments`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `citizen_project_votes`
+-- Indeksy dla tabeli `citizen_project_votes`
 --
 ALTER TABLE `citizen_project_votes`
   ADD PRIMARY KEY (`id`),
@@ -540,62 +565,62 @@ ALTER TABLE `citizen_project_votes`
   ADD KEY `project_id` (`project_id`);
 
 --
--- Indexes for table `document_types`
+-- Indeksy dla tabeli `document_types`
 --
 ALTER TABLE `document_types`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indexes for table `job_postings`
+-- Indeksy dla tabeli `job_postings`
 --
 ALTER TABLE `job_postings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `ibfk_1` (`user_id`);
 
 --
--- Indexes for table `notification_templates`
+-- Indeksy dla tabeli `notification_templates`
 --
 ALTER TABLE `notification_templates`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indexes for table `permission_templates`
+-- Indeksy dla tabeli `permission_templates`
 --
 ALTER TABLE `permission_templates`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indexes for table `sequelize_meta`
+-- Indeksy dla tabeli `sequelize_meta`
 --
 ALTER TABLE `sequelize_meta`
   ADD PRIMARY KEY (`name`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indexes for table `session`
+-- Indeksy dla tabeli `session`
 --
 ALTER TABLE `session`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `session_sid_key` (`sid`);
 
 --
--- Indexes for table `sessions`
+-- Indeksy dla tabeli `sessions`
 --
 ALTER TABLE `sessions`
   ADD PRIMARY KEY (`sid`);
 
 --
--- Indexes for table `support_ticket`
+-- Indeksy dla tabeli `support_ticket`
 --
 ALTER TABLE `support_ticket`
   ADD PRIMARY KEY (`id`),
   ADD KEY `usrid` (`user_id`);
 
 --
--- Indexes for table `support_ticket_messages`
+-- Indeksy dla tabeli `support_ticket_messages`
 --
 ALTER TABLE `support_ticket_messages`
   ADD PRIMARY KEY (`id`),
@@ -603,14 +628,14 @@ ALTER TABLE `support_ticket_messages`
   ADD KEY `ops_2` (`sender_id`);
 
 --
--- Indexes for table `users`
+-- Indeksy dla tabeli `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `unique_email` (`email`);
 
 --
--- Indexes for table `user_data`
+-- Indeksy dla tabeli `user_data`
 --
 ALTER TABLE `user_data`
   ADD PRIMARY KEY (`id`),
@@ -618,7 +643,7 @@ ALTER TABLE `user_data`
   ADD UNIQUE KEY `unique_pesel` (`pesel`);
 
 --
--- Indexes for table `user_details`
+-- Indeksy dla tabeli `user_details`
 --
 ALTER TABLE `user_details`
   ADD PRIMARY KEY (`id`),
@@ -626,7 +651,7 @@ ALTER TABLE `user_details`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `user_eid_data`
+-- Indeksy dla tabeli `user_eid_data`
 --
 ALTER TABLE `user_eid_data`
   ADD PRIMARY KEY (`id`),
@@ -634,7 +659,7 @@ ALTER TABLE `user_eid_data`
   ADD UNIQUE KEY `unique_document_number` (`document_number`);
 
 --
--- Indexes for table `user_notifications`
+-- Indeksy dla tabeli `user_notifications`
 --
 ALTER TABLE `user_notifications`
   ADD PRIMARY KEY (`id`),
@@ -642,7 +667,7 @@ ALTER TABLE `user_notifications`
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `user_passport_data`
+-- Indeksy dla tabeli `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
   ADD PRIMARY KEY (`id`),
@@ -650,7 +675,7 @@ ALTER TABLE `user_passport_data`
   ADD UNIQUE KEY `unique_passport_number` (`passport_number`);
 
 --
--- Indexes for table `user_permission`
+-- Indeksy dla tabeli `user_permission`
 --
 ALTER TABLE `user_permission`
   ADD PRIMARY KEY (`id`),
@@ -658,172 +683,184 @@ ALTER TABLE `user_permission`
   ADD KEY `permission_id` (`permission_id`);
 
 --
--- Indexes for table `user_referrals`
+-- Indeksy dla tabeli `user_referrals`
 --
 ALTER TABLE `user_referrals`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `_prisma_migrations`
+-- Indeksy dla tabeli `user_settings`
+--
+ALTER TABLE `user_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indeksy dla tabeli `_prisma_migrations`
 --
 ALTER TABLE `_prisma_migrations`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT dla zrzuconych tabel
 --
 
 --
--- AUTO_INCREMENT for table `citizen_projects`
+-- AUTO_INCREMENT dla tabeli `citizen_projects`
 --
 ALTER TABLE `citizen_projects`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `citizen_project_comments`
+-- AUTO_INCREMENT dla tabeli `citizen_project_comments`
 --
 ALTER TABLE `citizen_project_comments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `citizen_project_votes`
+-- AUTO_INCREMENT dla tabeli `citizen_project_votes`
 --
 ALTER TABLE `citizen_project_votes`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `job_postings`
+-- AUTO_INCREMENT dla tabeli `job_postings`
 --
 ALTER TABLE `job_postings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `notification_templates`
+-- AUTO_INCREMENT dla tabeli `notification_templates`
 --
 ALTER TABLE `notification_templates`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT for table `permission_templates`
+-- AUTO_INCREMENT dla tabeli `permission_templates`
 --
 ALTER TABLE `permission_templates`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `support_ticket`
+-- AUTO_INCREMENT dla tabeli `support_ticket`
 --
 ALTER TABLE `support_ticket`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
--- AUTO_INCREMENT for table `support_ticket_messages`
+-- AUTO_INCREMENT dla tabeli `support_ticket_messages`
 --
 ALTER TABLE `support_ticket_messages`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
--- AUTO_INCREMENT for table `user_data`
+-- AUTO_INCREMENT dla tabeli `user_data`
 --
 ALTER TABLE `user_data`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `user_details`
+-- AUTO_INCREMENT dla tabeli `user_details`
 --
 ALTER TABLE `user_details`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `user_eid_data`
+-- AUTO_INCREMENT dla tabeli `user_eid_data`
 --
 ALTER TABLE `user_eid_data`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `user_notifications`
+-- AUTO_INCREMENT dla tabeli `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
--- AUTO_INCREMENT for table `user_passport_data`
+-- AUTO_INCREMENT dla tabeli `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `user_permission`
+-- AUTO_INCREMENT dla tabeli `user_permission`
 --
 ALTER TABLE `user_permission`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT for table `user_referrals`
+-- AUTO_INCREMENT dla tabeli `user_referrals`
 --
 ALTER TABLE `user_referrals`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT dla tabeli `user_settings`
+--
+ALTER TABLE `user_settings`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Ograniczenia dla zrzutów tabel
 --
 
 --
--- Constraints for table `citizen_projects`
+-- Ograniczenia dla tabeli `citizen_projects`
 --
 ALTER TABLE `citizen_projects`
   ADD CONSTRAINT `citizen_projects_ibfk_1` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `citizen_project_comments`
+-- Ograniczenia dla tabeli `citizen_project_comments`
 --
 ALTER TABLE `citizen_project_comments`
   ADD CONSTRAINT `citizen_project_comments_ibfk_1` FOREIGN KEY (`project_id`) REFERENCES `citizen_projects` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `job_postings`
+-- Ograniczenia dla tabeli `job_postings`
 --
 ALTER TABLE `job_postings`
   ADD CONSTRAINT `ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `support_ticket`
+-- Ograniczenia dla tabeli `support_ticket`
 --
 ALTER TABLE `support_ticket`
   ADD CONSTRAINT `usrid` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `support_ticket_messages`
+-- Ograniczenia dla tabeli `support_ticket_messages`
 --
 ALTER TABLE `support_ticket_messages`
   ADD CONSTRAINT `ops_1` FOREIGN KEY (`ticket_id`) REFERENCES `support_ticket` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ops_2` FOREIGN KEY (`sender_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `user_eid_data`
+-- Ograniczenia dla tabeli `user_eid_data`
 --
 ALTER TABLE `user_eid_data`
   ADD CONSTRAINT `bfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_data` (`user_id`);
 
 --
--- Constraints for table `user_notifications`
+-- Ograniczenia dla tabeli `user_notifications`
 --
 ALTER TABLE `user_notifications`
   ADD CONSTRAINT `user_notifications_ibfk_2` FOREIGN KEY (`notification_id`) REFERENCES `notification_templates` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `user_passport_data`
+-- Ograniczenia dla tabeli `user_passport_data`
 --
 ALTER TABLE `user_passport_data`
   ADD CONSTRAINT `cfk_1` FOREIGN KEY (`user_id`) REFERENCES `user_data` (`user_id`);
 
 --
--- Constraints for table `user_permission`
+-- Ograniczenia dla tabeli `user_permission`
 --
 ALTER TABLE `user_permission`
   ADD CONSTRAINT `FK_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission_templates` (`id`);

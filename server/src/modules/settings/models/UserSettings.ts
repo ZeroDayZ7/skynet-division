@@ -36,7 +36,7 @@ UserSettings.init(
     },
     two_factor_enabled: {
       type: DataTypes.BOOLEAN,
-      allowNull: false,
+      allowNull: true,
       defaultValue: false,
     },
     dark_mode: {
@@ -68,5 +68,5 @@ UserSettings.init(
     underscored: true,
   }
 );
-
+ 
 export default UserSettings;
