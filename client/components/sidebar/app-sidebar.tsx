@@ -5,14 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link'
 import {
   BookOpen,
-  Command,
   AlertTriangle,
   LifeBuoy,
   PieChart,
-  Send,
   Settings2,
   SquareTerminal,
-  FileDigit
+  FileDigit,
+  MergeIcon
 } from 'lucide-react'
 
 import { NavMain } from '@/components/sidebar/nav-main'
@@ -93,7 +92,7 @@ function useSidebarData() {
     ],
     modules:[
       { name: t('modules.mod1'), url: '/modules', icon: AlertTriangle },
-      // { name: t('modules.travel'), url: '#', icon: Map, show: false },
+      { name: t('modules.mod2'), url: '/dashboard/me', icon: MergeIcon },
     ],
     navSecondary: [
       { title: t('secondary.support'), url: '/dashboard/support', icon: LifeBuoy },
@@ -139,7 +138,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       <SidebarContent>
         <NavModules modules={data.modules} />
-        <NavMain items={data.navMain} />
+        {/* <NavMain items={data.navMain} /> */}
 
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
