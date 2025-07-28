@@ -21,7 +21,8 @@ const eslintConfig = [
       'prefer-null': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
       'react/no-unescaped-entities': 'off',
-      'jsx-a11y/aria-props': 'off'
+      'jsx-a11y/aria-props': 'off',
+      'react/react-in-jsx-scope': 'off', // Nie jest potrzebne w Next.js
     }
   })
 ];

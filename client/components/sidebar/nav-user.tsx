@@ -34,7 +34,7 @@ import LogoutDialog from '../auth/LogoutDialog';
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { user, fullUser } = useAuth();
+  const { user } = useAuth();
   const t = useTranslations('NavUser');
 
   const [logoutOpen, setLogoutOpen] = useState(false);
@@ -108,7 +108,7 @@ export function NavUser() {
                 <DropdownMenuItem asChild>
                 <DropdownMenuItem onSelect={() => setIsNotificationSheetOpen(true)}>
                   <NotificationBell
-                    count={fullUser?.notifications}
+                    count={user?.notifications}
                     label={t('notifications')}
                   />
                 </DropdownMenuItem>

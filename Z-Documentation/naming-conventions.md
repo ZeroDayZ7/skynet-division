@@ -18,7 +18,8 @@
 ---
 
 ## 📦 Foldery i struktura
-```
+
+```Vis
 src/
 ├── components/
 │ └── UserProfile.tsx
@@ -118,6 +119,7 @@ src/
 ### 🧭 Indexy (`index.ts`)
 
 - Dobrze używać do `barrel exports`:
+  
 ```ts
 // src/lib/index.ts
 export * from './utils/date-utils';
@@ -126,12 +128,13 @@ export * from './middleware/auth-middleware';
 
 ### 🧼 Dobre praktyki
 
-   - Unikaj camelCase.ts dla nazw plików – to dezorientujące (rezerwuj dla zmiennych).
+- Unikaj camelCase.ts dla nazw plików – to dezorientujące (rezerwuj dla zmiennych).
 
-   - Folder = kontekst (np. user/, auth/) → łatwiej utrzymać logikę domenową.
+- Folder = kontekst (np. user/, auth/) → łatwiej utrzymać logikę domenową.
 
-   - Jeśli komponent ma swój hook, test i styl — wrzuć go w folder:
-```
+- Jeśli komponent ma swój hook, test i styl — wrzuć go w folder:
+  
+```Vis
 components/
 └── UserProfile/
     ├── UserProfile.tsx

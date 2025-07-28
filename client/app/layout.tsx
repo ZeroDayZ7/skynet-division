@@ -21,7 +21,7 @@ import './globals.css';
 // });
 
 export const metadata: Metadata = {
-  title: 'Dark Army',
+  title: process.env.NEXT_PUBLIC_SYSTEM_NAME || 'System Kasandra',
   description: 'Wolność nie jest darem, wolność jest prawem!',
   robots: {
     index: false,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       noimageindex: true,
     },
   },
-  applicationName: 'Dark Army',
+  applicationName: process.env.NEXT_PUBLIC_SYSTEM_NAME || 'System Kasandra',
   referrer: 'no-referrer',
 };
 
