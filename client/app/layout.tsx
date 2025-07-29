@@ -1,5 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
+import { Roboto } from 'next/font/google';
+import localFont from 'next/font/local';
 import { inter } from './fonts';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { AuthProvider } from '@/context/AuthContext';
@@ -8,9 +10,14 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import './globals.css';
 
+const roboto = Roboto({
+  weight: '400',
+  subsets: ['latin'],
+});
 
-
-
+const myFont = localFont({
+  src: './my-font.woff2',
+});
 
 // const inter = Inter({
 //   subsets: ['latin', 'latin-ext'],
@@ -48,6 +55,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      {/* <html lang="en" className={roboto.className}> */}
       <body className={`${inter.className} antialiased`}>
         <NextIntlClientProvider>
           <AuthProvider>
