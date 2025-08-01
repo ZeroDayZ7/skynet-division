@@ -121,7 +121,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <Link href="/dashboard">
                 <div className="items-center justify-center rounded-lg">
                   <Image
-                    src="/images/icon.png"
+                    src="/images/logo.png"
                     alt="Ikona"
                     width={32}
                     height={32}
