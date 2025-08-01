@@ -1,43 +1,88 @@
 import 'dotenv/config';
+import { Server } from 'http';
 import app from './app';
-// import { initializePrisma, disconnectPrisma } from '#ro/config/prisma.config';
-import { initializeSequelize, disconnectSequelize } from '#ro/config/sequelize.config';
-import SystemLog from '#ro/common/utils/SystemLog';
+import { env } from './config/env/env';
+import SystemLog from './common/utils/SystemLog';
+import { initializeSequelize, disconnectSequelize } from './config/sequelize.config';
+import { markShuttingDown } from './utils/health';
 
-async function startServer() {
+let server: Server | null = null;
+const SHUTDOWN_TIMEOUT = 30_000;
+
+async function startServer(): Promise<void> {
   try {
-    SystemLog.info(`"Application starting..."`);
-    SystemLog.info(`Loaded ENV variables: ${JSON.stringify(process.env, null, 2)}`);
-    // console.log(process.env);
-    // Inicjalizacja Prisma i Sequelize
-    // await initializePrisma();
+    SystemLog.info('🚀 Starting application...');
+    SystemLog.info(`Environment: ${env.NODE_ENV}`);
+    SystemLog.info(`PID: ${process.pid}`);
+
     await initializeSequelize();
 
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      SystemLog.info(`Server running on port ${PORT}`);
+    server = app.listen(env.PORT, () => {
+      SystemLog.info(`✅ Server running on port ${env.PORT}`);
+    });
+
+    server.on('error', (err: any) => {
+      if (err.code === 'EADDRINUSE') {
+        SystemLog.error(`❌ Port ${env.PORT} is already in use`);
+      } else {
+        SystemLog.error('❌ Server error:', err);
+      }
+      process.exit(1);
+    });
+
+    server.on('clientError', (error, socket) => {
+      SystemLog.warn(`⚠️ Client error: ${error.message}`);
+      socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
     });
   } catch (error) {
-    SystemLog.error('Failed to start server:', error);
+    SystemLog.error('❌ Failed to start server:', error);
     process.exit(1);
   }
 }
 
-// Graceful shutdown
-async function shutdown() {
-  SystemLog.info('Shutting down server...');
+/**
+ * Graceful shutdown handler
+ */
+async function shutdown(signal?: string) {
+  markShuttingDown?.();
+  SystemLog.info(`🛑 Received ${signal || 'shutdown'}, shutting down gracefully...`);
+
+  const timer = setTimeout(() => {
+    SystemLog.error('⏳ Forced shutdown due to timeout');
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT);
+
   try {
-    // await disconnectPrisma();
+    // 1. Zamknij serwer HTTP
+    if (server) {
+      await new Promise<void>((resolve, reject) => server!.close((err) => (err ? reject(err) : resolve())));
+      SystemLog.info('✅ Server closed');
+    }
+
+    // 2. Rozłącz bazę danych
     await disconnectSequelize();
-    SystemLog.info('Server stopped');
+
+    clearTimeout(timer);
     process.exit(0);
-  } catch (error) {
-    SystemLog.error('Error during shutdown:', error);
+  } catch (err) {
+    SystemLog.error('❌ Error during shutdown:', err);
+    clearTimeout(timer);
     process.exit(1);
   }
 }
 
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+/**
+ * Global error handlers
+ */
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('uncaughtException', (err) => {
+  SystemLog.error('💥 Uncaught Exception:', err);
+  shutdown('uncaughtException');
+});
+process.on('unhandledRejection', (reason) => {
+  SystemLog.error('💥 Unhandled Rejection:', reason);
+  shutdown('unhandledRejection');
+});
 
-startServer();
+await startServer();

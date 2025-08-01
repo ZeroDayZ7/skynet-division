@@ -1,6 +1,6 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
+// import { Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
 import { inter } from './fonts';
 import { ThemeProvider } from '@/components/theme/theme-provider';
@@ -10,14 +10,14 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import './globals.css';
 
-const roboto = Roboto({
-  weight: '400',
-  subsets: ['latin'],
-});
+// const roboto = Roboto({
+//   weight: '400',
+//   subsets: ['latin'],
+// });
 
-const myFont = localFont({
-  src: './my-font.woff2',
-});
+// const myFont = localFont({
+//   src: './my-font.woff2',
+// });
 
 // const inter = Inter({
 //   subsets: ['latin', 'latin-ext'],

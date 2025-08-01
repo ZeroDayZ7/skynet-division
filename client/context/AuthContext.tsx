@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import { getUserSession } from '@/lib/session/getUserSession';
 import type { UserRole } from '@/components/ui/RoleBadge';
 import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
 
 
 // types/user.ts
@@ -85,14 +86,18 @@ const checkAuth = useCallback(async (): Promise<boolean> => {
   // Wyświetlanie loadera podczas inicjalizacji
   if (isLoading) {
     return (
-      <div
-        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-        role="status"
-        aria-live="polite"
-      >
-        <Loader2 className="animate-spin text-muted-foreground text-4xl" />
-        <span className="sr-only">Ładowanie danych, proszę czekać...</span>
-      </div>
+      // <div
+      //   className="fixed inset-0 flex items-center justify-center bg-foreground bg-opacity-50 z-50"
+      //   role="status"
+      //   aria-live="polite"
+      // >
+      //   <Loader2 className="animate-spin text-muted-foreground text-4xl" />
+      //   <span className="sr-only">Ładowanie danych, proszę czekać...</span>
+      // </div>
+
+      <>
+        <Loader fullscreen={true} /> 
+      </>
     );
   }
   
