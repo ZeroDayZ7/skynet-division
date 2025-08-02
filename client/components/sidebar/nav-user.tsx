@@ -63,6 +63,7 @@ export function NavUser() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+              aria-hidden={false}
               side={isMobile ? 'bottom' : 'right'}
               align="end"
             >
@@ -106,12 +107,14 @@ export function NavUser() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                <DropdownMenuItem onSelect={() => setIsNotificationSheetOpen(true)}>
-                  <NotificationBell
-                    count={user?.notifications}
-                    label={t('notifications')}
-                  />
-                </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => setIsNotificationSheetOpen(true)}
+                  >
+                    <NotificationBell
+                      count={user?.notifications}
+                      label={t('notifications')}
+                    />
+                  </DropdownMenuItem>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -133,7 +136,6 @@ export function NavUser() {
       />
 
       <LogoutDialog open={logoutOpen} onOpenChange={setLogoutOpen} />
-
     </>
   );
 }

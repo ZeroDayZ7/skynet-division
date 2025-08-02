@@ -3,7 +3,7 @@ import {
   DataTypes,
 } from 'sequelize';
 import sequelize from '#ro/config/sequelize.config';
-import { UserSettingsAttributes, UserSettingsCreationAttributes } from '../types/UserSettingsAttributes';
+import { UserSettingsAttributes, UserSettingsCreationAttributes } from '../modules/settings/types/UserSettingsAttributes';
 
 class UserSettings extends Model<UserSettingsAttributes, UserSettingsCreationAttributes>
   implements UserSettingsAttributes

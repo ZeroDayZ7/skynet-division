@@ -1,5 +1,5 @@
 import AppError from '#errors/AppError';
-import UserSettings from '../models/UserSettings';
+import UserSettings from '../../../models/UserSettings';
 /**
  * Włącza lub wyłącza uwierzytelnianie dwuskładnikowe dla użytkownika.
  */

@@ -8,7 +8,7 @@ import PermissionTemplate from '#ro/models/permissionTemplate.model';
 import PermissionUser from '#ro/models/userPermission.model';
 import SupportTicket from '#ro/models/support/SupportTicket';
 import SupportMessage from '#ro/models/support/SupportTicketMessage';
-import UserSettings from '#ro/modules/settings/models/UserSettings';
+import UserSettings from '#ro/models/UserSettings';
 
 export default function defineUserAssociations() {
   // Relacja Users <-> UserData

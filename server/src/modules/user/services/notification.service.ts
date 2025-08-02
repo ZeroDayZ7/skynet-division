@@ -1,6 +1,6 @@
 import { Op } from 'sequelize';
-import NotificationModel from '#ro/modules/user/models/notification.model';
-import NotificationTemplateModel from '#ro/modules/user/models/notification.template.model';
+import NotificationModel from '#models/notification.model';
+import NotificationTemplateModel from '#models/notification.template.model';
 import SystemLog from '#ro/common/utils/SystemLog';
 
 export interface FetchNotificationsResult {

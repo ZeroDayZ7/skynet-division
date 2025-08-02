@@ -1,6 +1,6 @@
 // pin.services.ts
 import AppError from '#errors/AppError'; // Importujemy AppError
-import UserSettings from '../models/UserSettings';
+import UserSettings from '../../../models/UserSettings';
 
 interface PinStatusResult {
   isPinSet: boolean;
