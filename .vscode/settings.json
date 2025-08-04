@@ -1,3 +1,27 @@
 {
-  "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+  // Wykluczenie z wyszukiwania
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/logs": true,
+    "package-lock.json": true,
+    "package.json": true
+  },
+
+  // Wykluczenie z eksploratora plików
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/logs": true,
+    "**/package-lock.json": true,
+    "**/LICENSE": true,
+    "**/README.md": true,
+    "**/nodemon.json": true,
+    "**/next-env.d.ts": true,
+    "**/nginx": true,
+    "**/certs": true,
+  },
+
+  // Wyłączenie zawijania linii w edytorze
+  "editor.wordWrap": "wordWrapColumn"
 }
