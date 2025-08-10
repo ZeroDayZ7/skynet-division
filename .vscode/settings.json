@@ -23,5 +23,7 @@
   },
 
   // Wyłączenie zawijania linii w edytorze
-  "editor.wordWrap": "wordWrapColumn"
+  "editor.wordWrap": "wordWrapColumn",
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": false,
 }
